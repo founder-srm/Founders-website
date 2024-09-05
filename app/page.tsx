@@ -1,6 +1,5 @@
-import Image from "next/image";
-import Navbar from "./components/navbar";
-import Sidebar from "./components/sidebar";
+import Navbar from './components/navbar';
+import Sidebar from './components/sidebar';
 
 export default function Home() {
   return (
@@ -9,8 +8,7 @@ export default function Home() {
       <Sidebar />
 
       {/* write the home page code here */}
-      <section className="pl-[60px] pt-[60px]">
-      </section>
+      <section className="pl-[60px] pt-[60px]"></section>
     </main>
   );
 }
