@@ -61,6 +61,7 @@ const config = {
       },
       fontFamily: {
         'noto-serif': ['"Noto Serif"', 'serif'],
+        hanson : ['hanson-bold', 'sans-serif'],
       },
       keyframes: {
         'accordion-down': {
