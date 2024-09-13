@@ -7,9 +7,6 @@ import Link from 'next/link';
 import React, { useRef } from 'react';
 import MenuToggle from '@/components/custom/MenuToggle';
 
-
-
-
 const draw = {
   hidden: { pathLength: 0, opacity: 0 },
   visible: (i: number) => {
@@ -40,7 +37,6 @@ const Sidebar: React.FC = () => {
     toggleOpen(0);
   });
 
- 
   return (
     <motion.nav
       initial={false}
