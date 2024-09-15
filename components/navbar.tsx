@@ -2,7 +2,7 @@ import React from 'react';
 
 const Navbar = () => {
   return (
-    <div className="fixed right-0 top-0 z-[15] h-[60px] w-[calc(100%-60px)] border-b-[3.5px] border-black">
+    <div className="fixed bg-background right-0 top-0 z-[15] h-[60px] w-[calc(100%-60px)] border-b-[3.5px] border-black col-span-2">
       <div className="flex h-full w-full flex-row items-center justify-between">
         <a href="/" className="ml-2 text-center font-hanson text-3xl font-bold">
           founder&apos;s club
