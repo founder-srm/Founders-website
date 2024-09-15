@@ -1,9 +1,7 @@
-/* eslint-disable @typescript-eslint/no-require-imports */
+/* eslint-disable */
 import type { Config } from 'tailwindcss';
 
-const {
-  default: flattenColorPalette,
-} = require("tailwindcss/lib/util/flattenColorPalette");
+const { default: flattenColorPalette } = require('tailwindcss/lib/util/flattenColorPalette');
 
 const config = {
   darkMode: ['class'],
@@ -90,11 +88,11 @@ const config = {
     function ({ addUtilities }) {
       addUtilities({
         '.scrollbar-hide': {
-          '-ms-overflow-style': 'none',  /* IE and Edge */
-          'scrollbar-width': 'none',  /* Firefox */
+          '-ms-overflow-style': 'none' /* IE and Edge */,
+          'scrollbar-width': 'none' /* Firefox */,
         },
         '.scrollbar-hide::-webkit-scrollbar': {
-          'display': 'none',  /* Chrome, Safari, and Opera */
+          display: 'none' /* Chrome, Safari, and Opera */,
         },
       });
     },
@@ -102,13 +100,13 @@ const config = {
 } satisfies Config;
 
 function addVariablesForColors({ addBase, theme }: any) {
-  const allColors = flattenColorPalette(theme("colors"));
+  const allColors = flattenColorPalette(theme('colors'));
   const newVars = Object.fromEntries(
-    Object.entries(allColors).map(([key, val]) => [`--${key}`, val])
+    Object.entries(allColors).map(([key, val]) => [`--${key}`, val]),
   );
- 
+
   addBase({
-    ":root": newVars,
+    ':root': newVars,
   });
 }
 

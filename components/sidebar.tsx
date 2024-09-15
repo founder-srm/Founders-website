@@ -40,7 +40,7 @@ const Sidebar: React.FC = () => {
   return (
     <motion.nav
       initial={false}
-      className="fixed left-0 z-[120] min-h-screen w-[60px] border-r-[3.5px] border-black col-span-1"
+      className="fixed left-0 z-[120] col-span-1 min-h-screen w-[60px] border-r-[3.5px] border-black"
       ref={containerRef}
     >
       <AnimatePresence>

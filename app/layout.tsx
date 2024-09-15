@@ -16,12 +16,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className=''>
+      <body className="">
         <Navbar />
         <Sidebar />
-        <main className='ml-[60px]'>
-          {children}
-        </main>
+        <main className="ml-[60px]">{children}</main>
         {/* <Footer /> */}
       </body>
     </html>
