@@ -1,16 +1,19 @@
 /* eslint-disable */
 import type { Config } from 'tailwindcss';
-
+import fluid, { extract } from 'fluid-tailwind'
 const { default: flattenColorPalette } = require('tailwindcss/lib/util/flattenColorPalette');
 
 const config = {
   darkMode: ['class'],
-  content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
-  ],
+  content: {
+    files: [
+      './pages/**/*.{ts,tsx}',
+      './components/**/*.{ts,tsx}',
+      './app/**/*.{ts,tsx}',
+      './src/**/*.{ts,tsx}',
+    ],
+    extract
+  },
   prefix: '',
   theme: {
     container: {
@@ -25,6 +28,7 @@ const config = {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
+        black: 'var(--text-black)',
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         primary: {
@@ -34,6 +38,19 @@ const config = {
         secondary: {
           DEFAULT: 'hsl(var(--secondary))',
           foreground: 'hsl(var(--secondary-foreground))',
+        },
+        highlight: {
+          blue: 'var(--highlight-blue)',
+          green: 'var(--highlight-green)',
+          red: 'var(--highlight-red)',
+          yellow: 'var(--highlight-yellow)',
+          orange: 'var(--highlight-orange)',
+          pink: 'var(--highlight-pink)',
+          lightBlue: 'var(--highlight-light-blue)',
+          lightGreen: 'var(--highlight-light-green)',
+          lightPink: 'var(--highlight-light-pink)',
+          lightYellow: 'var(--highlight-light-yellow)',
+          darkBlue: 'var(--highlight-dark-blue)',
         },
         destructive: {
           DEFAULT: 'hsl(var(--destructive))',
@@ -64,6 +81,13 @@ const config = {
       fontFamily: {
         'noto-serif': ['"Noto Serif"', 'serif'],
         hanson: ['hanson-bold', 'sans-serif'],
+        'uncut-sans': [
+          'UncutSans-ExtraLight',
+          'UncutSans-Light',
+          'UncutSans-Regular',
+          'UncutSans-SemiBold',
+          'sans-serif',
+        ],
       },
       keyframes: {
         'accordion-down': {
@@ -85,6 +109,7 @@ const config = {
   plugins: [
     require('tailwindcss-animate'),
     addVariablesForColors,
+    fluid,
     function ({ addUtilities }) {
       addUtilities({
         '.scrollbar-hide': {
