@@ -31,18 +31,18 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
-    --highlight-blue: #87CEEB;
-    --highlight-green: #90EE90;
-    --highlight-red: #FF6347;
-    --highlight-yellow: #FFE66D;
-    --highlight-orange: #FF9063;
-    --highlight-pink: #FFB2EF;
-    --highlight-light-green: #BAFCA2;
-    --highlight-light-pink: #FFD1F6;
-    --highlight-light-blue: #D3F2FF;
-    --highlight-light-yellow: #FDFD96;
-    --highlight-dark-blue: #146EF5;
-    --text-black: #050F0F;
+    --highlight-blue: #87ceeb;
+    --highlight-green: #90ee90;
+    --highlight-red: #ff6347;
+    --highlight-yellow: #ffe66d;
+    --highlight-orange: #ff9063;
+    --highlight-pink: #ffb2ef;
+    --highlight-light-green: #bafca2;
+    --highlight-light-pink: #ffd1f6;
+    --highlight-light-blue: #d3f2ff;
+    --highlight-light-yellow: #fdfd96;
+    --highlight-dark-blue: #146ef5;
+    --text-black: #050f0f;
   }
 }
 

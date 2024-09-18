@@ -1,6 +1,6 @@
 /* eslint-disable */
 import type { Config } from 'tailwindcss';
-import fluid, { extract } from 'fluid-tailwind'
+import fluid, { extract } from 'fluid-tailwind';
 const { default: flattenColorPalette } = require('tailwindcss/lib/util/flattenColorPalette');
 
 const config = {
@@ -12,7 +12,7 @@ const config = {
       './app/**/*.{ts,tsx}',
       './src/**/*.{ts,tsx}',
     ],
-    extract
+    extract,
   },
   prefix: '',
   theme: {

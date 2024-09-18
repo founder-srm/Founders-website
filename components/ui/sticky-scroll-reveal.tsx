@@ -13,10 +13,7 @@ interface StickyScrollProps {
   contentClassName?: string;
 }
 
-export const StickyScroll: React.FC<StickyScrollProps> = ({
-  content,
-  contentClassName,
-}) => {
+export const StickyScroll: React.FC<StickyScrollProps> = ({ content, contentClassName }) => {
   const [activeCard, setActiveCard] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
@@ -47,11 +44,14 @@ export const StickyScroll: React.FC<StickyScrollProps> = ({
 
   useEffect(() => {
     setBackgroundGradient(linearGradients[activeCard % linearGradients.length]);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeCard]);
 
   return (
-    <motion.div ref={ref} className="relative my-6 flex h-[32rem] w-full justify-center space-x-10 overflow-y-auto rounded-[20px] p-10 scrollbar-hide">
+    <motion.div
+      ref={ref}
+      className="relative my-6 flex h-[32rem] w-full justify-center space-x-10 overflow-y-auto rounded-[20px] p-10 scrollbar-hide"
+    >
       <div className="div relative flex items-start px-4">
         <div className="max-w-2xl">
           {content.map((item, index) => (
