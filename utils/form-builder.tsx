@@ -29,7 +29,7 @@ interface FormBuilderProps {
 //form builder component 
 //
 
-const formbuilder: React.FC<FormBuilderProps> = ({ fields })
+const formbuilder: React.FC<FormBuilderProps> = ({ fields }: { any })
 
 //validation schema
 //

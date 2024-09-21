@@ -11,6 +11,7 @@
     "format:fix": "prettier --write --ignore-path .gitignore ."
   },
   "dependencies": {
+    "@hookform/resolvers": "^3.9.0",
     "@supabase/ssr": "^0.5.0",
     "@supabase/supabase-js": "^2.45.2",
     "class-variance-authority": "^0.7.0",
@@ -20,9 +21,11 @@
     "next": "14.2.6",
     "react": "^18",
     "react-dom": "^18",
+    "react-hook-form": "^7.53.0",
     "shadcn": "^2.0.5",
     "tailwind-merge": "^2.5.2",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/node": "^20",
