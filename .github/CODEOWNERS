@@ -1,0 +1,9 @@
+*.yaml @greeenboi
+*.mjs @greeenboi
+.gitignore @greeenboi
+tsconfig.json @greeenboi
+.prettierrc @greeenboi
+.prettierrc.js @greeenboi
+.prettierrc.json @greeenboi
+.prettierrc.yaml @greeenboi
+.prettier.config.js @greeenboi
