@@ -110,7 +110,7 @@ const config = {
     require('tailwindcss-animate'),
     addVariablesForColors,
     fluid,
-    function ({ addUtilities }) {
+    function ({ addUtilities }: { addUtilities: (utilities: Record<string, Record<string, string>>) => void }) {
       addUtilities({
         '.scrollbar-hide': {
           '-ms-overflow-style': 'none' /* IE and Edge */,
