@@ -16,14 +16,10 @@ import {
 
 import { Background, Flex } from '../once-ui/components';
 
-import { Inter } from 'next/font/google';
+import { Lora } from 'next/font/google';
+import { Montserrat } from 'next/font/google';
+import { Arimo } from 'next/font/google';
 import { Roboto_Mono } from 'next/font/google';
-
-const primary = Inter({
-  variable: '--font-primary',
-  subsets: ['latin'],
-  display: 'swap',
-});
 
 const code = Roboto_Mono({
   variable: '--font-code',
@@ -31,18 +27,29 @@ const code = Roboto_Mono({
   display: 'swap',
 });
 
+const primary = Lora({
+  variable: '--font-primary',
+  subsets: ['latin'],
+  display: 'swap'
+});
+
+const secondary = Montserrat({
+  variable: '--font-secondary',
+  subsets: ['latin'],
+  display: 'swap'
+});
+
+const tertiary = Arimo({
+  variable: '--font-tertiary',
+  subsets: ['latin'],
+  display: 'swap'
+});
+
 type FontConfig = {
   variable: string;
 };
 
-/*
-	Replace with code for secondary and tertiary fonts
-	from https://once-ui.com/customize
-*/
-const secondary: FontConfig | undefined = undefined;
-const tertiary: FontConfig | undefined = undefined;
-/*
- */
+
 
 export async function generateMetadata(): Promise<Metadata> {
   const host = (await headers()).get('host');
@@ -54,7 +61,7 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       title: og.title,
       description: og.description,
-      url: 'https://' + baseURL,
+      url: `https://${baseURL}`,
       type: og.type as
         | 'website'
         | 'article'
@@ -76,7 +83,7 @@ export async function generateMetadata(): Promise<Metadata> {
 const schemaData = {
   '@context': 'https://schema.org',
   '@type': schema.type,
-  url: 'https://' + baseURL,
+  url: `https://${baseURL}`,
   logo: schema.logo,
   name: schema.name,
   description: schema.description,
@@ -115,6 +122,7 @@ export default function RootLayout({
       <head>
         <script
           type="application/ld+json"
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
           dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }}
         />
       </head>
