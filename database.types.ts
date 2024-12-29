@@ -93,6 +93,87 @@ export type Database = {
         };
         Relationships: [];
       };
+      bootcampregistration: {
+        Row: {
+          day1_an_in: boolean | null;
+          day1_an_out: boolean | null;
+          day1_fn_in: boolean | null;
+          day1_fn_out: boolean | null;
+          day2_an_in: boolean | null;
+          day2_an_out: boolean | null;
+          day2_fn_in: boolean | null;
+          day2_fn_out: boolean | null;
+          day3_an_in: boolean | null;
+          day3_an_out: boolean | null;
+          day3_fn_in: boolean | null;
+          day3_fn_out: boolean | null;
+          day4_an_in: boolean | null;
+          day4_an_out: boolean | null;
+          day4_fn_in: boolean | null;
+          day4_fn_out: boolean | null;
+          day5_an_in: boolean | null;
+          day5_an_out: boolean | null;
+          day5_fn_in: boolean | null;
+          day5_fn_out: boolean | null;
+          Email: string;
+          id: string;
+          Name: string;
+          'Phone Number': number;
+        };
+        Insert: {
+          day1_an_in?: boolean | null;
+          day1_an_out?: boolean | null;
+          day1_fn_in?: boolean | null;
+          day1_fn_out?: boolean | null;
+          day2_an_in?: boolean | null;
+          day2_an_out?: boolean | null;
+          day2_fn_in?: boolean | null;
+          day2_fn_out?: boolean | null;
+          day3_an_in?: boolean | null;
+          day3_an_out?: boolean | null;
+          day3_fn_in?: boolean | null;
+          day3_fn_out?: boolean | null;
+          day4_an_in?: boolean | null;
+          day4_an_out?: boolean | null;
+          day4_fn_in?: boolean | null;
+          day4_fn_out?: boolean | null;
+          day5_an_in?: boolean | null;
+          day5_an_out?: boolean | null;
+          day5_fn_in?: boolean | null;
+          day5_fn_out?: boolean | null;
+          Email: string;
+          id?: string;
+          Name: string;
+          'Phone Number': number;
+        };
+        Update: {
+          day1_an_in?: boolean | null;
+          day1_an_out?: boolean | null;
+          day1_fn_in?: boolean | null;
+          day1_fn_out?: boolean | null;
+          day2_an_in?: boolean | null;
+          day2_an_out?: boolean | null;
+          day2_fn_in?: boolean | null;
+          day2_fn_out?: boolean | null;
+          day3_an_in?: boolean | null;
+          day3_an_out?: boolean | null;
+          day3_fn_in?: boolean | null;
+          day3_fn_out?: boolean | null;
+          day4_an_in?: boolean | null;
+          day4_an_out?: boolean | null;
+          day4_fn_in?: boolean | null;
+          day4_fn_out?: boolean | null;
+          day5_an_in?: boolean | null;
+          day5_an_out?: boolean | null;
+          day5_fn_in?: boolean | null;
+          day5_fn_out?: boolean | null;
+          Email?: string;
+          id?: string;
+          Name?: string;
+          'Phone Number'?: number;
+        };
+        Relationships: [];
+      };
       contactentries: {
         Row: {
           description: string | null;
@@ -249,6 +330,63 @@ export type Database = {
         };
         Relationships: [];
       };
+      newsletter: {
+        Row: {
+          created_at: string;
+          email: string;
+          id: string;
+          name: string;
+        };
+        Insert: {
+          created_at?: string;
+          email: string;
+          id?: string;
+          name: string;
+        };
+        Update: {
+          created_at?: string;
+          email?: string;
+          id?: string;
+          name?: string;
+        };
+        Relationships: [];
+      };
+      posts: {
+        Row: {
+          author: string;
+          content: string;
+          created_at: string;
+          id: number;
+          image: string;
+          published_at: string;
+          slug: string;
+          summary: string;
+          title: string;
+        };
+        Insert: {
+          author: string;
+          content: string;
+          created_at?: string;
+          id?: never;
+          image: string;
+          published_at?: string;
+          slug: string;
+          summary: string;
+          title: string;
+        };
+        Update: {
+          author?: string;
+          content?: string;
+          created_at?: string;
+          id?: never;
+          image?: string;
+          published_at?: string;
+          slug?: string;
+          summary?: string;
+          title?: string;
+        };
+        Relationships: [];
+      };
       team: {
         Row: {
           created_at: string;
@@ -282,6 +420,48 @@ export type Database = {
           rollno?: string | null;
           socials?: Json | null;
           tagline?: string | null;
+        };
+        Relationships: [];
+      };
+      triumphtalkregistration: {
+        Row: {
+          Address: string;
+          attendance: boolean;
+          Department: string;
+          Email_Address: string;
+          qrID: string;
+          Section: string;
+          Student_EmailID: string;
+          Student_Name: string;
+          Student_Registration_No: string;
+          StudentPhoneNumber: string;
+          YearofStudy: string;
+        };
+        Insert: {
+          Address: string;
+          attendance?: boolean;
+          Department: string;
+          Email_Address: string;
+          qrID?: string;
+          Section: string;
+          Student_EmailID: string;
+          Student_Name: string;
+          Student_Registration_No: string;
+          StudentPhoneNumber: string;
+          YearofStudy: string;
+        };
+        Update: {
+          Address?: string;
+          attendance?: boolean;
+          Department?: string;
+          Email_Address?: string;
+          qrID?: string;
+          Section?: string;
+          Student_EmailID?: string;
+          Student_Name?: string;
+          Student_Registration_No?: string;
+          StudentPhoneNumber?: string;
+          YearofStudy?: string;
         };
         Relationships: [];
       };
@@ -381,4 +561,19 @@ export type Enums<
   ? Database[PublicEnumNameOrOptions['schema']]['Enums'][EnumName]
   : PublicEnumNameOrOptions extends keyof PublicSchema['Enums']
     ? PublicSchema['Enums'][PublicEnumNameOrOptions]
+    : never;
+
+export type CompositeTypes<
+  PublicCompositeTypeNameOrOptions extends
+    | keyof PublicSchema['CompositeTypes']
+    | { schema: keyof Database },
+  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+    schema: keyof Database;
+  }
+    ? keyof Database[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes']
+    : never = never,
+> = PublicCompositeTypeNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes'][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof PublicSchema['CompositeTypes']
+    ? PublicSchema['CompositeTypes'][PublicCompositeTypeNameOrOptions]
     : never;

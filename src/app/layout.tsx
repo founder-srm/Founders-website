@@ -30,26 +30,24 @@ const code = Roboto_Mono({
 const primary = Lora({
   variable: '--font-primary',
   subsets: ['latin'],
-  display: 'swap'
+  display: 'swap',
 });
 
 const secondary = Montserrat({
   variable: '--font-secondary',
   subsets: ['latin'],
-  display: 'swap'
+  display: 'swap',
 });
 
 const tertiary = Arimo({
   variable: '--font-tertiary',
   subsets: ['latin'],
-  display: 'swap'
+  display: 'swap',
 });
 
 type FontConfig = {
   variable: string;
 };
-
-
 
 export async function generateMetadata(): Promise<Metadata> {
   const host = (await headers()).get('host');
