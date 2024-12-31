@@ -8,7 +8,7 @@ export default async function RelatedPosts() {
   const posts = await getPostsRange(0, 3);
 
   return (
-    <section className="mx-auto py-12">
+    <section className="mx-auto py-12 container">
       <h2 className="text-3xl font-bold mb-8">Recent Posts</h2>
       <div className="grid grid-cols-3 gap-6 min-w-md w-full overflow-x-auto">
         {posts.map(post => (
