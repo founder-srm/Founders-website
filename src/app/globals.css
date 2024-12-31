@@ -71,7 +71,6 @@ body {
   }
 }
 
-
 /* Base styling */
 pre[class*="language-"],
 code[class*="language-"] {
@@ -93,15 +92,39 @@ code[class*="language-"] {
 }
 
 /* Token colors */
-.token.comment { color: #6a9955; }
-.token.string { color: #ce9178; }
-.token.number { color: #b5cea8; }
-.token.keyword { color: #569cd6; }
-.token.boolean { color: #569cd6; }
-.token.function { color: #dcdcaa; }
-.token.constant { color: #4fc1ff; }
-.token.class-name { color: #4ec9b0; }
-.token.punctuation { color: #d4d4d4; }
-.token.operator { color: #d4d4d4; }
-.token.property { color: #9cdcfe; }
-.token.parameter { color: #9cdcfe; }
+.token.comment {
+  color: #6a9955;
+}
+.token.string {
+  color: #ce9178;
+}
+.token.number {
+  color: #b5cea8;
+}
+.token.keyword {
+  color: #569cd6;
+}
+.token.boolean {
+  color: #569cd6;
+}
+.token.function {
+  color: #dcdcaa;
+}
+.token.constant {
+  color: #4fc1ff;
+}
+.token.class-name {
+  color: #4ec9b0;
+}
+.token.punctuation {
+  color: #d4d4d4;
+}
+.token.operator {
+  color: #d4d4d4;
+}
+.token.property {
+  color: #9cdcfe;
+}
+.token.parameter {
+  color: #9cdcfe;
+}

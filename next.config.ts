@@ -1,6 +1,6 @@
 import remarkGfm from 'remark-gfm';
 import createMDX from '@next/mdx';
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx'],
@@ -17,7 +17,7 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'images.unsplash.com',
-      }
+      },
     ],
   },
   transpilePackages: ['next-mdx-remote'],
@@ -29,6 +29,6 @@ const withMDX = createMDX({
     remarkPlugins: [remarkGfm],
     rehypePlugins: [],
   },
-})
+});
 
 export default withMDX(nextConfig);

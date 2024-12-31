@@ -1,40 +1,41 @@
-"use client"
+'use client';
 
-import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
-import { Check, Copy } from "lucide-react"
-import { useEffect, useState } from "react"
-import Prism from "prismjs"
-import "prismjs/components/prism-typescript"
-import "prismjs/components/prism-javascript"
-import "prismjs/components/prism-jsx"
-import "prismjs/components/prism-tsx"
-import "prismjs/components/prism-bash"
-import "prismjs/components/prism-markdown"
-import "prismjs/components/prism-json"
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+import { Check, Copy } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import Prism from 'prismjs';
+import 'prismjs/components/prism-typescript';
+import 'prismjs/components/prism-javascript';
+import 'prismjs/components/prism-jsx';
+import 'prismjs/components/prism-tsx';
+import 'prismjs/components/prism-bash';
+import 'prismjs/components/prism-markdown';
+import 'prismjs/components/prism-json';
 
 interface CodeBlockProps {
-  code: string
-  language?: string
-  className?: string
+  code: string;
+  language?: string;
+  className?: string;
 }
 
 export function CodeBlock({ code, language, className }: CodeBlockProps) {
-  const [hasCopied, setHasCopied] = useState(false)
+  const [hasCopied, setHasCopied] = useState(false);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
-    Prism.highlightAll()
-  }, [code, language])
+    Prism.highlightAll();
+  }, [code, language]);
 
   const copyToClipboard = async () => {
-    await navigator.clipboard.writeText(code)
-    setHasCopied(true)
-    setTimeout(() => setHasCopied(false), 2000)
-  }
+    await navigator.clipboard.writeText(code);
+    setHasCopied(true);
+    setTimeout(() => setHasCopied(false), 2000);
+  };
 
   // Extract language from className if provided (e.g., "language-typescript" -> "typescript")
-  const languageClass = language || className?.replace("language-", "") || "plaintext"
+  const languageClass =
+    language || className?.replace('language-', '') || 'plaintext';
 
   return (
     <div className="relative w-full group">
@@ -52,16 +53,18 @@ export function CodeBlock({ code, language, className }: CodeBlockProps) {
           )}
         </Button>
       </div>
-      <pre className={cn(
-        "px-4 py-4 overflow-x-auto rounded-lg border",
-        "relative font-mono text-sm leading-6",
-        "bg-muted/50 dark:bg-muted/80",
-        className
-      )}>
+      <pre
+        className={cn(
+          'px-4 py-4 overflow-x-auto rounded-lg border',
+          'relative font-mono text-sm leading-6',
+          'bg-muted/50 dark:bg-muted/80',
+          className
+        )}
+      >
         <code className={`language-${languageClass} min-w-full inline-block`}>
           {code}
         </code>
       </pre>
     </div>
-  )
+  );
 }

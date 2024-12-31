@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { MDXRemote, type MDXRemoteProps } from "next-mdx-remote/rsc";
+import { MDXRemote, type MDXRemoteProps } from 'next-mdx-remote/rsc';
 import Image from 'next/image';
 import {
   Table,
@@ -8,11 +8,13 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { CodeBlock } from "@/components/mdx/code-block";
-import { cn } from "./lib/utils";
+} from '@/components/ui/table';
+import { CodeBlock } from '@/components/mdx/code-block';
+import { cn } from './lib/utils';
 
-function ShadcnTable({ data }: { data: { headers: string[]; rows: string[][] } }) {
+function ShadcnTable({
+  data,
+}: { data: { headers: string[]; rows: string[][] } }) {
   return (
     <Table>
       <TableHeader>
@@ -46,23 +48,25 @@ function slugify(str: string): string {
     .replace(/\-\-+/g, '-'); // Replace multiple - with single -
 }
 
-function LinkHeading({ Tag, slug, children, ...props }: {
+function LinkHeading({
+  Tag,
+  slug,
+  children,
+  ...props
+}: {
   Tag: keyof JSX.IntrinsicElements;
   slug: string;
   children: React.ReactNode;
   [key: string]: any;
 }) {
   return (
-    <Tag 
+    <Tag
       id={slug}
-      className={cn(
-        "group flex items-center gap-2",
-        props.className
-      )}
+      className={cn('group flex items-center gap-2', props.className)}
       {...props}
     >
       {children}
-      <a 
+      <a
         href={`#${slug}`}
         className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-foreground transition-all"
         aria-label={`Link to ${children}`}
@@ -76,25 +80,25 @@ function LinkHeading({ Tag, slug, children, ...props }: {
 function createHeading(level: 1 | 2 | 3 | 4 | 5 | 6) {
   const Tag = `h${level}` as keyof JSX.IntrinsicElements;
   const sizes = {
-    1: "text-4xl font-extrabold lg:text-5xl",
-    2: "text-3xl font-semibold lg:text-4xl",
-    3: "text-2xl font-semibold lg:text-3xl",
-    4: "text-xl font-semibold lg:text-2xl",
-    5: "text-lg font-semibold lg:text-xl",
-    6: "text-base font-semibold lg:text-lg",
+    1: 'text-4xl font-extrabold lg:text-5xl',
+    2: 'text-3xl font-semibold lg:text-4xl',
+    3: 'text-2xl font-semibold lg:text-3xl',
+    4: 'text-xl font-semibold lg:text-2xl',
+    5: 'text-lg font-semibold lg:text-xl',
+    6: 'text-base font-semibold lg:text-lg',
   };
-  
+
   return function Heading({ children, ...props }: any) {
     const slug = slugify(children as string);
     return (
-      <LinkHeading 
+      <LinkHeading
         Tag={Tag}
         slug={slug}
         className={cn(
-          "scroll-m-20 tracking-tight text-secondary-foreground",
+          'scroll-m-20 tracking-tight text-secondary-foreground',
           sizes[level as keyof typeof sizes],
-          "first:mt-0 mb-4"
-        )} 
+          'first:mt-0 mb-4'
+        )}
         {...props}
       >
         {children}
@@ -113,9 +117,9 @@ function ShadcnParagraph({ children }: any) {
 
 function ShadcnLink({ href, children, ...props }: any) {
   return (
-    <a 
-      className="font-medium underline underline-offset-4 hover:text-primary text-accent" 
-      href={href} 
+    <a
+      className="font-medium underline underline-offset-4 hover:text-primary text-accent"
+      href={href}
       {...props}
     >
       {children}
@@ -149,9 +153,7 @@ function ShadcnImage({ src, alt, ...props }: any) {
 function ShadcnBlockquote({ children }: any) {
   return (
     <blockquote className="my-6 text-base font-extralight border-l-4 border-accent rounded-lg pl-4">
-      <p className="text-muted-foreground bg-slate-800 ">
-        {children}
-      </p>
+      <p className="text-muted-foreground bg-slate-800 ">{children}</p>
     </blockquote>
   );
 }
@@ -164,9 +166,7 @@ const Lists = {
   ol: (props: any) => (
     <ol className="my-6 ml-6 list-decimal [&>li]:mt-2" {...props} />
   ),
-  li: (props: any) => (
-    <li className="text-muted-foreground pl-6" {...props} />
-  ),
+  li: (props: any) => <li className="text-muted-foreground pl-6" {...props} />,
 };
 
 const components = {
@@ -182,11 +182,11 @@ const components = {
   table: ShadcnTable,
   pre: ({ children }: { children: any }) => {
     if (!children?.props?.children) {
-      return <pre>{children}</pre>
+      return <pre>{children}</pre>;
     }
 
-    const code = children.props.children
-    const language = children.props.className?.replace('language-', '')
+    const code = children.props.children;
+    const language = children.props.className?.replace('language-', '');
 
     return (
       <div className="my-6 overflow-hidden rounded-lg">
@@ -196,7 +196,7 @@ const components = {
           className={children.props.className}
         />
       </div>
-    )
+    );
   },
   code: ShadcnInlineCode,
   img: ShadcnImage,
@@ -210,6 +210,9 @@ type CustomMDXProps = MDXRemoteProps & { components?: typeof components };
 export function CustomMDX(props: CustomMDXProps) {
   return (
     // @ts-expect-error components prop is not in the MDXRemoteProps type
-    <MDXRemote {...props} components={{ ...components, ...(props.components || {}) }} />
+    <MDXRemote
+      {...props}
+      components={{ ...components, ...(props.components || {}) }}
+    />
   );
 }
