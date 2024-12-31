@@ -14,7 +14,7 @@ export interface BlogPost {
 }
 
 export async function getAllPosts(): Promise<BlogPost[]> {
-  const supabase = createClient();
+    const supabase = createClient();
   const { data, error } = await supabase
     .from('posts')
     .select('*')
@@ -25,7 +25,7 @@ export async function getAllPosts(): Promise<BlogPost[]> {
 }
 
 export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
-  const supabase = createClient();
+    const supabase = createClient();
   const { data, error } = await supabase
     .from('posts')
     .select('*')
@@ -36,9 +36,7 @@ export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
   return data as BlogPost;
 }
 
-export async function serializeMDX(
-  content: string
-): Promise<MDXRemoteSerializeResult> {
+export async function serializeMDX(content: string): Promise<MDXRemoteSerializeResult> {
   return await serialize(content, {
     parseFrontmatter: true,
     mdxOptions: {

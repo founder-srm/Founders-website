@@ -1,34 +1,32 @@
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import { format } from "date-fns";
-import { getPostBySlug, serializeMDX } from "@/lib/mdx";
-import { MDXWrapper } from "./mdx-wrapper";
+import { getPostBySlug } from "@/lib/mdx";
+import { CustomMDX } from "@/mdx-components";
+
 
 export const revalidate = 3600;
 
-interface BlogPostPageProps {
-  params: {
-    slug: string;
-  };
-}
+type Params = Promise<{ slug: string }>
 
-export default async function BlogPostPage({ params }: BlogPostPageProps) {
-  const post = await getPostBySlug(params.slug);
+export default async function BlogPostPage({ params }: { params: Params }) {
+    const { slug } = await params;
+    const post = await getPostBySlug(slug);
 
   if (!post) {
     notFound();
   }
 
-  const mdxSource = await serializeMDX(post.content);
 
   return (
-    <article className="container mx-auto py-12 max-w-4xl">
+    <article className="container mx-auto py-12 max-w-4xl overflow-y-auto">
       <div className="relative w-full h-[400px] mb-8">
         <Image
           src={post.image}
           alt={post.title}
-          fill
-          className="object-cover rounded-lg"
+          width={800}
+          height={400}
+          className="object-cover rounded-lg max-w-full max-h-[400px]"
           priority
         />
       </div>
@@ -41,8 +39,8 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         <time>{format(new Date(post.published_at), "MMMM d, yyyy")}</time>
       </div>
 
-      <div className="prose prose-lg dark:prose-invert max-w-none">
-        <MDXWrapper source={mdxSource} />
+      <div className="mx-auto max-w-2xl py-8 px-4 md:px-0 text-primary-foreground leading-relaxed">
+        <CustomMDX source={post.content} />
       </div>
     </article>
   );
