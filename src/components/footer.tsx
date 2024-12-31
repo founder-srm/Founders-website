@@ -1,3 +1,6 @@
+'use client';
+import { usePathname } from 'next/navigation';
+
 const sections = [
   {
     title: 'Product',
@@ -39,7 +42,24 @@ const sections = [
   },
 ];
 
+const isPathExcluded = (pathname: string, excludedPaths: string[]) => {
+  return excludedPaths.some(path => {
+    if (path.endsWith('/*')) {
+      const prefix = path.slice(0, -2); // Remove /* from the end
+      return pathname.startsWith(prefix);
+    }
+    return pathname === path;
+  });
+};
+
 const Footer2 = () => {
+  const pathname = usePathname();
+  const excludedRoutes = ['/studio/*', '/blog/posts/*', '/admin'];
+  
+  if (isPathExcluded(pathname, excludedRoutes)) {
+    return null;
+  }
+
   return (
     <section className="pt-32 w-full flex flex-col items-center ">
       <footer className="w-full mx-auto px-4">

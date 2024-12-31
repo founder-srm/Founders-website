@@ -1,4 +1,6 @@
+'use client';
 import { Book, Menu, Sunset, Trees, Zap } from 'lucide-react';
+import { usePathname } from 'next/navigation';
 
 import { cn } from '@/lib/utils';
 
@@ -75,7 +77,24 @@ const subMenuItemsTwo = [
   },
 ];
 
+const isPathExcluded = (pathname: string, excludedPaths: string[]) => {
+  return excludedPaths.some(path => {
+    if (path.endsWith('/*')) {
+      const prefix = path.slice(0, -2); // Remove /* from the end
+      return pathname.startsWith(prefix);
+    }
+    return pathname === path;
+  });
+};
+
 const Navbar1 = () => {
+  const pathname = usePathname();
+  const excludedRoutes = ['/studio/*', '/blog/posts/*', '/login', '/signup', '/admin'];
+  
+  if (isPathExcluded(pathname, excludedRoutes)) {
+    return null;
+  }
+
   return (
     <section className="py-4 w-full flex items-center justify-center ">
       <div className="container">

@@ -1,6 +1,9 @@
 import { Button } from "@/components/ui/button";
+import { client, ctaQuery } from "@/sanity/lib/client";
 
-const CTA10 = () => {
+const CTA10 = async () => {
+  const ctaData = await client.fetch(ctaQuery);
+
   return (
     <section className="py-32">
       <div className="container">

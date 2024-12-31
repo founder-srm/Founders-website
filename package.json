@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "fmt": "biome check --write"
+    "fmt": "biome check --write",
+    "schema": "sanity@latest schema extract",
+    "sanity-typegen": "sanity@latest typegen generate"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.1.0",

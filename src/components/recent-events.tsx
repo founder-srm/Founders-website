@@ -1,31 +1,10 @@
 import { ArrowRight } from "lucide-react";
+import Image from "next/image";
+import { client } from "@/sanity/lib/client";
+import { eventsQuery } from "@/sanity/lib/queries/eventsQuery";
 
-const webinars = [
-  {
-    id: "webinar-1",
-    title: "Duis sem sem, gravida vel porttitor eu, volutpat ut arcu",
-    summary:
-      "Pellentesque eget quam ligula. Sed felis ante, consequat nec ultrices ut, ornare quis metus. Vivamus sit amet tortor vel enim sollicitudin hendrerit.",
-    label: "Ut varius dolor turpis",
-    author: "Jane Doe",
-    published: "1 Jan 2024",
-    href: "#",
-    image: "https://shadcnblocks.com/images/block/placeholder-dark-1.svg",
-  },
-  {
-    id: "webinar-2",
-    title: "Duis sem sem, gravida vel porttitor eu, volutpat ut arcu",
-    summary:
-      "Pellentesque eget quam ligula. Sed felis ante, consequat nec ultrices ut, ornare quis metus. Vivamus sit amet tortor vel enim sollicitudin hendrerit.",
-    label: "Ut varius dolor turpis",
-    author: "Jane Doe",
-    published: "1 Jan 2024",
-    href: "#",
-    image: "https://shadcnblocks.com/images/block/placeholder-dark-1.svg",
-  },
-];
-
-const Blog8 = () => {
+const Blog8 = async () => {
+  const webinars = await client.fetch(eventsQuery);
   return (
     <section className="py-32">
       <div className="container flex flex-col items-center gap-16">
@@ -33,7 +12,7 @@ const Blog8 = () => {
           Webinars
         </h2>
         <div className="grid gap-y-10 sm:grid-cols-12 sm:gap-y-12 md:gap-y-16 lg:gap-y-20">
-          {webinars.map((webinar) => (
+          {webinars?.map((webinar) => (
             <a
               key={webinar.id}
               href={webinar.href}
@@ -59,10 +38,13 @@ const Blog8 = () => {
               </div>
               <div className="order-first sm:order-last sm:col-span-5">
                 <div className="aspect-[16/9] overflow-clip rounded-lg border border-border">
-                  <img
+                  <Image
                     src={webinar.image}
                     alt={webinar.title}
-                    className="h-full w-full object-cover transition-transform group-hover:scale-[1.05]"
+                    width={500}
+                    height={281}
+                    className=" h-full w-full object-cover transition-transform group-hover:scale-[1.05]"
+                    loading="lazy"
                   />
                 </div>
               </div>

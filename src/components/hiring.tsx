@@ -1,51 +1,10 @@
 import { cn } from "@/lib/utils";
-
 import { buttonVariants } from "@/components/ui/button";
+import { client } from "@/sanity/lib/client";
+import { jobsQuery } from "@/sanity/lib/queries/jobsquery";
 
-const Careers4 = () => {
-  const jobs = [
-    {
-      category: "Engineering",
-      openings: [
-        {
-          title: "Senior Software Engineer",
-          location: "Remote",
-          link: "#",
-        },
-        {
-          title: "Product Manager",
-          location: "Windhoek, Namibia",
-          link: "#",
-        },
-        {
-          title: "QA Engineer",
-          location: "Remote",
-          link: "#",
-        },
-        {
-          title: "Technical Support Specialist",
-          location: "Remote",
-          link: "#",
-        },
-      ],
-    },
-    {
-      category: "Marketing",
-      openings: [
-        {
-          title: "Content Writer",
-          location: "Fes, Morocco",
-          link: "#",
-        },
-        {
-          title: "Social Media Manager",
-
-          location: "Goa, India",
-          link: "#",
-        },
-      ],
-    },
-  ];
+const Careers4 = async () => {
+  const jobs = await client.fetch(jobsQuery);
 
   return (
     <section className="py-32">
@@ -57,7 +16,7 @@ const Careers4 = () => {
             </h1>
           </div>
           <div className="mx-auto mt-6 flex flex-col gap-16 md:mt-14">
-            {jobs.map((jobCategory) => (
+            {jobs?.map((jobCategory) => (
               <div key={jobCategory.category} className="grid">
                 <h2 className="border-b pb-4 text-xl font-bold">
                   {jobCategory.category}
