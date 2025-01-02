@@ -9,6 +9,7 @@ import { featureType } from './featureType';
 import { faqType } from './faqType';
 import { ctaType } from './ctaType';
 import { eventType } from './eventType';
+import { heroComponentType } from './heroComponentType';
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -20,6 +21,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     featureType,
     faqType,
     ctaType,
+    heroComponentType,
     eventType,
   ],
 };

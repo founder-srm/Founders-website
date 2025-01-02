@@ -91,6 +91,7 @@ const Navbar1 = () => {
   const pathname = usePathname();
   const excludedRoutes = [
     '/studio/*',
+    '/events/*',
     '/blog/posts/*',
     '/login',
     '/signup',

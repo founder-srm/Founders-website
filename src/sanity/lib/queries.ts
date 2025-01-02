@@ -40,7 +40,8 @@ export const FAQS_QUERY = defineQuery(`*[_type == "faq"]{
   answer
 }`);
 
-export const EVENTS_QUERY = defineQuery(`*[_type == "event"] | order(published desc)[0...3]{
+export const EVENTS_QUERY =
+  defineQuery(`*[_type == "event"] | order(published desc)[0...3]{
   _id,
   _createdAt,
   id,
@@ -67,7 +68,8 @@ export const ALL_EVENTS_QUERY = defineQuery(`*[_type == "event"] {
   href
 }`);
 
-export const EVENT_BY_SLUG_QUERY = defineQuery(`*[_type == "event" && slug.current == $slug][0] {
+export const EVENT_BY_SLUG_QUERY =
+  defineQuery(`*[_type == "event" && slug.current == $slug][0] {
   _id,
   _createdAt,
   title,
@@ -79,4 +81,18 @@ export const EVENT_BY_SLUG_QUERY = defineQuery(`*[_type == "event" && slug.curre
   author,
   published,
   href
+}`);
+
+export const HERO_QUERY = defineQuery(`*[_type == "heroComponent"][0]{
+    _id,
+    _createdAt,
+    title,
+    subtitle,
+    buttonText,
+    buttonLink,
+    showButton,
+    image1,
+    image2,
+    image3,
+    image4
 }`);

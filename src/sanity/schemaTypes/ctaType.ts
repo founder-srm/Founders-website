@@ -55,6 +55,6 @@ export const ctaType = defineType({
       type: 'boolean',
       title: 'Show CTA',
       initialValue: true,
-    })
+    }),
   ],
 });

@@ -63,9 +63,44 @@ export interface Event {
   href: string;
 }
 
+export interface Hero {
+  _id: string;
+  _createdAt: string;
+  title: string;
+  subtitle: string;
+  buttonText: string;
+  buttonLink: string;
+  showButton: boolean;
+  image1: {
+    asset: {
+      _ref: string;
+      _type: string;
+    };
+  };
+  image2: {
+    asset: {
+      _ref: string;
+      _type: string;
+    };
+  };
+  image3: {
+    asset: {
+      _ref: string;
+      _type: string;
+    };
+  };
+  image4: {
+    asset: {
+      _ref: string;
+      _type: string;
+    };
+  };
+}
+
 // Query response types
 export type CTAResponse = CTA[];
 export type JobCategoryResponse = JobCategory[];
 export type FeatureResponse = Feature[];
 export type FAQResponse = FAQ[];
 export type EventResponse = Event[];
+export type HeroResponse = Hero;

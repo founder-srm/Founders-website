@@ -1,81 +1,83 @@
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 import Particles from './ui/particles';
+// import type { Hero as HeroType } from '@/sanity/lib/sanity.types';
+import { urlFor } from '@/sanity/lib/image';
+import { HERO_QUERY } from '@/sanity/lib/queries';
+import { sanityFetch } from '@/sanity/lib/live';
+import InteractiveHoverButton from './ui/interactive-hover-button';
 
-export default function Hero() {
+export default async function Hero() {
+  const { data } = await sanityFetch({ query: HERO_QUERY });
+
+  const link = data.buttonLink.startsWith('/') ? data.buttonLink : '/';
+
   return (
-    <section className="container mx-auto px-4 py-12 md:py-24 relative">
+    <section className="overflow-hidden w-full relative pb-32 pt-12">
       <Particles className="absolute inset-0 -z-10" />
-      <div className="relative grid gap-8 lg:grid-cols-2">
-        {/* Text Content */}
-        <div className="flex flex-col justify-center space-y-4">
-          <h1 className="text-4xl font-medium tracking-tight sm:text-5xl md:text-6xl">
-            Welcome to Our Website
-          </h1>
-          <p className="max-w-[600px] text-lg text-muted-foreground">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Elig
-            doloremque mollitia fugiat omnis! Porro facilis quo animi
-            consequatur. Explicabo.
-          </p>
-          <div className="pt-4">
-            <Button className="group">
-              Get Started
-              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Button>
-          </div>
-        </div>
-
-        {/* Floating Cards */}
-        <div className="relative h-[400px] md:h-[600px]">
-          {/* Large hexagon */}
-          <div className="absolute right-4 top-1/4 w-48 md:w-64">
-            <div className="aspect-square rounded-xl bg-gray-100 p-8 shadow-sm">
-              <Image
-                src="/placeholder.svg"
-                alt="Hexagon Logo"
-                width={200}
-                height={200}
-                className="h-full w-full"
-              />
+      <div className="container w-full">
+        <div className="flex flex-col items-start justify-between gap-8 md:flex-row xl:gap-20">
+          {/* Text Content */}
+          <div className="flex w-full flex-col items-start text-left pt-12 ">
+            <h1 className="mb-8 text-pretty text-4xl font-normal md:text-7xl">
+              {data.title}
+            </h1>
+            <p className="mb-12 max-w-[70%] text-xl font-normal text-muted-foreground">
+              {data.subtitle}
+            </p>
+            <div className="flex w-full justify-start md:justify-start">
+              {/* <Button asChild className="group">
+                <Link href={link}>
+                  {data.buttonText}
+                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </Link>
+              </Button> */}
+              <InteractiveHoverButton link={link} text={data.buttonText} />
             </div>
           </div>
 
-          {/* Small cube 1 */}
-          <div className="absolute left-1/4 top-1/3 w-32 md:w-40">
-            <div className="aspect-square rounded-xl bg-gray-100 p-6 shadow-sm">
+          {/* Image Section */}
+          <div className="relative flex h-[600px] w-full rounded-md sm:h-[750px]">
+            <div className="absolute flex h-[600px] w-screen rounded-md bg-gradient-to-b from-muted/50 to-muted sm:h-[750px]">
               <Image
-                src="/placeholder.svg"
-                alt="Cube Logo"
-                width={100}
-                height={100}
-                className="h-full w-full"
+                src={urlFor(data.image1).url()}
+                alt="Largest"
+                width={3840}
+                height={2160}
+                className="my-auto ml-20 block h-5/6 w-auto rounded-md object-cover md:w-3/5"
+                loading="eager"
+                priority
               />
-            </div>
-          </div>
-
-          {/* Small cube 2 */}
-          <div className="absolute bottom-1/4 right-1/3 w-32 md:w-40">
-            <div className="aspect-square rounded-xl bg-gray-100 p-6 shadow-sm">
+              <div className="absolute -left-5 top-1/2 md:-left-20 lg:-left-44">
+                <Image
+                  src={urlFor(data.image2).url()}
+                  alt="Tops small"
+                  width={265}
+                  height={142}
+                  className="mb-6 h-[135px] w-[230px] rounded-lg object-cover shadow-md lg:h-[142px] lg:w-[265px]"
+                  loading="eager"
+                  priority
+                />
+                <Image
+                  src={urlFor(data.image3).url()}
+                  alt="Bottom small"
+                  width={265}
+                  height={142}
+                  className="h-[135px] w-[230px] rounded-lg bg-muted2 object-cover shadow-md lg:h-[142px] lg:w-[265px]"
+                  loading="eager"
+                  priority
+                />
+              </div>
               <Image
-                src="/placeholder.svg"
-                alt="Cube Logo"
-                width={100}
-                height={100}
-                className="h-full w-full"
-              />
-            </div>
-          </div>
-
-          {/* Small cube 3 */}
-          <div className="absolute bottom-8 right-8 w-32 md:w-40">
-            <div className="aspect-square rounded-xl bg-gray-100 p-6 shadow-sm">
-              <Image
-                src="/placeholder.svg"
-                alt="Cube Logo"
-                width={100}
-                height={100}
-                className="h-full w-full"
+                src={urlFor(data.image4).url()}
+                alt="Bottom right"
+                width={265}
+                height={156}
+                className="absolute -left-5 bottom-[70%] h-[146px] w-[230px] rounded-lg bg-muted2 shadow-md md:bottom-8 md:left-1/4 lg:h-[156px] lg:w-[265px] 2xl:left-32"
+                loading="eager"
+                priority
               />
             </div>
           </div>

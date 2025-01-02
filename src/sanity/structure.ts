@@ -4,18 +4,17 @@ export const structure: StructureResolver = S =>
   S.list()
     .title('FC Website Content')
     .items([
-      // // Blog section
-      // S.listItem()
-      //   .title('Blog')
-      //   .child(
-      //     S.list()
-      //       .title('Blog')
-      //       .items([
-      //         S.documentTypeListItem('post').title('Posts'),
-      //         S.documentTypeListItem('category').title('Categories'),
-      //         S.documentTypeListItem('author').title('Authors'),
-      //       ])
-      //   ),
+      S.divider(),
+      // Hero Section
+      S.listItem()
+        .title('Hero Section')
+        .child(
+          S.list()
+            .title('Hero Section')
+            .items([
+              S.documentTypeListItem('heroComponent').title('Hero Component'),
+            ])
+        ),
 
       S.divider(),
 
@@ -67,7 +66,6 @@ export const structure: StructureResolver = S =>
       ...S.documentTypeListItems().filter(
         item =>
           item.getId() &&
-          // biome-ignore lint/style/noNonNullAssertion: <explanation>
           ![
             'post',
             'category',
@@ -77,6 +75,7 @@ export const structure: StructureResolver = S =>
             'faq',
             'cta',
             'event',
+            // biome-ignore lint/style/noNonNullAssertion: <explanation>
           ].includes(item.getId()!)
       ),
     ]);

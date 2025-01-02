@@ -12,9 +12,9 @@ export default async function EventsPage() {
     <div className="container py-24">
       <h1 className="mb-12 text-3xl font-bold">All Events</h1>
       <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-        {events?.map((event:Event) => (
-          <Link 
-            key={event._id} 
+        {events?.map((event: Event) => (
+          <Link
+            key={event._id}
             href={`/events/${event.slug}`}
             className="group"
           >
@@ -28,7 +28,9 @@ export default async function EventsPage() {
               />
             </div>
             <div className="mt-4">
-              <p className="text-sm text-muted-foreground">{event.label} • {event.published}</p>
+              <p className="text-sm text-muted-foreground">
+                {event.label} • {event.published}
+              </p>
               <h2 className="mt-2 text-xl font-semibold">{event.title}</h2>
               <p className="mt-2 text-muted-foreground">{event.summary}</p>
             </div>

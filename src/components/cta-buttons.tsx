@@ -12,7 +12,7 @@ const CTAButtons = ({ ctaData }: CTAButtonsProps) => {
   return (
     <div className="flex w-full flex-col justify-center gap-2 sm:flex-row">
       <Button
-        className={cn(ctaData.variant && "w-full sm:w-auto")}
+        className={cn(ctaData.variant && 'w-full sm:w-auto')}
         onClick={() => window.open(ctaData.primaryButtonLink)}
         variant="outline"
       >
@@ -20,7 +20,7 @@ const CTAButtons = ({ ctaData }: CTAButtonsProps) => {
       </Button>
       {ctaData.activateSecondaryButton && (
         <Button
-          className={cn(ctaData.variant && "w-full sm:w-auto")}
+          className={cn(ctaData.variant && 'w-full sm:w-auto')}
           onClick={() => window.open(ctaData.secondaryButtonLink)}
         >
           {ctaData.secondaryButtonText}

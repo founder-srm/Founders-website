@@ -25,12 +25,14 @@ const Blog8 = async () => {
               <div className="sm:col-span-5">
                 <div className="mb-4 md:mb-6">
                   <div className="flex text-xs uppercase tracking-wider text-muted-foreground">
-                    <span className="mr-3 md:mr-5 lg:mr-6">{webinar.label}</span>
                     <span className="mr-3 md:mr-5 lg:mr-6">
-                      {new Date(webinar.published).toLocaleDateString('en-US', { 
+                      {webinar.label}
+                    </span>
+                    <span className="mr-3 md:mr-5 lg:mr-6">
+                      {new Date(webinar.published).toLocaleDateString('en-US', {
                         month: 'long',
                         day: 'numeric',
-                        year: 'numeric'
+                        year: 'numeric',
                       })}
                     </span>
                   </div>
@@ -53,7 +55,6 @@ const Blog8 = async () => {
                     className=" h-full w-full object-cover transition-transform group-hover:scale-[1.05]"
                     loading="lazy"
                   />
-                  
                 </div>
               </div>
             </Link>
