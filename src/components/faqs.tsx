@@ -13,8 +13,8 @@ const Faq1 = async () => {
   const { data: faqs } = await sanityFetch({ query: FAQS_QUERY });
 
   return (
-    <section className="py-32">
-      <div className="container">
+    <section className="py-32 w-full container">
+      <div className="container w-full">
         <h1 className="mb-4 text-3xl font-semibold md:mb-11 md:text-5xl">
           Frequently asked questions
         </h1>

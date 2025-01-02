@@ -57,5 +57,20 @@ export const eventType = defineType({
       type: 'url',
       title: 'Registration Link',
     }),
+    defineField({
+      name: 'slug',
+      type: 'slug',
+      title: 'Slug',
+      options: {
+        source: 'title',
+      },
+      validation: Rule => Rule.required(),
+    }),
+    defineField({
+      name: 'content',
+      type: 'array',
+      title: 'Content',
+      of: [{ type: 'block' }],
+    }),
   ],
 });

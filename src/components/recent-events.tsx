@@ -1,5 +1,6 @@
 import { ArrowRight } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { sanityFetch } from '@/sanity/lib/live';
 import { EVENTS_QUERY } from '@/sanity/lib/queries';
 import type { Event } from '@/sanity/lib/sanity.types';
@@ -7,18 +8,18 @@ import { urlFor } from '@/sanity/lib/image';
 
 const Blog8 = async () => {
   const { data: webinars } = await sanityFetch({ query: EVENTS_QUERY });
-  console.log(webinars);
+  // console.log(webinars);
   return (
     <section className="py-32">
       <div className="container flex flex-col items-center gap-16">
         <h2 className="mx-auto mb-3 text-pretty text-center text-2xl font-semibold md:mb-4 md:text-3xl lg:mb-6 lg:max-w-3xl">
-          Webinars
+          Recent Events
         </h2>
         <div className="grid gap-y-10 sm:grid-cols-12 sm:gap-y-12 md:gap-y-16 lg:gap-y-20">
           {webinars?.map((webinar: Event) => (
-            <a
+            <Link
               key={webinar.id}
-              href={webinar.href}
+              href={`/events/${webinar.slug}`}
               className="group order-last grid gap-y-6 sm:order-first sm:col-span-12 sm:grid-cols-10 sm:gap-x-5 sm:gap-y-0 md:items-center md:gap-x-8 lg:col-span-10 lg:col-start-2 lg:gap-x-12"
             >
               <div className="sm:col-span-5">
@@ -26,7 +27,11 @@ const Blog8 = async () => {
                   <div className="flex text-xs uppercase tracking-wider text-muted-foreground">
                     <span className="mr-3 md:mr-5 lg:mr-6">{webinar.label}</span>
                     <span className="mr-3 md:mr-5 lg:mr-6">
-                      {webinar.published}
+                      {new Date(webinar.published).toLocaleDateString('en-US', { 
+                        month: 'long',
+                        day: 'numeric',
+                        year: 'numeric'
+                      })}
                     </span>
                   </div>
                 </div>
@@ -51,7 +56,7 @@ const Blog8 = async () => {
                   
                 </div>
               </div>
-            </a>
+            </Link>
           ))}
         </div>
       </div>

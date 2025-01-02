@@ -48,6 +48,8 @@ export interface Event {
   id: string;
   title: string;
   summary: string;
+  slug: string;
+  content: PortableTextBlock[];
   image: {
     asset: {
       _ref: string;
