@@ -1,10 +1,11 @@
-import { cn } from "@/lib/utils";
-import { buttonVariants } from "@/components/ui/button";
-import { client } from "@/sanity/lib/client";
-import { jobsQuery } from "@/sanity/lib/queries/jobsquery";
+import { cn } from '@/lib/utils';
+import { buttonVariants } from '@/components/ui/button';
+import { sanityFetch } from '@/sanity/lib/live';
+import { JOBS_QUERY } from '@/sanity/lib/queries';
+import type { JobCategory } from '@/sanity/lib/sanity.types';
 
 const Careers4 = async () => {
-  const jobs = await client.fetch(jobsQuery);
+  const { data: jobs } = await sanityFetch({ query: JOBS_QUERY });
 
   return (
     <section className="py-32">
@@ -16,12 +17,12 @@ const Careers4 = async () => {
             </h1>
           </div>
           <div className="mx-auto mt-6 flex flex-col gap-16 md:mt-14">
-            {jobs?.map((jobCategory) => (
+            {jobs?.map((jobCategory: JobCategory) => (
               <div key={jobCategory.category} className="grid">
                 <h2 className="border-b pb-4 text-xl font-bold">
                   {jobCategory.category}
                 </h2>
-                {jobCategory.openings.map((job) => (
+                {jobCategory.openings.map(job => (
                   <div
                     key={job.title}
                     className="flex items-center justify-between border-b py-4"
@@ -36,10 +37,10 @@ const Careers4 = async () => {
                     <div
                       className={cn(
                         buttonVariants({
-                          variant: "outline",
-                          size: "sm",
+                          variant: 'outline',
+                          size: 'sm',
                         }),
-                        "pointer-events-none rounded-full",
+                        'pointer-events-none rounded-full'
                       )}
                     >
                       {job.location}

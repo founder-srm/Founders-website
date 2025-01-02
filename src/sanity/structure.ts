@@ -36,9 +36,7 @@ export const structure: StructureResolver = S =>
         .child(
           S.list()
             .title('Features')
-            .items([
-              S.documentTypeListItem('feature').title('Features'),
-            ])
+            .items([S.documentTypeListItem('feature').title('Features')])
         ),
 
       // Help section
@@ -47,9 +45,7 @@ export const structure: StructureResolver = S =>
         .child(
           S.list()
             .title('Help')
-            .items([
-              S.documentTypeListItem('faq').title('FAQs'),
-            ])
+            .items([S.documentTypeListItem('faq').title('FAQs')])
         ),
 
       S.divider(),
@@ -72,6 +68,15 @@ export const structure: StructureResolver = S =>
         item =>
           item.getId() &&
           // biome-ignore lint/style/noNonNullAssertion: <explanation>
-          !['post', 'category', 'author', 'jobCategory', 'feature', 'faq', 'cta', 'event'].includes(item.getId()!)
+          ![
+            'post',
+            'category',
+            'author',
+            'jobCategory',
+            'feature',
+            'faq',
+            'cta',
+            'event',
+          ].includes(item.getId()!)
       ),
     ]);

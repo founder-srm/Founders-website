@@ -89,8 +89,14 @@ const isPathExcluded = (pathname: string, excludedPaths: string[]) => {
 
 const Navbar1 = () => {
   const pathname = usePathname();
-  const excludedRoutes = ['/studio/*', '/blog/posts/*', '/login', '/signup', '/admin'];
-  
+  const excludedRoutes = [
+    '/studio/*',
+    '/blog/posts/*',
+    '/login',
+    '/signup',
+    '/admin',
+  ];
+
   if (isPathExcluded(pathname, excludedRoutes)) {
     return null;
   }

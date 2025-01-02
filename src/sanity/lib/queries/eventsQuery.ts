@@ -1,4 +1,8 @@
-export const eventsQuery = `*[_type == "event"]{
+import groq from 'groq';
+
+export const eventsQuery = groq`*[_type == "event"]{
+    _id,
+    _createdAt,
     id,
     title,
     summary,
@@ -7,5 +11,4 @@ export const eventsQuery = `*[_type == "event"]{
     author,
     published,
     href
-  }`;
-  
+}`;

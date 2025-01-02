@@ -1,4 +1,15 @@
-export const ctaQuery = `*[_type == "cta"]{
+import groq from 'groq';
+
+export const ctaQuery = groq`*[_type == "cta"]{
+    _id,
+    _createdAt,
     title,
-    description
-  }`;
+    description,
+    primaryButtonText,
+    primaryButtonLink,
+    secondaryButtonText,
+    secondaryButtonLink,
+    variant,
+    activateSecondaryButton,
+    showCTA
+}`;

@@ -11,5 +11,15 @@ import { ctaType } from './ctaType';
 import { eventType } from './eventType';
 
 export const schema: { types: SchemaTypeDefinition[] } = {
-  types: [blockContentType, categoryType, postType, authorType, jobCategoryType, featureType, faqType, ctaType, eventType],
+  types: [
+    blockContentType,
+    categoryType,
+    postType,
+    authorType,
+    jobCategoryType,
+    featureType,
+    faqType,
+    ctaType,
+    eventType,
+  ],
 };

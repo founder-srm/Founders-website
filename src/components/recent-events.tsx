@@ -1,10 +1,13 @@
-import { ArrowRight } from "lucide-react";
-import Image from "next/image";
-import { client } from "@/sanity/lib/client";
-import { eventsQuery } from "@/sanity/lib/queries/eventsQuery";
+import { ArrowRight } from 'lucide-react';
+import Image from 'next/image';
+import { sanityFetch } from '@/sanity/lib/live';
+import { EVENTS_QUERY } from '@/sanity/lib/queries';
+import type { Event } from '@/sanity/lib/sanity.types';
+import { urlFor } from '@/sanity/lib/image';
 
 const Blog8 = async () => {
-  const webinars = await client.fetch(eventsQuery);
+  const { data: webinars } = await sanityFetch({ query: EVENTS_QUERY });
+  console.log(webinars);
   return (
     <section className="py-32">
       <div className="container flex flex-col items-center gap-16">
@@ -12,7 +15,7 @@ const Blog8 = async () => {
           Webinars
         </h2>
         <div className="grid gap-y-10 sm:grid-cols-12 sm:gap-y-12 md:gap-y-16 lg:gap-y-20">
-          {webinars?.map((webinar) => (
+          {webinars?.map((webinar: Event) => (
             <a
               key={webinar.id}
               href={webinar.href}
@@ -21,15 +24,14 @@ const Blog8 = async () => {
               <div className="sm:col-span-5">
                 <div className="mb-4 md:mb-6">
                   <div className="flex text-xs uppercase tracking-wider text-muted-foreground">
-                    <span className="mr-3 md:mr-5 lg:mr-6">Webinar</span>
+                    <span className="mr-3 md:mr-5 lg:mr-6">{webinar.label}</span>
                     <span className="mr-3 md:mr-5 lg:mr-6">
-                      Employer of record
+                      {webinar.published}
                     </span>
                   </div>
                 </div>
                 <h3 className="text-xl font-semibold md:text-2xl lg:text-3xl">
-                  Engaging Talent, Embracing Change: Uncover the Value of an
-                  Employer of Record
+                  {webinar.title}
                 </h3>
                 <div className="mt-4 flex items-center space-x-2 md:mt-5">
                   <span className="font-semibold md:text-base">Read more</span>
@@ -39,13 +41,14 @@ const Blog8 = async () => {
               <div className="order-first sm:order-last sm:col-span-5">
                 <div className="aspect-[16/9] overflow-clip rounded-lg border border-border">
                   <Image
-                    src={webinar.image}
+                    src={urlFor(webinar.image).url()}
                     alt={webinar.title}
                     width={500}
                     height={281}
                     className=" h-full w-full object-cover transition-transform group-hover:scale-[1.05]"
                     loading="lazy"
                   />
+                  
                 </div>
               </div>
             </a>

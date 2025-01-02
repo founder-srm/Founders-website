@@ -1,13 +1,14 @@
 'use client';
-import React, { useEffect, useState, useRef } from 'react';
+import type React from 'react';
+import { useEffect, useState, useRef } from 'react';
 import {
   motion,
-  SpringOptions,
+  type SpringOptions,
   useMotionValue,
   useSpring,
   AnimatePresence,
-  Transition,
-  Variant,
+  type Transition,
+  type Variant,
 } from 'motion/react';
 import { cn } from '@/lib/utils';
 
@@ -116,9 +117,9 @@ export function Cursor({
       <AnimatePresence>
         {isVisible && (
           <motion.div
-            initial='initial'
-            animate='animate'
-            exit='exit'
+            initial="initial"
+            animate="animate"
+            exit="exit"
             variants={variants}
             transition={transition}
           >

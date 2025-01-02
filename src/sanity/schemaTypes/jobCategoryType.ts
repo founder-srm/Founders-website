@@ -1,25 +1,25 @@
-import { defineType, defineField } from "sanity";
+import { defineType, defineField } from 'sanity';
 
 export const jobCategoryType = defineType({
-  name: "jobCategory",
-  type: "document",
-  title: "Job Category",
+  name: 'jobCategory',
+  type: 'document',
+  title: 'Job Category',
   fields: [
     defineField({
-      name: "category",
-      type: "string",
-      title: "Category",
+      name: 'category',
+      type: 'string',
+      title: 'Category',
     }),
     defineField({
-      name: "openings",
-      type: "array",
+      name: 'openings',
+      type: 'array',
       of: [
         {
-          type: "object",
+          type: 'object',
           fields: [
-            { name: "title", type: "string", title: "Job Title" },
-            { name: "location", type: "string", title: "Location" },
-            { name: "link", type: "url", title: "Link" },
+            { name: 'title', type: 'string', title: 'Job Title' },
+            { name: 'location', type: 'string', title: 'Location' },
+            { name: 'link', type: 'url', title: 'Link' },
           ],
         },
       ],

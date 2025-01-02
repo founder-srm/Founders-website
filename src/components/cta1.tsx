@@ -1,10 +1,37 @@
-import { Button } from "@/components/ui/button";
-import { client } from "@/sanity/lib/client";
-import { ctaQuery } from "@/sanity/lib/queries/ctaQuery";
+import { Button } from '@/components/ui/button';
+import { sanityFetch } from '@/sanity/lib/live';
+import { CTA_QUERY } from '@/sanity/lib/queries';
+import type { CTA } from '@/sanity/lib/sanity.types';
 
 const CTA11 = async () => {
-  const ctaData = await client.fetch(ctaQuery);
-  return (
+  const { data } = await sanityFetch({ query: CTA_QUERY });
+  const ctaData: CTA = data[0];
+
+  if (!ctaData.showCTA) {
+    return null;
+  }
+
+  const renderButtons = () => (
+    <div className="flex w-full flex-col justify-center gap-2 sm:flex-row">
+      <Button
+        className="w-full sm:w-auto"
+        onClick={() => window.open(ctaData.primaryButtonLink)}
+        variant="outline"
+      >
+        {ctaData.primaryButtonText}
+      </Button>
+      {ctaData.activateSecondaryButton && (
+        <Button
+          className="w-full sm:w-auto"
+          onClick={() => window.open(ctaData.secondaryButtonLink)}
+        >
+          {ctaData.secondaryButtonText}
+        </Button>
+      )}
+    </div>
+  );
+
+  return ctaData.variant ? (
     <section className="py-32">
       <div className="container">
         <div className="flex flex-col items-center rounded-lg bg-accent p-8 text-center md:rounded-xl lg:p-16">
@@ -14,11 +41,34 @@ const CTA11 = async () => {
           <p className="mb-8 max-w-3xl text-muted-foreground lg:text-lg">
             {ctaData.description}
           </p>
-          <div className="flex w-full flex-col justify-center gap-2 sm:flex-row">
-            <Button variant="outline" className="w-full sm:w-auto">
-              Learn More
+          {renderButtons()}
+        </div>
+      </div>
+    </section>
+  ) : (
+    <section className="py-32">
+      <div className="container">
+        <div className="flex w-full flex-col gap-16 overflow-hidden rounded-lg bg-accent p-8 md:rounded-xl lg:flex-row lg:items-center lg:p-16">
+          <div className="flex-1">
+            <h3 className="mb-3 text-2xl font-semibold md:mb-4 md:text-4xl lg:mb-6">
+              {ctaData.title}
+            </h3>
+            <p className="text-muted-foreground lg:text-lg">
+              {ctaData.description}
+            </p>
+          </div>
+          <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
+            <Button
+              onClick={() => window.open(ctaData.primaryButtonLink)}
+              variant="outline"
+            >
+              {ctaData.primaryButtonText}
             </Button>
-            <Button className="w-full sm:w-auto">Get Started</Button>
+            {ctaData.activateSecondaryButton && (
+              <Button onClick={() => window.open(ctaData.secondaryButtonLink)}>
+                {ctaData.secondaryButtonText}
+              </Button>
+            )}
           </div>
         </div>
       </div>
