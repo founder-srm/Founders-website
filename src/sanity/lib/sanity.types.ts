@@ -39,7 +39,7 @@ export interface FAQ {
   _id: string;
   _createdAt: string;
   question: string;
-  answer: PortableTextBlock[];
+  answer: string;
 }
 
 export interface Event {

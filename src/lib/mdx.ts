@@ -1,17 +1,9 @@
 import type { MDXRemoteSerializeResult } from 'next-mdx-remote';
 import { serialize } from 'next-mdx-remote/serialize';
 import { createClient } from '@/utils/supabase/client';
+import type { Database } from '../../database.types';
 
-export interface BlogPost {
-  id: number;
-  title: string;
-  slug: string;
-  content: string;
-  summary: string;
-  author: string;
-  image: string;
-  published_at: string;
-}
+export type BlogPost = Database['public']['Tables']['posts']['Row'];
 
 export async function getAllPosts(): Promise<BlogPost[]> {
   const supabase = createClient();

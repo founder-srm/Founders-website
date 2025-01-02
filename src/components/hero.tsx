@@ -1,7 +1,4 @@
-import { Button } from '@/components/ui/button';
-import { ArrowRight } from 'lucide-react';
 import Image from 'next/image';
-import Link from 'next/link';
 import Particles from './ui/particles';
 // import type { Hero as HeroType } from '@/sanity/lib/sanity.types';
 import { urlFor } from '@/sanity/lib/image';
@@ -21,19 +18,13 @@ export default async function Hero() {
         <div className="flex flex-col items-start justify-between gap-8 md:flex-row xl:gap-20">
           {/* Text Content */}
           <div className="flex w-full flex-col items-start text-left pt-12 ">
-            <h1 className="mb-8 text-pretty text-4xl font-normal md:text-7xl">
+            <h1 className="mb-8 text-pretty text-4xl font-normal md:text-7xl heading-gradient">
               {data.title}
             </h1>
             <p className="mb-12 max-w-[70%] text-xl font-normal text-muted-foreground">
               {data.subtitle}
             </p>
             <div className="flex w-full justify-start md:justify-start">
-              {/* <Button asChild className="group">
-                <Link href={link}>
-                  {data.buttonText}
-                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                </Link>
-              </Button> */}
               <InteractiveHoverButton link={link} text={data.buttonText} />
             </div>
           </div>

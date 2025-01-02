@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
 import type { Config } from "tailwindcss";
-
+const plugin = require('tailwindcss/plugin')
 export default {
     darkMode: ["class"],
     content: [
@@ -10,6 +10,9 @@ export default {
   ],
   theme: {
   	extend: {
+		fontFamily:{
+			plusJK: ['var(--font-plus-jakarta-sans)'],
+		},
   		colors: {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
@@ -93,5 +96,17 @@ export default {
   plugins: [
     require("tailwindcss-animate"),
     require('@tailwindcss/typography'),
+	plugin(function ({ addUtilities } : any) {
+		addUtilities({
+			'.heading-gradient': {
+				'color': 'rgba(0, 0, 0, 0)',
+				'-webkit-text-fill-color': 'transparent',
+				'background-image': 'radial-gradient(circle farthest-side at 45%, #fff, rgba(255, 255, 255, .43))',
+				'-webkit-background-clip': 'text',
+				'background-clip': 'text',
+				'padding-bottom': '5px'
+			}
+		})
+	})
   ],
 } satisfies Config;

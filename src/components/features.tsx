@@ -10,8 +10,8 @@ const Feature43 = async () => {
     <section className="py-32">
       <div className="container">
         <div className="mb-10 md:mb-20">
-          <h2 className="mb-2 text-center text-3xl font-semibold lg:text-5xl">
-            Why Work With Us?
+          <h2 className="mb-2 text-center text-3xl font-semibold lg:text-5xl heading-gradient">
+            What we do in Founder&apos;s Club.
           </h2>
         </div>
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-3">

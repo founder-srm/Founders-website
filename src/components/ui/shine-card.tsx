@@ -46,7 +46,7 @@ export default function ShineCard({ reason }: ShineCardProps) {
           background: useMotionTemplate`
             radial-gradient(
               650px circle at ${mouseX}px ${mouseY}px,
-              rgba(100, 100, 255, 0.15),
+              rgba(100, 100, 100, 0.2),
               transparent 80%
             )
           `,

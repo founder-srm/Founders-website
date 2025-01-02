@@ -7,15 +7,14 @@ import {
 import { sanityFetch } from '@/sanity/lib/live';
 import { FAQS_QUERY } from '@/sanity/lib/queries';
 import type { FAQ } from '@/sanity/lib/sanity.types';
-import { PortableText } from 'next-sanity';
 
 const Faq1 = async () => {
   const { data: faqs } = await sanityFetch({ query: FAQS_QUERY });
-
+  // console.log(faqs);
   return (
-    <section className="py-32 w-full container">
+    <section className="py-32 container">
       <div className="container w-full">
-        <h1 className="mb-4 text-3xl font-semibold md:mb-11 md:text-5xl">
+        <h1 className="mb-4 text-3xl font-semibold md:mb-11 md:text-5xl heading-gradient">
           Frequently asked questions
         </h1>
         {faqs?.map((faq: FAQ) => (
@@ -24,9 +23,7 @@ const Faq1 = async () => {
               <AccordionTrigger className="hover:text-foreground/60 hover:no-underline">
                 {faq.question}
               </AccordionTrigger>
-              <AccordionContent>
-                <PortableText value={faq.answer} />
-              </AccordionContent>
+              <AccordionContent>{faq.answer}</AccordionContent>
             </AccordionItem>
           </Accordion>
         ))}
