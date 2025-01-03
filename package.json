@@ -10,7 +10,8 @@
     "fmt": "biome check --write",
     "shadcn": "shadcn@latest add [component]",
     "schema": "sanity@latest schema extract",
-    "sanity-typegen": "sanity@latest typegen generate"
+    "sanity-typegen": "sanity@latest typegen generate",
+    "supazod": "supazod -i database.types.ts -o schemas.zod.ts -t schemas.d.ts -s public --verbose"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.1.0",
@@ -23,7 +24,11 @@
     "@radix-ui/react-dropdown-menu": "^2.1.4",
     "@radix-ui/react-label": "^2.1.1",
     "@radix-ui/react-navigation-menu": "^1.2.3",
+    "@radix-ui/react-popover": "^1.1.4",
+    "@radix-ui/react-progress": "^1.1.1",
+    "@radix-ui/react-radio-group": "^1.2.2",
     "@radix-ui/react-select": "^2.1.4",
+    "@radix-ui/react-slider": "^1.2.2",
     "@radix-ui/react-slot": "^1.1.1",
     "@sanity/icons": "^3.5.7",
     "@sanity/image-url": "^1.1.0",
@@ -35,6 +40,7 @@
     "@types/prismjs": "^1.26.5",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
     "esbuild": "^0.24.2",
     "framer-motion": "^11.15.0",
     "groq": "^3.68.3",
@@ -46,11 +52,13 @@
     "next-themes": "^0.4.4",
     "prismjs": "^1.29.0",
     "react": "^18.3.1",
+    "react-day-picker": "8.10.1",
     "react-dom": "^18.3.1",
     "remark-gfm": "^4.0.0",
     "sanity": "^3.68.3",
     "styled-components": "^6.1.13",
     "supabase": "^2.2.1",
+    "supazod": "^1.1.2",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7"
   },
