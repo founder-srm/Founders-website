@@ -1,6 +1,5 @@
 import { sanityFetch } from '@/sanity/lib/live';
 import { ALL_EVENTS_QUERY } from '@/sanity/lib/queries';
-import type { Event } from '@/sanity/lib/sanity.types';
 import Link from 'next/link';
 import Image from 'next/image';
 import { urlFor } from '@/sanity/lib/image';
@@ -12,7 +11,7 @@ export default async function EventsPage() {
     <div className="container py-24">
       <h1 className="mb-12 text-3xl font-bold">All Events</h1>
       <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-        {events?.map((event: Event) => (
+        {events?.map((event) => (
           <Link
             key={event._id}
             href={`/events/${event.slug}`}
@@ -20,8 +19,8 @@ export default async function EventsPage() {
           >
             <div className="overflow-hidden rounded-lg">
               <Image
-                src={urlFor(event.image).url()}
-                alt={event.title}
+                src={urlFor(event.image || '').url()}
+                alt={event.title || ''}
                 width={400}
                 height={300}
                 className="aspect-video object-cover transition-transform duration-300 group-hover:scale-105"

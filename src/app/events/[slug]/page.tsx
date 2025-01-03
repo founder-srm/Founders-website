@@ -1,6 +1,5 @@
 import { sanityFetch } from '@/sanity/lib/live';
-import { EVENT_BY_SLUG_QUERY } from '@/sanity/lib/queries';
-// import type { Event } from '@/sanity/lib/sanity.types';
+import { ALL_EVENTS_QUERY, EVENT_BY_SLUG_QUERY } from '@/sanity/lib/queries';
 import { urlFor } from '@/sanity/lib/image';
 import Image from 'next/image';
 import { PortableText } from '@portabletext/react';
@@ -11,13 +10,13 @@ interface Props {
   };
 }
 
-// export async function generateStaticParams() {
-//   const { data: events } = await sanityFetch({ query: ALL_EVENTS_QUERY });
+export async function generateStaticParams() {
+  const { data: events } = await sanityFetch({ query: ALL_EVENTS_QUERY });
 
-//   return events?.map((event: Event) => ({
-//     slug: event.slug,
-//   }));
-// }
+  return events?.map((event) => ({
+    slug: event.slug || '',
+  }));
+}
 
 export default async function EventPage({ params }: Props) {
   const { data: event } = await sanityFetch({
@@ -38,15 +37,16 @@ export default async function EventPage({ params }: Props) {
         <h1 className="mb-8 text-4xl font-bold">{event.title}</h1>
         <div className="mb-8 overflow-hidden rounded-lg">
           <Image
-            src={urlFor(event.image).url()}
-            alt={event.title}
+            src={urlFor(event.image || '').url()}
+            alt={event.title || ''}
             width={800}
             height={500}
             className="aspect-video object-cover"
           />
         </div>
         <div className="prose prose-lg max-w-none">
-          <PortableText value={event.content} />
+          {/* biome-ignore lint/style/noNonNullAssertion: Static rendered page, will always have content */}
+          <PortableText value={event.content!} />
         </div>
       </div>
     </article>
