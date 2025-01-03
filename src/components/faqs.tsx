@@ -6,7 +6,6 @@ import {
 } from '@/components/ui/accordion';
 import { sanityFetch } from '@/sanity/lib/live';
 import { FAQS_QUERY } from '@/sanity/lib/queries';
-import type { FAQ } from '@/sanity/lib/sanity.types';
 
 const Faq1 = async () => {
   const { data: faqs } = await sanityFetch({ query: FAQS_QUERY });
@@ -17,7 +16,7 @@ const Faq1 = async () => {
         <h1 className="mb-4 text-3xl font-semibold md:mb-11 md:text-5xl heading-gradient">
           Frequently asked questions
         </h1>
-        {faqs?.map((faq: FAQ) => (
+        {faqs?.map(faq => (
           <Accordion key={faq._id} type="single" collapsible>
             <AccordionItem value={`item-${faq._id}`} className="mb-4">
               <AccordionTrigger className="hover:text-foreground/60 hover:no-underline">

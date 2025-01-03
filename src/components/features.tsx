@@ -1,6 +1,5 @@
 import { sanityFetch } from '@/sanity/lib/live';
 import { FEATURES_QUERY } from '@/sanity/lib/queries';
-import type { Feature } from '@/sanity/lib/sanity.types';
 import ShineCard from './ui/shine-card';
 
 const Feature43 = async () => {
@@ -15,7 +14,7 @@ const Feature43 = async () => {
           </h2>
         </div>
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-3">
-          {reasons?.map((reason: Feature) => (
+          {reasons?.map(reason => (
             <ShineCard key={reason._id} reason={reason} />
           ))}
         </div>

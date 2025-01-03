@@ -1,11 +1,10 @@
 import { sanityFetch } from '@/sanity/lib/live';
 import { CTA_QUERY } from '@/sanity/lib/queries';
-import type { CTA } from '@/sanity/lib/sanity.types';
 import CTAButtons from './cta-buttons';
 
 const CTA11 = async () => {
   const { data } = await sanityFetch({ query: CTA_QUERY });
-  const ctaData: CTA = data[0];
+  const ctaData = data[0];
 
   if (!ctaData.showCTA) {
     return <></>;

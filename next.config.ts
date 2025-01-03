@@ -20,7 +20,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'unsplash.com',
+        hostname: 'shadcnblocks.com',
       },
     ],
   },

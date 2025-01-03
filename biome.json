@@ -12,7 +12,12 @@
     "ignoreUnknown": true
   },
   "linter": {
-    "ignore": ["tailwind.config.ts", "once-ui"],
+    "ignore": [
+      "tailwind.config.ts",
+      "once-ui",
+      "sanity.config.ts",
+      "sanity.types.ts"
+    ],
     "enabled": true,
     "rules": {
       "recommended": true,
@@ -23,7 +28,12 @@
     }
   },
   "formatter": {
-    "ignore": ["tailwind.config.ts", "once-ui"],
+    "ignore": [
+      "tailwind.config.ts",
+      "once-ui",
+      "sanity.config.ts",
+      "sanity.types.ts"
+    ],
     "enabled": true,
     "formatWithErrors": true,
     "indentStyle": "space",

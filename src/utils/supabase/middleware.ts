@@ -7,7 +7,9 @@ export async function updateSession(request: NextRequest) {
   });
 
   const supabase = createServerClient(
+    // biome-ignore lint/style/noNonNullAssertion: Default Config
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    // biome-ignore lint/style/noNonNullAssertion: Default Config
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
@@ -15,12 +17,14 @@ export async function updateSession(request: NextRequest) {
           return request.cookies.getAll();
         },
         setAll(cookiesToSet) {
+          // biome-ignore lint/complexity/noForEach: Default Config
           cookiesToSet.forEach(({ name, value }) =>
             request.cookies.set(name, value)
           );
           supabaseResponse = NextResponse.next({
             request,
           });
+          // biome-ignore lint/complexity/noForEach: Default Config
           cookiesToSet.forEach(({ name, value, options }) =>
             supabaseResponse.cookies.set(name, value, options)
           );

@@ -3,7 +3,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { sanityFetch } from '@/sanity/lib/live';
 import { EVENTS_QUERY } from '@/sanity/lib/queries';
-import type { Event } from '@/sanity/lib/sanity.types';
 import { urlFor } from '@/sanity/lib/image';
 
 const Blog8 = async () => {
@@ -16,7 +15,7 @@ const Blog8 = async () => {
           Recent Events
         </h2>
         <div className="grid gap-y-10 sm:grid-cols-12 sm:gap-y-12 md:gap-y-16 lg:gap-y-20">
-          {webinars?.map((webinar: Event) => (
+          {webinars?.map(webinar => (
             <Link
               key={webinar.id}
               href={`/events/${webinar.slug}`}
@@ -29,11 +28,16 @@ const Blog8 = async () => {
                       {webinar.label}
                     </span>
                     <span className="mr-3 md:mr-5 lg:mr-6">
-                      {new Date(webinar.published).toLocaleDateString('en-US', {
-                        month: 'long',
-                        day: 'numeric',
-                        year: 'numeric',
-                      })}
+                      {webinar.published
+                        ? new Date(webinar.published).toLocaleDateString(
+                            'en-US',
+                            {
+                              month: 'long',
+                              day: 'numeric',
+                              year: 'numeric',
+                            }
+                          )
+                        : ''}
                     </span>
                   </div>
                 </div>
@@ -48,8 +52,8 @@ const Blog8 = async () => {
               <div className="order-first sm:order-last sm:col-span-5">
                 <div className="aspect-[16/9] overflow-clip rounded-lg border border-border">
                   <Image
-                    src={urlFor(webinar.image).url()}
-                    alt={webinar.title}
+                    src={webinar.image ? urlFor(webinar.image).url() : ''}
+                    alt={webinar.title || ''}
                     width={500}
                     height={281}
                     className=" h-full w-full object-cover transition-transform group-hover:scale-[1.05]"

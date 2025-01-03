@@ -2,7 +2,6 @@ import { cn } from '@/lib/utils';
 import { buttonVariants } from '@/components/ui/button';
 import { sanityFetch } from '@/sanity/lib/live';
 import { JOBS_QUERY } from '@/sanity/lib/queries';
-import type { JobCategory } from '@/sanity/lib/sanity.types';
 
 const Careers4 = async () => {
   const { data: jobs } = await sanityFetch({ query: JOBS_QUERY });
@@ -17,18 +16,18 @@ const Careers4 = async () => {
             </h1>
           </div>
           <div className="mx-auto mt-6 flex flex-col gap-16 md:mt-14 w-full">
-            {jobs?.map((jobCategory: JobCategory) => (
+            {jobs?.map(jobCategory => (
               <div key={jobCategory.category} className="grid w-full">
                 <h2 className="border-b pb-4 text-xl font-bold">
                   {jobCategory.category}
                 </h2>
-                {jobCategory.openings.map(job => (
+                {jobCategory.openings?.map(job => (
                   <div
                     key={job.title}
                     className="flex items-center justify-between gap-32 border-b py-4 w-full"
                   >
                     <a
-                      href={job.link}
+                      href={job.link || ''}
                       className="font-semibold hover:underline"
                     >
                       {job.title}

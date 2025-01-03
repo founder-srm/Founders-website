@@ -1,5 +1,4 @@
 'use client';
-import type { Feature } from '@/sanity/lib/sanity.types';
 import { motion, useMotionTemplate, useMotionValue } from 'framer-motion';
 import { createElement, type MouseEvent } from 'react';
 import {
@@ -12,7 +11,13 @@ import {
 } from 'lucide-react';
 
 type ShineCardProps = {
-  reason: Feature;
+  reason: {
+    _id: string;
+    _createdAt: string;
+    title: string | null;
+    description: string | null;
+    icon: string | null;
+  };
 };
 
 const iconComponents = {

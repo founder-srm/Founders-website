@@ -1,12 +1,12 @@
-import { type BlogPost, getPostsRange } from '@/lib/mdx'
-import Image from 'next/image'
-import Link from 'next/link'
-import { ArrowUpRight } from 'lucide-react'
-import { Button } from './ui/button'
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
+import { type BlogPost, getPostsRange } from '@/lib/mdx';
+import Image from 'next/image';
+import Link from 'next/link';
+import { ArrowUpRight } from 'lucide-react';
+import { Button } from './ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 
 export default async function RelatedPosts() {
-  const posts = await getPostsRange(0, 1)
+  const posts = await getPostsRange(0, 1);
 
   return (
     <section className="py-32">
@@ -20,7 +20,8 @@ export default async function RelatedPosts() {
             Blog
           </h2>
           <p className="md:mb-5 lg:mb-6 lg:max-w-xs">
-            We write about the things we love, the things we learn, and the things we do.
+            We write about the things we love, the things we learn, and the
+            things we do.
           </p>
           <div className="hidden md:block">
             <ViewAllPostsButton />
@@ -29,7 +30,7 @@ export default async function RelatedPosts() {
 
         {/* Posts Grid */}
         <div className="grid gap-x-4 gap-y-8 md:grid-cols-2 lg:gap-x-6 lg:gap-y-12">
-          {posts.map((post) => (
+          {posts.map(post => (
             <BlogPostCard key={post.id} post={post} />
           ))}
         </div>
@@ -40,7 +41,7 @@ export default async function RelatedPosts() {
         </div>
       </div>
     </section>
-  )
+  );
 }
 
 function BlogPostCard({ post }: { post: BlogPost }) {
@@ -69,7 +70,13 @@ function BlogPostCard({ post }: { post: BlogPost }) {
       <div className="flex items-center gap-2">
         <span className="relative flex shrink-0 overflow-hidden rounded-full size-12">
           <Avatar>
-            <AvatarImage width={48} height={48} className="aspect-square h-full w-full object-cover" src={post.author_image} alt={post.author} />
+            <AvatarImage
+              width={48}
+              height={48}
+              className="aspect-square h-full w-full object-cover"
+              src={post.author_image}
+              alt={post.author}
+            />
             <AvatarFallback>{post.author}</AvatarFallback>
           </Avatar>
         </span>
@@ -81,18 +88,13 @@ function BlogPostCard({ post }: { post: BlogPost }) {
         </div>
       </div>
     </Link>
-  )
+  );
 }
 
 function ViewAllPostsButton({ className = '' }) {
   return (
-    <Button 
-      className={className}
-      asChild
-    >
-      <Link href="/blog">
-        View all posts
-      </Link>
+    <Button className={className} asChild>
+      <Link href="/blog">View all posts</Link>
     </Button>
-  )
+  );
 }
