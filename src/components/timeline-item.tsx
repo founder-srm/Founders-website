@@ -1,15 +1,19 @@
-'use client'
+'use client';
 
-import { motion } from 'framer-motion'
-import Image from 'next/image'
+import { motion } from 'framer-motion';
+import Image from 'next/image';
 
 interface TimelineItemProps {
-  title: string
-  description: string
-  image: string
+  title: string;
+  description: string;
+  image: string;
 }
 
-export default function TimelineItem({ title, description, image }: TimelineItemProps) {
+export default function TimelineItem({
+  title,
+  description,
+  image,
+}: TimelineItemProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 50 }}
@@ -30,6 +34,5 @@ export default function TimelineItem({ title, description, image }: TimelineItem
         <p className="text-muted-foreground">{description}</p>
       </div>
     </motion.div>
-  )
+  );
 }
-

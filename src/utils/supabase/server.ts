@@ -1,9 +1,9 @@
-
 import { createServerClient } from '@supabase/ssr';
-import type { cookies } from 'next/headers';
+import { cookies } from 'next/headers';
 import type { Database } from '../../../database.types';
 
-export const createClient = (cookieStore: ReturnType<typeof cookies>) => {
+export async function createClient() {
+  const cookieStore = await cookies();
   return createServerClient<Database>(
     // biome-ignore lint/style/noNonNullAssertion: Default Config
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -28,4 +28,4 @@ export const createClient = (cookieStore: ReturnType<typeof cookies>) => {
       },
     }
   );
-};
+}

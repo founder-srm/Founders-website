@@ -13,7 +13,7 @@ interface Props {
 export async function generateStaticParams() {
   const { data: events } = await sanityFetch({ query: ALL_EVENTS_QUERY });
 
-  return events?.map((event) => ({
+  return events?.map(event => ({
     slug: event.slug || '',
   }));
 }

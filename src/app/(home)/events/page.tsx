@@ -11,7 +11,7 @@ export default async function EventsPage() {
     <div className="container py-24">
       <h1 className="mb-12 text-3xl font-bold">All Events</h1>
       <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-        {events?.map((event) => (
+        {events?.map(event => (
           <Link
             key={event._id}
             href={`/events/${event.slug}`}

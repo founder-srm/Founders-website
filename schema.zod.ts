@@ -5,18 +5,55 @@ import type { Database } from './database.types';
 export type eventsInsertType = Database['public']['Tables']['events']['Insert'];
 
 export const eventsInsertSchema = z.object({
-    banner_image: z.string(),
-    description: z.string(),
-    end_date: z.string(),
-    event_type: z.enum(['online', 'offline', 'hybrid']).nullable().optional(),
-    is_featured: z.boolean().nullable().optional(),
-    more_info: z.string().nullable().optional(),
-    publish_date: z.string(),
-    rules: z.string().nullable().optional(),
-    slug: z.string().optional(),
-    start_date: z.string(),
-    tags: z.array(z.string()),
-    title: z.string(),
-    typeform_config: z.any(),
-    venue: z.string()
+  banner_image: z.string(),
+  description: z.string(),
+  end_date: z.string(),
+  event_type: z.enum(['online', 'offline', 'hybrid']).nullable().optional(),
+  is_featured: z.boolean().nullable().optional(),
+  more_info: z.string().nullable().optional(),
+  publish_date: z.string(),
+  rules: z.string().nullable().optional(),
+  slug: z.string().optional(),
+  start_date: z.string(),
+  tags: z.array(z.string()),
+  title: z.string(),
+  typeform_config: z.any(),
+  venue: z.string(),
+});
+
+export const typeformFieldSchema = z.object({
+  fieldType: z.enum([
+    'text',
+    'radio',
+    'select',
+    'slider',
+    'checkbox',
+    'date',
+    'textarea',
+  ]),
+  label: z.string(),
+  name: z.string(),
+  description: z.string().optional(),
+  required: z.boolean().optional(),
+  options: z.array(z.string()).optional(),
+  min: z.number().optional(),
+  max: z.number().optional(),
+  validation: z
+    .object({
+      min: z.number().optional(),
+      max: z.number().optional(),
+      minLength: z.number().optional(),
+      maxLength: z.number().optional(),
+      pattern: z.string().optional(),
+    })
+    .optional(),
+  checkboxType: z.enum(['single', 'multiple']).optional(),
+  items: z
+    .array(
+      z.object({
+        id: z.string(),
+        label: z.string(),
+      })
+    )
+    .optional(),
 });
