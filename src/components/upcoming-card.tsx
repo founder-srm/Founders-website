@@ -15,8 +15,9 @@ export function UpcomingCard({ post }: UpcomingCardProps) {
           <Image
             src={post.banner_image}
             alt={post.title}
-            width={400}
-            height={300}
+            width={1024}
+            height={768}
+            loading='lazy'
             className="aspect-[3/2] h-full w-full object-cover object-center"
           />
         </div>
