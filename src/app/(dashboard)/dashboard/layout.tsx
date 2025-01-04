@@ -1,7 +1,5 @@
 import { SessionProvider } from '@/components/providers/SessionProvider';
 
-
-
 export default function DashboardLayout({
   children,
 }: {
@@ -9,9 +7,7 @@ export default function DashboardLayout({
 }) {
   return (
     <SessionProvider>
-      <main className="dashboard-layout">
-        {children}
-      </main>
+      <main className="dashboard-layout">{children}</main>
     </SessionProvider>
   );
 }

@@ -14,15 +14,17 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Slider } from "@/components/ui/slider";
-import { Input } from "@/components/ui/input";
+} from '@/components/ui/select';
+import { Slider } from '@/components/ui/slider';
+import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
 export default function CustomizeTicketPage() {
   const searchParams = useSearchParams();
   const ticketId = searchParams.get('ticketid');
-  const [registration, setRegistration] = useState<typeformInsertType | null>(null);
+  const [registration, setRegistration] = useState<typeformInsertType | null>(
+    null
+  );
   const [loading, setLoading] = useState(true);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [backgroundColor, setBackgroundColor] = useState('#ffffff');
@@ -73,14 +75,19 @@ export default function CustomizeTicketPage() {
     const ctx = canvas.getContext('2d');
 
     if (!ctx) return;
-    
+
     // Clear canvas and draw background
     ctx.fillStyle = backgroundColor;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     // Theme-specific background
     if (selectedTheme === 'gradient') {
-      const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+      const gradient = ctx.createLinearGradient(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
       gradient.addColorStop(0, backgroundColor);
       gradient.addColorStop(1, '#f0f0f0');
       ctx.fillStyle = gradient;
@@ -98,7 +105,7 @@ export default function CustomizeTicketPage() {
       patternCtx.moveTo(0, 20);
       patternCtx.lineTo(20, 0);
       patternCtx.stroke();
-      
+
       const pattern = ctx.createPattern(patternCanvas, 'repeat');
       if (pattern) {
         ctx.fillStyle = pattern;
@@ -122,18 +129,29 @@ export default function CustomizeTicketPage() {
 
     // Draw additional info
     ctx.font = '16px Inter';
-    ctx.fillText(`Ticket ID: ${registration.ticket_id}`, canvas.width / 2, canvas.height - 60);
+    ctx.fillText(
+      `Ticket ID: ${registration.ticket_id}`,
+      canvas.width / 2,
+      canvas.height - 60
+    );
     ctx.fillText(
       `Registration Date: ${registration.created_at ? new Date(registration.created_at).toLocaleDateString() : 'Not available'}`,
       canvas.width / 2,
       canvas.height - 30
     );
-  }, [registration, backgroundColor, textColor, fontSize, selectedTheme, qrCodeImage]);
+  }, [
+    registration,
+    backgroundColor,
+    textColor,
+    fontSize,
+    selectedTheme,
+    qrCodeImage,
+  ]);
 
   const downloadTicket = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    
+
     const downloadLink = document.createElement('a');
     downloadLink.download = `custom-ticket-${registration?.ticket_id}.png`;
     downloadLink.href = canvas.toDataURL('image/png');
@@ -173,13 +191,13 @@ export default function CustomizeTicketPage() {
                 <Input
                   type="color"
                   value={backgroundColor}
-                  onChange={(e) => setBackgroundColor(e.target.value)}
+                  onChange={e => setBackgroundColor(e.target.value)}
                   className="w-16 h-10"
                 />
                 <Input
                   type="text"
                   value={backgroundColor}
-                  onChange={(e) => setBackgroundColor(e.target.value)}
+                  onChange={e => setBackgroundColor(e.target.value)}
                   className="flex-1"
                 />
               </div>
@@ -191,13 +209,13 @@ export default function CustomizeTicketPage() {
                 <Input
                   type="color"
                   value={textColor}
-                  onChange={(e) => setTextColor(e.target.value)}
+                  onChange={e => setTextColor(e.target.value)}
                   className="w-16 h-10"
                 />
                 <Input
                   type="text"
                   value={textColor}
-                  onChange={(e) => setTextColor(e.target.value)}
+                  onChange={e => setTextColor(e.target.value)}
                   className="flex-1"
                 />
               </div>
@@ -207,19 +225,18 @@ export default function CustomizeTicketPage() {
               <Label className="text-sm font-medium">Font Size</Label>
               <Slider
                 value={[fontSize]}
-                onValueChange={(value) => setFontSize(value[0])}
+                onValueChange={value => setFontSize(value[0])}
                 min={16}
                 max={48}
                 step={1}
                 className="my-2"
               />
-              <div className="text-sm text-gray-500 text-right">{fontSize}px</div>
+              <div className="text-sm text-gray-500 text-right">
+                {fontSize}px
+              </div>
             </div>
 
-            <Button 
-              onClick={downloadTicket}
-              className="w-full"
-            >
+            <Button onClick={downloadTicket} className="w-full">
               <Download className="mr-2 h-4 w-4" />
               Download Custom Ticket
             </Button>
@@ -235,7 +252,7 @@ export default function CustomizeTicketPage() {
               className="w-full h-auto border rounded-lg"
             />
           </Card>
-          
+
           <div className="hidden">
             <QRCode
               id="QRCode"

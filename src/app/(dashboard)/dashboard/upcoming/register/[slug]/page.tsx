@@ -11,7 +11,9 @@ import {
 import { TypeformMultiStep } from './multistep-typeform';
 import { useParams } from 'next/navigation';
 
-const typeformSchema = z.array(typeformFieldSchema).min(1, "At least one field is required");
+const typeformSchema = z
+  .array(typeformFieldSchema)
+  .min(1, 'At least one field is required');
 
 export default function TypeformPage() {
   const params = useParams<{ slug: string }>();
@@ -24,7 +26,7 @@ export default function TypeformPage() {
   useEffect(() => {
     async function fetchEvent() {
       if (!user?.id) return;
-      
+
       const supabase = createClient();
       const { data: eventData, error: eventError } = await supabase
         .from('events')
@@ -55,7 +57,7 @@ export default function TypeformPage() {
       setEvent(eventData);
       setLoading(false);
     }
-    
+
     fetchEvent();
   }, [params.slug, Router, user?.id]);
 

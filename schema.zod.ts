@@ -3,7 +3,8 @@ import { z } from 'zod';
 import type { Database } from './database.types';
 
 export type eventsInsertType = Database['public']['Tables']['events']['Insert'];
-export type typeformInsertType = Database['public']['Tables']['eventsregistrations']['Insert'];
+export type typeformInsertType =
+  Database['public']['Tables']['eventsregistrations']['Insert'];
 
 export const eventsInsertSchema = z.object({
   banner_image: z.string(),

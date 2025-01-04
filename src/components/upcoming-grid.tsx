@@ -12,8 +12,7 @@ export function UpcomingGrid({ events }: { events: eventsInsertType[] }) {
           No upcoming events found
           <br />
           Check back later!
-          <br />
-          🎉
+          <br />🎉
         </div>
       )}
     </div>

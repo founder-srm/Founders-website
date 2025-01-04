@@ -17,14 +17,16 @@ export function UpcomingCard({ post }: UpcomingCardProps) {
             alt={post.title}
             width={1024}
             height={768}
-            loading='lazy'
+            loading="lazy"
             className="aspect-[3/2] h-full w-full object-cover object-center"
           />
         </div>
       </div>
       <div className="mb-4">
         {post.tags?.map((tag, index) => (
-          <Badge key={index} variant="default">{tag}</Badge>
+          <Badge key={index} variant="default">
+            {tag}
+          </Badge>
         ))}
       </div>
       <div className="mb-2 line-clamp-3 break-words text-lg font-medium md:mb-3 md:text-2xl lg:text-3xl">
@@ -43,7 +45,9 @@ export function UpcomingCard({ post }: UpcomingCardProps) {
         />
         <div className="flex flex-col gap-px">
           <span className="text-xs font-medium">{post.start_date}</span>
-          <span className="text-xs text-muted-foreground">{post.event_type}</span>
+          <span className="text-xs text-muted-foreground">
+            {post.event_type}
+          </span>
         </div>
       </div>
     </Link>

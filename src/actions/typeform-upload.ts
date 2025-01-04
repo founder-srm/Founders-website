@@ -32,7 +32,7 @@ export async function createEvent(eventData: unknown) {
   return data;
 }
 
-export async function sendEventRegistration(eventData :  typeformInsertType){
+export async function sendEventRegistration(eventData: typeformInsertType) {
   const supabase = createClient();
   const { data, error } = await supabase
     .from('eventsregistrations')

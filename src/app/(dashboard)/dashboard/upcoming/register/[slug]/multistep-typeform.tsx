@@ -128,10 +128,13 @@ function generateZodSchema(fields: TypeFormField[]) {
   return z.object(schemaObj);
 }
 
-export function TypeformMultiStep({ eventData, fields }: { eventData: eventsInsertType, fields: TypeFormField[] }) {
+export function TypeformMultiStep({
+  eventData,
+  fields,
+}: { eventData: eventsInsertType; fields: TypeFormField[] }) {
   const [step, setStep] = useState(0);
   const formSchema = generateZodSchema(fields);
-  
+
   const Router = useRouter();
 
   const user = useUser();
@@ -155,9 +158,11 @@ export function TypeformMultiStep({ eventData, fields }: { eventData: eventsInse
         alert('Registration failed!');
         return;
       }
-      
+
       alert('Registration successful!');
-      Router.push(`/dashboard/upcoming/register/success?ticketid=${response[0].ticket_id}`);
+      Router.push(
+        `/dashboard/upcoming/register/success?ticketid=${response[0].ticket_id}`
+      );
     } catch (error) {
       console.error('Error:', error);
       alert('Registration failed!');
@@ -167,10 +172,10 @@ export function TypeformMultiStep({ eventData, fields }: { eventData: eventsInse
   const handleNext = async () => {
     // Get the current field
     const currentField = fields[step];
-    
+
     // Trigger validation for the current field
     const result = await form.trigger(currentField.name);
-    
+
     // Only proceed if validation passes
     if (result) {
       setStep(step + 1);
@@ -275,7 +280,10 @@ export function TypeformMultiStep({ eventData, fields }: { eventData: eventsInse
                                 className="flex items-center space-x-3 space-y-0"
                               >
                                 <FormControl>
-                                  <RadioGroupItem required={field.required} value={opt} />
+                                  <RadioGroupItem
+                                    required={field.required}
+                                    value={opt}
+                                  />
                                 </FormControl>
                                 <FormLabel className="font-normal">
                                   {opt}

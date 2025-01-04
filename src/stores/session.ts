@@ -10,16 +10,16 @@ interface SessionState {
   setLoading: (loading: boolean) => void;
 }
 
-export const useSessionStore = create<SessionState>()((set) => ({
+export const useSessionStore = create<SessionState>()(set => ({
   user: null,
   session: null,
   loading: true,
-  setUser: (user) => set({ user }),
-  setSession: (session) => set({ session }),
-  setLoading: (loading) => set({ loading }),
+  setUser: user => set({ user }),
+  setSession: session => set({ session }),
+  setLoading: loading => set({ loading }),
 }));
 
 // Utility hooks
-export const useUser = () => useSessionStore((state) => state.user);
-export const useSession = () => useSessionStore((state) => state.session);
-export const useIsLoading = () => useSessionStore((state) => state.loading);
+export const useUser = () => useSessionStore(state => state.user);
+export const useSession = () => useSessionStore(state => state.session);
+export const useIsLoading = () => useSessionStore(state => state.loading);
