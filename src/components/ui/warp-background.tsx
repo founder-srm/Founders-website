@@ -38,7 +38,9 @@ const Beam = ({
           '--background': `linear-gradient(hsl(${hue} 80% 60%), transparent)`,
         } as React.CSSProperties
       }
-      className={`absolute left-[var(--x)] top-0 [aspect-ratio:1/var(--aspect-ratio)] [background:var(--background)] [width:var(--width)]`}
+      className={
+        'absolute left-[var(--x)] top-0 [aspect-ratio:1/var(--aspect-ratio)] [background:var(--background)] [width:var(--width)]'
+      }
       initial={{ y: '100cqmax', x: '-50%' }}
       animate={{ y: '-100%', x: '-50%' }}
       transition={{

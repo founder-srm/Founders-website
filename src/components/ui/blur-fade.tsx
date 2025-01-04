@@ -52,7 +52,7 @@ export default function BlurFade({
     visible: {
       [direction === 'left' || direction === 'right' ? 'x' : 'y']: 0,
       opacity: 1,
-      filter: `blur(0px)`,
+      filter: 'blur(0px)',
     },
   };
   const combinedVariants = variant || defaultVariants;
