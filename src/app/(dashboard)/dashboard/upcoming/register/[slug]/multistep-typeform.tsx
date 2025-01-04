@@ -35,6 +35,10 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import { sendEventRegistration } from '@/actions/typeform-upload';
+import type { eventsInsertType } from '../../../../../../../schema.zod';
+import { useUser } from '@/stores/session';
+import { useRouter } from 'next/navigation';
 
 type TypeFormField = {
   fieldType:
@@ -124,18 +128,54 @@ function generateZodSchema(fields: TypeFormField[]) {
   return z.object(schemaObj);
 }
 
-export function TypeformMultiStep({ fields }: { fields: TypeFormField[] }) {
+export function TypeformMultiStep({ eventData, fields }: { eventData: eventsInsertType, fields: TypeFormField[] }) {
   const [step, setStep] = useState(0);
   const formSchema = generateZodSchema(fields);
+  
+  const Router = useRouter();
+
+  const user = useUser();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    // shouldUnregister: false,
   });
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     console.log('Final submission:', data);
+
+    try {
+      const response = await sendEventRegistration({
+        event_id: eventData.id,
+        event_title: eventData.title,
+        application_id: user?.id,
+        details: data,
+      });
+      console.log('Response:', response);
+      if (!Array.isArray(response)) {
+        alert('Registration failed!');
+        return;
+      }
+      
+      alert('Registration successful!');
+      Router.push(`/dashboard/upcoming/register/success?ticketid=${response[0].ticket_id}`);
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Registration failed!');
+    }
   }
+
+  const handleNext = async () => {
+    // Get the current field
+    const currentField = fields[step];
+    
+    // Trigger validation for the current field
+    const result = await form.trigger(currentField.name);
+    
+    // Only proceed if validation passes
+    if (result) {
+      setStep(step + 1);
+    }
+  };
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -160,6 +200,7 @@ export function TypeformMultiStep({ fields }: { fields: TypeFormField[] }) {
                           <Input
                             value={formField.value ?? ''}
                             onChange={formField.onChange}
+                            required={field.required}
                           />
                         </FormControl>
                         {field.description && (
@@ -199,6 +240,7 @@ export function TypeformMultiStep({ fields }: { fields: TypeFormField[] }) {
                                 mode="single"
                                 selected={formField.value}
                                 onSelect={formField.onChange}
+                                required={field.required}
                                 initialFocus
                               />
                             </PopoverContent>
@@ -233,7 +275,7 @@ export function TypeformMultiStep({ fields }: { fields: TypeFormField[] }) {
                                 className="flex items-center space-x-3 space-y-0"
                               >
                                 <FormControl>
-                                  <RadioGroupItem value={opt} />
+                                  <RadioGroupItem required={field.required} value={opt} />
                                 </FormControl>
                                 <FormLabel className="font-normal">
                                   {opt}
@@ -263,6 +305,7 @@ export function TypeformMultiStep({ fields }: { fields: TypeFormField[] }) {
                           <Select
                             value={formField.value ?? ''}
                             onValueChange={formField.onChange}
+                            required={field.required}
                           >
                             <FormControl>
                               <SelectTrigger>
@@ -342,6 +385,7 @@ export function TypeformMultiStep({ fields }: { fields: TypeFormField[] }) {
                                     >
                                       <FormControl>
                                         <Checkbox
+                                          required={field.required}
                                           checked={
                                             Array.isArray(arrayField.value)
                                               ? arrayField.value.includes(
@@ -404,6 +448,7 @@ export function TypeformMultiStep({ fields }: { fields: TypeFormField[] }) {
                           <Textarea
                             placeholder={`Enter ${field.label.toLowerCase()}`}
                             className="resize-none"
+                            required={field.required}
                             {...formField}
                           />
                         </FormControl>
@@ -429,7 +474,7 @@ export function TypeformMultiStep({ fields }: { fields: TypeFormField[] }) {
             <Button
               type="button"
               disabled={step >= fields.length - 1}
-              onClick={() => setStep(step + 1)}
+              onClick={handleNext}
             >
               Next
             </Button>

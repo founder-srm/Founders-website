@@ -1,5 +1,5 @@
 import { createClient } from '@/utils/supabase/client';
-import { eventsInsertSchema } from '../../schema.zod';
+import { eventsInsertSchema, type typeformInsertType } from '../../schema.zod';
 
 export async function createEvent(eventData: unknown) {
   const supabase = createClient();
@@ -29,5 +29,18 @@ export async function createEvent(eventData: unknown) {
   if (error) {
     throw new Error(error.message);
   }
+  return data;
+}
+
+export async function sendEventRegistration(eventData :  typeformInsertType){
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from('eventsregistrations')
+    .insert(eventData)
+    .select();
+  if (error) {
+    return Error(error.message);
+  }
+  console.log(data);
   return data;
 }

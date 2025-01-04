@@ -2,6 +2,8 @@
 import { z } from 'zod';
 import { createClient } from '@/utils/supabase/client';
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useUser } from '@/stores/session';
 import {
   typeformFieldSchema,
   type eventsInsertType,
@@ -9,45 +11,75 @@ import {
 import { TypeformMultiStep } from './multistep-typeform';
 import { useParams } from 'next/navigation';
 
-const typeformSchema = z.array(typeformFieldSchema);
+const typeformSchema = z.array(typeformFieldSchema).min(1, "At least one field is required");
 
 export default function TypeformPage() {
   const params = useParams<{ slug: string }>();
+  const Router = useRouter();
+  const user = useUser();
   const [event, setEvent] = useState<eventsInsertType | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<null | string>(null);
 
   useEffect(() => {
     async function fetchEvent() {
+      if (!user?.id) return;
+      
       const supabase = createClient();
-      const { data, error } = await supabase
+      const { data: eventData, error: eventError } = await supabase
         .from('events')
         .select('*')
         .eq('slug', params.slug)
         .single();
-      if (error) {
-        setError(error.message);
-      } else {
-        setEvent(data);
+
+      if (eventError) {
+        setError(eventError.message);
+        setLoading(false);
+        return;
       }
+
+      // Check if user is already registered
+      const { data: registrationData } = await supabase
+        .from('eventsregistrations')
+        .select('*')
+        .eq('event_id', eventData.id)
+        .eq('application_id', user.id)
+        .single();
+
+      console.log('registrationData', registrationData);
+      if (registrationData) {
+        Router.push('/dashboard/account');
+        return;
+      }
+
+      setEvent(eventData);
       setLoading(false);
     }
+    
     fetchEvent();
-  }, [params.slug]);
+  }, [params.slug, Router, user?.id]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
   const parseResult = typeformSchema.safeParse(event?.typeform_config);
   if (!parseResult.success) {
-    console.log(event?.typeform_config);
-    console.error(parseResult.error);
-    return <div>Invalid form configuration</div>;
+    console.error('Form configuration error:', parseResult.error.flatten());
+    return (
+      <div className="p-4 text-red-600">
+        <h2 className="font-bold">Invalid form configuration</h2>
+        <pre>{JSON.stringify(parseResult.error.flatten(), null, 2)}</pre>
+      </div>
+    );
+  }
+
+  if (!event) {
+    return <div>Event not found</div>;
   }
 
   return (
     <>
-      <TypeformMultiStep fields={parseResult.data} />
+      <TypeformMultiStep eventData={event} fields={parseResult.data} />
     </>
   );
 }
