@@ -1,27 +1,16 @@
 import { sanityFetch } from '@/sanity/lib/live';
-import { ALL_EVENTS_QUERY, EVENT_BY_SLUG_QUERY } from '@/sanity/lib/queries';
+import { EVENT_BY_SLUG_QUERY } from '@/sanity/lib/queries';
 import { urlFor } from '@/sanity/lib/image';
 import Image from 'next/image';
 import { PortableText } from '@portabletext/react';
 
-interface Props {
-  params: {
-    slug: string;
-  };
-}
+type Params = Promise<{ slug: string }>;
 
-export async function generateStaticParams() {
-  const { data: events } = await sanityFetch({ query: ALL_EVENTS_QUERY });
-
-  return events?.map(event => ({
-    slug: event.slug || '',
-  }));
-}
-
-export default async function EventPage({ params }: Props) {
+export default async function EventPage({ params }: { params: Params }) {
+  const { slug } = await params;
   const { data: event } = await sanityFetch({
     query: EVENT_BY_SLUG_QUERY,
-    params: { slug: params.slug },
+    params: { slug: slug },
   });
 
   if (!event) return <div>Event not found</div>;

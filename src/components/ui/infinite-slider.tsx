@@ -30,6 +30,7 @@ export function InfiniteSlider({
   const [key, setKey] = useState(0);
 
   useEffect(() => {
+    // biome-ignore lint/suspicious/noImplicitAnyLet: <explanation>
     let controls;
     const size = direction === 'horizontal' ? width : height;
     const contentSize = size + gap;

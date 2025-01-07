@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
       redirect(next);
     }
     console.error('Error confirming email: ', error);
+    // redirect the user to an error page with some instructions
+    redirect(`/error?message=${error}`);
   }
-  // redirect the user to an error page with some instructions
-  redirect('/error');
 }

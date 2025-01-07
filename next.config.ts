@@ -1,4 +1,4 @@
-import remarkGfm from 'remark-gfm';
+// import remarkGfm from 'remark-gfm';
 import createMDX from '@next/mdx';
 import type { NextConfig } from 'next';
 
@@ -29,10 +29,10 @@ const nextConfig: NextConfig = {
 
 const withMDX = createMDX({
   // Add markdown plugins here, as desired
-  options: {
-    remarkPlugins: [remarkGfm],
-    rehypePlugins: [],
-  },
+  // options: {
+  //   remarkPlugins: [remarkGfm],
+  //   rehypePlugins: [],
+  // },
 });
 
 export default withMDX(nextConfig);

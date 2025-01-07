@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "NODE_OPTIONS='--inspect' next dev",
+    "dev": "NODE_OPTIONS='--inspect' next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -59,6 +59,7 @@
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.54.2",
     "react-qr-code": "^2.0.15",
+    "react-use-measure": "^2.1.1",
     "remark-gfm": "^4.0.0",
     "sanity": "^3.68.3",
     "styled-components": "^6.1.13",
