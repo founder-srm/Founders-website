@@ -1,3 +1,4 @@
+'use client';
 import { Dribbble, Github, Linkedin } from 'lucide-react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';

@@ -80,8 +80,6 @@ export default function Particles({
     }
   };
 
-
-
   const resizeCanvas = () => {
     if (canvasContainerRef.current && canvasRef.current && context.current) {
       circles.current.length = 0;

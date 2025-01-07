@@ -1,4 +1,6 @@
 'use client';
+import Image from 'next/image';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 const sections = [
@@ -65,12 +67,14 @@ const Footer2 = () => {
       <footer className="w-full mx-auto px-4">
         <div className="grid grid-cols-2 gap-8 lg:grid-cols-6">
           <div className="col-span-2 mb-8 lg:mb-0">
-            <img
-              src="https://shadcnblocks.com/images/block/logos/shadcn-ui.svg"
+            <Image
+              src="/FC-logo.png"
               alt="logo"
-              className="mb-4 h-7"
+              width={500}
+              height={238}
+              className="mb-3 h-16 w-auto "
             />
-            <p className="font-bold">Components made easy.</p>
+            <p className="font-bold">Startups and stuff.</p>
           </div>
           {sections.map((section, sectionIdx) => (
             <div key={sectionIdx}>
@@ -86,13 +90,13 @@ const Footer2 = () => {
           ))}
         </div>
         <div className="mt-24 flex flex-col justify-between gap-4 border-t pt-8 text-sm font-medium text-muted-foreground md:flex-row md:items-center">
-          <p>© 2024 Shadcn. All rights reserved.</p>
+          <p>© 2025 Foundersclub. All rights reserved.</p>
           <ul className="flex gap-4">
             <li className="underline hover:text-primary">
-              <a href="#"> Terms and Conditions</a>
+              <Link href="#"> Terms and Conditions</Link>
             </li>
             <li className="underline hover:text-primary">
-              <a href="#"> Privacy Policy</a>
+              <Link href="#"> Privacy Policy</Link>
             </li>
           </ul>
         </div>
