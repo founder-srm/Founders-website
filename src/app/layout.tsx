@@ -5,6 +5,7 @@ import { ThemeProvider } from '@/components/theme/theme-provider';
 import { SessionProvider } from '@/components/providers/SessionProvider';
 import Navbar1 from '@/components/navbar';
 import Footer2 from '@/components/footer';
+import { Toaster } from '@/components/ui/toaster';
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   variable: '--font-plus-jakarta-sans',
@@ -37,6 +38,7 @@ export default function RootLayout({
             <Navbar1 />
             {children}
             <Footer2 />
+            <Toaster />
           </SessionProvider>
         </ThemeProvider>
       </body>

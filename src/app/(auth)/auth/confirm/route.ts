@@ -1,29 +1,27 @@
-import type { EmailOtpType } from '@supabase/supabase-js';
-import type { NextRequest } from 'next/server';
-
+import { NextResponse } from 'next/server';
 import { createClient } from '@/utils/supabase/server';
-import { redirect } from 'next/navigation';
 
-export async function GET(request: NextRequest) {
-  const { searchParams } = new URL(request.url);
-  const token_hash = searchParams.get('token_hash');
-  const type = searchParams.get('type') as EmailOtpType | null;
+export async function GET(request: Request) {
+  const { searchParams, origin } = new URL(request.url);
+  const code = searchParams.get('code');
+  // Default redirect to dashboard for authenticated users
   const next = searchParams.get('next') ?? '/dashboard/upcoming';
 
-  if (token_hash && type) {
+  if (code) {
     const supabase = await createClient();
-
-    const { error } = await supabase.auth.verifyOtp({
-      type,
-      token_hash,
-    });
+    const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
-      // redirect user to specified redirect URL or root of app
-      console.log('Email confirmed');
-      redirect(next);
+      const forwardedHost = request.headers.get('x-forwarded-host');
+      const isLocalEnv = process.env.NODE_ENV === 'development';
+
+      if (isLocalEnv) {
+        return NextResponse.redirect(`${origin}${next}`);
+      }if (forwardedHost) {
+        return NextResponse.redirect(`https://${forwardedHost}${next}`);
+      }
+      return NextResponse.redirect(`${origin}${next}`);
     }
-    console.error('Error confirming email: ', error);
-    // redirect the user to an error page with some instructions
-    redirect(`/error?message=${error}`);
   }
+
+  return NextResponse.redirect(`${origin}/auth/auth-code-error`);
 }
