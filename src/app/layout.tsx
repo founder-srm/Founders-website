@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Plus_Jakarta_Sans } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@/components/theme/theme-provider';
+import { SessionProvider } from '@/components/providers/SessionProvider';
 import Navbar1 from '@/components/navbar';
 import Footer2 from '@/components/footer';
 
@@ -32,9 +33,11 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Navbar1 />
-          {children}
-          <Footer2 />
+          <SessionProvider>
+            <Navbar1 />
+            {children}
+            <Footer2 />
+          </SessionProvider>
         </ThemeProvider>
       </body>
     </html>

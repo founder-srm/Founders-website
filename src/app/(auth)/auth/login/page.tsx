@@ -1,0 +1,170 @@
+'use client';
+
+import React from 'react';
+import { login } from '../actions';
+import Image from 'next/image'
+import Link from 'next/link'
+import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Input } from "@/components/ui/input"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import GoogleIcon from '@/components/custom-icons/custom-icons';
+import { TriangleAlert } from 'lucide-react';
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { loginSchema, type LoginFormData } from "@/lib/schemas/auth"
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form"
+
+export default function LoginPage({
+  searchParams,
+}: {
+  searchParams: { message: string, cause: string, code: string } 
+}) {
+  
+
+  // const {message, cause, code} = searchParams;
+  const form = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+      remember: false,
+    },
+  })
+
+  async function onSubmit(data: LoginFormData) {
+    await login(data);
+  }
+
+
+  return (
+    <main className='w-full min-h-screen flex flex-col items-center'>
+      <section className="pb-32 container mx-auto">
+        <div className="container">
+          <div className="flex flex-col gap-4">
+            {searchParams?.message && (
+              <Alert variant="destructive" className="mx-auto w-full max-w-sm mt-8">
+                <TriangleAlert className="h-4 w-4" />
+                <AlertDescription>
+                  {searchParams.message}
+                  {searchParams.cause && (
+                  <div className="mt-2">
+                    <strong>Cause:</strong> {searchParams.cause}
+                  </div>
+                  )}
+                  {searchParams.code && (
+                  <div>
+                    <strong>Code:</strong> {searchParams.code}
+                  </div>
+                  )}
+                </AlertDescription>
+              </Alert>
+            )}
+            <div className="relative flex flex-col items-center overflow-hidden pb-6 pt-32">
+              <svg
+                // xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 200 200"
+                className="absolute top-10 -z-10 h-full w-[1250px] [mask-image:radial-gradient(circle,red,transparent,transparent,transparent)]"
+                aria-label="Background grid pattern"
+                role="img"
+              >
+                <defs>
+                  <pattern id="innerGrid" width="40" height="40" patternUnits="userSpaceOnUse">
+                    <path d="M 40 0 L 0 0 0 40" fill="none" className="stroke-muted-foreground/70" strokeWidth="0.5" />
+                  </pattern>
+                  <pattern id="grid" width="160" height="160" patternUnits="userSpaceOnUse">
+                    <rect width="160" height="160" fill="url(#innerGrid)" />
+                  </pattern>
+                </defs>
+                <rect width="200" height="200" fill="url(#grid)" />
+              </svg>
+              <Image
+                src="/FC-logo-short.png"
+                alt="logo"
+                width={640}
+                height={640}
+                className="mb-7 h-12 w-auto"
+              />
+              <h1 className="mb-2 text-2xl font-bold">Log in to your account</h1>
+              <p className="text-muted-foreground">Welcome back! Please enter your details.</p>
+            </div>
+            <div className="z-10 mx-auto w-full max-w-sm rounded-md bg-background p-6 shadow">
+              <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Email</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Enter your email" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Password</FormLabel>
+                        <FormControl>
+                          <Input type="password" placeholder="Enter your password" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="remember"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-row items-center justify-between">
+                        <div className="flex items-center space-x-2">
+                          <FormControl>
+                            <Checkbox
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                            />
+                          </FormControl>
+                          <FormLabel className="!mt-0">Remember me</FormLabel>
+                        </div>
+                        <Link href="#" className="text-sm font-medium text-primary">
+                          Forgot password
+                        </Link>
+                      </FormItem>
+                    )}
+                  />
+                  <Button type="submit" className="w-full">
+                    Sign in
+                  </Button>
+                  <Button variant="outline" className="w-full">
+                    <GoogleIcon className="mr-2" />
+                    
+                    Sign up with Google
+                  </Button>
+                </form>
+              </Form>
+            </div>
+            <div className="mx-auto mt-3 flex justify-center gap-1 text-sm text-muted-foreground">
+              <p>Don&apos;t have an account?</p>
+              <Link href="#" className="font-medium text-primary">
+                Sign up
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  )
+}
+

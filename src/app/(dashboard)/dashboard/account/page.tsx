@@ -44,7 +44,7 @@ export default function AccountPage() {
   async function handleSignOut() {
     const supabase = createClient();
     await supabase.auth.signOut();
-    redirect('/login');
+    redirect('/auth/login');
   }
 
   if (isLoading) {

@@ -95,7 +95,7 @@ const Navbar1 = () => {
     '/studio/*',
     '/events/*',
     '/blog/posts/*',
-    '/login',
+    '/auth/*',
     '/signup',
     '/admin',
   ];
@@ -230,12 +230,12 @@ const Navbar1 = () => {
           <div className="flex gap-2">
             <ModeToggle />
             <Button variant="outline" asChild>
-              <Link href="/login" className="text-muted-foreground">
+              <Link href="/auth/login" className="text-muted-foreground">
                 Log in
               </Link>
             </Button>
             <Button asChild>
-              <Link href="/login" className="text-foreground">
+              <Link href="/auth/login" className="text-foreground">
                 Sign up
               </Link>
             </Button>
@@ -419,12 +419,12 @@ const Navbar1 = () => {
                   <div className="mt-2 flex flex-col gap-3">
                     <ModeToggle />
                     <Button variant="outline" asChild>
-                      <Link href="/login" className="text-muted-foreground">
+                      <Link href="/auth/login" className="text-muted-foreground">
                         Log in
                       </Link>
                     </Button>
                     <Button asChild>
-                      <Link href="/login" className="text-foreground">
+                      <Link href="/auth/login" className="text-foreground">
                         Sign up
                       </Link>
                     </Button>
