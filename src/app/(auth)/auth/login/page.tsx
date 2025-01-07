@@ -1,18 +1,18 @@
 'use client';
 
-import React from 'react';
+import React, { use, useState } from 'react';
 import { login } from '../actions';
-import Image from 'next/image'
-import Link from 'next/link'
-import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Input } from "@/components/ui/input"
-import { Alert, AlertDescription } from "@/components/ui/alert"
+import Image from 'next/image';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Input } from '@/components/ui/input';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import GoogleIcon from '@/components/custom-icons/custom-icons';
-import { TriangleAlert } from 'lucide-react';
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { loginSchema, type LoginFormData } from "@/lib/schemas/auth"
+import { LucideLoaderPinwheel, TriangleAlert } from 'lucide-react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { loginSchema, type LoginFormData } from '@/lib/schemas/auth';
 import {
   Form,
   FormControl,
@@ -20,49 +20,51 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
+} from '@/components/ui/form';
 
-export default function LoginPage({
-  searchParams,
-}: {
-  searchParams: { message: string, cause: string, code: string } 
+export default function LoginPage(props: {
+  searchParams: Promise<{ message: string; cause: string; code: string }>;
 }) {
-  
+  const searchParams = use(props.searchParams);
 
-  // const {message, cause, code} = searchParams;
+  const [Loading, setLoading] = useState(false);
   const form = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
       remember: false,
     },
-  })
+  });
 
   async function onSubmit(data: LoginFormData) {
+    setLoading(true);
     await login(data);
+    setLoading(false);
   }
 
-
   return (
-    <main className='w-full min-h-screen flex flex-col items-center'>
+    <main className="w-full min-h-screen flex flex-col items-center">
       <section className="pb-32 container mx-auto">
         <div className="container">
           <div className="flex flex-col gap-4">
             {searchParams?.message && (
-              <Alert variant="destructive" className="mx-auto w-full max-w-sm mt-8">
+              <Alert
+                variant="destructive"
+                className="mx-auto w-full max-w-sm mt-8"
+              >
                 <TriangleAlert className="h-4 w-4" />
                 <AlertDescription>
                   {searchParams.message}
                   {searchParams.cause && (
-                  <div className="mt-2">
-                    <strong>Cause:</strong> {searchParams.cause}
-                  </div>
+                    <div className="mt-2">
+                      <strong>Cause:</strong> {searchParams.cause}
+                    </div>
                   )}
                   {searchParams.code && (
-                  <div>
-                    <strong>Code:</strong> {searchParams.code}
-                  </div>
+                    <div>
+                      <strong>Code:</strong> {searchParams.code}
+                    </div>
                   )}
                 </AlertDescription>
               </Alert>
@@ -76,10 +78,25 @@ export default function LoginPage({
                 role="img"
               >
                 <defs>
-                  <pattern id="innerGrid" width="40" height="40" patternUnits="userSpaceOnUse">
-                    <path d="M 40 0 L 0 0 0 40" fill="none" className="stroke-muted-foreground/70" strokeWidth="0.5" />
+                  <pattern
+                    id="innerGrid"
+                    width="40"
+                    height="40"
+                    patternUnits="userSpaceOnUse"
+                  >
+                    <path
+                      d="M 40 0 L 0 0 0 40"
+                      fill="none"
+                      className="stroke-muted-foreground/70"
+                      strokeWidth="0.5"
+                    />
                   </pattern>
-                  <pattern id="grid" width="160" height="160" patternUnits="userSpaceOnUse">
+                  <pattern
+                    id="grid"
+                    width="160"
+                    height="160"
+                    patternUnits="userSpaceOnUse"
+                  >
                     <rect width="160" height="160" fill="url(#innerGrid)" />
                   </pattern>
                 </defs>
@@ -92,12 +109,19 @@ export default function LoginPage({
                 height={640}
                 className="mb-7 h-12 w-auto"
               />
-              <h1 className="mb-2 text-2xl font-bold">Log in to your account</h1>
-              <p className="text-muted-foreground">Welcome back! Please enter your details.</p>
+              <h1 className="mb-2 text-2xl font-bold">
+                Log in to your account
+              </h1>
+              <p className="text-muted-foreground">
+                Welcome back! Please enter your details.
+              </p>
             </div>
             <div className="z-10 mx-auto w-full max-w-sm rounded-md bg-background p-6 shadow">
               <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
+                <form
+                  onSubmit={form.handleSubmit(onSubmit)}
+                  className="grid gap-4"
+                >
                   <FormField
                     control={form.control}
                     name="email"
@@ -118,7 +142,11 @@ export default function LoginPage({
                       <FormItem>
                         <FormLabel>Password</FormLabel>
                         <FormControl>
-                          <Input type="password" placeholder="Enter your password" {...field} />
+                          <Input
+                            type="password"
+                            placeholder="Enter your password"
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -138,18 +166,27 @@ export default function LoginPage({
                           </FormControl>
                           <FormLabel className="!mt-0">Remember me</FormLabel>
                         </div>
-                        <Link href="#" className="text-sm font-medium text-primary">
+                        <Link
+                          href="#"
+                          className="text-sm font-medium text-primary"
+                        >
                           Forgot password
                         </Link>
                       </FormItem>
                     )}
                   />
-                  <Button type="submit" className="w-full">
+                  <Button
+                    type="submit"
+                    disabled={Loading}
+                    className="w-full flex gap-2 items-center"
+                  >
+                    {Loading && (
+                      <LucideLoaderPinwheel className="animate-spin" />
+                    )}{' '}
                     Sign in
                   </Button>
                   <Button variant="outline" className="w-full">
                     <GoogleIcon className="mr-2" />
-                    
                     Sign up with Google
                   </Button>
                 </form>
@@ -157,7 +194,7 @@ export default function LoginPage({
             </div>
             <div className="mx-auto mt-3 flex justify-center gap-1 text-sm text-muted-foreground">
               <p>Don&apos;t have an account?</p>
-              <Link href="#" className="font-medium text-primary">
+              <Link href="/auth/signup" className="font-medium text-primary">
                 Sign up
               </Link>
             </div>
@@ -165,6 +202,5 @@ export default function LoginPage({
         </div>
       </section>
     </main>
-  )
+  );
 }
-

@@ -4,13 +4,20 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
 import { createClient } from '@/utils/supabase/server';
-import { loginSchema, type LoginFormData } from '@/lib/schemas/auth';
+import {
+  loginSchema,
+  signupSchema,
+  type LoginFormData,
+  type SignupFormData,
+} from '@/lib/schemas/auth';
 
 export async function login(data: LoginFormData) {
   const result = loginSchema.safeParse(data);
-  
+
   if (!result.success) {
-    const errorMessage = result.error.errors.map(error => error.message).join(', ');
+    const errorMessage = result.error.errors
+      .map(error => error.message)
+      .join(', ');
     redirect(`/auth/login?message=${errorMessage}`);
   }
 
@@ -22,30 +29,38 @@ export async function login(data: LoginFormData) {
   });
 
   if (error) {
-    redirect(`/auth/login?message=${error.message}&cause=${error.cause}&code=${error.code}`);
+    redirect(
+      `/auth/login?message=${error.message}&cause=${error.cause}&code=${error.code}`
+    );
   }
 
   revalidatePath('/auth/login', 'layout');
   redirect('/dashboard/upcoming');
 }
 
-export async function signup(formData: FormData) {
-  const supabase = await createClient();
+export async function signup(data: SignupFormData) {
+  const result = signupSchema.safeParse(data);
 
-  // type-casting here for convenience
-  // in practice, you should validate your inputs
-  const data = {
-    email: formData.get('email') as string,
-    password: formData.get('password') as string,
-  };
-
-  const { error } = await supabase.auth.signUp(data);
-
-  if (error) {
-    console.error('Error signing up:', error);
-    redirect('/error');
+  if (!result.success) {
+    const errorMessage = result.error.errors
+      .map(error => error.message)
+      .join(', ');
+    redirect(`/auth/signup?message=${errorMessage}`);
   }
 
-  revalidatePath('/login', 'layout');
+  const supabase = await createClient();
+
+  const { error } = await supabase.auth.signUp({
+    email: result.data.email,
+    password: result.data.password,
+  });
+
+  if (error) {
+    redirect(
+      `/auth/signup?message=${error.message}&cause=${error.cause}&code=${error.code}`
+    );
+  }
+
+  revalidatePath('/auth/signup', 'layout');
   redirect('/dashboard/upcoming');
 }
