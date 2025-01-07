@@ -4,7 +4,7 @@ import { useSearchParams } from 'next/navigation';
 import { useEffect, useState, useRef } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import QRCode from 'react-qr-code';
-import { Card } from '@/components/ui/card';
+import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import type { typeformInsertType } from '../../../../../../../schema.zod';
 import { Button } from '@/components/ui/button';
 import { Download } from 'lucide-react';
@@ -18,6 +18,7 @@ import {
 import { Slider } from '@/components/ui/slider';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import ScratchToReveal from '@/components/ui/scratch-to-reveal';
 
 export default function CustomizeTicketPage() {
   const searchParams = useSearchParams();
@@ -162,7 +163,7 @@ export default function CustomizeTicketPage() {
   if (!registration) return <div>Registration not found</div>;
 
   return (
-    <div className="container max-w-4xl mx-auto py-8">
+    <div className=" max-w-6xl mx-auto py-8">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <Card className="p-6 space-y-6">
           <div className="text-center space-y-2">
@@ -243,14 +244,37 @@ export default function CustomizeTicketPage() {
           </div>
         </Card>
 
-        <div className="space-y-6">
-          <Card className="p-6">
-            <canvas
-              ref={canvasRef}
-              width={600}
-              height={400}
-              className="w-full h-auto border rounded-lg"
-            />
+        <div className="space-y-6 w-full max-w-xl h-auto">
+          <Card className="p-6 w-full min-w-[560px]">
+            <CardContent>
+              <ScratchToReveal
+                width={462}
+                height={308}
+                minScratchPercentage={70}
+                className="flex items-center justify-center overflow-hidden rounded-2xl border-2 bg-gray-100"
+                // onComplete={handleComplete}
+                gradientColors={[
+                  '#838487',
+                  '#8A8B8F',
+                  '#AFB0B3',
+                  '#A8A9AD',
+                  '#A1A2A5',
+                  '#929396',
+                ]}
+              >
+                <canvas
+                  ref={canvasRef}
+                  width={600}
+                  height={400}
+                  className="w-full h-auto border rounded-lg"
+                />
+              </ScratchToReveal>
+            </CardContent>
+            <CardFooter>
+              <p className="text-sm text-gray-500 text-center">
+                Scratch the ticket to reveal the QR code
+              </p>
+            </CardFooter>
           </Card>
 
           <div className="hidden">
