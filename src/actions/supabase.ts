@@ -1,78 +1,92 @@
 import { createClient } from '@/utils/supabase/client';
-import type { AuthError, Provider, User, UserIdentity } from '@supabase/supabase-js';
+import type {
+  AuthError,
+  Provider,
+  User,
+  UserIdentity,
+} from '@supabase/supabase-js';
 
 type ActionResponse = {
   error: null | AuthError;
-  data: {
-    user: User;
-} | {
-    user: null;
-} | null;
+  data:
+    | {
+        user: User;
+      }
+    | {
+        user: null;
+      }
+    | null;
 };
 
 type OAuthResponse = {
-    error: null | AuthError;
-    data: {
+  error: null | AuthError;
+  data:
+    | {
         provider: Provider;
         url: string;
-    } | {
+      }
+    | {
         provider: Provider;
         url: null;
-    }
-}
+      };
+};
 
-export async function updateUserEmail(newEmail: string): Promise<ActionResponse> {
+export async function updateUserEmail(
+  newEmail: string
+): Promise<ActionResponse> {
   const supabase = createClient();
-  const { data, error } = await supabase.auth.updateUser({ 
-    email: newEmail 
+  const { data, error } = await supabase.auth.updateUser({
+    email: newEmail,
   });
-  
+
   if (error) {
     return {
       error: error,
-      data: null
+      data: null,
     };
   }
-  
+
   return {
     error: null,
-    data
+    data,
   };
 }
 
-export async function updateUserPassword(newPassword: string): Promise<ActionResponse> {
+export async function updateUserPassword(
+  newPassword: string
+): Promise<ActionResponse> {
   const supabase = createClient();
-  const { data, error } = await supabase.auth.updateUser({ 
-    password: newPassword 
+  const { data, error } = await supabase.auth.updateUser({
+    password: newPassword,
   });
-  
+
   if (error) {
     return {
       error: error,
-      data: null
+      data: null,
     };
   }
 
   return {
     error: null,
-    data
+    data,
   };
 }
 
 export async function signOutUser(): Promise<ActionResponse> {
   const supabase = createClient();
   const { error } = await supabase.auth.signOut();
-  
+
   if (error) {
     return {
       error: error,
-      data: null
+      data: null,
     };
   }
 
   return {
     error: null,
-    data: null
+    data: null,
   };
 }
 
@@ -82,55 +96,62 @@ export async function getUserIdentities(): Promise<{
 }> {
   const supabase = createClient();
   const { data, error } = await supabase.auth.getUserIdentities();
-  
+
   return {
     error: error || null,
-    data: data?.identities || null
+    data: data?.identities || null,
   };
 }
 
-export async function linkIdentity(provider: 'github' | 'google'): Promise<OAuthResponse> {
+export async function linkIdentity(
+  provider: 'github' | 'google'
+): Promise<OAuthResponse> {
   const supabase = createClient();
   const { data, error } = await supabase.auth.linkIdentity({
     provider,
-    options: { redirectTo: '/dashboard/account' }
+    options: { redirectTo: '/dashboard/account' },
   });
-  
+
   return {
     error: error || null,
-    data: data || null
+    data: data || null,
   };
 }
 
-export async function unlinkIdentity(provider: string): Promise<ActionResponse> {
+export async function unlinkIdentity(
+  provider: string
+): Promise<ActionResponse> {
   const supabase = createClient();
-  const { data: identities, error: fetchError } = await supabase.auth.getUserIdentities();
-  
+  const { data: identities, error: fetchError } =
+    await supabase.auth.getUserIdentities();
+
   if (fetchError) {
     return {
       error: fetchError,
-      data: null
+      data: null,
     };
   }
 
   const identity = identities?.identities?.find(id => id.provider === provider);
-  
+
   if (!identity) {
     return {
       error: { message: 'Identity not found', name: 'NotFound' } as AuthError,
-      data: null
+      data: null,
     };
   }
 
   const { error } = await supabase.auth.unlinkIdentity(identity);
-  
+
   return {
     error: error || null,
-    data: null
+    data: null,
   };
 }
 
-export async function signInWithOAuth(provider: 'github' | 'google'): Promise<OAuthResponse> {
+export async function signInWithOAuth(
+  provider: 'github' | 'google'
+): Promise<OAuthResponse> {
   const supabase = createClient();
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider,
@@ -145,6 +166,6 @@ export async function signInWithOAuth(provider: 'github' | 'google'): Promise<OA
 
   return {
     error: error || null,
-    data: data || null
+    data: data || null,
   };
 }

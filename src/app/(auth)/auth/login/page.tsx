@@ -44,11 +44,11 @@ export default function LoginPage(props: {
   async function handleOAuthSignIn(provider: 'github' | 'google') {
     setLoading(true);
     const { error, data } = await signInWithOAuth(provider);
-    
+
     if (error) {
       toast({
-        variant: "destructive",
-        title: "Authentication Error",
+        variant: 'destructive',
+        title: 'Authentication Error',
         description: error.message,
       });
     } else if (data?.url) {

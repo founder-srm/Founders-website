@@ -9,12 +9,7 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from '@/components/ui/hover-card';
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   Card,
   CardContent,
@@ -22,24 +17,30 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from '@/components/ui/card';
 import { useUser, useIsLoading } from '@/stores/session';
 import { createClient } from '@/utils/supabase/client';
 import { LeaveIcon } from '@sanity/icons';
 import { redirect, useRouter } from 'next/navigation';
 import type { typeformInsertType } from '../../../../../schema.zod';
 import { Ticket, Mail, Key, Github, Radio, X } from 'lucide-react';
-import { updateUserEmail, updateUserPassword, signOutUser, getUserIdentities, linkIdentity, unlinkIdentity } from '@/actions/supabase';
+import {
+  updateUserEmail,
+  updateUserPassword,
+  signOutUser,
+  getUserIdentities,
+  linkIdentity,
+  unlinkIdentity,
+} from '@/actions/supabase';
 import { useToast } from '@/hooks/use-toast';
 import GoogleIcon from '@/components/custom-icons/custom-icons';
-import { Badge } from "@/components/ui/badge";
+import { Badge } from '@/components/ui/badge';
 import type { UserIdentity } from '@supabase/supabase-js';
 
 export default function AccountPage() {
-  
   const user = useUser();
   const isLoading = useIsLoading();
-  const { toast } = useToast()
+  const { toast } = useToast();
   const [registrations, setRegistrations] = useState<typeformInsertType[]>([]);
   const [newEmail, setNewEmail] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -79,17 +80,17 @@ export default function AccountPage() {
 
   async function handleUpdateEmail() {
     const result = await updateUserEmail(newEmail);
-    
+
     if (result.error) {
       toast({
-        variant: "destructive",
+        variant: 'destructive',
         title: `Error ${result.error.code || ''}`,
         description: result.error.message,
       });
     } else {
       toast({
-        title: "Success",
-        description: "Email update confirmation sent to your new email.",
+        title: 'Success',
+        description: 'Email update confirmation sent to your new email.',
       });
       setNewEmail('');
     }
@@ -97,17 +98,17 @@ export default function AccountPage() {
 
   async function handleUpdatePassword() {
     const result = await updateUserPassword(newPassword);
-    
+
     if (result.error) {
       toast({
-        variant: "destructive",
+        variant: 'destructive',
         title: `Error ${result.error.code || ''}`,
         description: result.error.message,
       });
     } else {
       toast({
-        title: "Success",
-        description: "Password updated successfully.",
+        title: 'Success',
+        description: 'Password updated successfully.',
       });
       setNewPassword('');
     }
@@ -115,10 +116,10 @@ export default function AccountPage() {
 
   async function handleSignOut() {
     const result = await signOutUser();
-    
+
     if (result.error) {
       toast({
-        variant: "destructive",
+        variant: 'destructive',
         title: `Error ${result.error.code || ''}`,
         description: result.error.message,
       });
@@ -137,13 +138,13 @@ export default function AccountPage() {
       const result = await unlinkIdentity(provider);
       if (result.error) {
         toast({
-          variant: "destructive",
-          title: "Error",
+          variant: 'destructive',
+          title: 'Error',
           description: result.error.message,
         });
       } else {
         toast({
-          title: "Success",
+          title: 'Success',
           description: `Disconnected from ${provider}`,
         });
         // Refresh identities
@@ -155,13 +156,13 @@ export default function AccountPage() {
       const result = await linkIdentity(provider);
       if (result.error) {
         toast({
-          variant: "destructive",
-          title: "Error",
+          variant: 'destructive',
+          title: 'Error',
           description: result.error.message,
         });
       } else {
         toast({
-          title: "Success",
+          title: 'Success',
           description: `Connected to ${provider}`,
         });
         // Refresh identities
@@ -191,8 +192,8 @@ export default function AccountPage() {
           <TabsTrigger value="events" className="flex items-center gap-2">
             Events
             {registrations.length > 0 && (
-              <Badge 
-                variant="secondary" 
+              <Badge
+                variant="secondary"
                 className="h-5 w-5 rounded-full p-0 flex items-center justify-center"
               >
                 {registrations.length}
@@ -215,7 +216,8 @@ export default function AccountPage() {
                   Email verified: {user?.email_confirmed_at ? 'Yes' : 'No'}
                 </p>
                 <p className="text-gray-600">
-                  Last sign in: {new Date(user?.last_sign_in_at || '').toLocaleString()}
+                  Last sign in:{' '}
+                  {new Date(user?.last_sign_in_at || '').toLocaleString()}
                 </p>
               </div>
             </CardContent>
@@ -236,7 +238,7 @@ export default function AccountPage() {
                     id="email"
                     type="email"
                     value={newEmail}
-                    onChange={(e) => setNewEmail(e.target.value)}
+                    onChange={e => setNewEmail(e.target.value)}
                   />
                 </div>
               </CardContent>
@@ -260,7 +262,7 @@ export default function AccountPage() {
                     id="new-password"
                     type="password"
                     value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
+                    onChange={e => setNewPassword(e.target.value)}
                   />
                 </div>
               </CardContent>
@@ -291,8 +293,8 @@ export default function AccountPage() {
                     </p>
                   </div>
                 </div>
-                <Button 
-                  variant={hasProvider('github') ? "destructive" : "outline"}
+                <Button
+                  variant={hasProvider('github') ? 'destructive' : 'outline'}
                   onClick={() => handleIdentityConnection('github')}
                 >
                   {hasProvider('github') ? 'Disconnect' : 'Connect'}
@@ -308,8 +310,8 @@ export default function AccountPage() {
                     </p>
                   </div>
                 </div>
-                <Button 
-                  variant={hasProvider('google') ? "destructive" : "outline"}
+                <Button
+                  variant={hasProvider('google') ? 'destructive' : 'outline'}
                   onClick={() => handleIdentityConnection('google')}
                 >
                   {hasProvider('google') ? 'Disconnect' : 'Connect'}
@@ -334,12 +336,20 @@ export default function AccountPage() {
                         className="flex size-9 shrink-0 items-center justify-center rounded-full border border-border"
                         aria-hidden="true"
                       >
-                        <Radio className="opacity-60" size={16} strokeWidth={2} />
+                        <Radio
+                          className="opacity-60"
+                          size={16}
+                          strokeWidth={2}
+                        />
                       </div>
                       <div className="flex grow items-center gap-12">
                         <div className="space-y-1">
-                          <p className="text-sm font-medium">No Events Registered yet</p>
-                          <p className="text-xs text-muted-foreground">Lets change that!</p>
+                          <p className="text-sm font-medium">
+                            No Events Registered yet
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            Lets change that!
+                          </p>
                         </div>
                         <Button size="sm">Lets Participate</Button>
                       </div>
@@ -364,7 +374,9 @@ export default function AccountPage() {
                       className="border rounded-lg p-4 hover:bg-accent transition-colors relative"
                     >
                       <div className=" w-full flex flex-row justify-between items-center space-x-4">
-                        <h3 className="font-medium text-lg">{reg.event_title}</h3>
+                        <h3 className="font-medium text-lg">
+                          {reg.event_title}
+                        </h3>
                         <HoverCard>
                           <HoverCardTrigger>
                             <Ticket
@@ -407,11 +419,7 @@ export default function AccountPage() {
       </Tabs>
 
       <div className="mt-6 flex justify-end">
-        <Button
-          onClick={handleSignOut}
-          variant="destructive"
-          size="icon"
-        >
+        <Button onClick={handleSignOut} variant="destructive" size="icon">
           <LeaveIcon />
         </Button>
       </div>

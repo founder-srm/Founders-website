@@ -10,7 +10,8 @@ export default function AuthCodeErrorPage() {
         <AlertTriangle className="h-4 w-4" />
         <AlertTitle>Authentication Error</AlertTitle>
         <AlertDescription>
-          There was a problem authenticating your account. This could be because:
+          There was a problem authenticating your account. This could be
+          because:
           <ul className="list-disc pl-4 mt-2 space-y-1">
             <li>The authentication code has expired</li>
             <li>The code has already been used</li>
@@ -18,7 +19,7 @@ export default function AuthCodeErrorPage() {
           </ul>
         </AlertDescription>
       </Alert>
-      
+
       <div className="mt-6 space-x-4">
         <Button asChild>
           <Link href="/auth/login">Try Again</Link>
