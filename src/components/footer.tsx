@@ -56,7 +56,13 @@ const isPathExcluded = (pathname: string, excludedPaths: string[]) => {
 
 const Footer2 = () => {
   const pathname = usePathname();
-  const excludedRoutes = ['/studio/*', '/events/*', '/blog/posts/*', '/admin', '/auth/*'];
+  const excludedRoutes = [
+    '/studio/*',
+    '/events/*',
+    '/blog/posts/*',
+    '/admin',
+    '/auth/*',
+  ];
 
   if (isPathExcluded(pathname, excludedRoutes)) {
     return null;

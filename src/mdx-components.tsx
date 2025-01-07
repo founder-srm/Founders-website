@@ -209,7 +209,6 @@ type CustomMDXProps = MDXRemoteProps & { components?: typeof components };
 
 export function CustomMDX(props: CustomMDXProps) {
   return (
-    
     <MDXRemote
       {...props}
       // @ts-expect-error components prop is not in the MDXRemoteProps type

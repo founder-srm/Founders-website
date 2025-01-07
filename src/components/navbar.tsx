@@ -235,7 +235,7 @@ const Navbar1 = () => {
               </Link>
             </Button>
             <Button asChild>
-              <Link href="/auth/login" className="text-foreground">
+              <Link href="/auth/signup" className="text-foreground">
                 Sign up
               </Link>
             </Button>
@@ -419,7 +419,10 @@ const Navbar1 = () => {
                   <div className="mt-2 flex flex-col gap-3">
                     <ModeToggle />
                     <Button variant="outline" asChild>
-                      <Link href="/auth/login" className="text-muted-foreground">
+                      <Link
+                        href="/auth/login"
+                        className="text-muted-foreground"
+                      >
                         Log in
                       </Link>
                     </Button>
