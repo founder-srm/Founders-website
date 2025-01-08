@@ -1,5 +1,8 @@
 'use client';
 
+// Add these imports at the top
+import { Download, Share2, Mail } from 'lucide-react';
+
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState, useRef } from 'react';
 import { createClient } from '@/utils/supabase/client';
@@ -8,7 +11,6 @@ import confetti from 'canvas-confetti';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import type { typeformInsertType } from '../../../../../../../schema.zod';
 import { Button } from '@/components/ui/button';
-import { Download } from 'lucide-react';
 import {
   Select,
   SelectContent,
@@ -34,6 +36,10 @@ export default function CustomizeTicketPage() {
   const [fontSize, setFontSize] = useState(24);
   const [selectedTheme, setSelectedTheme] = useState('classic');
   const [qrCodeImage, setQrCodeImage] = useState<HTMLImageElement | null>(null);
+  const [patternType, setPatternType] = useState('none');
+  const [patternContent, setPatternContent] = useState('🎫');
+  const [patternSize, setPatternSize] = useState(30);
+  const [patternRotation, setPatternRotation] = useState(0);
 
   useEffect(() => {
     async function fetchRegistration() {
@@ -78,9 +84,58 @@ export default function CustomizeTicketPage() {
 
     if (!ctx) return;
 
-    // Clear canvas and draw background
+    // Clear canvas
     ctx.fillStyle = backgroundColor;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Draw custom pattern background if selected
+    if (patternType === 'emoji' || patternType === 'text') {
+      ctx.save();
+      ctx.translate(canvas.width / 2, canvas.height / 2);
+      ctx.rotate((patternRotation * Math.PI) / 180);
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.font = `${patternSize}px Arial`;
+      
+      for (let x = -canvas.width; x < canvas.width; x += patternSize * 2) {
+        for (let y = -canvas.height; y < canvas.height; y += patternSize * 2) {
+          ctx.fillStyle = `${textColor}20`; // 20% opacity
+          ctx.fillText(patternContent, x, y);
+        }
+      }
+      ctx.restore();
+    }
+
+    // Draw jagged edges
+    ctx.fillStyle = backgroundColor;
+    ctx.strokeStyle = textColor;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    
+    // Left edge zigzag
+    for (let y = 20; y < canvas.height - 20; y += 20) {
+      if (y === 20) ctx.moveTo(10, y);
+      ctx.lineTo(y % 40 === 0 ? 20 : 10, y + 20);
+    }
+    
+    // Bottom edge
+    for (let x = 10; x < canvas.width - 10; x += 20) {
+      ctx.lineTo(x + 20, canvas.height - (x % 40 === 0 ? 20 : 10));
+    }
+    
+    // Right edge zigzag
+    for (let y = canvas.height - 20; y > 20; y -= 20) {
+      ctx.lineTo(y % 40 === 0 ? canvas.width - 20 : canvas.width - 10, y);
+    }
+    
+    // Top edge
+    for (let x = canvas.width - 10; x > 10; x -= 20) {
+      ctx.lineTo(x - 20, x % 40 === 0 ? 20 : 10);
+    }
+    
+    ctx.closePath();
+    ctx.stroke();
+    ctx.clip();
 
     // Theme-specific background
     if (selectedTheme === 'gradient') {
@@ -115,12 +170,7 @@ export default function CustomizeTicketPage() {
       ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
 
-    // Draw border
-    ctx.strokeStyle = textColor;
-    ctx.lineWidth = 4;
-    ctx.strokeRect(10, 10, canvas.width - 20, canvas.height - 20);
-
-    // Draw title
+    // Draw content
     ctx.fillStyle = textColor;
     ctx.font = `bold ${fontSize}px Inter`;
     ctx.textAlign = 'center';
@@ -141,6 +191,7 @@ export default function CustomizeTicketPage() {
       canvas.width / 2,
       canvas.height - 30
     );
+
   }, [
     registration,
     backgroundColor,
@@ -148,6 +199,10 @@ export default function CustomizeTicketPage() {
     fontSize,
     selectedTheme,
     qrCodeImage,
+    patternType,
+    patternContent,
+    patternSize,
+    patternRotation,
   ]);
 
   const downloadTicket = () => {
@@ -155,14 +210,24 @@ export default function CustomizeTicketPage() {
     if (!canvas) return;
 
     const downloadLink = document.createElement('a');
-    downloadLink.download = `custom-ticket-${registration?.ticket_id}.png`;
+    downloadLink.download = `${registration?.event_title}-${registration?.ticket_id}.png`;
     downloadLink.href = canvas.toDataURL('image/png');
     downloadLink.click();
     
-    // Simple wide-spread confetti
     confetti({
       spread: 180
     });
+  };
+
+  // Add new functions for share and email (to be implemented)
+  const shareTicket = () => {
+    // TODO: Implement sharing functionality
+    console.log('Share functionality to be implemented');
+  };
+
+  const emailTicket = () => {
+    // TODO: Implement email functionality
+    console.log('Email functionality to be implemented');
   };
 
   if (loading) return <div>Loading...</div>;
@@ -243,10 +308,69 @@ export default function CustomizeTicketPage() {
               </div>
             </div>
 
-            <Button onClick={downloadTicket} className="w-full">
-              <Download className="mr-2 h-4 w-4" />
-              Download Custom Ticket
-            </Button>
+            <div>
+              <Label className="text-sm font-medium">Background Pattern</Label>
+              <Select value={patternType} onValueChange={setPatternType}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select pattern type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="none">None</SelectItem>
+                  <SelectItem value="emoji">Emoji Pattern</SelectItem>
+                  <SelectItem value="text">Text Pattern</SelectItem>
+                </SelectContent>
+              </Select>
+
+              {(patternType === 'emoji' || patternType === 'text') && (
+                <div className="space-y-4 mt-4">
+                  <div>
+                    <Label>Pattern Content</Label>
+                    <Input
+                      value={patternContent}
+                      onChange={(e) => setPatternContent(e.target.value)}
+                      placeholder="Enter emoji or text"
+                    />
+                  </div>
+                  
+                  <div>
+                    <Label>Pattern Size</Label>
+                    <Slider
+                      value={[patternSize]}
+                      onValueChange={value => setPatternSize(value[0])}
+                      min={10}
+                      max={50}
+                      step={1}
+                    />
+                  </div>
+
+                  <div>
+                    <Label>Pattern Rotation</Label>
+                    <Slider
+                      value={[patternRotation]}
+                      onValueChange={value => setPatternRotation(value[0])}
+                      min={0}
+                      max={360}
+                      step={15}
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="flex gap-2">
+              <Button onClick={downloadTicket} className="flex-1">
+                <Download className="mr-2 h-4 w-4" />
+                Download
+              </Button>
+              <Button onClick={shareTicket} variant="outline" className="flex-1">
+                <Share2 className="mr-2 h-4 w-4" />
+                Share
+              </Button>
+              <Button onClick={emailTicket} variant="outline" className="flex-1">
+                <Mail className="mr-2 h-4 w-4" />
+                Email
+              </Button>
+            </div>
           </div>
         </Card>
 
