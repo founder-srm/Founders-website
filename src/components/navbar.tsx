@@ -27,10 +27,44 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import { ModeToggle } from '@/components/theme/theme-toggle';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useUser } from '@/stores/session';
+import { usePresence } from '@/hooks/usePresence';
+
+
+
+function AvatarButton({ Image, name }: { Image: string | undefined; name: string }) {
+  const isPresent = usePresence();
+  const getInitials = (name: string) => {
+    return name
+      .split(' ')
+      .map((word) => word[0])
+      .join('')
+      .toUpperCase();
+  };
+
+  return (
+    <Link href="/dashboard/account" className="relative">
+      <Avatar className="rounded-lg">
+        <AvatarImage src={Image} alt={name} />
+        <AvatarFallback>{getInitials(name) || 'SG'}</AvatarFallback>
+      </Avatar>
+      <span 
+        className={cn(
+          "absolute -end-1 -top-1 size-3 rounded-full border-2 border-background",
+          isPresent ? "bg-emerald-500" : "bg-yellow-500"
+        )}
+      >
+        <span className="sr-only">{isPresent ? 'Online' : 'Away'}</span>
+      </span>
+    </Link>
+  );
+}
+
 
 const subMenuItemsOne = [
   {
@@ -91,6 +125,7 @@ const isPathExcluded = (pathname: string, excludedPaths: string[]) => {
 
 const Navbar1 = () => {
   const pathname = usePathname();
+  const user = useUser();
   const excludedRoutes = [
     '/studio/*',
     '/events/*',
@@ -227,18 +262,27 @@ const Navbar1 = () => {
               </Link>
             </div>
           </div>
-          <div className="flex gap-2">
+          <div className="flex items-center gap-2">
             <ModeToggle />
-            <Button variant="outline" asChild>
-              <Link href="/auth/login" className="text-muted-foreground">
-                Log in
-              </Link>
-            </Button>
-            <Button asChild>
-              <Link href="/auth/signup" className="text-foreground">
-                Sign up
-              </Link>
-            </Button>
+            {user ? (
+                <AvatarButton Image={user?.user_metadata.picture} name={user?.user_metadata.name || user?.email} />
+              ) : (
+                <>
+                  <Button variant="outline" asChild>
+                    <Link
+                      href="/auth/login"
+                      className="text-muted-foreground"
+                    >
+                      Log in
+                    </Link>
+                  </Button>
+                  <Button asChild>
+                    <Link href="/auth/login" className="text-foreground">
+                      Sign up
+                    </Link>
+                  </Button>
+                </>
+              )}
           </div>
         </nav>
         <div className="block lg:hidden">
@@ -418,19 +462,25 @@ const Navbar1 = () => {
                   </div>
                   <div className="mt-2 flex flex-col gap-3">
                     <ModeToggle />
-                    <Button variant="outline" asChild>
-                      <Link
-                        href="/auth/login"
-                        className="text-muted-foreground"
-                      >
-                        Log in
-                      </Link>
-                    </Button>
-                    <Button asChild>
-                      <Link href="/auth/login" className="text-foreground">
-                        Sign up
-                      </Link>
-                    </Button>
+                    {user ? (
+                      <AvatarButton Image={user?.user_metadata.picture} name={user?.user_metadata.name || user?.email} />
+                    ) : (
+                      <>
+                        <Button variant="outline" asChild>
+                          <Link
+                            href="/auth/login"
+                            className="text-muted-foreground"
+                          >
+                            Log in
+                          </Link>
+                        </Button>
+                        <Button asChild>
+                          <Link href="/auth/login" className="text-foreground">
+                            Sign up
+                          </Link>
+                        </Button>
+                      </>
+                    )}
                   </div>
                 </div>
               </SheetContent>
