@@ -10,9 +10,11 @@ export default {
   ],
   theme: {
   	extend: {
-		fontFamily:{
-			plusJK: ['var(--font-plus-jakarta-sans)'],
-		},
+  		fontFamily: {
+  			plusJK: [
+  				'var(--font-plus-jakarta-sans)'
+  			]
+  		},
   		colors: {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
