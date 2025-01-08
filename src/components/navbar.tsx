@@ -157,6 +157,7 @@ const isPathExcluded = (pathname: string, excludedPaths: string[]) => {
 const Navbar1 = () => {
   const pathname = usePathname();
   const user = useUser();
+  console.log(user)
   const excludedRoutes = [
     '/studio/*',
     '/events/*',
@@ -295,7 +296,7 @@ const Navbar1 = () => {
         <div className="flex items-center gap-2">
           <ModeToggle />
           {user ? (
-              <AvatarButton Image={user?.user_metadata.picture} name={user?.user_metadata.name || user?.email} />
+              <AvatarButton Image={user?.user_metadata.picture || user?.user_metadata.avatar_url} name={user?.user_metadata.name || user?.user_metadata.full_name} />
             ) : (
               <>
                 <Button variant="outline" asChild>
@@ -493,7 +494,7 @@ const Navbar1 = () => {
                 <div className="mt-2 flex flex-col gap-3">
                   <ModeToggle />
                   {user ? (
-                    <AvatarButton Image={user?.user_metadata.picture} name={user?.user_metadata.name || user?.email} />
+                    <AvatarButton Image={user?.user_metadata.picture || user?.user_metadata.avatar_url} name={user?.user_metadata.name || user?.user_metadata.full_name} />
                   ) : (
                     <>
                       <Button variant="outline" asChild>
