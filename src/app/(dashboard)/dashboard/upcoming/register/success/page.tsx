@@ -4,6 +4,7 @@ import { useSearchParams } from 'next/navigation';
 import { useEffect, useState, useRef } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import QRCode from 'react-qr-code';
+import confetti from 'canvas-confetti';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import type { typeformInsertType } from '../../../../../../../schema.zod';
 import { Button } from '@/components/ui/button';
@@ -157,6 +158,11 @@ export default function CustomizeTicketPage() {
     downloadLink.download = `custom-ticket-${registration?.ticket_id}.png`;
     downloadLink.href = canvas.toDataURL('image/png');
     downloadLink.click();
+    
+    // Simple wide-spread confetti
+    confetti({
+      spread: 180
+    });
   };
 
   if (loading) return <div>Loading...</div>;

@@ -27,6 +27,11 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import { ModeToggle } from '@/components/theme/theme-toggle';
@@ -34,7 +39,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useUser } from '@/stores/session';
 import { usePresence } from '@/hooks/usePresence';
-
 
 
 function AvatarButton({ Image, name }: { Image: string | undefined; name: string }) {
@@ -48,20 +52,47 @@ function AvatarButton({ Image, name }: { Image: string | undefined; name: string
   };
 
   return (
-    <Link href="/dashboard/account" className="relative">
-      <Avatar className="rounded-lg">
-        <AvatarImage src={Image} alt={name} />
-        <AvatarFallback>{getInitials(name) || 'SG'}</AvatarFallback>
-      </Avatar>
-      <span 
-        className={cn(
-          "absolute -end-1 -top-1 size-3 rounded-full border-2 border-background",
-          isPresent ? "bg-emerald-500" : "bg-yellow-500"
-        )}
-      >
-        <span className="sr-only">{isPresent ? 'Online' : 'Away'}</span>
-      </span>
-    </Link>
+    <HoverCard>
+      <HoverCardTrigger asChild>
+        <Link href="/dashboard/account" className="relative">
+          <Avatar className="rounded-lg">
+            <AvatarImage src={Image} alt={name} />
+            <AvatarFallback>{getInitials(name) || 'SG'}</AvatarFallback>
+          </Avatar>
+          <span 
+            className={cn(
+              "absolute -end-1 -top-1 size-3 rounded-full border-2 border-background",
+              isPresent ? "bg-emerald-500" : "bg-yellow-500"
+            )}
+          >
+            <span className="sr-only">{isPresent ? 'Online' : 'Away'}</span>
+          </span>
+        </Link>
+      </HoverCardTrigger>
+      <HoverCardContent className="w-80">
+        <div className="flex justify-between space-x-4">
+          <Avatar>
+            <AvatarImage src={Image} />
+            <AvatarFallback>{getInitials(name) || 'SG'}</AvatarFallback>
+          </Avatar>
+          <div className="space-y-1">
+            <h4 className="text-sm font-semibold">{name}</h4>
+            <p className="text-sm text-muted-foreground">
+              Click to view and manage your account settings
+            </p>
+            <div className="flex items-center pt-2">
+              <span className={cn(
+                "mr-2 size-2 rounded-full",
+                isPresent ? "bg-emerald-500" : "bg-yellow-500"
+              )} />
+              <span className="text-xs text-muted-foreground">
+                {isPresent ? 'Online' : 'Away'}
+              </span>
+            </div>
+          </div>
+        </div>
+      </HoverCardContent>
+    </HoverCard>
   );
 }
 
@@ -141,351 +172,349 @@ const Navbar1 = () => {
 
   return (
     <section className="py-4 w-full flex items-center justify-center ">
-      <div className="container">
-        <nav className="hidden justify-between lg:flex">
-          <div className="flex items-center gap-6">
+      <nav className="hidden justify-between lg:flex w-full container ">
+        <div className="flex items-center gap-6">
+          <Link
+            href={'/'}
+            className="flex items-center gap-2 backdrop-blur-sm"
+          >
+            <Image
+              src="/FC-logo-short.png"
+              alt="logo"
+              width={640}
+              height={640}
+              className="w-8 h-auto"
+              priority
+            />
+            <span className="text-xl font-bold">Founders Club</span>
+          </Link>
+          <div className="flex items-center">
             <Link
-              href={'/'}
-              className="flex items-center gap-2 backdrop-blur-sm"
-            >
-              <Image
-                src="/FC-logo-short.png"
-                alt="logo"
-                width={640}
-                height={640}
-                className="w-8 h-auto"
-                priority
-              />
-              <span className="text-xl font-bold">Founders Club</span>
-            </Link>
-            <div className="flex items-center">
-              <Link
-                className={cn(
-                  'text-muted-foreground',
-                  navigationMenuTriggerStyle,
-                  buttonVariants({
-                    variant: 'ghost',
-                  })
-                )}
-                href="/"
-              >
-                Home
-              </Link>
-              <NavigationMenu>
-                <NavigationMenuList>
-                  <NavigationMenuItem className="text-muted-foreground">
-                    <NavigationMenuTrigger>
-                      <span>Content</span>
-                    </NavigationMenuTrigger>
-                    <NavigationMenuContent>
-                      <ul className="w-80 p-3">
-                        <NavigationMenuLink>
-                          {subMenuItemsOne.map((item, idx) => (
-                            <li key={idx}>
-                              <Link
-                                className={cn(
-                                  'flex select-none gap-4 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground'
-                                )}
-                                href="/"
-                              >
-                                {item.icon}
-                                <div>
-                                  <div className="text-sm font-semibold">
-                                    {item.title}
-                                  </div>
-                                  <p className="text-sm leading-snug text-muted-foreground">
-                                    {item.description}
-                                  </p>
-                                </div>
-                              </Link>
-                            </li>
-                          ))}
-                        </NavigationMenuLink>
-                      </ul>
-                    </NavigationMenuContent>
-                  </NavigationMenuItem>
-                  <NavigationMenuItem className="text-muted-foreground">
-                    <NavigationMenuTrigger>Events</NavigationMenuTrigger>
-                    <NavigationMenuContent>
-                      <ul className="w-80 p-3">
-                        <NavigationMenuLink>
-                          {subMenuItemsTwo.map((item, idx) => (
-                            <li key={idx}>
-                              <Link
-                                className={cn(
-                                  'flex select-none gap-4 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground'
-                                )}
-                                href="/"
-                              >
-                                {item.icon}
-                                <div>
-                                  <div className="text-sm font-semibold">
-                                    {item.title}
-                                  </div>
-                                  <p className="text-sm leading-snug text-muted-foreground">
-                                    {item.description}
-                                  </p>
-                                </div>
-                              </Link>
-                            </li>
-                          ))}
-                        </NavigationMenuLink>
-                      </ul>
-                    </NavigationMenuContent>
-                  </NavigationMenuItem>
-                </NavigationMenuList>
-              </NavigationMenu>
-
-              <Link
-                className={cn(
-                  'text-muted-foreground',
-                  navigationMenuTriggerStyle,
-                  buttonVariants({
-                    variant: 'ghost',
-                  })
-                )}
-                href="/dashboard/upcoming"
-              >
-                Upcoming
-              </Link>
-              <Link
-                className={cn(
-                  'text-muted-foreground',
-                  navigationMenuTriggerStyle,
-                  buttonVariants({
-                    variant: 'ghost',
-                  })
-                )}
-                href="/contact-us"
-              >
-                Contact Us
-              </Link>
-            </div>
-          </div>
-          <div className="flex items-center gap-2">
-            <ModeToggle />
-            {user ? (
-                <AvatarButton Image={user?.user_metadata.picture} name={user?.user_metadata.name || user?.email} />
-              ) : (
-                <>
-                  <Button variant="outline" asChild>
-                    <Link
-                      href="/auth/login"
-                      className="text-muted-foreground"
-                    >
-                      Log in
-                    </Link>
-                  </Button>
-                  <Button asChild>
-                    <Link href="/auth/login" className="text-foreground">
-                      Sign up
-                    </Link>
-                  </Button>
-                </>
+              className={cn(
+                'text-muted-foreground',
+                navigationMenuTriggerStyle,
+                buttonVariants({
+                  variant: 'ghost',
+                })
               )}
-          </div>
-        </nav>
-        <div className="block lg:hidden">
-          <div className="flex items-center justify-between">
-            <Link
-              href={'/'}
-              className="flex items-center gap-2 backdrop-blur-sm"
+              href="/"
             >
-              <Image
-                src="/FC-logo-short.png"
-                alt="logo"
-                width={640}
-                height={640}
-                className="w-8 h-auto"
-                priority
-              />
-              <span className="text-xl font-bold">Founders Club</span>
+              Home
             </Link>
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button variant="outline" size="icon">
-                  <Menu className="size-4" />
-                </Button>
-              </SheetTrigger>
-              <SheetContent className="overflow-y-auto">
-                <SheetHeader>
-                  <SheetTitle>
-                    <Link
-                      href={'/'}
-                      className="flex items-center gap-2 backdrop-blur-sm"
-                    >
-                      <Image
-                        src="/FC-logo-short.png"
-                        alt="logo"
-                        width={640}
-                        height={640}
-                        className="w-8 h-auto"
-                        priority
-                      />
-                      <span className="text-xl font-bold">Founders Club</span>
-                    </Link>
-                  </SheetTitle>
-                </SheetHeader>
-                <div className="mb-8 mt-8 flex flex-col gap-4">
-                  <Link href="/" className="font-semibold">
-                    Home
-                  </Link>
-                  <Accordion type="single" collapsible className="w-full">
-                    <AccordionItem value="products" className="border-b-0">
-                      <AccordionTrigger className="mb-4 py-0 font-semibold hover:no-underline">
-                        Content
-                      </AccordionTrigger>
-                      <AccordionContent className="mt-2">
+            <NavigationMenu>
+              <NavigationMenuList>
+                <NavigationMenuItem className="text-muted-foreground">
+                  <NavigationMenuTrigger>
+                    <span>Content</span>
+                  </NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <ul className="w-80 p-3">
+                      <NavigationMenuLink>
                         {subMenuItemsOne.map((item, idx) => (
-                          <Link
-                            key={idx}
-                            className={cn(
-                              'flex select-none gap-4 rounded-md p-3 leading-none outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground'
-                            )}
-                            href="/"
-                          >
-                            {item.icon}
-                            <div>
-                              <div className="text-sm font-semibold">
-                                {item.title}
+                          <li key={idx}>
+                            <Link
+                              className={cn(
+                                'flex select-none gap-4 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground'
+                              )}
+                              href="/"
+                            >
+                              {item.icon}
+                              <div>
+                                <div className="text-sm font-semibold">
+                                  {item.title}
+                                </div>
+                                <p className="text-sm leading-snug text-muted-foreground">
+                                  {item.description}
+                                </p>
                               </div>
-                              <p className="text-sm leading-snug text-muted-foreground">
-                                {item.description}
-                              </p>
-                            </div>
-                          </Link>
+                            </Link>
+                          </li>
                         ))}
-                      </AccordionContent>
-                    </AccordionItem>
-                    <AccordionItem value="resources" className="border-b-0">
-                      <AccordionTrigger className="py-0 font-semibold hover:no-underline">
-                        Events
-                      </AccordionTrigger>
-                      <AccordionContent className="mt-2">
+                      </NavigationMenuLink>
+                    </ul>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+                <NavigationMenuItem className="text-muted-foreground">
+                  <NavigationMenuTrigger>Events</NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <ul className="w-80 p-3">
+                      <NavigationMenuLink>
                         {subMenuItemsTwo.map((item, idx) => (
-                          <Link
-                            key={idx}
-                            className={cn(
-                              'flex select-none gap-4 rounded-md p-3 leading-none outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground'
-                            )}
-                            href="/"
-                          >
-                            {item.icon}
-                            <div>
-                              <div className="text-sm font-semibold">
-                                {item.title}
+                          <li key={idx}>
+                            <Link
+                              className={cn(
+                                'flex select-none gap-4 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground'
+                              )}
+                              href="/"
+                            >
+                              {item.icon}
+                              <div>
+                                <div className="text-sm font-semibold">
+                                  {item.title}
+                                </div>
+                                <p className="text-sm leading-snug text-muted-foreground">
+                                  {item.description}
+                                </p>
                               </div>
-                              <p className="text-sm leading-snug text-muted-foreground">
-                                {item.description}
-                              </p>
-                            </div>
-                          </Link>
+                            </Link>
+                          </li>
                         ))}
-                      </AccordionContent>
-                    </AccordionItem>
-                  </Accordion>
-                  <Link href="/dashboard/upcoming" className="font-semibold">
-                    Upcoming
-                  </Link>
-                  <Link href="/contact-us" className="font-semibold">
-                    Blog
-                  </Link>
-                </div>
-                <div className="border-t pt-4">
-                  <div className="grid grid-cols-2 justify-start">
-                    <Link
-                      className={cn(
-                        buttonVariants({
-                          variant: 'ghost',
-                        }),
-                        'justify-start text-muted-foreground'
-                      )}
-                      href="#"
-                    >
-                      Press
-                    </Link>
-                    <Link
-                      className={cn(
-                        buttonVariants({
-                          variant: 'ghost',
-                        }),
-                        'justify-start text-muted-foreground'
-                      )}
-                      href="#"
-                    >
-                      Contact
-                    </Link>
-                    <Link
-                      className={cn(
-                        buttonVariants({
-                          variant: 'ghost',
-                        }),
-                        'justify-start text-muted-foreground'
-                      )}
-                      href="#"
-                    >
-                      Imprint
-                    </Link>
-                    <Link
-                      className={cn(
-                        buttonVariants({
-                          variant: 'ghost',
-                        }),
-                        'justify-start text-muted-foreground'
-                      )}
-                      href="#"
-                    >
-                      Sitemap
-                    </Link>
-                    <Link
-                      className={cn(
-                        buttonVariants({
-                          variant: 'ghost',
-                        }),
-                        'justify-start text-muted-foreground'
-                      )}
-                      href="#"
-                    >
-                      Legal
-                    </Link>
-                    <Link
-                      className={cn(
-                        buttonVariants({
-                          variant: 'ghost',
-                        }),
-                        'justify-start text-muted-foreground'
-                      )}
-                      href="#"
-                    >
-                      Cookie Settings
-                    </Link>
-                  </div>
-                  <div className="mt-2 flex flex-col gap-3">
-                    <ModeToggle />
-                    {user ? (
-                      <AvatarButton Image={user?.user_metadata.picture} name={user?.user_metadata.name || user?.email} />
-                    ) : (
-                      <>
-                        <Button variant="outline" asChild>
-                          <Link
-                            href="/auth/login"
-                            className="text-muted-foreground"
-                          >
-                            Log in
-                          </Link>
-                        </Button>
-                        <Button asChild>
-                          <Link href="/auth/login" className="text-foreground">
-                            Sign up
-                          </Link>
-                        </Button>
-                      </>
-                    )}
-                  </div>
-                </div>
-              </SheetContent>
-            </Sheet>
+                      </NavigationMenuLink>
+                    </ul>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+              </NavigationMenuList>
+            </NavigationMenu>
+
+            <Link
+              className={cn(
+                'text-muted-foreground',
+                navigationMenuTriggerStyle,
+                buttonVariants({
+                  variant: 'ghost',
+                })
+              )}
+              href="/dashboard/upcoming"
+            >
+              Upcoming
+            </Link>
+            <Link
+              className={cn(
+                'text-muted-foreground',
+                navigationMenuTriggerStyle,
+                buttonVariants({
+                  variant: 'ghost',
+                })
+              )}
+              href="/contact-us"
+            >
+              Contact Us
+            </Link>
           </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <ModeToggle />
+          {user ? (
+              <AvatarButton Image={user?.user_metadata.picture} name={user?.user_metadata.name || user?.email} />
+            ) : (
+              <>
+                <Button variant="outline" asChild>
+                  <Link
+                    href="/auth/login"
+                    className="text-muted-foreground"
+                  >
+                    Log in
+                  </Link>
+                </Button>
+                <Button asChild>
+                  <Link href="/auth/login" className="text-foreground">
+                    Sign up
+                  </Link>
+                </Button>
+              </>
+            )}
+        </div>
+      </nav>
+      <div className="block lg:hidden">
+        <div className="flex items-center justify-between">
+          <Link
+            href={'/'}
+            className="flex items-center gap-2 backdrop-blur-sm"
+          >
+            <Image
+              src="/FC-logo-short.png"
+              alt="logo"
+              width={640}
+              height={640}
+              className="w-8 h-auto"
+              priority
+            />
+            <span className="text-xl font-bold">Founders Club</span>
+          </Link>
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="outline" size="icon">
+                <Menu className="size-4" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent className="overflow-y-auto">
+              <SheetHeader>
+                <SheetTitle>
+                  <Link
+                    href={'/'}
+                    className="flex items-center gap-2 backdrop-blur-sm"
+                  >
+                    <Image
+                      src="/FC-logo-short.png"
+                      alt="logo"
+                      width={640}
+                      height={640}
+                      className="w-8 h-auto"
+                      priority
+                    />
+                    <span className="text-xl font-bold">Founders Club</span>
+                  </Link>
+                </SheetTitle>
+              </SheetHeader>
+              <div className="mb-8 mt-8 flex flex-col gap-4">
+                <Link href="/" className="font-semibold">
+                  Home
+                </Link>
+                <Accordion type="single" collapsible className="w-full">
+                  <AccordionItem value="products" className="border-b-0">
+                    <AccordionTrigger className="mb-4 py-0 font-semibold hover:no-underline">
+                      Content
+                    </AccordionTrigger>
+                    <AccordionContent className="mt-2">
+                      {subMenuItemsOne.map((item, idx) => (
+                        <Link
+                          key={idx}
+                          className={cn(
+                            'flex select-none gap-4 rounded-md p-3 leading-none outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground'
+                          )}
+                          href="/"
+                        >
+                          {item.icon}
+                          <div>
+                            <div className="text-sm font-semibold">
+                              {item.title}
+                            </div>
+                            <p className="text-sm leading-snug text-muted-foreground">
+                              {item.description}
+                            </p>
+                          </div>
+                        </Link>
+                      ))}
+                    </AccordionContent>
+                  </AccordionItem>
+                  <AccordionItem value="resources" className="border-b-0">
+                    <AccordionTrigger className="py-0 font-semibold hover:no-underline">
+                      Events
+                    </AccordionTrigger>
+                    <AccordionContent className="mt-2">
+                      {subMenuItemsTwo.map((item, idx) => (
+                        <Link
+                          key={idx}
+                          className={cn(
+                            'flex select-none gap-4 rounded-md p-3 leading-none outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground'
+                          )}
+                          href="/"
+                        >
+                          {item.icon}
+                          <div>
+                            <div className="text-sm font-semibold">
+                              {item.title}
+                            </div>
+                            <p className="text-sm leading-snug text-muted-foreground">
+                              {item.description}
+                            </p>
+                          </div>
+                        </Link>
+                      ))}
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+                <Link href="/dashboard/upcoming" className="font-semibold">
+                  Upcoming
+                </Link>
+                <Link href="/contact-us" className="font-semibold">
+                  Blog
+                </Link>
+              </div>
+              <div className="border-t pt-4">
+                <div className="grid grid-cols-2 justify-start">
+                  <Link
+                    className={cn(
+                      buttonVariants({
+                        variant: 'ghost',
+                      }),
+                      'justify-start text-muted-foreground'
+                    )}
+                    href="#"
+                  >
+                    Press
+                  </Link>
+                  <Link
+                    className={cn(
+                      buttonVariants({
+                        variant: 'ghost',
+                      }),
+                      'justify-start text-muted-foreground'
+                    )}
+                    href="#"
+                  >
+                    Contact
+                  </Link>
+                  <Link
+                    className={cn(
+                      buttonVariants({
+                        variant: 'ghost',
+                      }),
+                      'justify-start text-muted-foreground'
+                    )}
+                    href="#"
+                  >
+                    Imprint
+                  </Link>
+                  <Link
+                    className={cn(
+                      buttonVariants({
+                        variant: 'ghost',
+                      }),
+                      'justify-start text-muted-foreground'
+                    )}
+                    href="#"
+                  >
+                    Sitemap
+                  </Link>
+                  <Link
+                    className={cn(
+                      buttonVariants({
+                        variant: 'ghost',
+                      }),
+                      'justify-start text-muted-foreground'
+                    )}
+                    href="#"
+                  >
+                    Legal
+                  </Link>
+                  <Link
+                    className={cn(
+                      buttonVariants({
+                        variant: 'ghost',
+                      }),
+                      'justify-start text-muted-foreground'
+                    )}
+                    href="#"
+                  >
+                    Cookie Settings
+                  </Link>
+                </div>
+                <div className="mt-2 flex flex-col gap-3">
+                  <ModeToggle />
+                  {user ? (
+                    <AvatarButton Image={user?.user_metadata.picture} name={user?.user_metadata.name || user?.email} />
+                  ) : (
+                    <>
+                      <Button variant="outline" asChild>
+                        <Link
+                          href="/auth/login"
+                          className="text-muted-foreground"
+                        >
+                          Log in
+                        </Link>
+                      </Button>
+                      <Button asChild>
+                        <Link href="/auth/login" className="text-foreground">
+                          Sign up
+                        </Link>
+                      </Button>
+                    </>
+                  )}
+                </div>
+              </div>
+            </SheetContent>
+          </Sheet>
         </div>
       </div>
     </section>
