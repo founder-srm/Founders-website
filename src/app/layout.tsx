@@ -25,7 +25,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="antialiased" suppressHydrationWarning>
       <body
-        className={`${plusJakartaSans.variable} antialiased w-full bg-background font-plusJK`}
+        className={`${plusJakartaSans.variable} antialiased w-full bg-background font-plusJK [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-muted-foreground/20 [&::-webkit-scrollbar-track]:bg-transparent`}
       >
         <ThemeProvider
           attribute="class"

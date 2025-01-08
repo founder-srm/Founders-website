@@ -1,7 +1,7 @@
 'use client';
 import { Sparkle } from "lucide-react";
 import { InfiniteSlider } from "./ui/infinite-slider";
-import { memo } from "react";
+import { memo, useState, useEffect } from "react";
 
 interface BannerSingletonProps {
     color: string;
@@ -22,8 +22,19 @@ BannerSingleton.displayName = 'BannerSingleton';
 export function InfiniteSliderBanner() {
   const presetColors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEEAD'];
   
+  const [colors, setColors] = useState(
+    [...Array(10)].map((_, i) => presetColors[i % presetColors.length])
+  );
+
+  useEffect(() => {
+    const randomColors = [...Array(10)].map(() => 
+      presetColors[Math.floor(Math.random() * presetColors.length)]
+    );
+    setColors(randomColors);
+  }, []);
+
   return (
-    <div className="w-screen overflow-clip z-50 h-fit py-6 md:py-12 relative">
+    <div className="w-screen overflow-hidden z-50 h-fit py-6 md:py-12 relative">
       <div className="absolute inset-0 top-4">
         <InfiniteSlider 
           className="rotate-2 blur-[2px] opacity-75 bg-accent/80 py-4 shadow-lg" 
@@ -32,10 +43,10 @@ export function InfiniteSliderBanner() {
           durationOnHover={65} 
           reverse
         >
-          {[...Array(10)].map((_, index) => (
+          {colors.map((color, index) => (
             <BannerSingleton 
               key={`banner-bg-${index}`} 
-              color={presetColors[Math.floor(Math.random() * presetColors.length)]} 
+              color={color} 
             />
           ))}
         </InfiniteSlider>
@@ -47,10 +58,10 @@ export function InfiniteSliderBanner() {
         durationOnHover={55} 
         reverse
       >
-        {[...Array(10)].map((_, index) => (
+        {colors.map((color, index) => (
           <BannerSingleton 
             key={`banner-front-${index}`} 
-            color={presetColors[Math.floor(Math.random() * presetColors.length)]} 
+            color={color} 
           />
         ))}
       </InfiniteSlider>
