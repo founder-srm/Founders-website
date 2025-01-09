@@ -1,9 +1,8 @@
 'use client';
 
-// Add these imports at the top
-import { Download, Share2, Mail } from 'lucide-react';
+import { Download, Share2, Mail, TriangleAlert, X } from 'lucide-react';
 
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState, useRef } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import QRCode from 'react-qr-code';
@@ -25,6 +24,7 @@ import ScratchToReveal from '@/components/ui/scratch-to-reveal';
 
 export default function CustomizeTicketPage() {
   const searchParams = useSearchParams();
+  const Router = useRouter();
   const ticketId = searchParams.get('ticketid');
   const [registration, setRegistration] = useState<typeformInsertType | null>(
     null
@@ -37,7 +37,7 @@ export default function CustomizeTicketPage() {
   const [selectedTheme, setSelectedTheme] = useState('classic');
   const [qrCodeImage, setQrCodeImage] = useState<HTMLImageElement | null>(null);
   const [patternType, setPatternType] = useState('none');
-  const [patternContent, setPatternContent] = useState('🎫');
+  const [patternContent, setPatternContent] = useState('🔥');
   const [patternSize, setPatternSize] = useState(30);
   const [patternRotation, setPatternRotation] = useState(0);
 
@@ -231,6 +231,55 @@ export default function CustomizeTicketPage() {
 
   if (loading) return <div>Loading...</div>;
   if (!registration) return <div>Registration not found</div>;
+
+  if (!registration.is_approved) {
+    return (
+      <div className="h-screen w-full flex items-center justify-center bg-accent">
+        <div className="z-[100] max-w-[400px] rounded-lg border border-border bg-background p-4 shadow-lg shadow-black/5">
+          <div className="flex gap-2">
+            <div className="flex grow gap-3">
+              <TriangleAlert
+                className="mt-0.5 shrink-0 text-amber-500"
+                size={16}
+                strokeWidth={2}
+                aria-hidden="true"
+              />
+              <div className="flex grow flex-col gap-3">
+                <div className="space-y-2">
+                  <p className="text-sm font-medium">Registration Pending Approval</p>
+                  <p className="text-sm text-muted-foreground">
+                    Your registration is currently being reviewed by the event organizers. 
+                    You&apos;ll be able to access and customize your ticket once approved.
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-3">
+                    Ticket ID: {registration.ticket_id}
+                  </p>
+                </div>
+                <div>
+                  <Button size="sm" variant="outline" onClick={() => Router.back()}>
+                    Return to Dashboard
+                  </Button>
+                </div>
+              </div>
+            </div>
+            <Button
+              variant="ghost"
+              className="group -my-1.5 -me-2 size-8 shrink-0 p-0 hover:bg-transparent"
+              aria-label="Close notification"
+              // onClick={() => window.location.href = '/dashboard'}
+            >
+              <X
+                size={16}
+                strokeWidth={2}
+                className="opacity-60 transition-opacity group-hover:opacity-100"
+                aria-hidden="true"
+              />
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className=" max-w-6xl mx-auto py-8">
