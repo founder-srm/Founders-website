@@ -33,7 +33,7 @@ import {
   unlinkIdentity,
 } from '@/actions/supabase';
 import { useToast } from '@/hooks/use-toast';
-import GoogleIcon from '@/components/custom-icons/custom-icons';
+import { GoogleIcon } from '@/components/custom-icons/custom-icons';
 import { Badge } from '@/components/ui/badge';
 import type { UserIdentity } from '@supabase/supabase-js';
 

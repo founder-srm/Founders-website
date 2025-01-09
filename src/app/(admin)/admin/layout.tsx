@@ -1,30 +1,17 @@
-import { createClient } from "@/utils/supabase/server";
-import { redirect } from "next/navigation";
-import { Suspense } from "react";
+'use client';
+import { useAdminCheck } from "@/hooks/useAdminCheck";
 
-export default async function AdminLayout({children}: {children: React.ReactNode}) {
-    const supabase = await createClient();
-    const {
-        data: { user },
-    } = await supabase.auth.getUser();
-    if (!user) {
-        return null;
-    }
-    const { count, error } = await supabase
-      .from('adminuseraccount')
-      .select('*', { count: 'exact' })
-      .eq('user_id', user?.id);
+export default function AdminLayout({children}: {children: React.ReactNode}) {
+    const { isLoading } = useAdminCheck();
 
-    if (!count || count === 0){
-        redirect('/');
+    if (isLoading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center">
+                <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-gray-900" />
+                <p className="ml-4">Checking permissions...</p>
+            </div>
+        );
     }
-    
-    if (error) {
-        console.error(error);
-    }
-    return(
-        <Suspense fallback={<div>Loading...</div>}>
-            {children}
-        </Suspense>
-    )
+
+    return children;
 }

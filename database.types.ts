@@ -806,18 +806,21 @@ export type Database = {
           email: string
           id: string
           user_id: string
+          user_role: Database["public"]["Enums"]["user-role"]
         }
         Insert: {
           created_at?: string
           email: string
           id?: string
           user_id?: string
+          user_role?: Database["public"]["Enums"]["user-role"]
         }
         Update: {
           created_at?: string
           email?: string
           id?: string
           user_id?: string
+          user_role?: Database["public"]["Enums"]["user-role"]
         }
         Relationships: []
       }
@@ -1307,6 +1310,7 @@ export type Database = {
         | "OpenHouse"
         | "Other"
       "event-type": "online" | "offline" | "hybrid"
+      "user-role": "user" | "moderator" | "admin" | "owner"
     }
     CompositeTypes: {
       [_ in never]: never

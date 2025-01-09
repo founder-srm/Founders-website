@@ -39,6 +39,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useUser } from '@/stores/session';
 import { usePresence } from '@/hooks/usePresence';
+import useAdmin from '@/hooks/use-admin';
+import { AdminUserIcon } from './custom-icons/custom-icons';
 
 
 function AvatarButton({ Image, name }: { Image: string | undefined; name: string }) {
@@ -157,7 +159,8 @@ const isPathExcluded = (pathname: string, excludedPaths: string[]) => {
 const Navbar1 = () => {
   const pathname = usePathname();
   const user = useUser();
-  console.log(user)
+  const isAdmin = useAdmin({ user });
+
   const excludedRoutes = [
     '/studio/*',
     '/events/*',
@@ -295,6 +298,7 @@ const Navbar1 = () => {
         </div>
         <div className="flex items-center gap-2">
           <ModeToggle />
+          {isAdmin && <Button variant='ghost' size="icon" className='' asChild><Link href="/admin" ><AdminUserIcon /></Link></Button>}
           {user ? (
               <AvatarButton Image={user?.user_metadata.picture || user?.user_metadata.avatar_url} name={user?.user_metadata.name || user?.user_metadata.full_name} />
             ) : (
@@ -493,6 +497,7 @@ const Navbar1 = () => {
                 </div>
                 <div className="mt-2 flex flex-col gap-3">
                   <ModeToggle />
+                  {isAdmin && <Button variant='ghost' size="icon" className='' asChild><Link href="/admin" ><AdminUserIcon /></Link></Button>}
                   {user ? (
                     <AvatarButton Image={user?.user_metadata.picture || user?.user_metadata.avatar_url} name={user?.user_metadata.name || user?.user_metadata.full_name} />
                   ) : (

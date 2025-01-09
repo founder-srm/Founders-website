@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import GoogleIcon from '@/components/custom-icons/custom-icons';
+import { GoogleIcon } from '@/components/custom-icons/custom-icons';
 import { Github, LucideLoaderPinwheel, TriangleAlert } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';

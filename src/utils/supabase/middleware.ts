@@ -44,29 +44,8 @@ export async function updateSession(request: NextRequest) {
 
   console.log('CURRENT PATH:', request.nextUrl.pathname);
 
-  // if (user && request.nextUrl.pathname.includes('/admin')) {
-  //   console.log('inside admin');
-  //   const { data, count, error } = await supabase
-  //     .from('adminuseraccount')
-  //     .select('*', { count: 'exact' })
-  //     .eq('user_id', user.id);
-
-  //   if (error) {
-  //     // handle or log the error
-  //     console.error(error);
-  //   }
-
-  //   console.log('data', data);
-
-  //   if (!count || count === 0) {
-  //     // user is not an admin, potentially respond by redirecting the user to home
-
-  //     console.log('redirecting to home');
-  //     const url = request.nextUrl.clone();
-  //     url.pathname = '/';
-  //     return NextResponse.redirect(url);
-  //   }
-  // }
+  // Remove or comment out the admin check section
+  // if (user && request.nextUrl.pathname.includes('/admin')) {...}
 
   if (!user && request.nextUrl.pathname.startsWith('/dashboard')) {
     // no user, potentially respond by redirecting the user to the login page
