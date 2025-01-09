@@ -36,7 +36,7 @@ const CTAButtons = ({ ctaData }: CTAButtonsProps) => {
         <Button
           className={cn(ctaData.variant && 'w-full sm:w-auto')}
           onClick={() => window.open(ctaData.secondaryButtonLink || '')}
-          variant='outline'
+          variant="outline"
         >
           {ctaData.secondaryButtonText}
         </Button>

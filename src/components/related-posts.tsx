@@ -16,7 +16,7 @@ export default async function RelatedPosts() {
           <p className="text-wider mb-4 text-sm font-medium text-muted-foreground">
             Stuff we write
           </p>
-          <h2 className="mb-4 w-full text-4xl font-medium md:mb-5 md:text-5xl lg:mb-6 lg:max-w-xs lg:text-6xl heading-gradient">
+          <h2 className="mb-5 py-[4px] leading-6 w-full text-4xl font-medium md:mb-5 md:text-5xl lg:mb-6 lg:max-w-xs lg:text-6xl heading-gradient">
             Blog
           </h2>
           <p className="md:mb-5 lg:mb-6 lg:max-w-xs">

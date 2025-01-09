@@ -31,8 +31,8 @@ import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
-} from "@/components/ui/hover-card"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+} from '@/components/ui/hover-card';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 import { ModeToggle } from '@/components/theme/theme-toggle';
 import Image from 'next/image';
@@ -42,13 +42,15 @@ import { usePresence } from '@/hooks/usePresence';
 import useAdmin from '@/hooks/use-admin';
 import { AdminUserIcon } from './custom-icons/custom-icons';
 
-
-function AvatarButton({ Image, name }: { Image: string | undefined; name: string }) {
+function AvatarButton({
+  Image,
+  name,
+}: { Image: string | undefined; name: string }) {
   const isPresent = usePresence();
   const getInitials = (name: string) => {
     return name
       .split(' ')
-      .map((word) => word[0])
+      .map(word => word[0])
       .join('')
       .toUpperCase();
   };
@@ -61,10 +63,10 @@ function AvatarButton({ Image, name }: { Image: string | undefined; name: string
             <AvatarImage src={Image} alt={name} />
             <AvatarFallback>{getInitials(name) || 'SG'}</AvatarFallback>
           </Avatar>
-          <span 
+          <span
             className={cn(
-              "absolute -end-1 -top-1 size-3 rounded-full border-2 border-background",
-              isPresent ? "bg-emerald-500" : "bg-yellow-500"
+              'absolute -end-1 -top-1 size-3 rounded-full border-2 border-background',
+              isPresent ? 'bg-emerald-500' : 'bg-yellow-500'
             )}
           >
             <span className="sr-only">{isPresent ? 'Online' : 'Away'}</span>
@@ -83,10 +85,12 @@ function AvatarButton({ Image, name }: { Image: string | undefined; name: string
               Click to view and manage your account settings
             </p>
             <div className="flex items-center pt-2">
-              <span className={cn(
-                "mr-2 size-2 rounded-full",
-                isPresent ? "bg-emerald-500" : "bg-yellow-500"
-              )} />
+              <span
+                className={cn(
+                  'mr-2 size-2 rounded-full',
+                  isPresent ? 'bg-emerald-500' : 'bg-yellow-500'
+                )}
+              />
               <span className="text-xs text-muted-foreground">
                 {isPresent ? 'Online' : 'Away'}
               </span>
@@ -97,7 +101,6 @@ function AvatarButton({ Image, name }: { Image: string | undefined; name: string
     </HoverCard>
   );
 }
-
 
 const subMenuItemsOne = [
   {
@@ -178,10 +181,7 @@ const Navbar1 = () => {
     <section className="py-4 w-full flex items-center justify-center ">
       <nav className="hidden justify-between lg:flex w-full container ">
         <div className="flex items-center gap-6">
-          <Link
-            href={'/'}
-            className="flex items-center gap-2 backdrop-blur-sm"
-          >
+          <Link href={'/'} className="flex items-center gap-2 backdrop-blur-sm">
             <Image
               src="/FC-logo-short.png"
               alt="logo"
@@ -298,34 +298,39 @@ const Navbar1 = () => {
         </div>
         <div className="flex items-center gap-2">
           <ModeToggle />
-          {isAdmin && <Button variant='ghost' size="icon" className='' asChild><Link href="/admin" ><AdminUserIcon /></Link></Button>}
+          {isAdmin && (
+            <Button variant="ghost" size="icon" className="" asChild>
+              <Link href="/admin">
+                <AdminUserIcon />
+              </Link>
+            </Button>
+          )}
           {user ? (
-              <AvatarButton Image={user?.user_metadata.picture || user?.user_metadata.avatar_url} name={user?.user_metadata.name || user?.user_metadata.full_name} />
-            ) : (
-              <>
-                <Button variant="outline" asChild>
-                  <Link
-                    href="/auth/login"
-                    className="text-muted-foreground"
-                  >
-                    Log in
-                  </Link>
-                </Button>
-                <Button asChild>
-                  <Link href="/auth/login" className="text-foreground">
-                    Sign up
-                  </Link>
-                </Button>
-              </>
-            )}
+            <AvatarButton
+              Image={
+                user?.user_metadata.picture || user?.user_metadata.avatar_url
+              }
+              name={user?.user_metadata.name || user?.user_metadata.full_name}
+            />
+          ) : (
+            <>
+              <Button variant="outline" asChild>
+                <Link href="/auth/login" className="text-muted-foreground">
+                  Log in
+                </Link>
+              </Button>
+              <Button asChild>
+                <Link href="/auth/login" className="text-foreground">
+                  Sign up
+                </Link>
+              </Button>
+            </>
+          )}
         </div>
       </nav>
       <div className="block lg:hidden">
         <div className="flex items-center justify-between">
-          <Link
-            href={'/'}
-            className="flex items-center gap-2 backdrop-blur-sm"
-          >
+          <Link href={'/'} className="flex items-center gap-2 backdrop-blur-sm">
             <Image
               src="/FC-logo-short.png"
               alt="logo"
@@ -497,9 +502,24 @@ const Navbar1 = () => {
                 </div>
                 <div className="mt-2 flex flex-col gap-3">
                   <ModeToggle />
-                  {isAdmin && <Button variant='ghost' size="icon" className='' asChild><Link href="/admin" ><AdminUserIcon /></Link></Button>}
+                  {isAdmin && (
+                    <Button variant="ghost" size="icon" className="" asChild>
+                      <Link href="/admin">
+                        <AdminUserIcon />
+                      </Link>
+                    </Button>
+                  )}
                   {user ? (
-                    <AvatarButton Image={user?.user_metadata.picture || user?.user_metadata.avatar_url} name={user?.user_metadata.name || user?.user_metadata.full_name} />
+                    <AvatarButton
+                      Image={
+                        user?.user_metadata.picture ||
+                        user?.user_metadata.avatar_url
+                      }
+                      name={
+                        user?.user_metadata.name ||
+                        user?.user_metadata.full_name
+                      }
+                    />
                   ) : (
                     <>
                       <Button variant="outline" asChild>

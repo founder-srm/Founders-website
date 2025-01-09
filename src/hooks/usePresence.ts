@@ -9,7 +9,7 @@ export const usePresence = () => {
     };
 
     document.addEventListener('visibilitychange', handleVisibilityChange);
-    
+
     // Cleanup
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);

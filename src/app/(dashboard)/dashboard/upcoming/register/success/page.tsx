@@ -96,7 +96,7 @@ export default function CustomizeTicketPage() {
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.font = `${patternSize}px Arial`;
-      
+
       for (let x = -canvas.width; x < canvas.width; x += patternSize * 2) {
         for (let y = -canvas.height; y < canvas.height; y += patternSize * 2) {
           ctx.fillStyle = `${textColor}20`; // 20% opacity
@@ -111,28 +111,28 @@ export default function CustomizeTicketPage() {
     ctx.strokeStyle = textColor;
     ctx.lineWidth = 2;
     ctx.beginPath();
-    
+
     // Left edge zigzag
     for (let y = 20; y < canvas.height - 20; y += 20) {
       if (y === 20) ctx.moveTo(10, y);
       ctx.lineTo(y % 40 === 0 ? 20 : 10, y + 20);
     }
-    
+
     // Bottom edge
     for (let x = 10; x < canvas.width - 10; x += 20) {
       ctx.lineTo(x + 20, canvas.height - (x % 40 === 0 ? 20 : 10));
     }
-    
+
     // Right edge zigzag
     for (let y = canvas.height - 20; y > 20; y -= 20) {
       ctx.lineTo(y % 40 === 0 ? canvas.width - 20 : canvas.width - 10, y);
     }
-    
+
     // Top edge
     for (let x = canvas.width - 10; x > 10; x -= 20) {
       ctx.lineTo(x - 20, x % 40 === 0 ? 20 : 10);
     }
-    
+
     ctx.closePath();
     ctx.stroke();
     ctx.clip();
@@ -191,7 +191,6 @@ export default function CustomizeTicketPage() {
       canvas.width / 2,
       canvas.height - 30
     );
-
   }, [
     registration,
     backgroundColor,
@@ -213,9 +212,9 @@ export default function CustomizeTicketPage() {
     downloadLink.download = `${registration?.event_title}-${registration?.ticket_id}.png`;
     downloadLink.href = canvas.toDataURL('image/png');
     downloadLink.click();
-    
+
     confetti({
-      spread: 180
+      spread: 180,
     });
   };
 
@@ -327,11 +326,11 @@ export default function CustomizeTicketPage() {
                     <Label>Pattern Content</Label>
                     <Input
                       value={patternContent}
-                      onChange={(e) => setPatternContent(e.target.value)}
+                      onChange={e => setPatternContent(e.target.value)}
                       placeholder="Enter emoji or text"
                     />
                   </div>
-                  
+
                   <div>
                     <Label>Pattern Size</Label>
                     <Slider
@@ -362,11 +361,19 @@ export default function CustomizeTicketPage() {
                 <Download className="mr-2 h-4 w-4" />
                 Download
               </Button>
-              <Button onClick={shareTicket} variant="outline" className="flex-1">
+              <Button
+                onClick={shareTicket}
+                variant="outline"
+                className="flex-1"
+              >
                 <Share2 className="mr-2 h-4 w-4" />
                 Share
               </Button>
-              <Button onClick={emailTicket} variant="outline" className="flex-1">
+              <Button
+                onClick={emailTicket}
+                variant="outline"
+                className="flex-1"
+              >
                 <Mail className="mr-2 h-4 w-4" />
                 Email
               </Button>

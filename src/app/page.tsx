@@ -11,13 +11,13 @@ import { SanityLive } from '@/sanity/lib/live';
 export default function Home() {
   return (
     <main className="flex flex-col items-center justify-center w-full h-full relative overflow-x-hidden">
-      <section className='md:px-16 w-full flex flex-col items-center justify-center'>
+      <section className="md:px-16 w-full flex flex-col items-center justify-center">
         <Hero />
       </section>
-      <section className='z-50 overflow-hidden w-screen'>
+      <section className="z-50 overflow-hidden w-screen">
         <InfiniteSliderBanner />
       </section>
-      <section className='md:px-16 w-full flex flex-col items-center justify-center'>
+      <section className="md:px-16 w-full flex flex-col items-center justify-center">
         <Feature43 />
         <RelatedPosts />
         <Blog8 />
