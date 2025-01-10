@@ -15,6 +15,7 @@ import { Separator } from '@/components/ui/separator';
 import { SidebarLeft } from '@/components/sidebar/sidebar-left';
 import { SidebarRight } from '@/components/sidebar/sidebar-right';
 import { ModeToggle } from '@/components/theme/theme-toggle';
+import { ReactQueryClientProvider } from '@/components/providers/QueryClientProvider';
 
 export default function AdminLayout({
   children,
@@ -31,33 +32,33 @@ export default function AdminLayout({
   }
 
   return (
-    <SidebarProvider>
-      <SidebarLeft />
-      <SidebarInset>
-        <header className="sticky top-0 flex h-14 shrink-0 items-center gap-2 bg-background">
-          <div className="flex flex-1 items-center gap-2 px-3">
-            <SidebarTrigger />
-            <Separator orientation="vertical" className="mr-2 h-4" />
-            <Breadcrumb>
-              <BreadcrumbList>
-                <BreadcrumbItem>
-                  <BreadcrumbPage className="line-clamp-1">
-                    Project Management & Task Tracking
-                  </BreadcrumbPage>
-                </BreadcrumbItem>
-              </BreadcrumbList>
-            </Breadcrumb>
-            <Separator orientation="vertical" className="ml-2 h-4" />
-            <ModeToggle />
+    <ReactQueryClientProvider>
+      <SidebarProvider>
+        <SidebarLeft />
+        <SidebarInset>
+          <header className="sticky top-0 z-[1000] flex h-14 shrink-0 items-center gap-2 bg-background">
+            <div className="flex flex-1 items-center gap-2 px-3">
+              <SidebarTrigger />
+              <Separator orientation="vertical" className="mr-2 h-4" />
+              <Breadcrumb>
+                <BreadcrumbList>
+                  <BreadcrumbItem>
+                    <BreadcrumbPage className="line-clamp-1">
+                      Project Management & Task Tracking
+                    </BreadcrumbPage>
+                  </BreadcrumbItem>
+                </BreadcrumbList>
+              </Breadcrumb>
+              <Separator orientation="vertical" className="ml-2 h-4" />
+              <ModeToggle />
+            </div>
+          </header>
+          <div className="flex flex-1 flex-col gap-4 p-4">
+            {children}
           </div>
-        </header>
-        <div className="flex flex-1 flex-col gap-4 p-4">
-          {children}
-          <div className="mx-auto h-24 w-full max-w-3xl rounded-xl bg-muted/50" />
-          <div className="mx-auto h-[100vh] w-full max-w-3xl rounded-xl bg-muted/50" />
-        </div>
-      </SidebarInset>
-      <SidebarRight />
-    </SidebarProvider>
+        </SidebarInset>
+        <SidebarRight />
+      </SidebarProvider>
+    </ReactQueryClientProvider>
   );
 }
