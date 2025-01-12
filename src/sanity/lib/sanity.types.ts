@@ -1,5 +1,37 @@
 import type { PortableTextBlock } from '@portabletext/types';
 
+export interface aboutValues {
+  icon: string;
+  title: string;
+  description: string;
+}
+export interface AboutHeroSection {
+  _id: string;
+  _createdAt: string;
+  title: string;
+  subTitle: string;
+  bannerImage: {
+    asset: {
+      _ref: string;
+      _type: string;
+    };
+  }
+  ourMission: string;
+  secondaryHeading: string;
+  secondarySubHeading: string;
+  ourValues: aboutValues[];
+  aboutUsCta: {
+    title: string;
+    ctaBannerImage: {
+      asset: {
+        _ref: string;
+        _type: string;
+      };
+    };
+    subTitle: string;
+  }
+}
+
 export interface CTA {
   _id: string;
   _createdAt: string;
@@ -104,3 +136,4 @@ export type FeatureResponse = Feature[];
 export type FAQResponse = FAQ[];
 export type EventResponse = Event[];
 export type HeroResponse = Hero;
+export type AboutHeroSectionResponse = AboutHeroSection;

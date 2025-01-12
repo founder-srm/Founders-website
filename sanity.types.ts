@@ -14,7 +14,7 @@
 
 // Source: schema.json
 export type SanityImagePaletteSwatch = {
-  _type: 'sanity.imagePaletteSwatch';
+  _type: "sanity.imagePaletteSwatch";
   background?: string;
   foreground?: string;
   population?: number;
@@ -22,7 +22,7 @@ export type SanityImagePaletteSwatch = {
 };
 
 export type SanityImagePalette = {
-  _type: 'sanity.imagePalette';
+  _type: "sanity.imagePalette";
   darkMuted?: SanityImagePaletteSwatch;
   lightVibrant?: SanityImagePaletteSwatch;
   darkVibrant?: SanityImagePaletteSwatch;
@@ -33,7 +33,7 @@ export type SanityImagePalette = {
 };
 
 export type SanityImageDimensions = {
-  _type: 'sanity.imageDimensions';
+  _type: "sanity.imageDimensions";
   height?: number;
   width?: number;
   aspectRatio?: number;
@@ -41,7 +41,7 @@ export type SanityImageDimensions = {
 
 export type SanityFileAsset = {
   _id: string;
-  _type: 'sanity.fileAsset';
+  _type: "sanity.fileAsset";
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
@@ -62,15 +62,69 @@ export type SanityFileAsset = {
 };
 
 export type Geopoint = {
-  _type: 'geopoint';
+  _type: "geopoint";
   lat?: number;
   lng?: number;
   alt?: number;
 };
 
+export type AboutUsCta = {
+  _type: "aboutUsCta";
+  title?: string;
+  ctaBannerImage?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
+  subTitle?: string;
+};
+
+export type AboutValues = {
+  _type: "aboutValues";
+  icon?: string;
+  title?: string;
+  description?: string;
+};
+
+export type AboutUsHero = {
+  _id: string;
+  _type: "aboutUsHero";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  subTitle?: string;
+  bannerImage?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
+  ourMission?: string;
+  secondaryHeading?: string;
+  secondarySubHeading?: string;
+  ourValues?: Array<{
+    _key: string;
+  } & AboutValues>;
+  aboutUsCtaComponent?: Array<{
+    _key: string;
+  } & AboutUsCta>;
+};
+
 export type Event = {
   _id: string;
-  _type: 'event';
+  _type: "event";
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
@@ -79,21 +133,21 @@ export type Event = {
   image?: {
     asset?: {
       _ref: string;
-      _type: 'reference';
+      _type: "reference";
       _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
     };
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
-    _type: 'image';
+    _type: "image";
   };
-  type?: 'webinar' | 'conference' | 'workshop';
+  type?: "webinar" | "conference" | "workshop";
   label?: string;
   author?: {
     _ref: string;
-    _type: 'reference';
+    _type: "reference";
     _weak?: boolean;
-    [internalGroqTypeReferenceTo]?: 'author';
+    [internalGroqTypeReferenceTo]?: "author";
   };
   published?: string;
   href?: string;
@@ -102,25 +156,25 @@ export type Event = {
     children?: Array<{
       marks?: Array<string>;
       text?: string;
-      _type: 'span';
+      _type: "span";
       _key: string;
     }>;
-    style?: 'normal' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'blockquote';
-    listItem?: 'bullet' | 'number';
+    style?: "normal" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "blockquote";
+    listItem?: "bullet" | "number";
     markDefs?: Array<{
       href?: string;
-      _type: 'link';
+      _type: "link";
       _key: string;
     }>;
     level?: number;
-    _type: 'block';
+    _type: "block";
     _key: string;
   }>;
 };
 
 export type HeroComponent = {
   _id: string;
-  _type: 'heroComponent';
+  _type: "heroComponent";
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
@@ -132,52 +186,52 @@ export type HeroComponent = {
   image1?: {
     asset?: {
       _ref: string;
-      _type: 'reference';
+      _type: "reference";
       _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
     };
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
-    _type: 'image';
+    _type: "image";
   };
   image2?: {
     asset?: {
       _ref: string;
-      _type: 'reference';
+      _type: "reference";
       _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
     };
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
-    _type: 'image';
+    _type: "image";
   };
   image3?: {
     asset?: {
       _ref: string;
-      _type: 'reference';
+      _type: "reference";
       _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
     };
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
-    _type: 'image';
+    _type: "image";
   };
   image4?: {
     asset?: {
       _ref: string;
-      _type: 'reference';
+      _type: "reference";
       _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
     };
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
-    _type: 'image';
+    _type: "image";
   };
 };
 
 export type Cta = {
   _id: string;
-  _type: 'cta';
+  _type: "cta";
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
@@ -194,7 +248,7 @@ export type Cta = {
 
 export type Faq = {
   _id: string;
-  _type: 'faq';
+  _type: "faq";
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
@@ -204,7 +258,7 @@ export type Faq = {
 
 export type Feature = {
   _id: string;
-  _type: 'feature';
+  _type: "feature";
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
@@ -215,7 +269,7 @@ export type Feature = {
 
 export type JobCategory = {
   _id: string;
-  _type: 'jobCategory';
+  _type: "jobCategory";
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
@@ -230,7 +284,7 @@ export type JobCategory = {
 
 export type Post = {
   _id: string;
-  _type: 'post';
+  _type: "post";
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
@@ -238,68 +292,65 @@ export type Post = {
   slug?: Slug;
   author?: {
     _ref: string;
-    _type: 'reference';
+    _type: "reference";
     _weak?: boolean;
-    [internalGroqTypeReferenceTo]?: 'author';
+    [internalGroqTypeReferenceTo]?: "author";
   };
   mainImage?: {
     asset?: {
       _ref: string;
-      _type: 'reference';
+      _type: "reference";
       _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
     };
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
     alt?: string;
-    _type: 'image';
+    _type: "image";
   };
   categories?: Array<{
     _ref: string;
-    _type: 'reference';
+    _type: "reference";
     _weak?: boolean;
     _key: string;
-    [internalGroqTypeReferenceTo]?: 'category';
+    [internalGroqTypeReferenceTo]?: "category";
   }>;
   publishedAt?: string;
-  body?: Array<
-    | {
-        children?: Array<{
-          marks?: Array<string>;
-          text?: string;
-          _type: 'span';
-          _key: string;
-        }>;
-        style?: 'normal' | 'h1' | 'h2' | 'h3' | 'h4' | 'blockquote';
-        listItem?: 'bullet';
-        markDefs?: Array<{
-          href?: string;
-          _type: 'link';
-          _key: string;
-        }>;
-        level?: number;
-        _type: 'block';
-        _key: string;
-      }
-    | {
-        asset?: {
-          _ref: string;
-          _type: 'reference';
-          _weak?: boolean;
-          [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
-        };
-        hotspot?: SanityImageHotspot;
-        crop?: SanityImageCrop;
-        alt?: string;
-        _type: 'image';
-        _key: string;
-      }
-  >;
+  body?: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "normal" | "h1" | "h2" | "h3" | "h4" | "blockquote";
+    listItem?: "bullet";
+    markDefs?: Array<{
+      href?: string;
+      _type: "link";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  } | {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+    _key: string;
+  }>;
 };
 
 export type Author = {
   _id: string;
-  _type: 'author';
+  _type: "author";
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
@@ -308,37 +359,37 @@ export type Author = {
   image?: {
     asset?: {
       _ref: string;
-      _type: 'reference';
+      _type: "reference";
       _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
     };
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
-    _type: 'image';
+    _type: "image";
   };
   bio?: Array<{
     children?: Array<{
       marks?: Array<string>;
       text?: string;
-      _type: 'span';
+      _type: "span";
       _key: string;
     }>;
-    style?: 'normal';
+    style?: "normal";
     listItem?: never;
     markDefs?: Array<{
       href?: string;
-      _type: 'link';
+      _type: "link";
       _key: string;
     }>;
     level?: number;
-    _type: 'block';
+    _type: "block";
     _key: string;
   }>;
 };
 
 export type Category = {
   _id: string;
-  _type: 'category';
+  _type: "category";
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
@@ -348,47 +399,44 @@ export type Category = {
 };
 
 export type Slug = {
-  _type: 'slug';
+  _type: "slug";
   current?: string;
   source?: string;
 };
 
-export type BlockContent = Array<
-  | {
-      children?: Array<{
-        marks?: Array<string>;
-        text?: string;
-        _type: 'span';
-        _key: string;
-      }>;
-      style?: 'normal' | 'h1' | 'h2' | 'h3' | 'h4' | 'blockquote';
-      listItem?: 'bullet';
-      markDefs?: Array<{
-        href?: string;
-        _type: 'link';
-        _key: string;
-      }>;
-      level?: number;
-      _type: 'block';
-      _key: string;
-    }
-  | {
-      asset?: {
-        _ref: string;
-        _type: 'reference';
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
-      };
-      hotspot?: SanityImageHotspot;
-      crop?: SanityImageCrop;
-      alt?: string;
-      _type: 'image';
-      _key: string;
-    }
->;
+export type BlockContent = Array<{
+  children?: Array<{
+    marks?: Array<string>;
+    text?: string;
+    _type: "span";
+    _key: string;
+  }>;
+  style?: "normal" | "h1" | "h2" | "h3" | "h4" | "blockquote";
+  listItem?: "bullet";
+  markDefs?: Array<{
+    href?: string;
+    _type: "link";
+    _key: string;
+  }>;
+  level?: number;
+  _type: "block";
+  _key: string;
+} | {
+  asset?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+  };
+  hotspot?: SanityImageHotspot;
+  crop?: SanityImageCrop;
+  alt?: string;
+  _type: "image";
+  _key: string;
+}>;
 
 export type SanityImageCrop = {
-  _type: 'sanity.imageCrop';
+  _type: "sanity.imageCrop";
   top?: number;
   bottom?: number;
   left?: number;
@@ -396,7 +444,7 @@ export type SanityImageCrop = {
 };
 
 export type SanityImageHotspot = {
-  _type: 'sanity.imageHotspot';
+  _type: "sanity.imageHotspot";
   x?: number;
   y?: number;
   height?: number;
@@ -405,7 +453,7 @@ export type SanityImageHotspot = {
 
 export type SanityImageAsset = {
   _id: string;
-  _type: 'sanity.imageAsset';
+  _type: "sanity.imageAsset";
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
@@ -427,14 +475,14 @@ export type SanityImageAsset = {
 };
 
 export type SanityAssetSourceData = {
-  _type: 'sanity.assetSourceData';
+  _type: "sanity.assetSourceData";
   name?: string;
   id?: string;
   url?: string;
 };
 
 export type SanityImageMetadata = {
-  _type: 'sanity.imageMetadata';
+  _type: "sanity.imageMetadata";
   location?: Geopoint;
   dimensions?: SanityImageDimensions;
   palette?: SanityImagePalette;
@@ -444,30 +492,37 @@ export type SanityImageMetadata = {
   isOpaque?: boolean;
 };
 
-export type AllSanitySchemaTypes =
-  | SanityImagePaletteSwatch
-  | SanityImagePalette
-  | SanityImageDimensions
-  | SanityFileAsset
-  | Geopoint
-  | Event
-  | HeroComponent
-  | Cta
-  | Faq
-  | Feature
-  | JobCategory
-  | Post
-  | Author
-  | Category
-  | Slug
-  | BlockContent
-  | SanityImageCrop
-  | SanityImageHotspot
-  | SanityImageAsset
-  | SanityAssetSourceData
-  | SanityImageMetadata;
+export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityFileAsset | Geopoint | AboutUsCta | AboutValues | AboutUsHero | Event | HeroComponent | Cta | Faq | Feature | JobCategory | Post | Author | Category | Slug | BlockContent | SanityImageCrop | SanityImageHotspot | SanityImageAsset | SanityAssetSourceData | SanityImageMetadata;
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ./src/sanity/lib/queries.ts
+// Variable: ABOUT_HERO_QUERY
+// Query: *[_type == "aboutUsHero"][0]{  _id,  _createdAt,  title,  subTitle,  bannerImage,  ourMission,  secondaryHeading,  secondarySubHeading,  ourValues,  aboutUsCtaComponent}
+export type ABOUT_HERO_QUERYResult = {
+  _id: string;
+  _createdAt: string;
+  title: string | null;
+  subTitle: string | null;
+  bannerImage: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  } | null;
+  ourMission: string | null;
+  secondaryHeading: string | null;
+  secondarySubHeading: string | null;
+  ourValues: Array<{
+    _key: string;
+  } & AboutValues> | null;
+  aboutUsCtaComponent: Array<{
+    _key: string;
+  } & AboutUsCta> | null;
+} | null;
 // Variable: CTA_QUERY
 // Query: *[_type == "cta"]{  _id,  _createdAt,  title,  description,  primaryButtonText,  primaryButtonLink,  secondaryButtonText,  secondaryButtonLink,  variant,  activateSecondaryButton,  showCTA}
 export type CTA_QUERYResult = Array<{
@@ -523,20 +578,20 @@ export type EVENTS_QUERYResult = Array<{
   image: {
     asset?: {
       _ref: string;
-      _type: 'reference';
+      _type: "reference";
       _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
     };
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
-    _type: 'image';
+    _type: "image";
   } | null;
   label: string | null;
   author: {
     _ref: string;
-    _type: 'reference';
+    _type: "reference";
     _weak?: boolean;
-    [internalGroqTypeReferenceTo]?: 'author';
+    [internalGroqTypeReferenceTo]?: "author";
   } | null;
   published: string | null;
   href: string | null;
@@ -553,20 +608,20 @@ export type ALL_EVENTS_QUERYResult = Array<{
   image: {
     asset?: {
       _ref: string;
-      _type: 'reference';
+      _type: "reference";
       _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
     };
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
-    _type: 'image';
+    _type: "image";
   } | null;
   label: string | null;
   author: {
     _ref: string;
-    _type: 'reference';
+    _type: "reference";
     _weak?: boolean;
-    [internalGroqTypeReferenceTo]?: 'author';
+    [internalGroqTypeReferenceTo]?: "author";
   } | null;
   published: string | null;
   href: string | null;
@@ -582,38 +637,38 @@ export type EVENT_BY_SLUG_QUERYResult = {
     children?: Array<{
       marks?: Array<string>;
       text?: string;
-      _type: 'span';
+      _type: "span";
       _key: string;
     }>;
-    style?: 'blockquote' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'normal';
-    listItem?: 'bullet' | 'number';
+    style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
+    listItem?: "bullet" | "number";
     markDefs?: Array<{
       href?: string;
-      _type: 'link';
+      _type: "link";
       _key: string;
     }>;
     level?: number;
-    _type: 'block';
+    _type: "block";
     _key: string;
   }> | null;
   slug: string | null;
   image: {
     asset?: {
       _ref: string;
-      _type: 'reference';
+      _type: "reference";
       _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
     };
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
-    _type: 'image';
+    _type: "image";
   } | null;
   label: string | null;
   author: {
     _ref: string;
-    _type: 'reference';
+    _type: "reference";
     _weak?: boolean;
-    [internalGroqTypeReferenceTo]?: 'author';
+    [internalGroqTypeReferenceTo]?: "author";
   } | null;
   published: string | null;
   href: string | null;
@@ -631,46 +686,46 @@ export type HERO_QUERYResult = {
   image1: {
     asset?: {
       _ref: string;
-      _type: 'reference';
+      _type: "reference";
       _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
     };
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
-    _type: 'image';
+    _type: "image";
   } | null;
   image2: {
     asset?: {
       _ref: string;
-      _type: 'reference';
+      _type: "reference";
       _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
     };
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
-    _type: 'image';
+    _type: "image";
   } | null;
   image3: {
     asset?: {
       _ref: string;
-      _type: 'reference';
+      _type: "reference";
       _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
     };
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
-    _type: 'image';
+    _type: "image";
   } | null;
   image4: {
     asset?: {
       _ref: string;
-      _type: 'reference';
+      _type: "reference";
       _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
     };
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
-    _type: 'image';
+    _type: "image";
   } | null;
 } | null;
 
@@ -703,20 +758,20 @@ export type EventsQueryResult = Array<{
   image: {
     asset?: {
       _ref: string;
-      _type: 'reference';
+      _type: "reference";
       _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
     };
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
-    _type: 'image';
+    _type: "image";
   } | null;
   label: string | null;
   author: {
     _ref: string;
-    _type: 'reference';
+    _type: "reference";
     _weak?: boolean;
-    [internalGroqTypeReferenceTo]?: 'author';
+    [internalGroqTypeReferenceTo]?: "author";
   } | null;
   published: string | null;
   href: string | null;
@@ -758,21 +813,22 @@ export type JobsQueryResult = Array<{
 }>;
 
 // Query TypeMap
-import '@sanity/client';
-declare module '@sanity/client' {
+import "@sanity/client";
+declare module "@sanity/client" {
   interface SanityQueries {
-    '*[_type == "cta"]{\n  _id,\n  _createdAt,\n  title,\n  description,\n  primaryButtonText,\n  primaryButtonLink,\n  secondaryButtonText,\n  secondaryButtonLink,\n  variant,\n  activateSecondaryButton,\n  showCTA\n}': CTA_QUERYResult;
-    '*[_type == "jobCategory"]{\n  _id,\n  _createdAt,\n  category,\n  openings[]{\n    title,\n    location,\n    link\n  }\n}': JOBS_QUERYResult;
-    '*[_type == "feature"]{\n  _id,\n  _createdAt,\n  title,\n  description,\n  icon\n}': FEATURES_QUERYResult;
-    '*[_type == "faq"]{\n  _id,\n  _createdAt,\n  question,\n  answer\n}': FAQS_QUERYResult;
-    '*[_type == "event"] | order(published desc)[0...3]{\n  _id,\n  _createdAt,\n  id,\n  title,\n  summary,\n  image,\n  label,\n  author,\n  published,\n  href,\n  "slug": slug.current\n}': EVENTS_QUERYResult;
-    '*[_type == "event"] {\n  _id,\n  _createdAt,\n  title,\n  summary,\n  "slug": slug.current,\n  image,\n  label,\n  author,\n  published,\n  href\n}': ALL_EVENTS_QUERYResult;
-    '*[_type == "event" && slug.current == $slug][0] {\n  _id,\n  _createdAt,\n  title,\n  summary,\n  content,\n  "slug": slug.current,\n  image,\n  label,\n  author,\n  published,\n  href\n}': EVENT_BY_SLUG_QUERYResult;
-    '*[_type == "heroComponent"][0]{\n    _id,\n    _createdAt,\n    title,\n    subtitle,\n    buttonText,\n    buttonLink,\n    showButton,\n    image1,\n    image2,\n    image3,\n    image4\n}': HERO_QUERYResult;
-    '*[_type == "cta"]{\n    _id,\n    _createdAt,\n    title,\n    description,\n    primaryButtonText,\n    primaryButtonLink,\n    secondaryButtonText,\n    secondaryButtonLink,\n    variant,\n    activateSecondaryButton,\n    showCTA\n}': CtaQueryResult;
-    '*[_type == "event"]{\n    _id,\n    _createdAt,\n    id,\n    title,\n    summary,\n    image,\n    label,\n    author,\n    published,\n    href\n}': EventsQueryResult;
-    '*[_type == "faq"]{\n    _id,\n    _createdAt,\n    question,\n    answer\n}': FaqsQueryResult;
-    '*[_type == "feature"]{\n    _id,\n    _createdAt,\n    title,\n    description,\n    icon\n}': FeaturesQueryResult;
-    '*[_type == "jobCategory"]{\n    _id,\n    _createdAt,\n    category,\n    openings[]{\n      title,\n      location,\n      link\n    }\n}': JobsQueryResult;
+    "*[_type == \"aboutUsHero\"][0]{\n  _id,\n  _createdAt,\n  title,\n  subTitle,\n  bannerImage,\n  ourMission,\n  secondaryHeading,\n  secondarySubHeading,\n  ourValues,\n  aboutUsCtaComponent\n}": ABOUT_HERO_QUERYResult;
+    "*[_type == \"cta\"]{\n  _id,\n  _createdAt,\n  title,\n  description,\n  primaryButtonText,\n  primaryButtonLink,\n  secondaryButtonText,\n  secondaryButtonLink,\n  variant,\n  activateSecondaryButton,\n  showCTA\n}": CTA_QUERYResult;
+    "*[_type == \"jobCategory\"]{\n  _id,\n  _createdAt,\n  category,\n  openings[]{\n    title,\n    location,\n    link\n  }\n}": JOBS_QUERYResult;
+    "*[_type == \"feature\"]{\n  _id,\n  _createdAt,\n  title,\n  description,\n  icon\n}": FEATURES_QUERYResult;
+    "*[_type == \"faq\"]{\n  _id,\n  _createdAt,\n  question,\n  answer\n}": FAQS_QUERYResult;
+    "*[_type == \"event\"] | order(published desc)[0...3]{\n  _id,\n  _createdAt,\n  id,\n  title,\n  summary,\n  image,\n  label,\n  author,\n  published,\n  href,\n  \"slug\": slug.current\n}": EVENTS_QUERYResult;
+    "*[_type == \"event\"] {\n  _id,\n  _createdAt,\n  title,\n  summary,\n  \"slug\": slug.current,\n  image,\n  label,\n  author,\n  published,\n  href\n}": ALL_EVENTS_QUERYResult;
+    "*[_type == \"event\" && slug.current == $slug][0] {\n  _id,\n  _createdAt,\n  title,\n  summary,\n  content,\n  \"slug\": slug.current,\n  image,\n  label,\n  author,\n  published,\n  href\n}": EVENT_BY_SLUG_QUERYResult;
+    "*[_type == \"heroComponent\"][0]{\n    _id,\n    _createdAt,\n    title,\n    subtitle,\n    buttonText,\n    buttonLink,\n    showButton,\n    image1,\n    image2,\n    image3,\n    image4\n}": HERO_QUERYResult;
+    "*[_type == \"cta\"]{\n    _id,\n    _createdAt,\n    title,\n    description,\n    primaryButtonText,\n    primaryButtonLink,\n    secondaryButtonText,\n    secondaryButtonLink,\n    variant,\n    activateSecondaryButton,\n    showCTA\n}": CtaQueryResult;
+    "*[_type == \"event\"]{\n    _id,\n    _createdAt,\n    id,\n    title,\n    summary,\n    image,\n    label,\n    author,\n    published,\n    href\n}": EventsQueryResult;
+    "*[_type == \"faq\"]{\n    _id,\n    _createdAt,\n    question,\n    answer\n}": FaqsQueryResult;
+    "*[_type == \"feature\"]{\n    _id,\n    _createdAt,\n    title,\n    description,\n    icon\n}": FeaturesQueryResult;
+    "*[_type == \"jobCategory\"]{\n    _id,\n    _createdAt,\n    category,\n    openings[]{\n      title,\n      location,\n      link\n    }\n}": JobsQueryResult;
   }
 }

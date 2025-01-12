@@ -10,7 +10,7 @@ import { SanityLive } from '@/sanity/lib/live';
 
 export default function Home() {
   return (
-    <main className="flex flex-col items-center justify-center w-full h-full relative overflow-x-hidden">
+    <main className="flex flex-col px-2 md:px-0 items-center justify-center w-full h-full relative overflow-x-hidden">
       <section className="md:px-16 w-full flex flex-col items-center justify-center">
         <Hero />
       </section>

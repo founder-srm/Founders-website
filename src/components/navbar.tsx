@@ -1,5 +1,5 @@
 'use client';
-import { Book, Menu, Sunset, Trees, Zap } from 'lucide-react';
+import { Book, Menu, Sunset, Trees, UsersRound, Zap } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 
 import { cn } from '@/lib/utils';
@@ -104,48 +104,54 @@ function AvatarButton({
 
 const subMenuItemsOne = [
   {
-    title: 'Blog',
-    description: 'The latest industry news, updates, and info',
-    icon: <Book className="size-5 shrink-0" />,
+    title: 'About Us',
+    description: 'Bringing Ideas to reality',
+    icon: <Trees className="size-5 shrink-0" />,
+    route: '/about',
   },
   {
-    title: 'Compnay',
-    description: 'Our mission is to innovate and empower the world',
-    icon: <Trees className="size-5 shrink-0" />,
+    title: 'Blog',
+    description: 'The Latest and Greatest in the world of entrepreneurship',
+    icon: <Book className="size-5 shrink-0" />,
+    route: '/blog',
+  },
+  {
+    title: 'Our Team',
+    description:
+      'Get to know the people behind the scenes at Founders Club',
+    icon: <UsersRound className="size-5 shrink-0" />,
+    route: '/about/team',
   },
   {
     title: 'Careers',
-    description: 'Browse job listing and discover our workspace',
+    description: 'Join our team and help us build the future',
     icon: <Sunset className="size-5 shrink-0" />,
-  },
-  {
-    title: 'Support',
-    description:
-      'Get in touch with our support team or visit our community forums',
-    icon: <Zap className="size-5 shrink-0" />,
+    route: '/about',
   },
 ];
 
 const subMenuItemsTwo = [
   {
-    title: 'Help Center',
-    description: 'Get all the answers you need right here',
+    title: 'Events and Workshops',
+    description: 'Get the latest updates on our events and workshops',
     icon: <Zap className="size-5 shrink-0" />,
+    route: '/events',
   },
-  {
-    title: 'Contact Us',
-    description: 'We are here to help you with any questions you have',
-    icon: <Sunset className="size-5 shrink-0" />,
-  },
-  {
-    title: 'Status',
-    description: 'Check the current status of our services and APIs',
-    icon: <Trees className="size-5 shrink-0" />,
-  },
+  // {
+  //   title: 'Contact Us',
+  //   description: 'We are here to help you with any questions you have',
+  //   icon: <Sunset className="size-5 shrink-0" />,
+  // },
+  // {
+  //   title: 'Status',
+  //   description: 'Check the current status of our services and APIs',
+  //   icon: <Trees className="size-5 shrink-0" />,
+  // },
   {
     title: 'Terms of Service',
-    description: 'Our terms and conditions for using our services',
+    description: 'Our terms and conditions for events and more',
     icon: <Book className="size-5 shrink-0" />,
+    route: '/terms',
   },
 ];
 
@@ -213,28 +219,26 @@ const Navbar1 = () => {
                   </NavigationMenuTrigger>
                   <NavigationMenuContent>
                     <ul className="w-80 p-3">
-                      <NavigationMenuLink>
-                        {subMenuItemsOne.map((item, idx) => (
-                          <li key={idx}>
-                            <Link
-                              className={cn(
-                                'flex select-none gap-4 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground'
-                              )}
-                              href="/"
-                            >
-                              {item.icon}
-                              <div>
-                                <div className="text-sm font-semibold">
-                                  {item.title}
-                                </div>
-                                <p className="text-sm leading-snug text-muted-foreground">
-                                  {item.description}
-                                </p>
+                      {subMenuItemsOne.map((item, idx) => (
+                        <li key={idx}>
+                          <NavigationMenuLink
+                            className={cn(
+                              'flex select-none gap-4 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground'
+                            )}
+                            href={item.route}
+                          >
+                            {item.icon}
+                            <div>
+                              <div className="text-sm font-semibold">
+                                {item.title}
                               </div>
-                            </Link>
-                          </li>
-                        ))}
-                      </NavigationMenuLink>
+                              <p className="text-sm leading-snug text-muted-foreground">
+                                {item.description}
+                              </p>
+                            </div>
+                          </NavigationMenuLink>
+                        </li>
+                      ))}
                     </ul>
                   </NavigationMenuContent>
                 </NavigationMenuItem>
@@ -242,28 +246,26 @@ const Navbar1 = () => {
                   <NavigationMenuTrigger>Events</NavigationMenuTrigger>
                   <NavigationMenuContent>
                     <ul className="w-80 p-3">
-                      <NavigationMenuLink>
-                        {subMenuItemsTwo.map((item, idx) => (
-                          <li key={idx}>
-                            <Link
-                              className={cn(
-                                'flex select-none gap-4 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground'
-                              )}
-                              href="/"
-                            >
-                              {item.icon}
-                              <div>
-                                <div className="text-sm font-semibold">
-                                  {item.title}
-                                </div>
-                                <p className="text-sm leading-snug text-muted-foreground">
-                                  {item.description}
-                                </p>
+                      {subMenuItemsTwo.map((item, idx) => (
+                        <li key={idx}>
+                          <NavigationMenuLink
+                            className={cn(
+                              'flex select-none gap-4 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground'
+                            )}
+                            href={item.route}
+                          >
+                            {item.icon}
+                            <div>
+                              <div className="text-sm font-semibold">
+                                {item.title}
                               </div>
-                            </Link>
-                          </li>
-                        ))}
-                      </NavigationMenuLink>
+                              <p className="text-sm leading-snug text-muted-foreground">
+                                {item.description}
+                              </p>
+                            </div>
+                          </NavigationMenuLink>
+                        </li>
+                      ))}
                     </ul>
                   </NavigationMenuContent>
                 </NavigationMenuItem>
@@ -382,7 +384,7 @@ const Navbar1 = () => {
                           className={cn(
                             'flex select-none gap-4 rounded-md p-3 leading-none outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground'
                           )}
-                          href="/"
+                          href={item.route}
                         >
                           {item.icon}
                           <div>
@@ -408,7 +410,7 @@ const Navbar1 = () => {
                           className={cn(
                             'flex select-none gap-4 rounded-md p-3 leading-none outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground'
                           )}
-                          href="/"
+                          href={item.route}
                         >
                           {item.icon}
                           <div>
@@ -432,74 +434,6 @@ const Navbar1 = () => {
                 </Link>
               </div>
               <div className="border-t pt-4">
-                <div className="grid grid-cols-2 justify-start">
-                  <Link
-                    className={cn(
-                      buttonVariants({
-                        variant: 'ghost',
-                      }),
-                      'justify-start text-muted-foreground'
-                    )}
-                    href="#"
-                  >
-                    Press
-                  </Link>
-                  <Link
-                    className={cn(
-                      buttonVariants({
-                        variant: 'ghost',
-                      }),
-                      'justify-start text-muted-foreground'
-                    )}
-                    href="#"
-                  >
-                    Contact
-                  </Link>
-                  <Link
-                    className={cn(
-                      buttonVariants({
-                        variant: 'ghost',
-                      }),
-                      'justify-start text-muted-foreground'
-                    )}
-                    href="#"
-                  >
-                    Imprint
-                  </Link>
-                  <Link
-                    className={cn(
-                      buttonVariants({
-                        variant: 'ghost',
-                      }),
-                      'justify-start text-muted-foreground'
-                    )}
-                    href="#"
-                  >
-                    Sitemap
-                  </Link>
-                  <Link
-                    className={cn(
-                      buttonVariants({
-                        variant: 'ghost',
-                      }),
-                      'justify-start text-muted-foreground'
-                    )}
-                    href="#"
-                  >
-                    Legal
-                  </Link>
-                  <Link
-                    className={cn(
-                      buttonVariants({
-                        variant: 'ghost',
-                      }),
-                      'justify-start text-muted-foreground'
-                    )}
-                    href="#"
-                  >
-                    Cookie Settings
-                  </Link>
-                </div>
                 <div className="mt-2 flex flex-col gap-3">
                   <ModeToggle />
                   {isAdmin && (

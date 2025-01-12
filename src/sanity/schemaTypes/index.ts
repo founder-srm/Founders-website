@@ -10,6 +10,7 @@ import { faqType } from './faqType';
 import { ctaType } from './ctaType';
 import { eventType } from './eventType';
 import { heroComponentType } from './heroComponentType';
+import { aboutUsCtaType, aboutUsHeroType, aboutValuesType } from './aboutUsHeroType';
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -23,5 +24,8 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     ctaType,
     heroComponentType,
     eventType,
+    aboutUsHeroType,
+    aboutValuesType,
+    aboutUsCtaType
   ],
 };

@@ -1,5 +1,18 @@
 import { defineQuery } from 'next-sanity';
 
+export const ABOUT_HERO_QUERY = defineQuery(`*[_type == "aboutUsHero"][0]{
+  _id,
+  _createdAt,
+  title,
+  subTitle,
+  bannerImage,
+  ourMission,
+  secondaryHeading,
+  secondarySubHeading,
+  ourValues,
+  aboutUsCtaComponent
+}`);
+
 export const CTA_QUERY = defineQuery(`*[_type == "cta"]{
   _id,
   _createdAt,

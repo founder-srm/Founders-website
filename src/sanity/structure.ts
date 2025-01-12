@@ -60,22 +60,31 @@ export const structure: StructureResolver = S =>
               S.documentTypeListItem('event').title('Events & Webinars'),
             ])
         ),
-
+      S.divider(),
+      S.listItem()
+        .title('About Us Hero Component')
+        .child(
+          S.list()
+            .title('About Us Hero Component')
+            .items([
+              S.documentTypeListItem('aboutUsHero').title('About Us Hero'),
+            ])
+        ),
       // Show remaining document types
       S.divider(),
-      ...S.documentTypeListItems().filter(
-        item =>
-          item.getId() &&
-          ![
-            'post',
-            'category',
-            'author',
-            'jobCategory',
-            'feature',
-            'faq',
-            'cta',
-            'event',
-            // biome-ignore lint/style/noNonNullAssertion: <explanation>
-          ].includes(item.getId()!)
-      ),
+      // ...S.documentTypeListItems().filter(
+      //   item =>
+      //     item.getId() &&
+      //     ![
+      //       'post',
+      //       'category',
+      //       'author',
+      //       'jobCategory',
+      //       'feature',
+      //       'faq',
+      //       'cta',
+      //       'event',
+      //       // biome-ignore lint/style/noNonNullAssertion: <explanation>
+      //     ].includes(item.getId()!)
+      // ),
     ]);
