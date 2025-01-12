@@ -60,7 +60,7 @@ const Footer2 = () => {
     '/studio/*',
     '/events/*',
     '/blog/posts/*',
-    '/admin',
+    '/admin/*',
     '/auth/*',
   ];
 

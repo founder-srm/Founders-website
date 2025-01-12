@@ -170,7 +170,7 @@ const Navbar1 = () => {
     '/blog/posts/*',
     '/auth/*',
     '/signup',
-    '/admin',
+    '/admin/*',
   ];
 
   if (isPathExcluded(pathname, excludedRoutes)) {

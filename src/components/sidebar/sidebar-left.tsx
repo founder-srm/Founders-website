@@ -6,8 +6,8 @@ import {
   Blocks,
   Calendar,
   Command,
+  FilePlus2,
   Home,
-  Inbox,
   MessageCircleQuestion,
   Search,
   Settings2,
@@ -27,7 +27,6 @@ import { NavFavorites } from './nav-favorites';
 import { NavWorkspaces } from './nav-workspaces';
 import { NavSecondary } from './nav-secondary';
 
-// This is sample data.
 const data = {
   teams: [
     {
@@ -59,14 +58,14 @@ const data = {
     },
     {
       title: 'Home',
-      url: '#',
+      url: '/admin',
       icon: Home,
       isActive: true,
     },
     {
-      title: 'Inbox',
-      url: '#',
-      icon: Inbox,
+      title: 'New Event',
+      url: '/admin/new-event',
+      icon: FilePlus2,
       badge: '10',
     },
   ],
