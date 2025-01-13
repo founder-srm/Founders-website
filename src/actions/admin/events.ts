@@ -1,11 +1,7 @@
-import type { TypedSupabaseClient } from "@/utils/types"
-
+import type { TypedSupabaseClient } from '@/utils/types';
 
 export function getAllEvents(client: TypedSupabaseClient) {
-  return client
-    .from('events')
-    .select('*')
-    .throwOnError()
+  return client.from('events').select('*').throwOnError();
 }
 
 export function getEventStats(client: TypedSupabaseClient) {
@@ -21,5 +17,5 @@ export function getEventStats(client: TypedSupabaseClient) {
         title,
         venue
     `)
-    .throwOnError()
+    .throwOnError();
 }

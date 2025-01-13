@@ -246,17 +246,24 @@ export default function CustomizeTicketPage() {
               />
               <div className="flex grow flex-col gap-3">
                 <div className="space-y-2">
-                  <p className="text-sm font-medium">Registration Pending Approval</p>
+                  <p className="text-sm font-medium">
+                    Registration Pending Approval
+                  </p>
                   <p className="text-sm text-muted-foreground">
-                    Your registration is currently being reviewed by the event organizers. 
-                    You&apos;ll be able to access and customize your ticket once approved.
+                    Your registration is currently being reviewed by the event
+                    organizers. You&apos;ll be able to access and customize your
+                    ticket once approved.
                   </p>
                   <p className="text-xs text-muted-foreground mt-3">
                     Ticket ID: {registration.ticket_id}
                   </p>
                 </div>
                 <div>
-                  <Button size="sm" variant="outline" onClick={() => Router.back()}>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => Router.back()}
+                  >
                     Return to Dashboard
                   </Button>
                 </div>

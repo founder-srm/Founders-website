@@ -25,7 +25,7 @@ const useAdmin = ({ user }: AdminCheckProps) => {
           .single();
 
         if (error || !adminUser || adminUser.user_role === 'user') {
-          console.error('Admin check error:', error);
+          console.log('Admin check error:', error);
           setIsAdmin(false);
           return;
         }

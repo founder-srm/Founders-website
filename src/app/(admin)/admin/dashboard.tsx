@@ -1,32 +1,40 @@
-'use client'
+'use client';
 
-import { useMemo } from 'react'
-import { useQuery } from '@supabase-cache-helpers/postgrest-react-query'
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { BarChartComponent } from "@/components/charts-admin/bar-chart"
-import PieChartComponent from "@/components/charts-admin/pie-chart"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { createClient } from '@/utils/supabase/client'
-import { getAllEvents } from '@/actions/admin/events'
-import { getAllRegistrations } from "@/actions/admin/registrations"
-import { Skeleton } from "@/components/ui/skeleton"
-import type { Event } from "@/types/events"
-import type { Registration } from '@/types/registrations'
+import { useMemo } from 'react';
+import { useQuery } from '@supabase-cache-helpers/postgrest-react-query';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { BarChartComponent } from '@/components/charts-admin/bar-chart';
+import PieChartComponent from '@/components/charts-admin/pie-chart';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { createClient } from '@/utils/supabase/client';
+import { getAllEvents } from '@/actions/admin/events';
+import { getAllRegistrations } from '@/actions/admin/registrations';
+import { Skeleton } from '@/components/ui/skeleton';
+import type { Event } from '@/types/events';
+import type { Registration } from '@/types/registrations';
 
 export default function AdminDashboard() {
-  const supabase = createClient()
+  const supabase = createClient();
 
-  const { data: events, isLoading: eventsLoading, isError: eventsError } = useQuery<Event[]>(getAllEvents(supabase))
-  const { data: registrations, isLoading: registrationsLoading, isError: registrationsError } = useQuery<Registration[]>(getAllRegistrations(supabase))
+  const {
+    data: events,
+    isLoading: eventsLoading,
+    isError: eventsError,
+  } = useQuery<Event[]>(getAllEvents(supabase));
+  const {
+    data: registrations,
+    isLoading: registrationsLoading,
+    isError: registrationsError,
+  } = useQuery<Registration[]>(getAllRegistrations(supabase));
 
   const registrationStats = useMemo(() => {
-    if (!registrations) return []
-    return registrations.map((r) => ({
+    if (!registrations) return [];
+    return registrations.map(r => ({
       ...r,
-      event_type: r.is_approved ? "Approved" : "Pending",
+      event_type: r.is_approved ? 'Approved' : 'Pending',
       registrations_count: 1,
-    }))
-  }, [registrations])
+    }));
+  }, [registrations]);
 
   if (eventsError || registrationsError) {
     return (
@@ -35,7 +43,7 @@ export default function AdminDashboard() {
           Failed to load dashboard data. Please try again later.
         </AlertDescription>
       </Alert>
-    )
+    );
   }
 
   if (eventsLoading || registrationsLoading) {
@@ -50,15 +58,15 @@ export default function AdminDashboard() {
           </CardContent>
         </Card>
         <Card className="col-span-full md:col-span-2">
-          <CardHeader>            
-            <Skeleton className="h-4 w-[250px]" />          
+          <CardHeader>
+            <Skeleton className="h-4 w-[250px]" />
           </CardHeader>
           <CardContent>
             <Skeleton className="h-[300px] w-full" />
           </CardContent>
         </Card>
       </div>
-    )
+    );
   }
 
   return (
@@ -77,7 +85,7 @@ export default function AdminDashboard() {
           <CardTitle>All Registrations</CardTitle>
         </CardHeader>
         <CardContent>
-          {registrations?.map((r) => (
+          {registrations?.map(r => (
             <div key={r.id}>
               <h2>{r.event_title}</h2>
               <p>ID: {r.id}</p>
@@ -101,7 +109,7 @@ export default function AdminDashboard() {
           <CardTitle>All Events</CardTitle>
         </CardHeader>
         <CardContent>
-          {events?.map((event) => (
+          {events?.map(event => (
             <div key={event.id}>
               <h1>{event.title}</h1>
               <p>{event.description}</p>
@@ -110,5 +118,5 @@ export default function AdminDashboard() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

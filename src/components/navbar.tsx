@@ -48,6 +48,7 @@ function AvatarButton({
 }: { Image: string | undefined; name: string }) {
   const isPresent = usePresence();
   const getInitials = (name: string) => {
+    if (!name || name === undefined) return '';
     return name
       .split(' ')
       .map(word => word[0])
@@ -117,8 +118,7 @@ const subMenuItemsOne = [
   },
   {
     title: 'Our Team',
-    description:
-      'Get to know the people behind the scenes at Founders Club',
+    description: 'Get to know the people behind the scenes at Founders Club',
     icon: <UsersRound className="size-5 shrink-0" />,
     route: '/about/team',
   },

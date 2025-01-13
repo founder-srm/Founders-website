@@ -1,10 +1,22 @@
-"use client"
+'use client';
 
-import * as React from "react"
-import { TrendingUp } from "lucide-react"
-import { Label, Pie, PieChart } from "recharts"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { type ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
+import * as React from 'react';
+import { TrendingUp } from 'lucide-react';
+import { Label, Pie, PieChart } from 'recharts';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import {
+  type ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from '@/components/ui/chart';
 
 interface PieChartProps {
   data?: {
@@ -16,31 +28,34 @@ interface PieChartProps {
 export default function PieChartComponent({ data = [] }: PieChartProps) {
   const processedData = React.useMemo(() => {
     if (!data) return [];
-    
-    const typeCount = data.reduce((acc, curr) => {
-      const type = curr.event_type || 'other';
-      acc[type] = (acc[type] || 0) + (curr.registrations_count || 0)
-      return acc
-    }, {} as Record<string, number>)
+
+    const typeCount = data.reduce(
+      (acc, curr) => {
+        const type = curr.event_type || 'other';
+        acc[type] = (acc[type] || 0) + (curr.registrations_count || 0);
+        return acc;
+      },
+      {} as Record<string, number>
+    );
 
     return Object.entries(typeCount).map(([type, count]) => ({
       type,
       count,
-      fill: `var(--color-${type.toLowerCase()})`
-    }))
-  }, [data])
+      fill: `var(--color-${type.toLowerCase()})`,
+    }));
+  }, [data]);
 
   const totalRegistrations = React.useMemo(() => {
-    return processedData.reduce((acc, curr) => acc + curr.count, 0)
-  }, [processedData])
+    return processedData.reduce((acc, curr) => acc + curr.count, 0);
+  }, [processedData]);
 
   const chartConfig = processedData.reduce((acc, curr) => {
     acc[curr.type.toLowerCase()] = {
       label: curr.type,
-      color: `hsl(var(--chart-${Object.keys(acc).length + 1}))`
-    }
-    return acc
-  }, {} as ChartConfig)
+      color: `hsl(var(--chart-${Object.keys(acc).length + 1}))`,
+    };
+    return acc;
+  }, {} as ChartConfig);
 
   return (
     <Card className="flex flex-col">
@@ -67,7 +82,7 @@ export default function PieChartComponent({ data = [] }: PieChartProps) {
             >
               <Label
                 content={({ viewBox }) => {
-                  if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                  if (viewBox && 'cx' in viewBox && 'cy' in viewBox) {
                     return (
                       <text
                         x={viewBox.cx}
@@ -90,7 +105,7 @@ export default function PieChartComponent({ data = [] }: PieChartProps) {
                           Registrations
                         </tspan>
                       </text>
-                    )
+                    );
                   }
                 }}
               />
@@ -107,5 +122,5 @@ export default function PieChartComponent({ data = [] }: PieChartProps) {
         </div>
       </CardFooter>
     </Card>
-  )
+  );
 }
