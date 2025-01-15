@@ -1,54 +1,46 @@
-'use client';
+"use client";
 
-import React, { use, useState } from 'react';
-import { login } from '../actions';
-import Image from 'next/image';
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Input } from '@/components/ui/input';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { GoogleIcon } from '@/components/custom-icons/custom-icons';
-import { Github, LucideLoaderPinwheel, TriangleAlert } from 'lucide-react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { loginSchema, type LoginFormData } from '@/lib/schemas/auth';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import { signInWithOAuth } from '@/actions/supabase';
-import { useToast } from '@/hooks/use-toast';
+import React, { use, useState } from "react";
+import { login } from "../actions";
+import Image from "next/image";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { GoogleIcon } from "@/components/custom-icons/custom-icons";
+import { Github, LucideLoaderPinwheel, TriangleAlert, Eye, EyeOff } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { loginSchema, type LoginFormData } from "@/lib/schemas/auth";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { signInWithOAuth } from "@/actions/supabase";
+import { useToast } from "@/hooks/use-toast";
 
-export default function LoginPage(props: {
-  searchParams: Promise<{ message: string; cause: string; code: string }>;
-}) {
+export default function LoginPage(props: { searchParams: Promise<{ message: string; cause: string; code: string }> }) {
   const searchParams = use(props.searchParams);
 
   const { toast } = useToast();
 
   const [Loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const form = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: '',
-      password: '',
+      email: "",
+      password: "",
       remember: false,
     },
   });
 
-  async function handleOAuthSignIn(provider: 'github' | 'google') {
+  async function handleOAuthSignIn(provider: "github" | "google") {
     setLoading(true);
     const { error, data } = await signInWithOAuth(provider);
 
     if (error) {
       toast({
-        variant: 'destructive',
-        title: 'Authentication Error',
+        variant: "destructive",
+        title: "Authentication Error",
         description: error.message,
       });
     } else if (data?.url) {
@@ -70,10 +62,7 @@ export default function LoginPage(props: {
         <div className="container">
           <div className="flex flex-col gap-4">
             {searchParams?.message && (
-              <Alert
-                variant="destructive"
-                className="mx-auto w-full max-w-sm mt-8"
-              >
+              <Alert variant="destructive" className="mx-auto w-full max-w-sm mt-8">
                 <TriangleAlert className="h-4 w-4" />
                 <AlertDescription>
                   {searchParams.message}
@@ -99,50 +88,22 @@ export default function LoginPage(props: {
                 role="img"
               >
                 <defs>
-                  <pattern
-                    id="innerGrid"
-                    width="40"
-                    height="40"
-                    patternUnits="userSpaceOnUse"
-                  >
-                    <path
-                      d="M 40 0 L 0 0 0 40"
-                      fill="none"
-                      className="stroke-muted-foreground/70"
-                      strokeWidth="0.5"
-                    />
+                  <pattern id="innerGrid" width="40" height="40" patternUnits="userSpaceOnUse">
+                    <path d="M 40 0 L 0 0 0 40" fill="none" className="stroke-muted-foreground/70" strokeWidth="0.5" />
                   </pattern>
-                  <pattern
-                    id="grid"
-                    width="160"
-                    height="160"
-                    patternUnits="userSpaceOnUse"
-                  >
+                  <pattern id="grid" width="160" height="160" patternUnits="userSpaceOnUse">
                     <rect width="160" height="160" fill="url(#innerGrid)" />
                   </pattern>
                 </defs>
                 <rect width="200" height="200" fill="url(#grid)" />
               </svg>
-              <Image
-                src="/FC-logo-short.png"
-                alt="logo"
-                width={640}
-                height={640}
-                className="mb-7 h-12 w-auto"
-              />
-              <h1 className="mb-2 text-2xl font-bold">
-                Log in to your account
-              </h1>
-              <p className="text-muted-foreground">
-                Welcome back! Please enter your details.
-              </p>
+              <Image src="/FC-logo-short.png" alt="logo" width={640} height={640} className="mb-7 h-12 w-auto" />
+              <h1 className="mb-2 text-2xl font-bold">Log in to your account</h1>
+              <p className="text-muted-foreground">Welcome back! Please enter your details.</p>
             </div>
             <div className="z-10 mx-auto w-full max-w-sm rounded-md bg-background p-6 shadow">
               <Form {...form}>
-                <form
-                  onSubmit={form.handleSubmit(onSubmit)}
-                  className="grid gap-4"
-                >
+                <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
                   <FormField
                     control={form.control}
                     name="email"
@@ -163,11 +124,12 @@ export default function LoginPage(props: {
                       <FormItem>
                         <FormLabel>Password</FormLabel>
                         <FormControl>
-                          <Input
-                            type="password"
-                            placeholder="Enter your password"
-                            {...field}
-                          />
+                          <div className="relative">
+                            <Input type={showPassword ? "text" : "password"} placeholder="Enter your password" {...field} />
+                            <button type="button" onClick={() => setShowPassword((prev) => !prev)} className="absolute inset-y-0 right-3 flex items-center">
+                              {showPassword ? <EyeOff /> : <Eye />}
+                            </button>
+                          </div>
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -180,56 +142,33 @@ export default function LoginPage(props: {
                       <FormItem className="flex flex-row items-center justify-between">
                         <div className="flex items-center space-x-2">
                           <FormControl>
-                            <Checkbox
-                              checked={field.value}
-                              onCheckedChange={field.onChange}
-                            />
+                            <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                           </FormControl>
                           <FormLabel className="!mt-0">Remember me</FormLabel>
                         </div>
-                        <Link
-                          href="#"
-                          className="text-sm font-medium text-primary"
-                        >
+                        <Link href="#" className="text-sm font-medium text-primary">
                           Forgot password
                         </Link>
                       </FormItem>
                     )}
                   />
-                  <Button
-                    type="submit"
-                    disabled={Loading}
-                    className="w-full flex gap-2 items-center"
-                  >
-                    {Loading && (
-                      <LucideLoaderPinwheel className="animate-spin" />
-                    )}{' '}
-                    Sign in
+                  <Button type="submit" disabled={Loading} className="w-full flex gap-2 items-center">
+                    {Loading && <LucideLoaderPinwheel className="animate-spin" />} Sign in
                   </Button>
                   <div className="relative my-4">
                     <div className="absolute inset-0 flex items-center">
                       <span className="w-full border-t" />
                     </div>
                     <div className="relative flex justify-center text-xs uppercase">
-                      <span className="bg-background px-2 text-muted-foreground">
-                        Or continue with
-                      </span>
+                      <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
                     </div>
                   </div>
                   <div className="grid grid-cols-2 gap-4 w-full">
-                    <Button
-                      variant="outline"
-                      onClick={() => handleOAuthSignIn('github')}
-                      disabled={Loading}
-                    >
+                    <Button variant="outline" onClick={() => handleOAuthSignIn("github")} disabled={Loading}>
                       <Github className="mr-2 h-4 w-4" />
                       GitHub
                     </Button>
-                    <Button
-                      variant="outline"
-                      onClick={() => handleOAuthSignIn('google')}
-                      disabled={Loading}
-                    >
+                    <Button variant="outline" onClick={() => handleOAuthSignIn("google")} disabled={Loading}>
                       <GoogleIcon className="mr-2" />
                       Google
                     </Button>
