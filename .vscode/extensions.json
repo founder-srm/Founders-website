@@ -1,3 +1,15 @@
 {
-  "recommendations": ["denoland.vscode-deno"]
+  "recommendations": [
+    "denoland.vscode-deno",
+    "biomejs.biome",
+    "pandy.bun",
+    "oven.bun-vscode",
+    "doppler.doppler-vscode",
+    "dbaeumer.vscode-eslint",
+    "dsznajder.es7-react-js-snippets",
+    "github.vscode-pull-request-github",
+    "sanity-io.vscode-sanity",
+    "hdoro.sanity-snippets",
+    "bradlc.vscode-tailwindcss"
+  ]
 }
