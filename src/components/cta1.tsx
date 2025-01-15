@@ -2,6 +2,8 @@ import { sanityFetch } from '@/sanity/lib/live';
 import { CTA_QUERY } from '@/sanity/lib/queries';
 import CTAButtons from './cta-buttons';
 
+export const revalidate = 3600; // revalidate every hour
+
 const CTA11 = async () => {
   const { data } = await sanityFetch({ query: CTA_QUERY });
   const ctaData = data[0];

@@ -3,6 +3,8 @@ import { buttonVariants } from '@/components/ui/button';
 import { sanityFetch } from '@/sanity/lib/live';
 import { JOBS_QUERY } from '@/sanity/lib/queries';
 
+export const revalidate = 3600; // revalidate every hour
+
 const Careers4 = async () => {
   const { data: jobs } = await sanityFetch({ query: JOBS_QUERY });
 

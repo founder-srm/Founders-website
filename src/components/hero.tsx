@@ -5,6 +5,8 @@ import { HERO_QUERY } from '@/sanity/lib/queries';
 import { sanityFetch } from '@/sanity/lib/live';
 import InteractiveHoverButton from './ui/interactive-hover-button';
 
+export const revalidate = 3600; // revalidate every hour
+
 export default async function Hero() {
   const { data } = await sanityFetch({ query: HERO_QUERY });
 

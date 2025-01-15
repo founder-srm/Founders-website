@@ -2,6 +2,8 @@ import { sanityFetch } from '@/sanity/lib/live';
 import { FEATURES_QUERY } from '@/sanity/lib/queries';
 import ShineCard from './ui/shine-card';
 
+export const revalidate = 3600; // revalidate every hour
+
 const Feature43 = async () => {
   const { data: reasons } = await sanityFetch({ query: FEATURES_QUERY });
 

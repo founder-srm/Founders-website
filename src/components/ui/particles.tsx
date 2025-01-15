@@ -53,10 +53,12 @@ export default function Particles({
     };
   }, []);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: it works
   useEffect(() => {
     onMouseMove();
   }, [mousePosition.x, mousePosition.y]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: it works
   useEffect(() => {
     initCanvas();
   }, [refresh]);

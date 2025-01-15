@@ -11,6 +11,8 @@ const iconComponents = {
   Settings,
 };
 
+export const revalidate = 3600; // revalidate every hour
+
 export default async function About1() {
   const { data } = await sanityFetch({ query: ABOUT_HERO_QUERY });
   return (

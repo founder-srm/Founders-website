@@ -4,6 +4,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { urlFor } from '@/sanity/lib/image';
 
+export const revalidate = 3600; // revalidate every hour
+
 export default async function EventsPage() {
   const { data: events } = await sanityFetch({ query: ALL_EVENTS_QUERY });
 

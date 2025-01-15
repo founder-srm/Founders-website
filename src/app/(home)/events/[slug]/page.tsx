@@ -6,6 +6,8 @@ import { PortableText } from '@portabletext/react';
 
 type Params = Promise<{ slug: string }>;
 
+export const revalidate = 3600; // revalidate every hour
+
 export default async function EventPage({ params }: { params: Params }) {
   const { slug } = await params;
   const { data: event } = await sanityFetch({

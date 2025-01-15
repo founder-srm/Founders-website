@@ -7,6 +7,8 @@ import {
 import { sanityFetch } from '@/sanity/lib/live';
 import { FAQS_QUERY } from '@/sanity/lib/queries';
 
+export const revalidate = 3600; // revalidate every hour
+
 const Faq1 = async () => {
   const { data: faqs } = await sanityFetch({ query: FAQS_QUERY });
   // console.log(faqs);

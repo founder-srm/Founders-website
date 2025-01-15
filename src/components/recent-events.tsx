@@ -5,6 +5,8 @@ import { sanityFetch } from '@/sanity/lib/live';
 import { EVENTS_QUERY } from '@/sanity/lib/queries';
 import { urlFor } from '@/sanity/lib/image';
 
+export const revalidate = 3600; // revalidate every hour
+
 const Blog8 = async () => {
   const { data: webinars } = await sanityFetch({ query: EVENTS_QUERY });
   // console.log(webinars);
