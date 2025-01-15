@@ -3,9 +3,8 @@ import type React from 'react';
 import { useEffect, useState, useRef } from 'react';
 import {
   motion,
-  type SpringOptions,
   useMotionValue,
-  useSpring,
+  
   AnimatePresence,
   type Transition,
   type Variant,
@@ -15,7 +14,6 @@ import { cn } from '@/lib/utils';
 type CursorProps = {
   children: React.ReactNode;
   className?: string;
-  springConfig?: SpringOptions;
   attachToParent?: boolean;
   transition?: Transition;
   variants?: {
@@ -29,7 +27,6 @@ type CursorProps = {
 export function Cursor({
   children,
   className,
-  springConfig,
   attachToParent,
   variants,
   transition,
@@ -64,9 +61,7 @@ export function Cursor({
     };
   }, [cursorX, cursorY, onPositionChange, attachToParent]);
 
-  const cursorXSpring = useSpring(cursorX, springConfig || { duration: 0 });
-  const cursorYSpring = useSpring(cursorY, springConfig || { duration: 0 });
-
+  
   useEffect(() => {
     const handleVisibilityChange = (visible: boolean) => {
       setIsVisible(visible);
@@ -102,8 +97,6 @@ export function Cursor({
       ref={cursorRef}
       className={cn('pointer-events-none fixed left-0 top-0 z-50', className)}
       style={{
-        x: cursorXSpring,
-        y: cursorYSpring,
         translateX: '-50%',
         translateY: '-50%',
       }}
