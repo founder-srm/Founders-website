@@ -13,8 +13,14 @@ import {
 import { Card } from '@/components/ui/card';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import { Label } from '@/components/ui/label';
-import { Switch } from "@/components/ui/switch"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Switch } from '@/components/ui/switch';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 
 type TypeFormField = {
   fieldType:
@@ -70,7 +76,7 @@ const createCleanField = (type: FieldType): TypeFormField => {
         min: 0,
         max: 10,
       };
-    
+
     case 'text':
     case 'textarea':
       return {
@@ -81,47 +87,47 @@ const createCleanField = (type: FieldType): TypeFormField => {
           maxLength: 100,
         },
       };
-    
+
     case 'select':
     case 'radio':
       return {
         ...baseField,
         options: [],
       };
-    
+
     case 'checkbox':
       return {
         ...baseField,
         checkboxType: 'single',
         items: type === 'checkbox' ? [] : undefined,
       };
-    
+
     default:
       return baseField;
   }
 };
 
-function CheckboxItemsEditor({ 
-  items = [], 
-  onChange 
-}: { 
+function CheckboxItemsEditor({
+  items = [],
+  onChange,
+}: {
   items: Array<{ id: string; label: string }>;
   onChange: (items: Array<{ id: string; label: string }>) => void;
 }) {
-  const [newId, setNewId] = useState('')
-  const [newLabel, setNewLabel] = useState('')
+  const [newId, setNewId] = useState('');
+  const [newLabel, setNewLabel] = useState('');
 
   const addItem = () => {
     if (newId && newLabel) {
-      onChange([...items, { id: newId, label: newLabel }])
-      setNewId('')
-      setNewLabel('')
+      onChange([...items, { id: newId, label: newLabel }]);
+      setNewId('');
+      setNewLabel('');
     }
-  }
+  };
 
   const removeItem = (index: number) => {
-    onChange(items.filter((_, i) => i !== index))
-  }
+    onChange(items.filter((_, i) => i !== index));
+  };
 
   return (
     <div className="space-y-4">
@@ -130,8 +136,8 @@ function CheckboxItemsEditor({
           <div key={item.id} className="flex items-center gap-2">
             <Input value={item.id} disabled />
             <Input value={item.label} disabled />
-            <Button 
-              variant="destructive" 
+            <Button
+              variant="destructive"
               size="icon"
               onClick={() => removeItem(index)}
             >
@@ -146,12 +152,12 @@ function CheckboxItemsEditor({
           <Input
             placeholder="Item ID (e.g., tech)"
             value={newId}
-            onChange={(e) => setNewId(e.target.value)}
+            onChange={e => setNewId(e.target.value)}
           />
           <Input
             placeholder="Item Label (e.g., Technology)"
             value={newLabel}
-            onChange={(e) => setNewLabel(e.target.value)}
+            onChange={e => setNewLabel(e.target.value)}
           />
           <Button onClick={addItem} disabled={!newId || !newLabel}>
             Add
@@ -159,7 +165,7 @@ function CheckboxItemsEditor({
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 export function FormBuilder({
@@ -223,11 +229,7 @@ export function FormBuilder({
               {fields.map((field, index) => {
                 const safeId = field.name || `field-${index}`;
                 return (
-                  <Draggable
-                    key={safeId}
-                    draggableId={safeId}
-                    index={index}
-                  >
+                  <Draggable key={safeId} draggableId={safeId} index={index}>
                     {provided => (
                       <Card
                         ref={provided.innerRef}
@@ -280,12 +282,17 @@ export function FormBuilder({
                                 <Input
                                   type="number"
                                   placeholder="Min Length"
-                                  value={field.validation?.minLength?.toString() || ''}
+                                  value={
+                                    field.validation?.minLength?.toString() ||
+                                    ''
+                                  }
                                   onChange={e =>
                                     updateField(index, {
                                       validation: {
                                         ...field.validation,
-                                        minLength: Number.parseInt(e.target.value),
+                                        minLength: Number.parseInt(
+                                          e.target.value
+                                        ),
                                       },
                                     })
                                   }
@@ -296,12 +303,17 @@ export function FormBuilder({
                                 <Input
                                   type="number"
                                   placeholder="Max Length"
-                                  value={field.validation?.maxLength?.toString() || ''}
+                                  value={
+                                    field.validation?.maxLength?.toString() ||
+                                    ''
+                                  }
                                   onChange={e =>
                                     updateField(index, {
                                       validation: {
                                         ...field.validation,
-                                        maxLength: Number.parseInt(e.target.value),
+                                        maxLength: Number.parseInt(
+                                          e.target.value
+                                        ),
                                       },
                                     })
                                   }
@@ -349,17 +361,25 @@ export function FormBuilder({
                                   <Label>Checkbox Items</Label>
                                   <Dialog>
                                     <DialogTrigger asChild>
-                                      <Button variant="outline" className="w-full">
-                                        Manage Items ({field.items?.length || 0} items)
+                                      <Button
+                                        variant="outline"
+                                        className="w-full"
+                                      >
+                                        Manage Items ({field.items?.length || 0}{' '}
+                                        items)
                                       </Button>
                                     </DialogTrigger>
                                     <DialogContent>
                                       <DialogHeader>
-                                        <DialogTitle>Manage Checkbox Items</DialogTitle>
+                                        <DialogTitle>
+                                          Manage Checkbox Items
+                                        </DialogTitle>
                                       </DialogHeader>
                                       <CheckboxItemsEditor
                                         items={field.items || []}
-                                        onChange={(items) => updateField(index, { items })}
+                                        onChange={items =>
+                                          updateField(index, { items })
+                                        }
                                       />
                                     </DialogContent>
                                   </Dialog>

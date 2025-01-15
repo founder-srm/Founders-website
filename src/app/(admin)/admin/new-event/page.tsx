@@ -113,7 +113,7 @@ function generateZodSchema(fields: TypeFormField[]) {
 
 export default function EventFormBuilderPage() {
   const [formFields, setFormFields] = useState<TypeFormField[]>([]);
-  
+
   const handleFieldsChange = (fields: TypeFormField[]) => {
     setFormFields(fields);
     // Reset form values when fields change
@@ -164,7 +164,8 @@ export default function EventFormBuilderPage() {
                       <Input {...field} placeholder="Enter venue" />
                     </FormControl>
                     <FormDescription>
-                      The location where the event is happening, If online, mention the format (gmeet, zoom etc..)
+                      The location where the event is happening, If online,
+                      mention the format (gmeet, zoom etc..)
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -180,9 +181,7 @@ export default function EventFormBuilderPage() {
                     <FormControl>
                       <Input type="datetime-local" {...field} />
                     </FormControl>
-                    <FormDescription>
-                      When the event starts?
-                    </FormDescription>
+                    <FormDescription>When the event starts?</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -197,9 +196,7 @@ export default function EventFormBuilderPage() {
                     <FormControl>
                       <Input type="datetime-local" {...field} />
                     </FormControl>
-                    <FormDescription>
-                      When the event ends?
-                    </FormDescription>
+                    <FormDescription>When the event ends?</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -295,8 +292,8 @@ export default function EventFormBuilderPage() {
               />
 
               {/* Dynamic Form Builder */}
-              <FormBuilder 
-                fields={formFields} 
+              <FormBuilder
+                fields={formFields}
                 onChange={setFormFields}
                 onFieldsChange={handleFieldsChange}
               />
