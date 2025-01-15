@@ -1,30 +1,38 @@
 ---
-name: Bug Report
-about: Report a bug in Once UI
+name: Bug report
+about: Create a report to help us improve
+title: ''
+labels: ''
+assignees: ''
+
 ---
 
-### Thank you for taking the time to fill out this bug report.
+**Describe the bug**
+A clear and concise description of what the bug is.
 
-**Tell us what happened**
+**To Reproduce**
+Steps to reproduce the behavior:
+1. Go to '...'
+2. Click on '....'
+3. Scroll down to '....'
+4. See error
 
-[A clear and concise description of the bug you've encountered.]
-
-
-**Affected components**
-
-[Is the feature request related to an existing component?]
-
-
-**How do we reproduce it?**
-
-[Please share a step-by-step description of how to reproduce the issue.]
-
+**Expected behavior**
+A clear and concise description of what you expected to happen.
 
 **Screenshots**
+If applicable, add screenshots to help explain your problem.
 
-[If applicable, add screenshots to help explain your problem.]
+**Desktop (please complete the following information):**
+ - OS: [e.g. iOS]
+ - Browser [e.g. chrome, safari]
+ - Version [e.g. 22]
 
+**Smartphone (please complete the following information):**
+ - Device: [e.g. iPhone6]
+ - OS: [e.g. iOS8.1]
+ - Browser [e.g. stock browser, safari]
+ - Version [e.g. 22]
 
-**System information and logs**
-
-[Add any information that might be relevant.]
+**Additional context**
+Add any other context about the problem here.

@@ -1,15 +1,20 @@
 ---
-name: Feature Request
-about: Submit a feature request for Once UI
+name: Feature request
+about: Suggest an idea for this project
+title: ''
+labels: ''
+assignees: ''
+
 ---
 
-### Thank you for taking the time to submit a feature request. We appreciate your contribution.
+**Is your feature request related to a problem? Please describe.**
+A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
 
-**Describe the feature**
+**Describe the solution you'd like**
+A clear and concise description of what you want to happen.
 
-[Tell us about the problem you're trying to solve and the requested feature.]
+**Describe alternatives you've considered**
+A clear and concise description of any alternative solutions or features you've considered.
 
-
-**Affected components**
-
-[Is the feature request related to an existing component?]
+**Additional context**
+Add any other context or screenshots about the feature request here.
