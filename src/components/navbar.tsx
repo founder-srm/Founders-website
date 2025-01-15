@@ -322,7 +322,7 @@ const Navbar1 = () => {
                 </Link>
               </Button>
               <Button asChild>
-                <Link href="/auth/login" className="text-foreground">
+                <Link href="/auth/signup" className="text-foreground">
                   Sign up
                 </Link>
               </Button>
@@ -465,7 +465,7 @@ const Navbar1 = () => {
                         </Link>
                       </Button>
                       <Button asChild>
-                        <Link href="/auth/login" className="text-foreground">
+                        <Link href="/auth/signup" className="text-foreground">
                           Sign up
                         </Link>
                       </Button>
