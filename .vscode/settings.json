@@ -18,5 +18,7 @@
     "fs",
     "http",
     "net"
-  ]
+  ],
+  "doppler.autocomplete.enable": true,
+  "doppler.hover.enable": true
 }
