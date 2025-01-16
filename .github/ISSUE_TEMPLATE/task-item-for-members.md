@@ -21,9 +21,9 @@ assignees: ''
 > **Temp**: Provide a clear, concise description of the task. Include the WHY (purpose/goal), WHAT (specific deliverables), and any important context. Example: "Implement user authentication flow using OAuth2 to allow users to sign in with their Google accounts. This is needed to support the new social login feature requested by stakeholders."
 
 ### Prerequisites
-- [ ] Required access/permissions
-- [ ] Development environment setup
-- [ ] Required dependencies installed
+- [ ] Required to have Installed and joined [Doppler](https://dashboard.doppler.com/workplace/55ce728ac58e146cffda/projects/foundersclub) teams.
+- [ ] Required to have all the recommended extensions installed (vscode)
+- [ ] Required to be on a fork
 - [ ] Relevant documentation reviewed
 
 ### References
@@ -56,15 +56,18 @@ The following files/components should not be changed:
 
 ### Testing Requirements
 - [ ] Unit tests
+- [ ] Vercel deployments in pr
 - [ ] Integration tests
 - [ ] Manual testing scenarios
 
 ### Additional Context
+Contact @greeenboi  for setup of doppler
 [Any other relevant information, constraints, or considerations]
 
 ### Definition of Done
 - [ ] All implementation steps completed
 - [ ] Tests passing
+- [ ] Ensure that the boards are updated for this task
 - [ ] Documentation updated
 - [ ] Code review completed
-- [ ] QA verification
+- [ ] Owner reviewed
