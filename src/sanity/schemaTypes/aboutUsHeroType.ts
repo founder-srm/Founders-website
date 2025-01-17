@@ -1,41 +1,11 @@
-// export interface aboutValues {
-//     icon: string;
-//     title: string;
-//     description: string;
-//   }
-//   export interface AboutHeroSection {
-//     _id: string;
-//     _createdAt: string;
-//     title: string;
-//     subTitle: string;
-//     bannerImage: {
-//       asset: {
-//         _ref: string;
-//         _type: string;
-//       };
-//     }
-//     ourMission: string;
-//     secondaryHeading: string;
-//     secondarySubHeading: string;
-//     ourValues: aboutValues[];
-//     aboutUsCta: {
-//       title: string;
-//       ctaBannerImage: {
-//         asset: {
-//           _ref: string;
-//           _type: string;
-//         };
-//       };
-//       subTitle: string;
-//     }
-//   }
-
 import { defineArrayMember, defineField, defineType } from 'sanity';
+import { PiGlobeLight } from 'react-icons/pi';
 
 export const aboutUsHeroType = defineType({
   name: 'aboutUsHero',
   title: 'About Us Hero Component Content',
   type: 'document',
+  icon: PiGlobeLight,
   fields: [
     defineField({
       name: 'title',
@@ -52,6 +22,9 @@ export const aboutUsHeroType = defineType({
       type: 'image',
       options: {
         hotspot: true,
+        aiAssist: {
+          imageDescriptionField: 'altText',
+        },
       },
       validation: Rule => Rule.required(),
     }),
@@ -109,6 +82,9 @@ export const aboutUsCtaType = defineType({
       type: 'image',
       options: {
         hotspot: true,
+        aiAssist: {
+          imageDescriptionField: 'altText',
+        },
       },
       validation: Rule => Rule.required(),
     }),

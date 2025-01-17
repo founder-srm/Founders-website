@@ -1,90 +1,108 @@
+import { contextDocumentTypeName } from '@sanity/assist';
 import type { StructureResolver } from 'sanity/structure';
 
 export const structure: StructureResolver = S =>
   S.list()
     .title('FC Website Content')
+    .showIcons(true)
     .items([
       S.divider(),
-      // Hero Section
       S.listItem()
-        .title('Hero Section')
+        .title('Home Page')
         .child(
           S.list()
-            .title('Hero Section')
+            .title('Home Page Components')
+            .showIcons(false)
             .items([
-              S.documentTypeListItem('heroComponent').title('Hero Component'),
+              S.listItem()
+                .title('Hero Section')
+                .child(
+                  S.list()
+                    .title('Hero Section')
+                    .items([
+                      S.documentTypeListItem('heroComponent').title(
+                        'Hero Component'
+                      ),
+                    ])
+                ),
+              S.listItem()
+                .title('Features Section')
+                .child(
+                  S.list()
+                    .title('Features')
+                    .items([
+                      S.documentTypeListItem('feature').title('Features'),
+                    ])
+                ),
+              S.listItem()
+                .title('Help Section')
+                .child(
+                  S.list()
+                    .title('Help')
+                    .items([S.documentTypeListItem('faq').title('FAQs')])
+                ),
+              S.listItem()
+                .title('Call to Action Section')
+                .child(
+                  S.list()
+                    .title('Call to Action')
+                    .items([
+                      S.documentTypeListItem('cta').title('Call to Actions'),
+                    ])
+                ),
             ])
         ),
-
-      S.divider(),
-
-      // Career section
       S.listItem()
-        .title('Careers')
+        .title('About Us Page')
         .child(
+          // S.list()
+          // .items([
+          // ])
           S.list()
-            .title('Careers')
+            .title('About Us Components')
+            .showIcons(false)
             .items([
-              S.documentTypeListItem('jobCategory').title('Job Categories'),
+              S.listItem()
+                .title('About Us Components')
+                .child(
+                  S.list()
+                    .title('About Us Hero Section')
+                    .items([
+                      S.documentTypeListItem('aboutUsHero').title(
+                        'About Us Hero'
+                      ),
+                    ])
+                ),
+              S.listItem()
+                .title('Careers Section')
+                .child(
+                  S.list()
+                    .title('Careers Section')
+                    .items([
+                      S.documentTypeListItem('jobCategory').title(
+                        'Job Categories'
+                      ),
+                    ])
+                ),
             ])
         ),
-
-      // Features section
+      S.listItem().title('Teams Page').child(
+        S.list().title('Teams Page').items([
+          // Empty sections to be filled later
+        ])
+      ),
       S.listItem()
-        .title('Features')
+        .title('Events Page')
         .child(
           S.list()
-            .title('Features')
-            .items([S.documentTypeListItem('feature').title('Features')])
+            .title('Events Page')
+            .items([S.documentTypeListItem('event').title('Events & Webinars')])
         ),
-
-      // Help section
-      S.listItem()
-        .title('Help')
-        .child(
-          S.list()
-            .title('Help')
-            .items([S.documentTypeListItem('faq').title('FAQs')])
-        ),
-
+      S.listItem().title('Contact Us Page').child(
+        S.list().title('Contact Us Page').items([
+          // Empty sections to be filled later
+        ])
+      ),
       S.divider(),
-
-      // Marketing section
-      S.listItem()
-        .title('Marketing')
-        .child(
-          S.list()
-            .title('Marketing')
-            .items([
-              S.documentTypeListItem('cta').title('Call to Actions'),
-              S.documentTypeListItem('event').title('Events & Webinars'),
-            ])
-        ),
-      S.divider(),
-      S.listItem()
-        .title('About Us Hero Component')
-        .child(
-          S.list()
-            .title('About Us Hero Component')
-            .items([
-              S.documentTypeListItem('aboutUsHero').title('About Us Hero'),
-            ])
-        ),
-      // Show remaining document types
-      S.divider(),
-      // ...S.documentTypeListItems().filter(
-      //   item =>
-      //     item.getId() &&
-      //     ![
-      //       'post',
-      //       'category',
-      //       'author',
-      //       'jobCategory',
-      //       'feature',
-      //       'faq',
-      //       'cta',
-      //       'event',
-      //       // biome-ignore lint/style/noNonNullAssertion: <explanation>
-      //     ].includes(item.getId()!)
-      // ),
+      S.documentTypeListItem(contextDocumentTypeName),
     ]);

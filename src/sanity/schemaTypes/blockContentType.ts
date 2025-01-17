@@ -63,7 +63,12 @@ export const blockContentType = defineType({
     defineArrayMember({
       type: 'image',
       icon: ImageIcon,
-      options: { hotspot: true },
+      options: {
+        hotspot: true,
+        aiAssist: {
+          imageDescriptionField: 'altText',
+        },
+      },
       fields: [
         {
           name: 'alt',

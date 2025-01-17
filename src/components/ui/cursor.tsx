@@ -9,7 +9,7 @@ import {
   type Transition,
   type Variant,
 } from 'motion/react';
-import type{ SpringOptions } from 'framer-motion';
+import type { SpringOptions } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
 type CursorProps = {

@@ -1,9 +1,11 @@
 import { defineType, defineField } from 'sanity';
+import { GrAnnounce } from 'react-icons/gr';
 
 export const ctaType = defineType({
   name: 'cta',
   type: 'document',
   title: 'Call to Action',
+  icon: GrAnnounce,
   fields: [
     defineField({
       name: 'title',

@@ -1,9 +1,11 @@
 import { defineType, defineField } from 'sanity';
+import { MdWorkOutline } from 'react-icons/md';
 
 export const jobCategoryType = defineType({
   name: 'jobCategory',
   type: 'document',
   title: 'Job Category',
+  icon: MdWorkOutline,
   fields: [
     defineField({
       name: 'category',

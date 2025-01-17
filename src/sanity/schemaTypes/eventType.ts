@@ -1,9 +1,11 @@
 import { defineType, defineField } from 'sanity';
+import { RiCalendarEventLine } from 'react-icons/ri';
 
 export const eventType = defineType({
   name: 'event',
   type: 'document',
   title: 'Event',
+  icon: RiCalendarEventLine,
   fields: [
     defineField({
       name: 'title',
@@ -23,6 +25,9 @@ export const eventType = defineType({
       title: 'Image',
       options: {
         hotspot: true,
+        aiAssist: {
+          imageDescriptionField: 'altText',
+        },
       },
     }),
     defineField({

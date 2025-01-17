@@ -28,6 +28,9 @@ export const postType = defineType({
       type: 'image',
       options: {
         hotspot: true,
+        aiAssist: {
+          imageDescriptionField: 'altText',
+        },
       },
       fields: [
         {

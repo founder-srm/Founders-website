@@ -23,6 +23,9 @@ export const authorType = defineType({
       type: 'image',
       options: {
         hotspot: true,
+        aiAssist: {
+          imageDescriptionField: 'altText',
+        },
       },
     }),
     defineField({

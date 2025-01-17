@@ -1,7 +1,10 @@
+import { HomeIcon } from '@sanity/icons';
+
 export const heroComponentType = {
   name: 'heroComponent',
   title: 'Hero Component Content',
   type: 'document',
+  icon: HomeIcon,
   fields: [
     {
       name: 'title',
