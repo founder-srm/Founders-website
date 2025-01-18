@@ -4,6 +4,8 @@ import Image from 'next/image';
 import { format } from 'date-fns';
 import { getPostBySlug } from '@/lib/mdx';
 import { CustomMDX } from '@/mdx-components';
+import { ArrowLeft } from 'lucide-react';
+import Link from 'next/link';
 
 export const revalidate = 3600;
 
@@ -59,6 +61,14 @@ export default async function BlogPostPage({ params }: { params: Params }) {
 
   return (
     <article className="container mx-auto py-12 max-w-4xl overflow-y-auto">
+      <Link 
+        href="/blog" 
+        className="inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors mb-6"
+      >
+        <ArrowLeft className="h-4 w-4" />
+        Back to Blog
+      </Link>
+
       <div className="relative w-full h-[400px] mb-8">
         <Image
           src={post.image}

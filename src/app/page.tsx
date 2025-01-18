@@ -3,7 +3,7 @@ import Faq1 from '@/components/faqs';
 import { InfiniteSliderBanner } from '@/components/fc-banner-home';
 import Feature43 from '@/components/features';
 import Hero from '@/components/hero';
-import Blog8 from '@/components/recent-events';
+import EventWriteUp from '@/components/recent-events';
 import RelatedPosts from '@/components/related-posts';
 import Testimonial10 from '@/components/testimonials';
 import { SanityLive } from '@/sanity/lib/live';
@@ -20,7 +20,7 @@ export default function Home() {
       <section className="md:px-16 w-full flex flex-col items-center justify-center">
         <Feature43 />
         <RelatedPosts />
-        <Blog8 />
+        <EventWriteUp />
         <Testimonial10 />
         <Faq1 />
         <CTA11 />
