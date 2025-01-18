@@ -2,6 +2,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { SpinningText } from './ui/spinning-text';
 
 const sections = [
   {
@@ -44,6 +45,47 @@ const sections = [
   },
 ];
 
+function SpinningTextCustom() {
+  return (
+    <SpinningText
+      radius={5.5}
+      fontSize={1}
+      variants={{
+        container: {
+          hidden: {
+            opacity: 1,
+          },
+          visible: {
+            opacity: 1,
+            rotate: 360,
+            transition: {
+              type: 'spring',
+              bounce: 0,
+              duration: 6,
+              repeat: Number.POSITIVE_INFINITY,
+              staggerChildren: 0.03,
+            },
+          },
+        },
+        item: {
+          hidden: {
+            opacity: 0,
+            filter: 'blur(4px)',
+          },
+          visible: {
+            opacity: 1,
+            filter: 'blur(0px)',
+          },
+        },
+      }}
+      className='font-[450]'
+    >
+      {'Founders club • Founders club • Founders club • '}
+    </SpinningText>
+  );
+}
+
+
 const isPathExcluded = (pathname: string, excludedPaths: string[]) => {
   return excludedPaths.some(path => {
     if (path.endsWith('/*')) {
@@ -69,8 +111,11 @@ const Footer2 = () => {
   }
 
   return (
-    <section className="pt-32 w-full flex flex-col items-center ">
-      <footer className="w-full mx-auto px-4">
+    <section className="relative pt-32 w-full">
+      <div className="absolute top-24 -z-10 left-8 p-4">
+        <SpinningTextCustom />
+      </div>
+      <footer className="relative z-50 w-full mx-auto px-4 bg-background ">
         <div className="grid grid-cols-2 gap-8 lg:grid-cols-6">
           <div className="col-span-2 mb-8 lg:mb-0">
             <Image
