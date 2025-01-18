@@ -1,5 +1,5 @@
 import { sanityFetch } from '@/sanity/lib/live';
-// import type { Metadata, ResolvingMetadata } from 'next';
+import type { Metadata, ResolvingMetadata } from 'next';
 import { EVENT_BY_SLUG_QUERY } from '@/sanity/lib/queries';
 import { urlFor } from '@/sanity/lib/image';
 import Image from 'next/image';
@@ -9,48 +9,48 @@ type Params = Promise<{ slug: string }>;
 
 export const revalidate = 3600; // revalidate every hour
 
-// export async function generateMetadata(
-//   { params }: { params: Params },
-//   parent: ResolvingMetadata
-// ): Promise<Metadata> {
-//   // read route params
-//   const { slug } = await params;
+export async function generateMetadata(
+  { params }: { params: Params },
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  // read route params
+  const { slug } = await params;
 
-//   const { data: event } = await sanityFetch({
-//     query: EVENT_BY_SLUG_QUERY,
-//     params: { slug: slug },
-//   });
+  const { data: event } = await sanityFetch({
+    query: EVENT_BY_SLUG_QUERY,
+    params: { slug: slug },
+  });
 
-//   const previousImages = (await parent).openGraph?.images || [];
+  const previousImages = (await parent).openGraph?.images || [];
 
-//   // const image = post?.image || previousImages[0];
-//   return {
-//     title: event?.title,
-//     description: event?.summary,
-//     creator: 'Founders Club',
-//     publisher: 'Founders Club',
-//     authors: [
-//       {
-//         name: event?.,
-//         url: `https://www.thefoundersclub.in/blog/posts/${slug}`,
-//       },
-//     ],
-//     openGraph: {
-//       images: [image, ...previousImages],
-//     },
-//     twitter: {
-//       card: 'summary_large_image',
-//       site: '@foundersclubsrm',
-//       title: post?.title,
-//       description: post?.summary,
-//       creator: '@foundersclubsrm',
-//       images: {
-//         url: `${image}`,
-//         alt: `Preview image for ${post?.title}`,
-//       },
-//     },
-//   };
-// }
+  const image = event?.image ? urlFor(event.image).url() : previousImages[0];
+  return {
+    title: event?.title,
+    description: event?.summary,
+    creator: 'Founders Club',
+    publisher: 'Founders Club',
+    authors: [
+      {
+        name: event?.author?.name || 'Founders Club',
+        url: `https://www.thefoundersclub.in/blog/posts/${slug}`,
+      },
+    ],
+    openGraph: {
+      images: [image, ...previousImages],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      site: '@foundersclubsrm',
+      title: event?.title || '',
+      description: event?.summary || '',
+      creator: '@foundersclubsrm',
+      images: {
+        url: `${image}`,
+        alt: `Preview image for ${event?.title}`,
+      },
+    },
+  };
+}
 
 export default async function EventPage({ params }: { params: Params }) {
   const { slug } = await params;
