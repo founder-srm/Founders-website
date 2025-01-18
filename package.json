@@ -51,6 +51,7 @@
     "@types/mdx": "^2.0.13",
     "@types/prismjs": "^1.26.5",
     "@vercel/analytics": "^1.4.1",
+    "@vercel/og": "^0.6.4",
     "@vercel/speed-insights": "^1.1.0",
     "canvas-confetti": "^1.9.3",
     "class-variance-authority": "^0.7.1",
