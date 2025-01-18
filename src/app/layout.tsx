@@ -41,7 +41,10 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Founders Club',
     description: 'A community of founders building the future',
-    images: ['https://www.thefoundersclub.in/fc-logo.png', 'https://www.thefoundersclub.in/FC-logo-short.png'],
+    images: [
+      'https://www.thefoundersclub.in/fc-logo.png',
+      'https://www.thefoundersclub.in/FC-logo-short.png',
+    ],
     creator: '@foundersclubsrm',
   },
   creator: 'Founders Club',

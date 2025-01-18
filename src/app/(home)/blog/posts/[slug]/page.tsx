@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation';
+import type { Metadata, ResolvingMetadata } from 'next';
 import Image from 'next/image';
 import { format } from 'date-fns';
 import { getPostBySlug } from '@/lib/mdx';
@@ -7,6 +8,46 @@ import { CustomMDX } from '@/mdx-components';
 export const revalidate = 3600;
 
 type Params = Promise<{ slug: string }>;
+
+export async function generateMetadata(
+  { params }: { params: Params },
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  // read route params
+  const { slug } = await params;
+
+  const post = await getPostBySlug(slug);
+
+  const previousImages = (await parent).openGraph?.images || [];
+
+  const image = post?.image || previousImages[0];
+  return {
+    title: post?.title,
+    description: post?.summary,
+    creator: 'Founders Club',
+    publisher: 'Founders Club',
+    authors: [
+      {
+        name: post?.author,
+        url: `https://www.thefoundersclub.in/blog/posts/${slug}`,
+      },
+    ],
+    openGraph: {
+      images: [image, ...previousImages],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      site: '@foundersclubsrm',
+      title: post?.title,
+      description: post?.summary,
+      creator: '@foundersclubsrm',
+      images: {
+        url: `${image}`,
+        alt: `Preview image for ${post?.title}`,
+      },
+    },
+  };
+}
 
 export default async function BlogPostPage({ params }: { params: Params }) {
   const { slug } = await params;
