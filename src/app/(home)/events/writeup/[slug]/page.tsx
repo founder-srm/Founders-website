@@ -9,6 +9,7 @@ import Link from 'next/link';
 import { format } from 'date-fns';
 import { AlignLeft, Calendar, ArrowLeft } from 'lucide-react';
 import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 
 const Header1 = ({ children }: PortableTextComponentProps<PortableTextBlock>) => (
@@ -180,6 +181,30 @@ export default async function EventPage({ params }: { params: Params }) {
           </div>
 
           <div className="sticky top-8 hidden h-fit space-y-3 lg:block">
+          {event.author && (
+              <div className="p-6 rounded-lg">
+                <h3 className="mb-4 font-semibold">Written by</h3>
+                <div className="flex items-center gap-2 md:gap-4">
+                  <Avatar className="size-10">
+                    <AvatarImage
+                      src={urlFor(event.author.image || '').url()}
+                    />
+                    <AvatarFallback>{event.author.name?.charAt(0)}</AvatarFallback>
+                  </Avatar>
+                  <div className="text-left">
+                    <p className="text-sm font-medium md:text-base">
+                      {event.author.name}
+                    </p>
+                    {event.author.title && (
+                      <p className="text-sm text-muted-foreground md:text-base">
+                        {event.author.title}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+
             <div className="p-6">
               <h3 className="mb-4 font-semibold">Event Details</h3>
               <div className="space-y-4">
