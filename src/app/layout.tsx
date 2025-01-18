@@ -23,11 +23,26 @@ export const metadata: Metadata = {
   description: 'A community of founders building the future',
   openGraph: {
     title: 'Founders Club',
+    images: [
+      {
+        url: '/fc-logo.png',
+        width: 1057,
+        height: 503,
+        alt: 'Founders Club Logo'
+      }
+    ],
     description: 'A community of founders building the future',
     url: config.baseUrl,
     siteName: 'Founders Club',
     locale: 'en_US',
     type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Founders Club',
+    description: 'A community of founders building the future',
+    images: ['/fc-logo.png', '/FC-logo-short.png'],
+    creator: '@foundersclubsrm',
   },
   robots: {
     index: true,
