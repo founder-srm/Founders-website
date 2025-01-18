@@ -280,7 +280,7 @@ const Navbar1 = () => {
                   variant: 'ghost',
                 })
               )}
-              href="/dashboard/upcoming"
+              href="/upcoming"
             >
               Upcoming
             </Link>
@@ -426,7 +426,7 @@ const Navbar1 = () => {
                     </AccordionContent>
                   </AccordionItem>
                 </Accordion>
-                <Link href="/dashboard/upcoming" className="font-semibold">
+                <Link href="/upcoming" className="font-semibold">
                   Upcoming
                 </Link>
                 <Link href="/contact-us" className="font-semibold">

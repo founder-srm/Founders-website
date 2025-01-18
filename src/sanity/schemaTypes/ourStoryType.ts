@@ -49,10 +49,14 @@ export const ourStoryType = defineType({
           title: 'Image 1',
           options: {
             hotspot: true,
-            aiAssist: {
-              imageDescriptionField: 'altText',
-            },
           },
+          fields: [
+            {
+              name: 'alt',
+              type: 'string',
+              title: 'Alternative Text',
+            }
+          ]
         },
         {
           name: 'image2',
@@ -60,10 +64,14 @@ export const ourStoryType = defineType({
           title: 'Image 2',
           options: {
             hotspot: true,
-            aiAssist: {
-              imageDescriptionField: 'altText',
-            },
           },
+          fields: [
+            {
+              name: 'alt',
+              type: 'string',
+              title: 'Alternative Text',
+            }
+          ]
         },
         {
           name: 'image3',
@@ -71,10 +79,14 @@ export const ourStoryType = defineType({
           title: 'Image 3',
           options: {
             hotspot: true,
-            aiAssist: {
-              imageDescriptionField: 'altText',
-            },
           },
+          fields: [
+            {
+              name: 'alt',
+              type: 'string',
+              title: 'Alternative Text',
+            }
+          ]
         },
         {
           name: 'image4',
@@ -82,10 +94,14 @@ export const ourStoryType = defineType({
           title: 'Image 4',
           options: {
             hotspot: true,
-            aiAssist: {
-              imageDescriptionField: 'altText',
-            },
           },
+          fields: [
+            {
+              name: 'alt',
+              type: 'string',
+              title: 'Alternative Text',
+            }
+          ]
         },
         {
           name: 'image5',
@@ -93,10 +109,14 @@ export const ourStoryType = defineType({
           title: 'Image 5',
           options: {
             hotspot: true,
-            aiAssist: {
-              imageDescriptionField: 'altText',
-            },
           },
+          fields: [
+            {
+              name: 'alt',
+              type: 'string',
+              title: 'Alternative Text',
+            }
+          ]
         },
         {
           name: 'image6',
@@ -104,10 +124,14 @@ export const ourStoryType = defineType({
           title: 'Image 6',
           options: {
             hotspot: true,
-            aiAssist: {
-              imageDescriptionField: 'altText',
-            },
           },
+          fields: [
+            {
+              name: 'alt',
+              type: 'string',
+              title: 'Alternative Text',
+            }
+          ]
         },
       ],
     }),

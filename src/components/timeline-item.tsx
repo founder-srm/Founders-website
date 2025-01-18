@@ -2,11 +2,20 @@
 
 import { motion } from 'framer-motion';
 import Image from 'next/image';
+import { urlFor } from '@/sanity/lib/image';
+import type { SanityImageSource } from '@sanity/image-url/lib/types/types';
+import type { SanityImageCrop, SanityImageHotspot } from '../../sanity.types';
 
 interface TimelineItemProps {
-  title: string;
-  description: string;
-  image: string;
+  title: string | null;
+  description: string | null;
+  image: {
+    asset?: SanityImageSource;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+  } | null;
 }
 
 export default function TimelineItem({
@@ -14,6 +23,10 @@ export default function TimelineItem({
   description,
   image,
 }: TimelineItemProps) {
+  if (!image?.asset) {
+    return null;
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 50 }}
@@ -23,8 +36,8 @@ export default function TimelineItem({
       className="rounded-xl border p-2"
     >
       <Image
-        src={image}
-        alt={title}
+        src={urlFor(image.asset).url()}
+        alt={image.alt || title || 'Timeline image'}
         width={600}
         height={400}
         className="aspect-video w-full rounded-xl border border-dashed object-cover"

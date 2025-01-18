@@ -151,3 +151,21 @@ export const OUR_STORY_QUERY = defineQuery(`*[_type == "ourStory"][0]{
   workplaceSecondaryContent,
   images
 }`);
+
+export const TIMELINE_QUERY = defineQuery(`*[_type == "timeline"][0]{
+  _id,
+  _createdAt,
+  title,
+  subtitle,
+  description,
+  buttonText,
+  buttonLink,
+  secondaryButtonText,
+  secondaryButtonLink,
+  showSecondaryButton,
+  items[]{
+    title,
+    description,
+    image
+  }
+}`);

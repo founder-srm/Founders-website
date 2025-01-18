@@ -94,6 +94,15 @@ export const structure: StructureResolver = S =>
                     ])
                 ),
               S.listItem()
+                .title('Timeline Section')
+                .child(
+                  S.list()
+                    .title('Timeline')
+                    .items([
+                      S.documentTypeListItem('timeline').title('Timeline'),
+                    ])
+                ),
+              S.listItem()
                 .title('Careers Section')
                 .child(
                   S.list()
