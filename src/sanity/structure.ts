@@ -125,13 +125,17 @@ export const structure: StructureResolver = S =>
         .child(
           S.list()
             .title('Events Page')
-            .items([S.documentTypeListItem('event').title('Events & Webinars')])
+            .items([S.documentTypeListItem('event').title('Event Writeups')])
         ),
-      S.listItem().title('Upcoming Events Page').child(
-        S.list().title('Upcoming Events Page').items([
-          // Empty sections to be filled later
-        ])
-      ),
+      S.listItem()
+        .title('Upcoming Events Page')
+        .child(
+          S.list().title('Upcoming Events Page').items([
+            S.documentTypeListItem('upcomingEventsHeader').title(
+              'Upcoming Events Header'
+            ),
+          ])
+        ),
       S.listItem().title('Contact Us Page').child(
         S.list().title('Contact Us Page').items([
           // Empty sections to be filled later

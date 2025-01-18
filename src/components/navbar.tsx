@@ -42,6 +42,7 @@ import { usePresence } from '@/hooks/usePresence';
 import useAdmin from '@/hooks/use-admin';
 import { AdminUserIcon } from './custom-icons/custom-icons';
 import { LineShadowText } from './ui/line-shadow-text';
+import SparklesText from './ui/sparkles-text';
 // import { useTheme } from 'next-themes';
 
 function AvatarButton({
@@ -294,7 +295,7 @@ const Navbar1 = () => {
               )}
               href="/upcoming"
             >
-              Upcoming
+              <SparklesText text="Upcoming" />
             </Link>
             <Link
               className={cn(
@@ -439,7 +440,7 @@ const Navbar1 = () => {
                   </AccordionItem>
                 </Accordion>
                 <Link href="/upcoming" className="font-semibold">
-                  Upcoming
+                  <SparklesText text="Upcoming" />
                 </Link>
                 <Link href="/contact-us" className="font-semibold">
                   Blog

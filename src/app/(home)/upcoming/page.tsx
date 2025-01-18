@@ -1,6 +1,6 @@
 import { FeaturedPost } from '@/components/upcoming-featured';
 import { UpcomingGrid } from '@/components/upcoming-grid';
-import { BlogHeader } from '@/components/upcoming-header';
+import { EventsHeader } from '@/components/upcoming-header';
 import { TabNavigation } from '@/components/upcoming-nav';
 import { Pagination } from '@/components/upcoming-pagination';
 import type { Metadata, ResolvingMetadata } from 'next';
@@ -84,7 +84,7 @@ export default async function Upcoming() {
   return (
     <main className=" flex flex-col items-center w-full min-h-screen">
       <div className="container py-32">
-        <BlogHeader />
+        <EventsHeader />
         <FeaturedPost event={featuredEvent} />
         <TabNavigation />
         <UpcomingGrid events={events.slice(1)} />

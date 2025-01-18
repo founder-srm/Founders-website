@@ -101,6 +101,17 @@ export type Timeline = {
   }>;
 };
 
+export type UpcomingEventsHeader = {
+  _id: string;
+  _type: "upcomingEventsHeader";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  badge?: string;
+  title?: string;
+  description?: string;
+};
+
 export type OurStory = {
   _id: string;
   _type: "ourStory";
@@ -760,7 +771,7 @@ export type SanityAssistSchemaTypeField = {
   } & SanityAssistInstruction>;
 };
 
-export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityFileAsset | Geopoint | Timeline | OurStory | AboutUsCta | AboutValues | AboutUsHero | Testimonial | Event | HeroComponent | Cta | Faq | Feature | JobCategory | Post | Author | Category | BlockContent | SanityImageCrop | SanityImageHotspot | SanityImageAsset | SanityAssetSourceData | SanityImageMetadata | MediaTag | Slug | SanityAssistInstructionTask | SanityAssistTaskStatus | SanityAssistSchemaTypeAnnotations | SanityAssistOutputType | SanityAssistOutputField | SanityAssistInstructionContext | AssistInstructionContext | SanityAssistInstructionUserInput | SanityAssistInstructionPrompt | SanityAssistInstructionFieldRef | SanityAssistInstruction | SanityAssistSchemaTypeField;
+export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityFileAsset | Geopoint | Timeline | UpcomingEventsHeader | OurStory | AboutUsCta | AboutValues | AboutUsHero | Testimonial | Event | HeroComponent | Cta | Faq | Feature | JobCategory | Post | Author | Category | BlockContent | SanityImageCrop | SanityImageHotspot | SanityImageAsset | SanityAssetSourceData | SanityImageMetadata | MediaTag | Slug | SanityAssistInstructionTask | SanityAssistTaskStatus | SanityAssistSchemaTypeAnnotations | SanityAssistOutputType | SanityAssistOutputField | SanityAssistInstructionContext | AssistInstructionContext | SanityAssistInstructionUserInput | SanityAssistInstructionPrompt | SanityAssistInstructionFieldRef | SanityAssistInstruction | SanityAssistSchemaTypeField;
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ./src/sanity/lib/queries.ts
 // Variable: ABOUT_HERO_QUERY
@@ -790,6 +801,15 @@ export type ABOUT_HERO_QUERYResult = {
   aboutUsCtaComponent: Array<{
     _key: string;
   } & AboutUsCta> | null;
+} | null;
+// Variable: UPCOMING_HEADER_QUERY
+// Query: *[_type == "upcomingEventsHeader"][0]{  _id,  _createdAt,  badge,  title,  description}
+export type UPCOMING_HEADER_QUERYResult = {
+  _id: string;
+  _createdAt: string;
+  badge: string | null;
+  title: string | null;
+  description: string | null;
 } | null;
 // Variable: CTA_QUERY
 // Query: *[_type == "cta"]{  _id,  _createdAt,  title,  description,  primaryButtonText,  primaryButtonLink,  secondaryButtonText,  secondaryButtonLink,  variant,  activateSecondaryButton,  showCTA}
@@ -1308,6 +1328,7 @@ import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
     "*[_type == \"aboutUsHero\"][0]{\n  _id,\n  _createdAt,\n  title,\n  subTitle,\n  bannerImage,\n  ourMission,\n  secondaryHeading,\n  secondarySubHeading,\n  ourValues,\n  aboutUsCtaComponent\n}": ABOUT_HERO_QUERYResult;
+    "*[_type == \"upcomingEventsHeader\"][0]{\n  _id,\n  _createdAt,\n  badge,\n  title,\n  description\n}": UPCOMING_HEADER_QUERYResult;
     "*[_type == \"cta\"]{\n  _id,\n  _createdAt,\n  title,\n  description,\n  primaryButtonText,\n  primaryButtonLink,\n  secondaryButtonText,\n  secondaryButtonLink,\n  variant,\n  activateSecondaryButton,\n  showCTA\n}": CTA_QUERYResult;
     "*[_type == \"testimonial\"]{\n  _id,\n  _createdAt,\n  quote,\n  author->{\n    name,\n    title,\n    slug,\n    image,\n    bio\n  },\n  published\n}": TESTIMONIALS_QUERYResult;
     "*[_type == \"jobCategory\"]{\n  _id,\n  _createdAt,\n  category,\n  openings[]{\n    title,\n    location,\n    link\n  }\n}": JOBS_QUERYResult;
