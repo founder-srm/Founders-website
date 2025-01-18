@@ -35,10 +35,19 @@ export const structure: StructureResolver = S =>
                     ])
                 ),
               S.listItem()
+                .title('Testimonials Section')
+                .child(
+                  S.list()
+                    .title('Testimonials')
+                    .items([
+                      S.documentTypeListItem('testimonial').title('Testimonial'),
+                    ])
+                ),
+              S.listItem()
                 .title('Help Section')
                 .child(
                   S.list()
-                    .title('Help')
+                    .title('Frequency Asked Questions')
                     .items([S.documentTypeListItem('faq').title('FAQs')])
                 ),
               S.listItem()
@@ -103,6 +112,16 @@ export const structure: StructureResolver = S =>
           // Empty sections to be filled later
         ])
       ),
+      S.divider(),
+      S.listItem()
+        .title('Authors')
+        .child(
+          S.list()
+            .title('Author Details')
+            .items([
+              S.documentTypeListItem('author').title('Authors')
+            ])
+        ),
       S.divider(),
       S.documentTypeListItem(contextDocumentTypeName),
     ]);

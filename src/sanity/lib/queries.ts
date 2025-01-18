@@ -27,6 +27,20 @@ export const CTA_QUERY = defineQuery(`*[_type == "cta"]{
   showCTA
 }`);
 
+export const TESTIMONIALS_QUERY = defineQuery(`*[_type == "testimonial"]{
+  _id,
+  _createdAt,
+  quote,
+  author->{
+    name,
+    title,
+    slug,
+    image,
+    bio
+  },
+  published
+}`);
+
 export const JOBS_QUERY = defineQuery(`*[_type == "jobCategory"]{
   _id,
   _createdAt,
@@ -62,7 +76,13 @@ export const EVENTS_QUERY =
   summary,
   image,
   label,
-  author,
+  author->{
+    name,
+    title,
+    slug,
+    image,
+    bio
+  },
   published,
   href,
   "slug": slug.current
@@ -76,7 +96,13 @@ export const ALL_EVENTS_QUERY = defineQuery(`*[_type == "event"] {
   "slug": slug.current,
   image,
   label,
-  author,
+  author->{
+    name,
+    title,
+    slug,
+    image,
+    bio
+  },
   published,
   href
 }`);
@@ -91,7 +117,11 @@ export const EVENT_BY_SLUG_QUERY =
   "slug": slug.current,
   image,
   label,
-  author,
+  author->{
+    name,
+    title,
+    image
+  },
   published,
   href
 }`);

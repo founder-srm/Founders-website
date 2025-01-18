@@ -122,6 +122,22 @@ export type AboutUsHero = {
   } & AboutUsCta>;
 };
 
+export type Testimonial = {
+  _id: string;
+  _type: "testimonial";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  quote?: string;
+  author?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "author";
+  };
+  published?: string;
+};
+
 export type Event = {
   _id: string;
   _type: "event";
@@ -355,6 +371,7 @@ export type Author = {
   _updatedAt: string;
   _rev: string;
   name?: string;
+  title?: string;
   slug?: Slug;
   image?: {
     asset?: {
@@ -396,12 +413,6 @@ export type Category = {
   title?: string;
   slug?: Slug;
   description?: string;
-};
-
-export type Slug = {
-  _type: "slug";
-  current?: string;
-  source?: string;
 };
 
 export type BlockContent = Array<{
@@ -492,7 +503,143 @@ export type SanityImageMetadata = {
   isOpaque?: boolean;
 };
 
-export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityFileAsset | Geopoint | AboutUsCta | AboutValues | AboutUsHero | Event | HeroComponent | Cta | Faq | Feature | JobCategory | Post | Author | Category | Slug | BlockContent | SanityImageCrop | SanityImageHotspot | SanityImageAsset | SanityAssetSourceData | SanityImageMetadata;
+export type MediaTag = {
+  _id: string;
+  _type: "media.tag";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name?: Slug;
+};
+
+export type Slug = {
+  _type: "slug";
+  current?: string;
+  source?: string;
+};
+
+export type SanityAssistInstructionTask = {
+  _type: "sanity.assist.instructionTask";
+  path?: string;
+  instructionKey?: string;
+  started?: string;
+  updated?: string;
+  info?: string;
+};
+
+export type SanityAssistTaskStatus = {
+  _type: "sanity.assist.task.status";
+  tasks?: Array<{
+    _key: string;
+  } & SanityAssistInstructionTask>;
+};
+
+export type SanityAssistSchemaTypeAnnotations = {
+  _type: "sanity.assist.schemaType.annotations";
+  title?: string;
+  fields?: Array<{
+    _key: string;
+  } & SanityAssistSchemaTypeField>;
+};
+
+export type SanityAssistOutputType = {
+  _type: "sanity.assist.output.type";
+  type?: string;
+};
+
+export type SanityAssistOutputField = {
+  _type: "sanity.assist.output.field";
+  path?: string;
+};
+
+export type SanityAssistInstructionContext = {
+  _type: "sanity.assist.instruction.context";
+  reference?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "assist.instruction.context";
+  };
+};
+
+export type AssistInstructionContext = {
+  _id: string;
+  _type: "assist.instruction.context";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  context?: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "normal";
+    listItem?: never;
+    markDefs?: null;
+    level?: number;
+    _type: "block";
+    _key: string;
+  }>;
+};
+
+export type SanityAssistInstructionUserInput = {
+  _type: "sanity.assist.instruction.userInput";
+  message?: string;
+  description?: string;
+};
+
+export type SanityAssistInstructionPrompt = Array<{
+  children?: Array<{
+    marks?: Array<string>;
+    text?: string;
+    _type: "span";
+    _key: string;
+  } | {
+    _key: string;
+  } & SanityAssistInstructionFieldRef | {
+    _key: string;
+  } & SanityAssistInstructionContext | {
+    _key: string;
+  } & SanityAssistInstructionUserInput>;
+  style?: "normal";
+  listItem?: never;
+  markDefs?: null;
+  level?: number;
+  _type: "block";
+  _key: string;
+}>;
+
+export type SanityAssistInstructionFieldRef = {
+  _type: "sanity.assist.instruction.fieldRef";
+  path?: string;
+};
+
+export type SanityAssistInstruction = {
+  _type: "sanity.assist.instruction";
+  prompt?: SanityAssistInstructionPrompt;
+  icon?: string;
+  title?: string;
+  userId?: string;
+  createdById?: string;
+  output?: Array<{
+    _key: string;
+  } & SanityAssistOutputField | {
+    _key: string;
+  } & SanityAssistOutputType>;
+};
+
+export type SanityAssistSchemaTypeField = {
+  _type: "sanity.assist.schemaType.field";
+  path?: string;
+  instructions?: Array<{
+    _key: string;
+  } & SanityAssistInstruction>;
+};
+
+export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityFileAsset | Geopoint | AboutUsCta | AboutValues | AboutUsHero | Testimonial | Event | HeroComponent | Cta | Faq | Feature | JobCategory | Post | Author | Category | BlockContent | SanityImageCrop | SanityImageHotspot | SanityImageAsset | SanityAssetSourceData | SanityImageMetadata | MediaTag | Slug | SanityAssistInstructionTask | SanityAssistTaskStatus | SanityAssistSchemaTypeAnnotations | SanityAssistOutputType | SanityAssistOutputField | SanityAssistInstructionContext | AssistInstructionContext | SanityAssistInstructionUserInput | SanityAssistInstructionPrompt | SanityAssistInstructionFieldRef | SanityAssistInstruction | SanityAssistSchemaTypeField;
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ./src/sanity/lib/queries.ts
 // Variable: ABOUT_HERO_QUERY
@@ -538,6 +685,48 @@ export type CTA_QUERYResult = Array<{
   activateSecondaryButton: boolean | null;
   showCTA: boolean | null;
 }>;
+// Variable: TESTIMONIALS_QUERY
+// Query: *[_type == "testimonial"]{  _id,  _createdAt,  quote,  author->{    name,    title,    slug,    image,    bio  },  published}
+export type TESTIMONIALS_QUERYResult = Array<{
+  _id: string;
+  _createdAt: string;
+  quote: string | null;
+  author: {
+    name: string | null;
+    title: string | null;
+    slug: Slug | null;
+    image: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: "image";
+    } | null;
+    bio: Array<{
+      children?: Array<{
+        marks?: Array<string>;
+        text?: string;
+        _type: "span";
+        _key: string;
+      }>;
+      style?: "normal";
+      listItem?: never;
+      markDefs?: Array<{
+        href?: string;
+        _type: "link";
+        _key: string;
+      }>;
+      level?: number;
+      _type: "block";
+      _key: string;
+    }> | null;
+  } | null;
+  published: string | null;
+}>;
 // Variable: JOBS_QUERY
 // Query: *[_type == "jobCategory"]{  _id,  _createdAt,  category,  openings[]{    title,    location,    link  }}
 export type JOBS_QUERYResult = Array<{
@@ -568,7 +757,7 @@ export type FAQS_QUERYResult = Array<{
   answer: string | null;
 }>;
 // Variable: EVENTS_QUERY
-// Query: *[_type == "event"] | order(published desc)[0...3]{  _id,  _createdAt,  id,  title,  summary,  image,  label,  author,  published,  href,  "slug": slug.current}
+// Query: *[_type == "event"] | order(published desc)[0...3]{  _id,  _createdAt,  id,  title,  summary,  image,  label,  author->{    name,    title,    slug,    image,    bio  },  published,  href,  "slug": slug.current}
 export type EVENTS_QUERYResult = Array<{
   _id: string;
   _createdAt: string;
@@ -588,17 +777,45 @@ export type EVENTS_QUERYResult = Array<{
   } | null;
   label: string | null;
   author: {
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    [internalGroqTypeReferenceTo]?: "author";
+    name: string | null;
+    title: string | null;
+    slug: Slug | null;
+    image: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: "image";
+    } | null;
+    bio: Array<{
+      children?: Array<{
+        marks?: Array<string>;
+        text?: string;
+        _type: "span";
+        _key: string;
+      }>;
+      style?: "normal";
+      listItem?: never;
+      markDefs?: Array<{
+        href?: string;
+        _type: "link";
+        _key: string;
+      }>;
+      level?: number;
+      _type: "block";
+      _key: string;
+    }> | null;
   } | null;
   published: string | null;
   href: string | null;
   slug: string | null;
 }>;
 // Variable: ALL_EVENTS_QUERY
-// Query: *[_type == "event"] {  _id,  _createdAt,  title,  summary,  "slug": slug.current,  image,  label,  author,  published,  href}
+// Query: *[_type == "event"] {  _id,  _createdAt,  title,  summary,  "slug": slug.current,  image,  label,  author->{    name,    title,    slug,    image,    bio  },  published,  href}
 export type ALL_EVENTS_QUERYResult = Array<{
   _id: string;
   _createdAt: string;
@@ -618,16 +835,44 @@ export type ALL_EVENTS_QUERYResult = Array<{
   } | null;
   label: string | null;
   author: {
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    [internalGroqTypeReferenceTo]?: "author";
+    name: string | null;
+    title: string | null;
+    slug: Slug | null;
+    image: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: "image";
+    } | null;
+    bio: Array<{
+      children?: Array<{
+        marks?: Array<string>;
+        text?: string;
+        _type: "span";
+        _key: string;
+      }>;
+      style?: "normal";
+      listItem?: never;
+      markDefs?: Array<{
+        href?: string;
+        _type: "link";
+        _key: string;
+      }>;
+      level?: number;
+      _type: "block";
+      _key: string;
+    }> | null;
   } | null;
   published: string | null;
   href: string | null;
 }>;
 // Variable: EVENT_BY_SLUG_QUERY
-// Query: *[_type == "event" && slug.current == $slug][0] {  _id,  _createdAt,  title,  summary,  content,  "slug": slug.current,  image,  label,  author,  published,  href}
+// Query: *[_type == "event" && slug.current == $slug][0] {  _id,  _createdAt,  title,  summary,  content,  "slug": slug.current,  image,  label,  author->{    name,    title,    image  },  published,  href}
 export type EVENT_BY_SLUG_QUERYResult = {
   _id: string;
   _createdAt: string;
@@ -665,10 +910,19 @@ export type EVENT_BY_SLUG_QUERYResult = {
   } | null;
   label: string | null;
   author: {
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    [internalGroqTypeReferenceTo]?: "author";
+    name: string | null;
+    title: string | null;
+    image: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: "image";
+    } | null;
   } | null;
   published: string | null;
   href: string | null;
@@ -818,12 +1072,13 @@ declare module "@sanity/client" {
   interface SanityQueries {
     "*[_type == \"aboutUsHero\"][0]{\n  _id,\n  _createdAt,\n  title,\n  subTitle,\n  bannerImage,\n  ourMission,\n  secondaryHeading,\n  secondarySubHeading,\n  ourValues,\n  aboutUsCtaComponent\n}": ABOUT_HERO_QUERYResult;
     "*[_type == \"cta\"]{\n  _id,\n  _createdAt,\n  title,\n  description,\n  primaryButtonText,\n  primaryButtonLink,\n  secondaryButtonText,\n  secondaryButtonLink,\n  variant,\n  activateSecondaryButton,\n  showCTA\n}": CTA_QUERYResult;
+    "*[_type == \"testimonial\"]{\n  _id,\n  _createdAt,\n  quote,\n  author->{\n    name,\n    title,\n    slug,\n    image,\n    bio\n  },\n  published\n}": TESTIMONIALS_QUERYResult;
     "*[_type == \"jobCategory\"]{\n  _id,\n  _createdAt,\n  category,\n  openings[]{\n    title,\n    location,\n    link\n  }\n}": JOBS_QUERYResult;
     "*[_type == \"feature\"]{\n  _id,\n  _createdAt,\n  title,\n  description,\n  icon\n}": FEATURES_QUERYResult;
     "*[_type == \"faq\"]{\n  _id,\n  _createdAt,\n  question,\n  answer\n}": FAQS_QUERYResult;
-    "*[_type == \"event\"] | order(published desc)[0...3]{\n  _id,\n  _createdAt,\n  id,\n  title,\n  summary,\n  image,\n  label,\n  author,\n  published,\n  href,\n  \"slug\": slug.current\n}": EVENTS_QUERYResult;
-    "*[_type == \"event\"] {\n  _id,\n  _createdAt,\n  title,\n  summary,\n  \"slug\": slug.current,\n  image,\n  label,\n  author,\n  published,\n  href\n}": ALL_EVENTS_QUERYResult;
-    "*[_type == \"event\" && slug.current == $slug][0] {\n  _id,\n  _createdAt,\n  title,\n  summary,\n  content,\n  \"slug\": slug.current,\n  image,\n  label,\n  author,\n  published,\n  href\n}": EVENT_BY_SLUG_QUERYResult;
+    "*[_type == \"event\"] | order(published desc)[0...3]{\n  _id,\n  _createdAt,\n  id,\n  title,\n  summary,\n  image,\n  label,\n  author->{\n    name,\n    title,\n    slug,\n    image,\n    bio\n  },\n  published,\n  href,\n  \"slug\": slug.current\n}": EVENTS_QUERYResult;
+    "*[_type == \"event\"] {\n  _id,\n  _createdAt,\n  title,\n  summary,\n  \"slug\": slug.current,\n  image,\n  label,\n  author->{\n    name,\n    title,\n    slug,\n    image,\n    bio\n  },\n  published,\n  href\n}": ALL_EVENTS_QUERYResult;
+    "*[_type == \"event\" && slug.current == $slug][0] {\n  _id,\n  _createdAt,\n  title,\n  summary,\n  content,\n  \"slug\": slug.current,\n  image,\n  label,\n  author->{\n    name,\n    title,\n    image\n  },\n  published,\n  href\n}": EVENT_BY_SLUG_QUERYResult;
     "*[_type == \"heroComponent\"][0]{\n    _id,\n    _createdAt,\n    title,\n    subtitle,\n    buttonText,\n    buttonLink,\n    showButton,\n    image1,\n    image2,\n    image3,\n    image4\n}": HERO_QUERYResult;
     "*[_type == \"cta\"]{\n    _id,\n    _createdAt,\n    title,\n    description,\n    primaryButtonText,\n    primaryButtonLink,\n    secondaryButtonText,\n    secondaryButtonLink,\n    variant,\n    activateSecondaryButton,\n    showCTA\n}": CtaQueryResult;
     "*[_type == \"event\"]{\n    _id,\n    _createdAt,\n    id,\n    title,\n    summary,\n    image,\n    label,\n    author,\n    published,\n    href\n}": EventsQueryResult;

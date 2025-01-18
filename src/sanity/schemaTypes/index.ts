@@ -15,6 +15,7 @@ import {
   aboutUsHeroType,
   aboutValuesType,
 } from './aboutUsHeroType';
+import { testimonialType } from './testimonialType';
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -28,6 +29,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     ctaType,
     heroComponentType,
     eventType,
+    testimonialType,
     aboutUsHeroType,
     aboutValuesType,
     aboutUsCtaType,
