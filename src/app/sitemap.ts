@@ -30,6 +30,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date().toISOString(),
     },
     {
+      url: `${baseUrl}/upcoming`,
+      priority: 0.8,
+      lastModified: new Date().toISOString(),
+    },
+    {
       url: `${baseUrl}/contact-us`,
       priority: 0.8,
       lastModified: new Date().toISOString(),
