@@ -25,9 +25,12 @@ async function getEvents() {
   return events as eventsInsertType[];
 }
 
+type Params = Promise<{ slug: string }>;
 
 export async function generateMetadata(
-  parent: ResolvingMetadata
+    // biome-ignore lint/correctness/noEmptyPattern: no need to use the params
+    { }: { params: Params },
+    parent: ResolvingMetadata
 ): Promise<Metadata> {
   const events = await getEvents();
   const featuredEvent = events[0];
