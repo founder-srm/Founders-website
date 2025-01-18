@@ -28,8 +28,8 @@ export const metadata: Metadata = {
         url: '/fc-logo.png',
         width: 1057,
         height: 503,
-        alt: 'Founders Club Logo'
-      }
+        alt: 'Founders Club Logo',
+      },
     ],
     description: 'A community of founders building the future',
     url: config.baseUrl,
@@ -44,6 +44,48 @@ export const metadata: Metadata = {
     images: ['/fc-logo.png', '/FC-logo-short.png'],
     creator: '@foundersclubsrm',
   },
+  creator: 'Founders Club',
+  applicationName: 'Founders Club',
+  authors: [
+    {
+      name: 'Founders Club',
+      url: config.baseUrl,
+    },
+    {
+      name: 'Suvan GS',
+      url: 'https://www.suvangs.tech',
+    },
+    {
+      name: 'Suvan Gowri Shanker',
+      url: 'https://www.suvangs.tech',
+    },
+  ],
+  category: 'Business',
+  classification: 'Business',
+  publisher: 'Founders Club',
+  keywords: [
+    'founders',
+    'club',
+    'community',
+    'startups',
+    'entrepreneurs',
+    'DEI',
+    'founders club',
+    'entrepreneurship',
+    'Directorate of Entrepreneurship and Innovation',
+    'SRM Institute of Science and Technology',
+    'SRMIST',
+    'SRM',
+    'SRM University',
+    'SRMIST Chennai',
+    'SRM Chennai',
+    'SRM Kattankulathur',
+    'SRMIST Kattankulathur',
+    'SRMIST Ramapuram',
+    'Student Entrepreneurship',
+    'Student Innovation',
+    'Student Startups',
+  ],
   robots: {
     index: true,
     follow: true,
@@ -53,8 +95,8 @@ export const metadata: Metadata = {
       'max-video-preview': -1,
       'max-image-preview': 'large',
       'max-snippet': -1,
-    }
-  }
+    },
+  },
 };
 
 export default function RootLayout({
