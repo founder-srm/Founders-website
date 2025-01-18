@@ -55,8 +55,8 @@ export const ourStoryType = defineType({
               name: 'alt',
               type: 'string',
               title: 'Alternative Text',
-            }
-          ]
+            },
+          ],
         },
         {
           name: 'image2',
@@ -70,8 +70,8 @@ export const ourStoryType = defineType({
               name: 'alt',
               type: 'string',
               title: 'Alternative Text',
-            }
-          ]
+            },
+          ],
         },
         {
           name: 'image3',
@@ -85,8 +85,8 @@ export const ourStoryType = defineType({
               name: 'alt',
               type: 'string',
               title: 'Alternative Text',
-            }
-          ]
+            },
+          ],
         },
         {
           name: 'image4',
@@ -100,8 +100,8 @@ export const ourStoryType = defineType({
               name: 'alt',
               type: 'string',
               title: 'Alternative Text',
-            }
-          ]
+            },
+          ],
         },
         {
           name: 'image5',
@@ -115,8 +115,8 @@ export const ourStoryType = defineType({
               name: 'alt',
               type: 'string',
               title: 'Alternative Text',
-            }
-          ]
+            },
+          ],
         },
         {
           name: 'image6',
@@ -130,8 +130,8 @@ export const ourStoryType = defineType({
               name: 'alt',
               type: 'string',
               title: 'Alternative Text',
-            }
-          ]
+            },
+          ],
         },
       ],
     }),

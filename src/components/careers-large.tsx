@@ -1,5 +1,5 @@
-import Link from 'next/link'
-import { MapPin, ArrowRight } from 'lucide-react'
+import Link from 'next/link';
+import { MapPin, ArrowRight } from 'lucide-react';
 import { JOBS_QUERY } from '@/sanity/lib/queries';
 import { sanityFetch } from '@/sanity/lib/live';
 
@@ -13,11 +13,13 @@ export default async function CareersLarge() {
       <div className="container px-1">
         <div className="border-x border-dashed">
           <div className="relative flex flex-col gap-6 border-b border-dashed px-4 pb-10 pt-10 sm:items-center md:pb-20">
-            <div className="absolute inset-0 -z-10 h-full w-full bg-[linear-gradient(to_right,hsl(var(--muted))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--muted))_1px,transparent_1px)] bg-[size:64px_64px] [mask-image:radial-gradient(ellipse_50%_100%_at_50%_50%,transparent_60%,#000_100%)]"/>
+            <div className="absolute inset-0 -z-10 h-full w-full bg-[linear-gradient(to_right,hsl(var(--muted))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--muted))_1px,transparent_1px)] bg-[size:64px_64px] [mask-image:radial-gradient(ellipse_50%_100%_at_50%_50%,transparent_60%,#000_100%)]" />
             <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 text-foreground w-fit">
               Our Recruitments
             </div>
-            <h1 className="text-2xl font-bold md:text-4xl">Openings at Founders Club</h1>
+            <h1 className="text-2xl font-bold md:text-4xl">
+              Openings at Founders Club
+            </h1>
             <p className="text-muted-foreground">
               Don&apos;t see a role for you?
               <Link href="/contact-us" className="ml-1 underline">
@@ -26,11 +28,16 @@ export default async function CareersLarge() {
             </p>
           </div>
           <div>
-            {jobCategories?.map((jobCategory) => (
+            {jobCategories?.map(jobCategory => (
               <div key={jobCategory.category}>
-                <h2 className="px-6 pt-6 text-xl font-bold">{jobCategory.category}</h2>
-                {jobCategory.openings?.map((job) => (
-                  <div key={job.title} className="grid items-center gap-6 border-b border-dashed px-6 py-10 lg:grid-cols-4">
+                <h2 className="px-6 pt-6 text-xl font-bold">
+                  {jobCategory.category}
+                </h2>
+                {jobCategory.openings?.map(job => (
+                  <div
+                    key={job.title}
+                    className="grid items-center gap-6 border-b border-dashed px-6 py-10 lg:grid-cols-4"
+                  >
                     <h3 className="text-lg">{job.title}</h3>
                     <div className="col-span-2 flex flex-col gap-4 text-sm text-muted-foreground sm:flex-row sm:gap-8 lg:justify-center">
                       <div className="flex gap-2">
@@ -53,6 +60,5 @@ export default async function CareersLarge() {
         </div>
       </div>
     </section>
-  )
+  );
 }
-

@@ -14,7 +14,9 @@ export default async function Timeline() {
       <div className="container max-w-6xl">
         <div className="relative grid gap-16 md:grid-cols-2">
           <div className="top-40 h-fit md:sticky">
-            <p className="font-medium text-muted-foreground">{data?.subtitle}</p>
+            <p className="font-medium text-muted-foreground">
+              {data?.subtitle}
+            </p>
             <h2 className="mb-6 mt-4 text-4xl font-semibold md:text-5xl">
               {data?.title}
             </h2>

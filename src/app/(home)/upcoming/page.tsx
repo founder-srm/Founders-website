@@ -7,7 +7,6 @@ import type { Metadata, ResolvingMetadata } from 'next';
 import { createClient } from '@/utils/supabase/server';
 import type { eventsInsertType } from '../../../../schema.zod';
 
-
 async function getEvents() {
   const supabase = await createClient();
 
@@ -28,9 +27,9 @@ async function getEvents() {
 type Params = Promise<{ slug: string }>;
 
 export async function generateMetadata(
-    // biome-ignore lint/correctness/noEmptyPattern: no need to use the params
-    { }: { params: Params },
-    parent: ResolvingMetadata
+  // biome-ignore lint/correctness/noEmptyPattern: no need to use the params
+  {}: { params: Params },
+  parent: ResolvingMetadata
 ): Promise<Metadata> {
   const events = await getEvents();
   const featuredEvent = events[0];

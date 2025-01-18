@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     title: 'Founders Club',
     description: 'A community of founders building the future',
     images: [
-      `${config.baseUrl}/FC-logo2.jpeg`, 
+      `${config.baseUrl}/FC-logo2.jpeg`,
       `${config.baseUrl}/FC-logo1.png`,
     ],
     creator: '@foundersclubsrm',

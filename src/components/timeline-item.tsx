@@ -14,7 +14,7 @@ interface TimelineItemProps {
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
     alt?: string;
-    _type: "image";
+    _type: 'image';
   } | null;
 }
 

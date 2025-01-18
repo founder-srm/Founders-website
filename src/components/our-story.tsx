@@ -23,7 +23,7 @@ export default async function OurStory() {
             <div className="flex flex-col items-center justify-center gap-6 md:flex-row">
               <Image
                 src={urlFor(data?.images?.image1 || '').url()}
-                alt={data?.images?.image1?.alt || "About 1"}
+                alt={data?.images?.image1?.alt || 'About 1'}
                 width={1000}
                 height={1428}
                 loading="lazy"
@@ -32,7 +32,7 @@ export default async function OurStory() {
               <div className="flex w-full flex-col items-center justify-center gap-6 md:w-1/2">
                 <Image
                   src={urlFor(data?.images?.image2 || '').url()}
-                  alt={data?.images?.image2?.alt || "About 2"}
+                  alt={data?.images?.image2?.alt || 'About 2'}
                   width={2040}
                   height={1856}
                   loading="lazy"
@@ -40,7 +40,7 @@ export default async function OurStory() {
                 />
                 <Image
                   src={urlFor(data?.images?.image3 || '').url()}
-                  alt={data?.images?.image3?.alt || "About 3"}
+                  alt={data?.images?.image3?.alt || 'About 3'}
                   width={2040}
                   height={2912}
                   loading="lazy"
@@ -53,7 +53,7 @@ export default async function OurStory() {
             <div className="flex flex-col items-center justify-center gap-6 md:flex-row">
               <Image
                 src={urlFor(data?.images?.image4 || '').url()}
-                alt={data?.images?.image4?.alt || "About 4"}
+                alt={data?.images?.image4?.alt || 'About 4'}
                 width={2040}
                 height={2264}
                 loading="lazy"
@@ -62,7 +62,7 @@ export default async function OurStory() {
               <div className="flex w-full flex-col items-center justify-center gap-6 md:w-1/2">
                 <Image
                   src={urlFor(data?.images?.image5 || '').url()}
-                  alt={data?.images?.image5?.alt || "About 5"}
+                  alt={data?.images?.image5?.alt || 'About 5'}
                   width={2040}
                   height={2550}
                   loading="lazy"
@@ -70,7 +70,7 @@ export default async function OurStory() {
                 />
                 <Image
                   src={urlFor(data?.images?.image6 || '').url()}
-                  alt={data?.images?.image6?.alt || "About 6"}
+                  alt={data?.images?.image6?.alt || 'About 6'}
                   width={2040}
                   height={2264}
                   loading="lazy"

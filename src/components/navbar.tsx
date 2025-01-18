@@ -50,7 +50,7 @@ function AvatarButton({
   name,
 }: { Image: string | undefined; name: string }) {
   const isPresent = usePresence();
-  
+
   const getInitials = (name: string) => {
     if (!name || name === undefined) return '';
     return name
@@ -194,7 +194,10 @@ const Navbar1 = () => {
     <section className="py-4 w-full flex items-center justify-center ">
       <nav className="hidden justify-between lg:flex w-full container ">
         <div className="flex items-center gap-6">
-          <Link href={'/'} className="flex items-center gap-2 backdrop-blur-sm flex-nowrap text-balance leading-none tracking-tighter">
+          <Link
+            href={'/'}
+            className="flex items-center gap-2 backdrop-blur-sm flex-nowrap text-balance leading-none tracking-tighter"
+          >
             <Image
               src="/FC-logo-short.png"
               alt="logo"
@@ -203,10 +206,16 @@ const Navbar1 = () => {
               className="w-8 h-auto"
               priority
             />
-            <LineShadowText className="italic text-2xl font-bold" shadowColor={"gray"}>
+            <LineShadowText
+              className="italic text-2xl font-bold"
+              shadowColor={'gray'}
+            >
               Founders
             </LineShadowText>
-            <LineShadowText className="italic text-2xl font-bold" shadowColor={"gray"}>
+            <LineShadowText
+              className="italic text-2xl font-bold"
+              shadowColor={'gray'}
+            >
               Club
             </LineShadowText>
             {/* <span className="text-xl font-bold">Founders Club</span> */}

@@ -1,5 +1,5 @@
-import { sanityFetch } from "@/sanity/lib/live";
-import { UPCOMING_HEADER_QUERY } from "@/sanity/lib/queries";
+import { sanityFetch } from '@/sanity/lib/live';
+import { UPCOMING_HEADER_QUERY } from '@/sanity/lib/queries';
 
 export async function EventsHeader() {
   const { data } = await sanityFetch({ query: UPCOMING_HEADER_QUERY });

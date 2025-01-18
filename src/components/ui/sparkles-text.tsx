@@ -1,9 +1,14 @@
-"use client";
+'use client';
 
-import { type CSSProperties, type ReactElement, useEffect, useState } from "react";
-import { motion } from "motion/react";
+import {
+  type CSSProperties,
+  type ReactElement,
+  useEffect,
+  useState,
+} from 'react';
+import { motion } from 'motion/react';
 
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils';
 
 interface Sparkle {
   id: string;
@@ -62,7 +67,7 @@ interface SparklesTextProps {
 
 const SparklesText: React.FC<SparklesTextProps> = ({
   text,
-  colors = { first: "#9E7AFF", second: "#FE8BBB" },
+  colors = { first: '#9E7AFF', second: '#FE8BBB' },
   className,
   sparklesCount = 6,
   ...props
@@ -87,13 +92,13 @@ const SparklesText: React.FC<SparklesTextProps> = ({
     };
 
     const updateStars = () => {
-      setSparkles((currentSparkles) =>
-        currentSparkles.map((star) => {
+      setSparkles(currentSparkles =>
+        currentSparkles.map(star => {
           if (star.lifespan <= 0) {
             return generateStar();
           }
           return { ...star, lifespan: star.lifespan - 0.1 };
-        }),
+        })
       );
     };
 
@@ -105,17 +110,17 @@ const SparklesText: React.FC<SparklesTextProps> = ({
 
   return (
     <div
-      className={cn("text-sm font-medium", className)}
+      className={cn('text-sm font-medium', className)}
       {...props}
       style={
         {
-          "--sparkles-first-color": `${colors.first}`,
-          "--sparkles-second-color": `${colors.second}`,
+          '--sparkles-first-color': `${colors.first}`,
+          '--sparkles-second-color': `${colors.second}`,
         } as CSSProperties
       }
     >
       <span className="relative inline-block">
-        {sparkles.map((sparkle) => (
+        {sparkles.map(sparkle => (
           <Sparkle key={sparkle.id} {...sparkle} />
         ))}
         {text}

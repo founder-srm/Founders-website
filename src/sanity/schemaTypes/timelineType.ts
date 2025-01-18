@@ -70,8 +70,8 @@ export const timelineType = defineType({
                   name: 'alt',
                   type: 'string',
                   title: 'Alternative Text',
-                }
-              ]
+                },
+              ],
             },
           ],
         },
