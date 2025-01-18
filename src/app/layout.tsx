@@ -25,9 +25,15 @@ export const metadata: Metadata = {
     title: 'Founders Club',
     images: [
       {
-        url: 'https://www.thefoundersclub.in/fc-logo.png',
-        width: 1057,
-        height: 503,
+        url: `${config.baseUrl}/FC-logo2.jpeg`,
+        width: 640,
+        height: 640,
+        alt: 'Founders Club Logo',
+      },
+      {
+        url: `${config.baseUrl}/FC-logo1.png`,
+        width: 412,
+        height: 255,
         alt: 'Founders Club Logo',
       },
     ],
@@ -42,8 +48,8 @@ export const metadata: Metadata = {
     title: 'Founders Club',
     description: 'A community of founders building the future',
     images: [
-      'https://www.thefoundersclub.in/fc-logo.png',
-      'https://www.thefoundersclub.in/FC-logo-short.png',
+      `${config.baseUrl}/FC-logo2.jpeg`, 
+      `${config.baseUrl}/FC-logo1.png`,
     ],
     creator: '@foundersclubsrm',
   },
