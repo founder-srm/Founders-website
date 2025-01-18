@@ -5,7 +5,7 @@ export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get('code');
   // Default redirect to dashboard for authenticated users
-  const next = searchParams.get('next') ?? '/dashboard/upcoming';
+  const next = searchParams.get('next') ?? '/dashboard/account';
 
   if (code) {
     const supabase = await createClient();

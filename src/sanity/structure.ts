@@ -127,6 +127,11 @@ export const structure: StructureResolver = S =>
             .title('Events Page')
             .items([S.documentTypeListItem('event').title('Events & Webinars')])
         ),
+      S.listItem().title('Upcoming Events Page').child(
+        S.list().title('Upcoming Events Page').items([
+          // Empty sections to be filled later
+        ])
+      ),
       S.listItem().title('Contact Us Page').child(
         S.list().title('Contact Us Page').items([
           // Empty sections to be filled later

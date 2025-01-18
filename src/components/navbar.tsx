@@ -41,12 +41,15 @@ import { useUser } from '@/stores/session';
 import { usePresence } from '@/hooks/usePresence';
 import useAdmin from '@/hooks/use-admin';
 import { AdminUserIcon } from './custom-icons/custom-icons';
+import { LineShadowText } from './ui/line-shadow-text';
+// import { useTheme } from 'next-themes';
 
 function AvatarButton({
   Image,
   name,
 }: { Image: string | undefined; name: string }) {
   const isPresent = usePresence();
+  
   const getInitials = (name: string) => {
     if (!name || name === undefined) return '';
     return name
@@ -123,10 +126,10 @@ const subMenuItemsOne = [
     route: '/about/team',
   },
   {
-    title: 'Careers',
+    title: 'Recruitments',
     description: 'Join our team and help us build the future',
     icon: <Sunset className="size-5 shrink-0" />,
-    route: '/about',
+    route: '/recruitments',
   },
 ];
 
@@ -170,6 +173,9 @@ const Navbar1 = () => {
   const user = useUser();
   const isAdmin = useAdmin({ user });
 
+  // const theme = useTheme();
+  // const shadowColor = theme.resolvedTheme === "dark" ? "white" : "black";
+
   const excludedRoutes = [
     '/studio/*',
     '/events/*',
@@ -187,7 +193,7 @@ const Navbar1 = () => {
     <section className="py-4 w-full flex items-center justify-center ">
       <nav className="hidden justify-between lg:flex w-full container ">
         <div className="flex items-center gap-6">
-          <Link href={'/'} className="flex items-center gap-2 backdrop-blur-sm">
+          <Link href={'/'} className="flex items-center gap-2 backdrop-blur-sm flex-nowrap text-balance leading-none tracking-tighter">
             <Image
               src="/FC-logo-short.png"
               alt="logo"
@@ -196,7 +202,13 @@ const Navbar1 = () => {
               className="w-8 h-auto"
               priority
             />
-            <span className="text-xl font-bold">Founders Club</span>
+            <LineShadowText className="italic text-2xl font-bold" shadowColor={"gray"}>
+              Founders
+            </LineShadowText>
+            <LineShadowText className="italic text-2xl font-bold" shadowColor={"gray"}>
+              Club
+            </LineShadowText>
+            {/* <span className="text-xl font-bold">Founders Club</span> */}
           </Link>
           <div className="flex items-center">
             <Link
