@@ -35,7 +35,7 @@ export async function login(data: LoginFormData) {
   }
 
   revalidatePath('/auth/login', 'layout');
-  redirect('/dashboard/upcoming');
+  redirect('/dashboard/account');
 }
 
 export async function signup(data: SignupFormData) {
@@ -62,5 +62,5 @@ export async function signup(data: SignupFormData) {
   }
 
   revalidatePath('/auth/signup', 'layout');
-  redirect('/dashboard/upcoming');
+  redirect('/dashboard/account');
 }
