@@ -1,5 +1,5 @@
 import { defineType, defineField } from 'sanity';
-import { FaBookOpen } from "react-icons/fa";
+import { FaBookOpen } from 'react-icons/fa';
 
 export const ourStoryType = defineType({
   name: 'ourStory',
@@ -22,7 +22,7 @@ export const ourStoryType = defineType({
     defineField({
       name: 'secondaryContent',
       type: 'text',
-    title: 'Secondary Content',
+      title: 'Secondary Content',
     }),
     defineField({
       name: 'workplaceTitle',
@@ -43,71 +43,71 @@ export const ourStoryType = defineType({
       name: 'images',
       type: 'object',
       fields: [
-        { 
-            name: 'image1', 
-            type: 'image', 
-            title: 'Image 1',
-            options: {
-                hotspot: true,
-                aiAssist: {
-                    imageDescriptionField: 'altText',
-                },
+        {
+          name: 'image1',
+          type: 'image',
+          title: 'Image 1',
+          options: {
+            hotspot: true,
+            aiAssist: {
+              imageDescriptionField: 'altText',
             },
+          },
         },
-        { 
-            name: 'image2', 
-            type: 'image', 
-            title: 'Image 2',
-            options: {
-                hotspot: true,
-                aiAssist: {
-                    imageDescriptionField: 'altText',
-                },
+        {
+          name: 'image2',
+          type: 'image',
+          title: 'Image 2',
+          options: {
+            hotspot: true,
+            aiAssist: {
+              imageDescriptionField: 'altText',
             },
+          },
         },
-        { 
-            name: 'image3', 
-            type: 'image', 
-            title: 'Image 3',
-            options: {
-                hotspot: true,
-                aiAssist: {
-                    imageDescriptionField: 'altText',
-                },
+        {
+          name: 'image3',
+          type: 'image',
+          title: 'Image 3',
+          options: {
+            hotspot: true,
+            aiAssist: {
+              imageDescriptionField: 'altText',
             },
+          },
         },
-        { 
-            name: 'image4', 
-            type: 'image', 
-            title: 'Image 4',
-            options: {
-                hotspot: true,
-                aiAssist: {
-                    imageDescriptionField: 'altText',
-                },
+        {
+          name: 'image4',
+          type: 'image',
+          title: 'Image 4',
+          options: {
+            hotspot: true,
+            aiAssist: {
+              imageDescriptionField: 'altText',
             },
+          },
         },
-        { 
-            name: 'image5', 
-            type: 'image', 
-            title: 'Image 5',
-            options: {
-                hotspot: true,
-                aiAssist: {
-                    imageDescriptionField: 'altText',
-                },
+        {
+          name: 'image5',
+          type: 'image',
+          title: 'Image 5',
+          options: {
+            hotspot: true,
+            aiAssist: {
+              imageDescriptionField: 'altText',
             },
+          },
         },
-        { 
-            name: 'image6', 
-            type: 'image', 
-            title: 'Image 6',
-            options: {
-                hotspot: true,
-                aiAssist: {
-                    imageDescriptionField: 'altText',
-                },
+        {
+          name: 'image6',
+          type: 'image',
+          title: 'Image 6',
+          options: {
+            hotspot: true,
+            aiAssist: {
+              imageDescriptionField: 'altText',
             },
+          },
         },
       ],
     }),

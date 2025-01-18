@@ -26,7 +26,7 @@ export default async function OurStory() {
                 alt="about 1"
                 width={1000}
                 height={1428}
-                loading='lazy'
+                loading="lazy"
                 className="aspect-[0.7] brightness-105 w-full rounded-lg  object-cover md:w-1/2"
               />
               <div className="flex w-full flex-col items-center justify-center gap-6 md:w-1/2">
@@ -35,7 +35,7 @@ export default async function OurStory() {
                   alt="about 2"
                   width={2040}
                   height={1856}
-                  loading='lazy'
+                  loading="lazy"
                   className="aspect-[1.1] brightness-105 rounded-lg object-cover"
                 />
                 <Image
@@ -43,7 +43,7 @@ export default async function OurStory() {
                   alt="about 3"
                   width={2040}
                   height={2912}
-                  loading='lazy'
+                  loading="lazy"
                   className="aspect-[0.7] brightness-105 rounded-lg object-cover"
                 />
               </div>
@@ -56,7 +56,7 @@ export default async function OurStory() {
                 alt="about 4"
                 width={2040}
                 height={2264}
-                loading='lazy'
+                loading="lazy"
                 className="aspect-[0.9] brightness-105 w-full rounded-lg object-cover md:w-1/2"
               />
               <div className="flex w-full flex-col items-center justify-center gap-6 md:w-1/2">
@@ -65,7 +65,7 @@ export default async function OurStory() {
                   alt="about 5"
                   width={2040}
                   height={2550}
-                  loading='lazy'
+                  loading="lazy"
                   className="aspect-[0.8] brightness-105 rounded-lg object-cover"
                 />
                 <Image
@@ -73,7 +73,7 @@ export default async function OurStory() {
                   alt="about 6"
                   width={2040}
                   height={2264}
-                  loading='lazy'
+                  loading="lazy"
                   className="aspect-[0.9] brightness-105 rounded-lg object-cover"
                 />
               </div>

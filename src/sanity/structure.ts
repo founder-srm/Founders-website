@@ -40,7 +40,9 @@ export const structure: StructureResolver = S =>
                   S.list()
                     .title('Testimonials')
                     .items([
-                      S.documentTypeListItem('testimonial').title('Testimonial'),
+                      S.documentTypeListItem('testimonial').title(
+                        'Testimonial'
+                      ),
                     ])
                 ),
               S.listItem()
@@ -127,9 +129,7 @@ export const structure: StructureResolver = S =>
         .child(
           S.list()
             .title('Author Details')
-            .items([
-              S.documentTypeListItem('author').title('Authors')
-            ])
+            .items([S.documentTypeListItem('author').title('Authors')])
         ),
       S.divider(),
       S.documentTypeListItem(contextDocumentTypeName),
