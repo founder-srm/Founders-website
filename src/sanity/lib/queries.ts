@@ -139,3 +139,15 @@ export const HERO_QUERY = defineQuery(`*[_type == "heroComponent"][0]{
     image3,
     image4
 }`);
+
+export const OUR_STORY_QUERY = defineQuery(`*[_type == "ourStory"][0]{
+  _id,
+  _createdAt,
+  title,
+  mainContent,
+  secondaryContent,
+  workplaceTitle,
+  workplaceContent,
+  workplaceSecondaryContent,
+  images
+}`);

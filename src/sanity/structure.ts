@@ -83,6 +83,15 @@ export const structure: StructureResolver = S =>
                     ])
                 ),
               S.listItem()
+                .title('Our Story Section')
+                .child(
+                  S.list()
+                    .title('Our Story')
+                    .items([
+                      S.documentTypeListItem('ourStory').title('Our Story'),
+                    ])
+                ),
+              S.listItem()
                 .title('Careers Section')
                 .child(
                   S.list()
