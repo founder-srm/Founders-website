@@ -22,6 +22,7 @@ import { Slider } from '@/components/ui/slider';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import ScratchToReveal from '@/components/ui/scratch-to-reveal';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 
 export default function CustomizeTicketPage() {
   const searchParams = useSearchParams();
@@ -42,6 +43,8 @@ export default function CustomizeTicketPage() {
   const [patternSize, setPatternSize] = useState(30);
   const [patternRotation, setPatternRotation] = useState(0);
   const [emailLoading, setEmailLoading] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [dialogMessage, setDialogMessage] = useState({ title: '', description: '', type: 'success' as 'success' | 'error' });
   // Remove toast related code
 
   useEffect(() => {
@@ -278,12 +281,22 @@ export default function CustomizeTicketPage() {
         throw new Error(data.error || 'Failed to send email');
       }
 
-      alert('Ticket has been sent to your email!');
+      setDialogMessage({
+        title: 'Success!',
+        description: 'Ticket has been sent to your email.',
+        type: 'success'
+      });
+      setDialogOpen(true);
 
     } catch (error: unknown) {
       console.error('Error sending email:', error);
       const errorMessage = error instanceof Error ? error.message : 'Failed to send email';
-      alert(`Failed to send email: ${errorMessage}`);
+      setDialogMessage({
+        title: 'Error',
+        description: `Failed to send email: ${errorMessage}`,
+        type: 'error'
+      });
+      setDialogOpen(true);
     } finally {
       setEmailLoading(false);
     }
@@ -541,6 +554,18 @@ export default function CustomizeTicketPage() {
           </div>
         </div>
       </div>
+      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className={dialogMessage.type === 'error' ? 'text-red-500' : 'text-green-500'}>
+              {dialogMessage.title}
+            </DialogTitle>
+            <DialogDescription>
+              {dialogMessage.description}
+            </DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
