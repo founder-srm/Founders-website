@@ -80,7 +80,6 @@ export const EVENTS_QUERY =
   defineQuery(`*[_type == "event"] | order(published desc)[0...3]{
   _id,
   _createdAt,
-  id,
   title,
   summary,
   image,
@@ -102,8 +101,8 @@ export const ALL_EVENTS_QUERY = defineQuery(`*[_type == "event"] {
   _createdAt,
   title,
   summary,
-  "slug": slug.current,
   image,
+  type,
   label,
   author->{
     name,
@@ -113,7 +112,8 @@ export const ALL_EVENTS_QUERY = defineQuery(`*[_type == "event"] {
     bio
   },
   published,
-  href
+  href,
+  "slug": slug.current
 }`);
 
 export const EVENT_BY_SLUG_QUERY =
@@ -123,8 +123,8 @@ export const EVENT_BY_SLUG_QUERY =
   title,
   summary,
   content,
-  "slug": slug.current,
   image,
+  type,
   label,
   author->{
     name,
@@ -132,7 +132,8 @@ export const EVENT_BY_SLUG_QUERY =
     image
   },
   published,
-  href
+  href,
+  "slug": slug.current
 }`);
 
 export const HERO_QUERY = defineQuery(`*[_type == "heroComponent"][0]{

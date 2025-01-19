@@ -55,7 +55,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: post.created_at,
     })),
     ...events.map(event => ({
-      url: `${baseUrl}/events/${event.slug}`,
+      url: `${baseUrl}/events/writeup/${event.slug}`,
       priority: 0.8,
       lastModified: event.published || new Date().toISOString(),
     })),

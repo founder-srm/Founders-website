@@ -1594,7 +1594,19 @@
             },
             {
               "type": "string",
-              "value": "conference"
+              "value": "bootcamp"
+            },
+            {
+              "type": "string",
+              "value": "triumphtalk"
+            },
+            {
+              "type": "string",
+              "value": "foundathon"
+            },
+            {
+              "type": "string",
+              "value": "openhouse"
             },
             {
               "type": "string",

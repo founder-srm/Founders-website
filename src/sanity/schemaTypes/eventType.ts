@@ -17,7 +17,7 @@ export const eventType = defineType({
       name: 'summary',
       type: 'text',
       title: 'Summary',
-      validation: Rule => Rule.required(),
+      validation: Rule => Rule.required().max(100),
     }),
     defineField({
       name: 'image',
@@ -25,9 +25,6 @@ export const eventType = defineType({
       title: 'Image',
       options: {
         hotspot: true,
-        aiAssist: {
-          imageDescriptionField: 'altText',
-        },
       },
     }),
     defineField({
@@ -37,7 +34,10 @@ export const eventType = defineType({
       options: {
         list: [
           { title: 'Webinar', value: 'webinar' },
-          { title: 'Conference', value: 'conference' },
+          { title: 'Bootcamp', value: 'bootcamp' },
+          { title: 'Triumph Talk', value: 'triumphtalk' },
+          { title: 'Foundathon', value: 'foundathon' },
+          { title: 'Open House', value: 'openhouse' },
           { title: 'Workshop', value: 'workshop' },
         ],
       },
@@ -60,7 +60,8 @@ export const eventType = defineType({
     defineField({
       name: 'href',
       type: 'url',
-      title: 'Registration Link',
+      title: 'Link for more info',
+      description: 'Link to the event page or to a google drive for photos',
     }),
     defineField({
       name: 'slug',
