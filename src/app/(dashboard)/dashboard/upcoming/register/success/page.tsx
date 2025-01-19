@@ -1,6 +1,7 @@
 'use client';
 
 import { Download, Share2, Mail, TriangleAlert, X } from 'lucide-react';
+// Remove useToast import
 
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState, useRef } from 'react';
@@ -40,12 +41,18 @@ export default function CustomizeTicketPage() {
   const [patternContent, setPatternContent] = useState('🔥');
   const [patternSize, setPatternSize] = useState(30);
   const [patternRotation, setPatternRotation] = useState(0);
+  const [emailLoading, setEmailLoading] = useState(false);
+  // Remove toast related code
 
   useEffect(() => {
     async function fetchRegistration() {
       if (!ticketId) return;
 
       const supabase = createClient();
+      
+      // Get current user's session
+      const { data: { user } } = await supabase.auth.getUser();
+      
       const { data, error } = await supabase
         .from('eventsregistrations')
         .select('*')
@@ -53,7 +60,21 @@ export default function CustomizeTicketPage() {
         .single();
 
       if (!error && data) {
-        setRegistration(data);
+        // Type-safe way to merge details
+        const updatedDetails = {
+          ...(typeof data.details === 'object' ? data.details : {}),
+          email: user?.email,
+        };
+
+        setRegistration({
+          ...data,
+          details: updatedDetails
+        });
+
+        console.log('Registration data with email:', {
+          ...data,
+          details: updatedDetails
+        });
       }
       setLoading(false);
     }
@@ -224,9 +245,48 @@ export default function CustomizeTicketPage() {
     console.log('Share functionality to be implemented');
   };
 
-  const emailTicket = () => {
-    // TODO: Implement email functionality
-    console.log('Email functionality to be implemented');
+  const emailTicket = async () => {
+    if (!canvasRef.current || !registration) return;
+
+    try {
+      setEmailLoading(true);
+      const ticketImageUrl = canvasRef.current.toDataURL('image/png');
+
+      // Debug log
+      console.log('Sending data:', {
+        registration: {
+          details: registration.details,
+          event_title: registration.event_title,
+          ticket_id: registration.ticket_id
+        }
+      });
+
+      const response = await fetch('/api/send-ticket', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          registration,
+          ticketImageUrl,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to send email');
+      }
+
+      alert('Ticket has been sent to your email!');
+
+    } catch (error: unknown) {
+      console.error('Error sending email:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Failed to send email';
+      alert(`Failed to send email: ${errorMessage}`);
+    } finally {
+      setEmailLoading(false);
+    }
   };
 
   if (loading) return <div>Loading...</div>;
@@ -429,9 +489,10 @@ export default function CustomizeTicketPage() {
                 onClick={emailTicket}
                 variant="outline"
                 className="flex-1"
+                disabled={emailLoading}
               >
                 <Mail className="mr-2 h-4 w-4" />
-                Email
+                {emailLoading ? "Sending..." : "Email"}
               </Button>
             </div>
           </div>
