@@ -289,7 +289,7 @@ export type Event = {
     crop?: SanityImageCrop;
     _type: "image";
   };
-  type?: "webinar" | "conference" | "workshop";
+  type?: "webinar" | "bootcamp" | "triumphtalk" | "foundathon" | "openhouse" | "workshop";
   label?: string;
   author?: {
     _ref: string;
@@ -898,11 +898,10 @@ export type FAQS_QUERYResult = Array<{
   answer: string | null;
 }>;
 // Variable: EVENTS_QUERY
-// Query: *[_type == "event"] | order(published desc)[0...3]{  _id,  _createdAt,  id,  title,  summary,  image,  label,  author->{    name,    title,    slug,    image,    bio  },  published,  href,  "slug": slug.current}
+// Query: *[_type == "event"] | order(published desc)[0...3]{  _id,  _createdAt,  title,  summary,  image,  label,  author->{    name,    title,    slug,    image,    bio  },  published,  href,  "slug": slug.current}
 export type EVENTS_QUERYResult = Array<{
   _id: string;
   _createdAt: string;
-  id: null;
   title: string | null;
   summary: string | null;
   image: {
@@ -956,13 +955,12 @@ export type EVENTS_QUERYResult = Array<{
   slug: string | null;
 }>;
 // Variable: ALL_EVENTS_QUERY
-// Query: *[_type == "event"] {  _id,  _createdAt,  title,  summary,  "slug": slug.current,  image,  label,  author->{    name,    title,    slug,    image,    bio  },  published,  href}
+// Query: *[_type == "event"] {  _id,  _createdAt,  title,  summary,  image,  type,  label,  author->{    name,    title,    slug,    image,    bio  },  published,  href,  "slug": slug.current}
 export type ALL_EVENTS_QUERYResult = Array<{
   _id: string;
   _createdAt: string;
   title: string | null;
   summary: string | null;
-  slug: string | null;
   image: {
     asset?: {
       _ref: string;
@@ -974,6 +972,7 @@ export type ALL_EVENTS_QUERYResult = Array<{
     crop?: SanityImageCrop;
     _type: "image";
   } | null;
+  type: "bootcamp" | "foundathon" | "openhouse" | "triumphtalk" | "webinar" | "workshop" | null;
   label: string | null;
   author: {
     name: string | null;
@@ -1011,9 +1010,10 @@ export type ALL_EVENTS_QUERYResult = Array<{
   } | null;
   published: string | null;
   href: string | null;
+  slug: string | null;
 }>;
 // Variable: EVENT_BY_SLUG_QUERY
-// Query: *[_type == "event" && slug.current == $slug][0] {  _id,  _createdAt,  title,  summary,  content,  "slug": slug.current,  image,  label,  author->{    name,    title,    image  },  published,  href}
+// Query: *[_type == "event" && slug.current == $slug][0] {  _id,  _createdAt,  title,  summary,  content,  image,  type,  label,  author->{    name,    title,    image  },  published,  href,  "slug": slug.current}
 export type EVENT_BY_SLUG_QUERYResult = {
   _id: string;
   _createdAt: string;
@@ -1037,7 +1037,6 @@ export type EVENT_BY_SLUG_QUERYResult = {
     _type: "block";
     _key: string;
   }> | null;
-  slug: string | null;
   image: {
     asset?: {
       _ref: string;
@@ -1049,6 +1048,7 @@ export type EVENT_BY_SLUG_QUERYResult = {
     crop?: SanityImageCrop;
     _type: "image";
   } | null;
+  type: "bootcamp" | "foundathon" | "openhouse" | "triumphtalk" | "webinar" | "workshop" | null;
   label: string | null;
   author: {
     name: string | null;
@@ -1067,6 +1067,7 @@ export type EVENT_BY_SLUG_QUERYResult = {
   } | null;
   published: string | null;
   href: string | null;
+  slug: string | null;
 } | null;
 // Variable: HERO_QUERY
 // Query: *[_type == "heroComponent"][0]{    _id,    _createdAt,    title,    subtitle,    buttonText,    buttonLink,    showButton,    image1,    image2,    image3,    image4}
@@ -1334,9 +1335,9 @@ declare module "@sanity/client" {
     "*[_type == \"jobCategory\"]{\n  _id,\n  _createdAt,\n  category,\n  openings[]{\n    title,\n    location,\n    link\n  }\n}": JOBS_QUERYResult;
     "*[_type == \"feature\"]{\n  _id,\n  _createdAt,\n  title,\n  description,\n  icon\n}": FEATURES_QUERYResult;
     "*[_type == \"faq\"]{\n  _id,\n  _createdAt,\n  question,\n  answer\n}": FAQS_QUERYResult;
-    "*[_type == \"event\"] | order(published desc)[0...3]{\n  _id,\n  _createdAt,\n  id,\n  title,\n  summary,\n  image,\n  label,\n  author->{\n    name,\n    title,\n    slug,\n    image,\n    bio\n  },\n  published,\n  href,\n  \"slug\": slug.current\n}": EVENTS_QUERYResult;
-    "*[_type == \"event\"] {\n  _id,\n  _createdAt,\n  title,\n  summary,\n  \"slug\": slug.current,\n  image,\n  label,\n  author->{\n    name,\n    title,\n    slug,\n    image,\n    bio\n  },\n  published,\n  href\n}": ALL_EVENTS_QUERYResult;
-    "*[_type == \"event\" && slug.current == $slug][0] {\n  _id,\n  _createdAt,\n  title,\n  summary,\n  content,\n  \"slug\": slug.current,\n  image,\n  label,\n  author->{\n    name,\n    title,\n    image\n  },\n  published,\n  href\n}": EVENT_BY_SLUG_QUERYResult;
+    "*[_type == \"event\"] | order(published desc)[0...3]{\n  _id,\n  _createdAt,\n  title,\n  summary,\n  image,\n  label,\n  author->{\n    name,\n    title,\n    slug,\n    image,\n    bio\n  },\n  published,\n  href,\n  \"slug\": slug.current\n}": EVENTS_QUERYResult;
+    "*[_type == \"event\"] {\n  _id,\n  _createdAt,\n  title,\n  summary,\n  image,\n  type,\n  label,\n  author->{\n    name,\n    title,\n    slug,\n    image,\n    bio\n  },\n  published,\n  href,\n  \"slug\": slug.current\n}": ALL_EVENTS_QUERYResult;
+    "*[_type == \"event\" && slug.current == $slug][0] {\n  _id,\n  _createdAt,\n  title,\n  summary,\n  content,\n  image,\n  type,\n  label,\n  author->{\n    name,\n    title,\n    image\n  },\n  published,\n  href,\n  \"slug\": slug.current\n}": EVENT_BY_SLUG_QUERYResult;
     "*[_type == \"heroComponent\"][0]{\n    _id,\n    _createdAt,\n    title,\n    subtitle,\n    buttonText,\n    buttonLink,\n    showButton,\n    image1,\n    image2,\n    image3,\n    image4\n}": HERO_QUERYResult;
     "*[_type == \"ourStory\"][0]{\n  _id,\n  _createdAt,\n  title,\n  mainContent,\n  secondaryContent,\n  workplaceTitle,\n  workplaceContent,\n  workplaceSecondaryContent,\n  images\n}": OUR_STORY_QUERYResult;
     "*[_type == \"timeline\"][0]{\n  _id,\n  _createdAt,\n  title,\n  subtitle,\n  description,\n  buttonText,\n  buttonLink,\n  secondaryButtonText,\n  secondaryButtonLink,\n  showSecondaryButton,\n  items[]{\n    title,\n    description,\n    image\n  }\n}": TIMELINE_QUERYResult;

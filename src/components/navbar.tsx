@@ -179,7 +179,7 @@ const Navbar1 = () => {
 
   const excludedRoutes = [
     '/studio/*',
-    '/events/*',
+    '/events/writeup/*',
     '/blog/posts/*',
     '/auth/*',
     '/signup',
