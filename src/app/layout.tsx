@@ -11,7 +11,7 @@ import Navbar1 from "@/components/navbar";
 import Footer2 from "@/components/footer";
 import { Toaster } from "@/components/ui/toaster";
 import config from "@/lib/config";
-import Banner from "@/components/banner";
+import BannerProvider from "@/components/providers/BannerProvider";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   variable: "--font-plus-jakarta-sans",
@@ -118,7 +118,7 @@ export default function RootLayout({
       >
         <ThemeProvider attribute="class" defaultTheme="system" themes={["light", "dark", "system"]} enableSystem disableTransitionOnChange>
           <SessionProvider>
-            <Banner />
+            <BannerProvider />
             <Navbar1 />
             {children}
             <Footer2 />

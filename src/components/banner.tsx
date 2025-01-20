@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { TicketPercent, X } from "lucide-react";
 import { useEffect, useState } from "react";
-import { BannerHeader } from "../../sanity.types";
+import type { BannerHeader } from "../../sanity.types";
 import Link from "next/link";
 
 interface TimeLeft {
