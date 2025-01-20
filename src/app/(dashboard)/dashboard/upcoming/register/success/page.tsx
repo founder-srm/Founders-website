@@ -2,7 +2,7 @@
 
 import { Download, Share2, Mail, TriangleAlert, X } from 'lucide-react';
 // Remove useToast import
-
+import RateLimitedButton from '@/components/RateLimitedButton';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState, useRef } from 'react';
 import { createClient } from '@/utils/supabase/client';
@@ -52,10 +52,10 @@ export default function CustomizeTicketPage() {
       if (!ticketId) return;
 
       const supabase = createClient();
-      
+
       // Get current user's session
       const { data: { user } } = await supabase.auth.getUser();
-      
+
       const { data, error } = await supabase
         .from('eventsregistrations')
         .select('*')
@@ -245,7 +245,6 @@ export default function CustomizeTicketPage() {
   // Add new functions for share and email (to be implemented)
   const shareTicket = () => {
     // TODO: Implement sharing functionality
-    console.log('Share functionality to be implemented');
   };
 
   const emailTicket = async () => {
@@ -346,7 +345,7 @@ export default function CustomizeTicketPage() {
               variant="ghost"
               className="group -my-1.5 -me-2 size-8 shrink-0 p-0 hover:bg-transparent"
               aria-label="Close notification"
-              // onClick={() => window.location.href = '/dashboard'}
+            // onClick={() => window.location.href = '/dashboard'}
             >
               <X
                 size={16}
@@ -498,15 +497,17 @@ export default function CustomizeTicketPage() {
                 <Share2 className="mr-2 h-4 w-4" />
                 Share
               </Button>
-              <Button
-                onClick={emailTicket}
+              <RateLimitedButton
+                onRateLimitedClick={emailTicket}
+                cooldownMs={60000}
                 variant="outline"
                 className="flex-1"
                 disabled={emailLoading}
+
               >
                 <Mail className="mr-2 h-4 w-4" />
                 {emailLoading ? "Sending..." : "Email"}
-              </Button>
+              </RateLimitedButton>
             </div>
           </div>
         </Card>
