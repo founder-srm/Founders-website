@@ -179,3 +179,12 @@ export const TIMELINE_QUERY = defineQuery(`*[_type == "timeline"][0]{
     image
   }
 }`);
+
+export const BANNER_QUERY = `*[_type == "bannerHeader"][0]{
+  title,
+  description,
+  buttonText,
+  buttonLink,
+  endDate,
+  isVisible
+}`;
