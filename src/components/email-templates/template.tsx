@@ -1,4 +1,4 @@
-import { typeformInsertType } from '../../../schema.zod';
+import type { typeformInsertType } from '../../../schema.zod';
 
 interface EmailTemplateProps {
   registration: typeformInsertType;
