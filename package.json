@@ -43,6 +43,7 @@
     "@sanity/assist": "^3.1.0",
     "@sanity/icons": "^3.5.7",
     "@sanity/image-url": "^1.1.0",
+    "@sanity/react-loader": "^1.10.36",
     "@sanity/vision": "^3.68.3",
     "@supabase-cache-helpers/postgrest-react-query": "^1.11.4",
     "@supabase/ssr": "^0.5.2",

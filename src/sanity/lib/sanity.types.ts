@@ -32,6 +32,17 @@ export interface AboutHeroSection {
   }
 }
 
+export interface BannerHeader {
+  _id: string;
+  _createdAt: string;
+  isVisible: boolean;
+  title: string;
+  description: string;
+  buttonText?: string;
+  buttonLink?: string;
+  endDate: string;
+}
+
 export interface CTA {
   _id: string;
   _createdAt: string;
@@ -130,6 +141,7 @@ export interface Hero {
 }
 
 // Query response types
+export type BannerHeaderResponse = BannerHeader;
 export type CTAResponse = CTA[];
 export type JobCategoryResponse = JobCategory[];
 export type FeatureResponse = Feature[];

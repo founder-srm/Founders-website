@@ -14,6 +14,15 @@ export const structure: StructureResolver = S =>
             .title('Home Page Components')
             .showIcons(false)
             .items([
+                S.listItem()
+                .title('Banner')
+                .child(
+                  S.list()
+                  .title('Banner')
+                  .items([
+                    S.documentTypeListItem('bannerHeader').title('Banner'),
+                  ])
+                ),
               S.listItem()
                 .title('Hero Section')
                 .child(
