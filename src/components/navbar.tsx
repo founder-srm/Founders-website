@@ -1,6 +1,7 @@
 'use client';
 import { Book, Menu, Sunset, Trees, UsersRound, Zap } from 'lucide-react';
 import { usePathname } from 'next/navigation';
+import { useState } from 'react';
 
 import { cn } from '@/lib/utils';
 
@@ -173,6 +174,7 @@ const Navbar1 = () => {
   const pathname = usePathname();
   const user = useUser();
   const isAdmin = useAdmin({ user });
+  const [isOpen, setIsOpen] = useState(false);
 
   // const theme = useTheme();
   // const shadowColor = theme.resolvedTheme === "dark" ? "white" : "black";
@@ -365,7 +367,7 @@ const Navbar1 = () => {
             />
             <span className="text-xl font-bold">Founders Club</span>
           </Link>
-          <Sheet>
+          <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
               <Button variant="outline" size="icon">
                 <Menu className="size-4" />
@@ -391,7 +393,7 @@ const Navbar1 = () => {
                 </SheetTitle>
               </SheetHeader>
               <div className="mb-8 mt-8 flex flex-col gap-4">
-                <Link href="/" className="font-semibold">
+                <Link href="/" onClick={() => setIsOpen(false)} className="font-semibold">
                   Home
                 </Link>
                 <Accordion type="single" collapsible className="w-full">
@@ -403,6 +405,7 @@ const Navbar1 = () => {
                       {subMenuItemsOne.map((item, idx) => (
                         <Link
                           key={idx}
+                          onClick={() => setIsOpen(false)}
                           className={cn(
                             'flex select-none gap-4 rounded-md p-3 leading-none outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground'
                           )}
@@ -429,6 +432,7 @@ const Navbar1 = () => {
                       {subMenuItemsTwo.map((item, idx) => (
                         <Link
                           key={idx}
+                          onClick={() => setIsOpen(false)}
                           className={cn(
                             'flex select-none gap-4 rounded-md p-3 leading-none outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground'
                           )}
@@ -448,10 +452,10 @@ const Navbar1 = () => {
                     </AccordionContent>
                   </AccordionItem>
                 </Accordion>
-                <Link href="/upcoming" className="font-semibold">
+                <Link href="/upcoming" onClick={() => setIsOpen(false)} className="font-semibold">
                   <SparklesText text="Upcoming" />
                 </Link>
-                <Link href="/contact-us" className="font-semibold">
+                <Link href="/contact-us" onClick={() => setIsOpen(false)} className="font-semibold">
                   Contact
                 </Link>
               </div>
