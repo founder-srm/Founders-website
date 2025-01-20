@@ -21,6 +21,7 @@ export const revalidate = 3600; // revalidate every hour
 
 export default async function EventsPage() {
   const { data: allEvents } = await sanityFetch({ query: ALL_EVENTS_QUERY });
+
   
   // Add pagination logic
   const eventsPerPage = 9;
@@ -39,7 +40,7 @@ export default async function EventsPage() {
         </div>
 
         {events && (
-          <Link href={`/events/writeup/${events[0].slug}`} className="mb-12">
+          <Link href={`/events/writeup/${events[0].slug}`} className="mb-12 hidden md:block">
             <h2 className="mb-6 text-2xl font-semibold">Featured Post</h2>
             <div className="group relative overflow-hidden rounded-xl">
               <Image
