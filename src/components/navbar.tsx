@@ -151,12 +151,12 @@ const subMenuItemsTwo = [
   //   description: 'Check the current status of our services and APIs',
   //   icon: <Trees className="size-5 shrink-0" />,
   // },
-  {
-    title: 'Terms of Service',
-    description: 'Our terms and conditions for events and more',
-    icon: <Book className="size-5 shrink-0" />,
-    route: '/terms',
-  },
+  // {
+  //   title: 'Terms of Service',
+  //   description: 'Our terms and conditions for events and more',
+  //   icon: <Book className="size-5 shrink-0" />,
+  //   route: '/terms',
+  // },
 ];
 
 const isPathExcluded = (pathname: string, excludedPaths: string[]) => {
@@ -452,7 +452,7 @@ const Navbar1 = () => {
                   <SparklesText text="Upcoming" />
                 </Link>
                 <Link href="/contact-us" className="font-semibold">
-                  Blog
+                  Contact
                 </Link>
               </div>
               <div className="border-t pt-4">
