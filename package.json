@@ -78,6 +78,7 @@
     "react-use-measure": "^2.1.1",
     "recharts": "^2.15.0",
     "remark-gfm": "^4.0.0",
+    "resend": "^4.1.1",
     "sanity": "^3.68.3",
     "sanity-plugin-media": "^2.3.2",
     "styled-components": "^6.1.13",
