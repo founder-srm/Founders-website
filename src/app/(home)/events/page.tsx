@@ -6,6 +6,7 @@ import { urlFor } from '@/sanity/lib/image';
 import { ChevronLeft, ChevronRight, Mail } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { SanityLive } from '@/sanity/lib/live';
 import { format } from 'date-fns';
 
 const categories = [
@@ -182,6 +183,7 @@ export default async function EventsPage() {
           </nav>
         </div>
       </div>
+      <SanityLive />
     </section>
   );
 }
