@@ -1,42 +1,51 @@
-"use client";
+'use client';
 
-import { Download, Share2, Mail, TriangleAlert, X } from "lucide-react";
+import { Download, Share2, Mail, TriangleAlert, X } from 'lucide-react';
 // Remove useToast import
-import RateLimitedButton from "@/components/RateLimitedButton";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState, useRef } from "react";
-import { createClient } from "@/utils/supabase/client";
-import QRCode from "react-qr-code";
-import confetti from "canvas-confetti";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import type { typeformInsertType } from "../../../../../../../schema.zod";
-import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Slider } from "@/components/ui/slider";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import ScratchToReveal from "@/components/ui/scratch-to-reveal";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import RateLimitedButton from '@/components/RateLimitedButton';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState, useRef } from 'react';
+import { createClient } from '@/utils/supabase/client';
+import QRCode from 'react-qr-code';
+import confetti from 'canvas-confetti';
+import { Card, CardContent, CardFooter } from '@/components/ui/card';
+import type { typeformInsertType } from '../../../../../../../schema.zod';
+import { Button } from '@/components/ui/button';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Slider } from '@/components/ui/slider';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import ScratchToReveal from '@/components/ui/scratch-to-reveal';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 
 export default function CustomizeTicketPage() {
   const searchParams = useSearchParams();
   const Router = useRouter();
-  const ticketId = searchParams.get("ticketid");
-  const [registration, setRegistration] = useState<typeformInsertType | null>(null);
+  const ticketId = searchParams.get('ticketid');
+  const [registration, setRegistration] = useState<typeformInsertType | null>(
+    null
+  );
   const [loading, setLoading] = useState(true);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [backgroundColor, setBackgroundColor] = useState("#ffffff");
-  const [textColor, setTextColor] = useState("#000000");
+  const [backgroundColor, setBackgroundColor] = useState('#ffffff');
+  const [textColor, setTextColor] = useState('#000000');
   const [fontSize, setFontSize] = useState(24);
-  const [selectedTheme, setSelectedTheme] = useState("classic");
+  const [selectedTheme, setSelectedTheme] = useState('classic');
   const [qrCodeImage, setQrCodeImage] = useState<HTMLImageElement | null>(null);
-  const [patternType, setPatternType] = useState("none");
-  const [patternContent, setPatternContent] = useState("🔥");
+  const [patternType, setPatternType] = useState('none');
+  const [patternContent, setPatternContent] = useState('🔥');
   const [patternSize, setPatternSize] = useState(30);
   const [patternRotation, setPatternRotation] = useState(0);
   const [emailLoading, setEmailLoading] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [dialogMessage, setDialogMessage] = useState({ title: "", description: "", type: "success" as "success" | "error" });
+  const [dialogMessage, setDialogMessage] = useState({ title: '', description: '', type: 'success' as 'success' | 'error' });
+  const [canvasSize, setCanvasSize] = useState({ width: 600, height: 400 });
   // Remove toast related code
 
   useEffect(() => {
@@ -46,27 +55,29 @@ export default function CustomizeTicketPage() {
       const supabase = createClient();
 
       // Get current user's session
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
+      const { data: { user } } = await supabase.auth.getUser();
 
-      const { data, error } = await supabase.from("eventsregistrations").select("*").eq("ticket_id", ticketId).single();
+      const { data, error } = await supabase
+        .from('eventsregistrations')
+        .select('*')
+        .eq('ticket_id', ticketId)
+        .single();
 
       if (!error && data) {
         // Type-safe way to merge details
         const updatedDetails = {
-          ...(typeof data.details === "object" ? data.details : {}),
+          ...(typeof data.details === 'object' ? data.details : {}),
           email: user?.email,
         };
 
         setRegistration({
           ...data,
-          details: updatedDetails,
+          details: updatedDetails
         });
 
-        console.log("Registration data with email:", {
+        console.log('Registration data with email:', {
           ...data,
-          details: updatedDetails,
+          details: updatedDetails
         });
       }
       setLoading(false);
@@ -79,7 +90,7 @@ export default function CustomizeTicketPage() {
     if (!registration) return;
 
     // Convert SVG to Image
-    const svg = document.getElementById("QRCode");
+    const svg = document.getElementById('QRCode');
     if (svg) {
       const svgData = new XMLSerializer().serializeToString(svg);
       const img = new Image();
@@ -90,11 +101,24 @@ export default function CustomizeTicketPage() {
     }
   }, [registration]);
 
+  // Around line 135-145
+  useEffect(() => {
+    const handleResize = () => {
+      const isMobile = window.innerWidth < 768;
+      setCanvasSize({
+        width: isMobile ? 320 : 600,
+        height: isMobile ? 213 : 400,
+      });
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
   useEffect(() => {
     if (!registration || !canvasRef.current || !qrCodeImage) return;
 
     const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext('2d');
 
     if (!ctx) return;
 
@@ -103,12 +127,12 @@ export default function CustomizeTicketPage() {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     // Draw custom pattern background if selected
-    if (patternType === "emoji" || patternType === "text") {
+    if (patternType === 'emoji' || patternType === 'text') {
       ctx.save();
       ctx.translate(canvas.width / 2, canvas.height / 2);
       ctx.rotate((patternRotation * Math.PI) / 180);
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
       ctx.font = `${patternSize}px Arial`;
 
       for (let x = -canvas.width; x < canvas.width; x += patternSize * 2) {
@@ -152,27 +176,32 @@ export default function CustomizeTicketPage() {
     ctx.clip();
 
     // Theme-specific background
-    if (selectedTheme === "gradient") {
-      const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+    if (selectedTheme === 'gradient') {
+      const gradient = ctx.createLinearGradient(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
       gradient.addColorStop(0, backgroundColor);
-      gradient.addColorStop(1, "#f0f0f0");
+      gradient.addColorStop(1, '#f0f0f0');
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
-    } else if (selectedTheme === "pattern") {
+    } else if (selectedTheme === 'pattern') {
       // Create diagonal stripes pattern
-      const patternCanvas = document.createElement("canvas");
-      const patternCtx = patternCanvas.getContext("2d");
+      const patternCanvas = document.createElement('canvas');
+      const patternCtx = patternCanvas.getContext('2d');
       if (!patternCtx) return;
       patternCanvas.width = 20;
       patternCanvas.height = 20;
-      patternCtx.strokeStyle = "#f0f0f0";
+      patternCtx.strokeStyle = '#f0f0f0';
       patternCtx.lineWidth = 2;
       patternCtx.beginPath();
       patternCtx.moveTo(0, 20);
       patternCtx.lineTo(20, 0);
       patternCtx.stroke();
 
-      const pattern = ctx.createPattern(patternCanvas, "repeat");
+      const pattern = ctx.createPattern(patternCanvas, 'repeat');
       if (pattern) {
         ctx.fillStyle = pattern;
       }
@@ -182,25 +211,44 @@ export default function CustomizeTicketPage() {
     // Draw content
     ctx.fillStyle = textColor;
     ctx.font = `bold ${fontSize}px Inter`;
-    ctx.textAlign = "center";
+    ctx.textAlign = 'center';
     ctx.fillText(registration.event_title, canvas.width / 2, 80);
 
     // Draw QR Code
     ctx.drawImage(qrCodeImage, (canvas.width - 200) / 2, 120, 200, 200);
 
     // Draw additional info
-    ctx.font = "16px Inter";
-    ctx.fillText(`Ticket ID: ${registration.ticket_id}`, canvas.width / 2, canvas.height - 60);
-    ctx.fillText(`Registration Date: ${registration.created_at ? new Date(registration.created_at).toLocaleDateString() : "Not available"}`, canvas.width / 2, canvas.height - 30);
-  }, [registration, backgroundColor, textColor, fontSize, selectedTheme, qrCodeImage, patternType, patternContent, patternSize, patternRotation]);
+    ctx.font = '16px Inter';
+    ctx.fillText(
+      `Ticket ID: ${registration.ticket_id}`,
+      canvas.width / 2,
+      canvas.height - 60
+    );
+    ctx.fillText(
+      `Registration Date: ${registration.created_at ? new Date(registration.created_at).toLocaleDateString() : 'Not available'}`,
+      canvas.width / 2,
+      canvas.height - 30
+    );
+  }, [
+    registration,
+    backgroundColor,
+    textColor,
+    fontSize,
+    selectedTheme,
+    qrCodeImage,
+    patternType,
+    patternContent,
+    patternSize,
+    patternRotation,
+  ]);
 
   const downloadTicket = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const downloadLink = document.createElement("a");
+    const downloadLink = document.createElement('a');
     downloadLink.download = `${registration?.event_title}-${registration?.ticket_id}.png`;
-    downloadLink.href = canvas.toDataURL("image/png");
+    downloadLink.href = canvas.toDataURL('image/png');
     downloadLink.click();
 
     confetti({
@@ -218,21 +266,21 @@ export default function CustomizeTicketPage() {
 
     try {
       setEmailLoading(true);
-      const ticketImageUrl = canvasRef.current.toDataURL("image/png");
+      const ticketImageUrl = canvasRef.current.toDataURL('image/png');
 
       // Debug log
-      console.log("Sending data:", {
+      console.log('Sending data:', {
         registration: {
           details: registration.details,
           event_title: registration.event_title,
-          ticket_id: registration.ticket_id,
-        },
+          ticket_id: registration.ticket_id
+        }
       });
 
-      const response = await fetch("/api/send-ticket", {
-        method: "POST",
+      const response = await fetch('/api/send-ticket', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           registration,
@@ -243,22 +291,23 @@ export default function CustomizeTicketPage() {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Failed to send email");
+        throw new Error(data.error || 'Failed to send email');
       }
 
       setDialogMessage({
-        title: "Success!",
-        description: "Ticket has been sent to your email.",
-        type: "success",
+        title: 'Success!',
+        description: 'Ticket has been sent to your email.',
+        type: 'success'
       });
       setDialogOpen(true);
+
     } catch (error: unknown) {
-      console.error("Error sending email:", error);
-      const errorMessage = error instanceof Error ? error.message : "Failed to send email";
+      console.error('Error sending email:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Failed to send email';
       setDialogMessage({
-        title: "Error",
+        title: 'Error',
         description: `Failed to send email: ${errorMessage}`,
-        type: "error",
+        type: 'error'
       });
       setDialogOpen(true);
     } finally {
@@ -275,17 +324,32 @@ export default function CustomizeTicketPage() {
         <div className="z-[100] max-w-[400px] rounded-lg border border-border bg-background p-4 shadow-lg shadow-black/5">
           <div className="flex gap-2">
             <div className="flex grow gap-3">
-              <TriangleAlert className="mt-0.5 shrink-0 text-amber-500" size={16} strokeWidth={2} aria-hidden="true" />
+              <TriangleAlert
+                className="mt-0.5 shrink-0 text-amber-500"
+                size={16}
+                strokeWidth={2}
+                aria-hidden="true"
+              />
               <div className="flex grow flex-col gap-3">
                 <div className="space-y-2">
-                  <p className="text-sm font-medium">Registration Pending Approval</p>
-                  <p className="text-sm text-muted-foreground">
-                    Your registration is currently being reviewed by the event organizers. You&apos;ll be able to access and customize your ticket once approved.
+                  <p className="text-sm font-medium">
+                    Registration Pending Approval
                   </p>
-                  <p className="text-xs text-muted-foreground mt-3">Ticket ID: {registration.ticket_id}</p>
+                  <p className="text-sm text-muted-foreground">
+                    Your registration is currently being reviewed by the event
+                    organizers. You&apos;ll be able to access and customize your
+                    ticket once approved.
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-3">
+                    Ticket ID: {registration.ticket_id}
+                  </p>
                 </div>
                 <div>
-                  <Button size="sm" variant="outline" onClick={() => Router.back()}>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => Router.back()}
+                  >
                     Return to Dashboard
                   </Button>
                 </div>
@@ -295,9 +359,14 @@ export default function CustomizeTicketPage() {
               variant="ghost"
               className="group -my-1.5 -me-2 size-8 shrink-0 p-0 hover:bg-transparent"
               aria-label="Close notification"
-              // onClick={() => window.location.href = '/dashboard'}
+            // onClick={() => window.location.href = '/dashboard'}
             >
-              <X size={16} strokeWidth={2} className="opacity-60 transition-opacity group-hover:opacity-100" aria-hidden="true" />
+              <X
+                size={16}
+                strokeWidth={2}
+                className="opacity-60 transition-opacity group-hover:opacity-100"
+                aria-hidden="true"
+              />
             </Button>
           </div>
         </div>
@@ -306,12 +375,12 @@ export default function CustomizeTicketPage() {
   }
 
   return (
-    <div className=" max-w-6xl mx-auto py-8">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <Card className="p-6 space-y-6">
+    <div className=" max-w-6xl mx-auto py-4 md:py-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
+        <Card className="p-6 space-y-6 order-2 md:order-1">
           <div className="text-center space-y-2">
-            <h1 className="text-2xl font-bold">Customize Your Ticket</h1>
-            <p className="text-gray-500">Personalize your event ticket</p>
+            <h1 className="text-2xl md:text-2xl font-bold">Customize Your Ticket</h1>
+            <p className="text-gray-500 text-sm">Personalize your event ticket</p>
           </div>
 
           <div className="space-y-4">
@@ -332,29 +401,58 @@ export default function CustomizeTicketPage() {
             <div>
               <Label className="text-sm font-medium">Background Color</Label>
               <div className="flex gap-2">
-                <Input type="color" value={backgroundColor} onChange={(e) => setBackgroundColor(e.target.value)} className="w-16 h-10" />
-                <Input type="text" value={backgroundColor} onChange={(e) => setBackgroundColor(e.target.value)} className="flex-1" />
+                <Input
+                  type="color"
+                  value={backgroundColor}
+                  onChange={e => setBackgroundColor(e.target.value)}
+                  className="w-12 h-9"
+                />
+                <Input
+                  type="text"
+                  value={backgroundColor}
+                  onChange={e => setBackgroundColor(e.target.value)}
+                  className="flex-1"
+                />
               </div>
             </div>
 
             <div>
               <Label className="text-sm font-medium">Text Color</Label>
               <div className="flex gap-2">
-                <Input type="color" value={textColor} onChange={(e) => setTextColor(e.target.value)} className="w-16 h-10" />
-                <Input type="text" value={textColor} onChange={(e) => setTextColor(e.target.value)} className="flex-1" />
+                <Input
+                  type="color"
+                  value={textColor}
+                  onChange={e => setTextColor(e.target.value)}
+                  className="w-16 h-10"
+                />
+                <Input
+                  type="text"
+                  value={textColor}
+                  onChange={e => setTextColor(e.target.value)}
+                  className="flex-1"
+                />
               </div>
             </div>
 
             <div>
               <Label className="text-sm font-medium">Font Size</Label>
-              <Slider value={[fontSize]} onValueChange={(value) => setFontSize(value[0])} min={16} max={48} step={1} className="my-2" />
-              <div className="text-sm text-gray-500 text-right">{fontSize}px</div>
+              <Slider
+                value={[fontSize]}
+                onValueChange={value => setFontSize(value[0])}
+                min={16}
+                max={48}
+                step={1}
+                className="my-2"
+              />
+              <div className="text-sm text-gray-500 text-right">
+                {fontSize}px
+              </div>
             </div>
 
             <div>
               <Label className="text-sm font-medium">Background Pattern</Label>
               <Select value={patternType} onValueChange={setPatternType}>
-                <SelectTrigger>
+                <SelectTrigger className='h-9'>
                   <SelectValue placeholder="Select pattern type" />
                 </SelectTrigger>
                 <SelectContent>
@@ -364,21 +462,37 @@ export default function CustomizeTicketPage() {
                 </SelectContent>
               </Select>
 
-              {(patternType === "emoji" || patternType === "text") && (
+              {(patternType === 'emoji' || patternType === 'text') && (
                 <div className="space-y-4 mt-4">
                   <div>
                     <Label>Pattern Content</Label>
-                    <Input value={patternContent} onChange={(e) => setPatternContent(e.target.value)} placeholder="Enter emoji or text" />
+                    <Input
+                      value={patternContent}
+                      onChange={e => setPatternContent(e.target.value)}
+                      placeholder="Enter emoji or text"
+                    />
                   </div>
 
                   <div>
                     <Label>Pattern Size</Label>
-                    <Slider value={[patternSize]} onValueChange={(value) => setPatternSize(value[0])} min={10} max={50} step={1} />
+                    <Slider
+                      value={[patternSize]}
+                      onValueChange={value => setPatternSize(value[0])}
+                      min={10}
+                      max={50}
+                      step={1}
+                    />
                   </div>
 
                   <div>
                     <Label>Pattern Rotation</Label>
-                    <Slider value={[patternRotation]} onValueChange={(value) => setPatternRotation(value[0])} min={0} max={360} step={15} />
+                    <Slider
+                      value={[patternRotation]}
+                      onValueChange={value => setPatternRotation(value[0])}
+                      min={0}
+                      max={360}
+                      step={15}
+                    />
                   </div>
                 </div>
               )}
@@ -389,11 +503,22 @@ export default function CustomizeTicketPage() {
                 <Download className="mr-2 h-4 w-4" />
                 Download
               </Button>
-              <Button onClick={shareTicket} variant="outline" className="flex-1">
+              <Button
+                onClick={shareTicket}
+                variant="outline"
+                className="flex-1"
+              >
                 <Share2 className="mr-2 h-4 w-4" />
                 Share
               </Button>
-              <RateLimitedButton onRateLimitedClick={emailTicket} cooldownMs={60000} variant="outline" className="flex-1" disabled={emailLoading}>
+              <RateLimitedButton
+                onRateLimitedClick={emailTicket}
+                cooldownMs={60000}
+                variant="outline"
+                className="flex-1"
+                disabled={emailLoading}
+
+              >
                 <Mail className="mr-2 h-4 w-4" />
                 {emailLoading ? "Sending..." : "Email"}
               </RateLimitedButton>
@@ -401,35 +526,58 @@ export default function CustomizeTicketPage() {
           </div>
         </Card>
 
-        <div className="space-y-6 w-full max-w-xl h-auto">
-          <Card className="p-6 w-full min-w-[560px]">
-            <CardContent>
+        <div className="space-y-6 w-full order-1 md:order-2">
+          <Card className="p-6 w-full overflow-hidden">
+            <CardContent className="flex justify-center items-center">
               <ScratchToReveal
-                width={462}
-                height={308}
+                width={canvasSize.width}
+                height={canvasSize.height}
                 minScratchPercentage={70}
                 className="flex items-center justify-center overflow-hidden rounded-2xl border-2 bg-gray-100"
                 // onComplete={handleComplete}
-                gradientColors={["#838487", "#8A8B8F", "#AFB0B3", "#A8A9AD", "#A1A2A5", "#929396"]}
+                gradientColors={[
+                  '#838487',
+                  '#8A8B8F',
+                  '#AFB0B3',
+                  '#A8A9AD',
+                  '#A1A2A5',
+                  '#929396',
+                ]}
               >
-                <canvas ref={canvasRef} width={600} height={400} className="w-full h-auto border rounded-lg" />
+                <canvas
+                  ref={canvasRef}
+                  width={canvasSize.width}
+                  height={canvasSize.height}
+                  className="w-full h-auto border rounded-lg"
+                />
               </ScratchToReveal>
             </CardContent>
             <CardFooter>
-              <p className="text-sm text-gray-500 text-center">Scratch the ticket to reveal the QR code</p>
+              <p className="text-xs md:text-sm text-gray-500 text-center">
+                Scratch the ticket to reveal the QR code
+              </p>
             </CardFooter>
           </Card>
 
           <div className="hidden">
-            <QRCode id="QRCode" value={registration.id || ""} size={200} level="H" />
+            <QRCode
+              id="QRCode"
+              value={registration.id || ''}
+              size={200}
+              level="H"
+            />
           </div>
         </div>
       </div>
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent>
+        <DialogContent className='sm:max-w-md'>
           <DialogHeader>
-            <DialogTitle className={dialogMessage.type === "error" ? "text-red-500" : "text-green-500"}>{dialogMessage.title}</DialogTitle>
-            <DialogDescription>{dialogMessage.description}</DialogDescription>
+            <DialogTitle className={dialogMessage.type === 'error' ? 'text-red-500' : 'text-green-500'}>
+              {dialogMessage.title}
+            </DialogTitle>
+            <DialogDescription>
+              {dialogMessage.description}
+            </DialogDescription>
           </DialogHeader>
         </DialogContent>
       </Dialog>
