@@ -5,13 +5,13 @@ interface EmailTemplateProps {
   ticketImageUrl: string;
 }
 
-export const EmailTemplate = ({
-  registration,
-}: EmailTemplateProps) => {
+export const EmailTemplate = ({ registration }: EmailTemplateProps) => {
   // Get event date safely from registration details
   const details = registration.details as { event_date?: string } | null;
-  const eventDate = details?.event_date ? new Date(details.event_date) : new Date();
-  const endDate = new Date(eventDate.getTime() + (2 * 60 * 60 * 1000)); // Assuming 2 hour event
+  const eventDate = details?.event_date
+    ? new Date(details.event_date)
+    : new Date();
+  const endDate = new Date(eventDate.getTime() + 2 * 60 * 60 * 1000); // Assuming 2 hour event
 
   // Create Google Calendar link
   const googleCalendarLink = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(registration.event_title)}&dates=${eventDate.toISOString().replace(/[-:]/g, '').replace('.000', '')}/${endDate.toISOString().replace(/[-:]/g, '').replace('.000', '')}&details=${encodeURIComponent(`Your Ticket ID: ${registration.ticket_id}\n\nThis is your ticket for ${registration.event_title}. Please keep it safe and present it at the event entrance.`)}&location=SRM%20Institute%20of%20Science%20and%20Technology%2C%20Kattankulathur`;

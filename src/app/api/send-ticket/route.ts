@@ -26,7 +26,7 @@ export async function POST(req: Request) {
     // Create a new object with the logo data
     const registrationWithLogo: typeformInsertType & { logoBase64: string } = {
       ...registration,
-      logoBase64: logoBuffer.toString('base64')
+      logoBase64: logoBuffer.toString('base64'),
     };
 
     // Convert ticket image to buffer for attachment
@@ -44,9 +44,12 @@ export async function POST(req: Request) {
           filename: `${registration.event_title}-${registration.ticket_id}.png`,
           content: ticketBuffer,
           contentType: 'image/png',
-        }
+        },
       ],
-      html: EmailTemplate({ registration: registrationWithLogo, ticketImageUrl }),
+      html: EmailTemplate({
+        registration: registrationWithLogo,
+        ticketImageUrl,
+      }),
     });
 
     console.log('Email sent successfully:', data);
@@ -55,7 +58,7 @@ export async function POST(req: Request) {
     console.error('Detailed API Error:', {
       error,
       message: error instanceof Error ? error.message : 'Unknown error',
-      stack: error instanceof Error ? error.stack : undefined
+      stack: error instanceof Error ? error.stack : undefined,
     });
     return NextResponse.json(
       { error: 'Failed to send email', details: error },

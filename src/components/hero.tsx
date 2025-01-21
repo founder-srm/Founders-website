@@ -1,16 +1,16 @@
-import Image from "next/image";
-import Particles from "./ui/particles";
-import { urlFor } from "@/sanity/lib/image";
-import { HERO_QUERY } from "@/sanity/lib/queries";
-import { sanityFetch } from "@/sanity/lib/live";
-import InteractiveHoverButton from "./ui/interactive-hover-button";
+import Image from 'next/image';
+import Particles from './ui/particles';
+import { urlFor } from '@/sanity/lib/image';
+import { HERO_QUERY } from '@/sanity/lib/queries';
+import { sanityFetch } from '@/sanity/lib/live';
+import InteractiveHoverButton from './ui/interactive-hover-button';
 
 export const revalidate = 3600; // revalidate every hour
 
 export default async function Hero() {
   const { data } = await sanityFetch({ query: HERO_QUERY });
 
-  const link = data?.buttonLink?.startsWith("/") ? data.buttonLink : "/";
+  const link = data?.buttonLink?.startsWith('/') ? data.buttonLink : '/';
 
   return (
     data && (
@@ -20,10 +20,17 @@ export default async function Hero() {
           <div className="flex flex-col items-start justify-between gap-8 md:flex-row xl:gap-20">
             {/* Text Content */}
             <div className="flex w-full flex-col items-start text-left pt-12 ">
-              <h1 className="mb-8 text-pretty text-4xl font-normal md:text-7xl heading-gradient">{data.title}</h1>
-              <p className="mb-12 max-w-[70%] text-xl font-normal text-muted-foreground">{data.subtitle}</p>
+              <h1 className="mb-8 text-pretty text-4xl font-normal md:text-7xl heading-gradient">
+                {data.title}
+              </h1>
+              <p className="mb-12 max-w-[70%] text-xl font-normal text-muted-foreground">
+                {data.subtitle}
+              </p>
               <div className="flex w-full justify-start md:justify-start">
-                <InteractiveHoverButton link={link} text={data.buttonText || ""} />
+                <InteractiveHoverButton
+                  link={link}
+                  text={data.buttonText || ''}
+                />
               </div>
             </div>
 
@@ -31,7 +38,7 @@ export default async function Hero() {
             <div className="relative flex h-[600px] w-full rounded-md sm:h-[750px]">
               <div className="absolute flex h-[600px] w-screen rounded-md bg-gradient-to-b from-muted/50 to-muted sm:h-[750px]">
                 <Image
-                  src={urlFor(data.image1 || "").url()}
+                  src={urlFor(data.image1 || '').url()}
                   alt="Largest"
                   width={3840}
                   height={2160}
@@ -41,7 +48,7 @@ export default async function Hero() {
                 />
                 <div className="absolute -left-5 top-1/2 md:-left-20 lg:-left-44">
                   <Image
-                    src={urlFor(data.image2 || "").url()}
+                    src={urlFor(data.image2 || '').url()}
                     alt="Tops small"
                     width={265}
                     height={142}
@@ -50,7 +57,7 @@ export default async function Hero() {
                     priority
                   />
                   <Image
-                    src={urlFor(data.image3 || "").url()}
+                    src={urlFor(data.image3 || '').url()}
                     alt="Bottom small"
                     width={265}
                     height={142}
@@ -60,7 +67,7 @@ export default async function Hero() {
                   />
                 </div>
                 <Image
-                  src={urlFor(data.image4 || "").url()}
+                  src={urlFor(data.image4 || '').url()}
                   alt="Bottom right"
                   width={265}
                   height={156}

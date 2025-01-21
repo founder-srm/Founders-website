@@ -40,6 +40,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     ourStoryType,
     upcompingEventsHeaderType,
     timelineType,
-    bannerHeaderType
+    bannerHeaderType,
   ],
 };

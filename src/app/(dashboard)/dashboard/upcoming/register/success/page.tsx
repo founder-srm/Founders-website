@@ -22,12 +22,18 @@ import { Slider } from '@/components/ui/slider';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import ScratchToReveal from '@/components/ui/scratch-to-reveal';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 
 export default function CustomizeTicketPage() {
   // Add new state for QR code size
   const [qrCodeSize, setQrCodeSize] = useState(200);
-  
+
   const searchParams = useSearchParams();
   const Router = useRouter();
   const ticketId = searchParams.get('ticketid');
@@ -47,7 +53,11 @@ export default function CustomizeTicketPage() {
   const [patternRotation, setPatternRotation] = useState(0);
   const [emailLoading, setEmailLoading] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [dialogMessage, setDialogMessage] = useState({ title: '', description: '', type: 'success' as 'success' | 'error' });
+  const [dialogMessage, setDialogMessage] = useState({
+    title: '',
+    description: '',
+    type: 'success' as 'success' | 'error',
+  });
   const [canvasSize, setCanvasSize] = useState({ width: 600, height: 400 });
   // Remove toast related code
 
@@ -58,7 +68,9 @@ export default function CustomizeTicketPage() {
       const supabase = createClient();
 
       // Get current user's session
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
 
       const { data, error } = await supabase
         .from('eventsregistrations')
@@ -75,12 +87,12 @@ export default function CustomizeTicketPage() {
 
         setRegistration({
           ...data,
-          details: updatedDetails
+          details: updatedDetails,
         });
 
         console.log('Registration data with email:', {
           ...data,
-          details: updatedDetails
+          details: updatedDetails,
         });
       }
       setLoading(false);
@@ -108,21 +120,24 @@ export default function CustomizeTicketPage() {
   useEffect(() => {
     const handleResize = () => {
       const screenWidth = window.innerWidth;
-      if (screenWidth < 640) { // mobile
+      if (screenWidth < 640) {
+        // mobile
         setCanvasSize({
           width: 300,
           height: 200,
         });
         setQrCodeSize(100); // smaller QR for mobile
         setFontSize(16); // smaller default font for mobile
-      } else if (screenWidth < 1024) { // tablet
+      } else if (screenWidth < 1024) {
+        // tablet
         setCanvasSize({
           width: 450,
           height: 300,
         });
         setQrCodeSize(150); // medium QR for tablet
         setFontSize(20); // medium font for tablet
-      } else { // desktop
+      } else {
+        // desktop
         setCanvasSize({
           width: 600,
           height: 400,
@@ -300,8 +315,8 @@ export default function CustomizeTicketPage() {
         registration: {
           details: registration.details,
           event_title: registration.event_title,
-          ticket_id: registration.ticket_id
-        }
+          ticket_id: registration.ticket_id,
+        },
       });
 
       const response = await fetch('/api/send-ticket', {
@@ -324,17 +339,17 @@ export default function CustomizeTicketPage() {
       setDialogMessage({
         title: 'Success!',
         description: 'Ticket has been sent to your email.',
-        type: 'success'
+        type: 'success',
       });
       setDialogOpen(true);
-
     } catch (error: unknown) {
       console.error('Error sending email:', error);
-      const errorMessage = error instanceof Error ? error.message : 'Failed to send email';
+      const errorMessage =
+        error instanceof Error ? error.message : 'Failed to send email';
       setDialogMessage({
         title: 'Error',
         description: `Failed to send email: ${errorMessage}`,
-        type: 'error'
+        type: 'error',
       });
       setDialogOpen(true);
     } finally {
@@ -386,7 +401,7 @@ export default function CustomizeTicketPage() {
               variant="ghost"
               className="group -my-1.5 -me-2 size-8 shrink-0 p-0 hover:bg-transparent"
               aria-label="Close notification"
-            // onClick={() => window.location.href = '/dashboard'}
+              // onClick={() => window.location.href = '/dashboard'}
             >
               <X
                 size={16}
@@ -406,8 +421,12 @@ export default function CustomizeTicketPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-8">
         <Card className="p-6 space-y-6 order-2 md:order-1">
           <div className="text-center space-y-2">
-            <h1 className="text-2xl md:text-2xl font-bold">Customize Your Ticket</h1>
-            <p className="text-gray-500 text-sm">Personalize your event ticket</p>
+            <h1 className="text-2xl md:text-2xl font-bold">
+              Customize Your Ticket
+            </h1>
+            <p className="text-gray-500 text-sm">
+              Personalize your event ticket
+            </p>
           </div>
 
           <div className="space-y-4">
@@ -479,7 +498,7 @@ export default function CustomizeTicketPage() {
             <div>
               <Label className="text-sm font-medium">Background Pattern</Label>
               <Select value={patternType} onValueChange={setPatternType}>
-                <SelectTrigger className='h-9'>
+                <SelectTrigger className="h-9">
                   <SelectValue placeholder="Select pattern type" />
                 </SelectTrigger>
                 <SelectContent>
@@ -544,10 +563,9 @@ export default function CustomizeTicketPage() {
                 variant="outline"
                 className="flex-1"
                 disabled={emailLoading}
-
               >
                 <Mail className="mr-2 h-4 w-4" />
-                {emailLoading ? "Sending..." : "Email"}
+                {emailLoading ? 'Sending...' : 'Email'}
               </RateLimitedButton>
             </div>
           </div>
@@ -598,14 +616,18 @@ export default function CustomizeTicketPage() {
         </div>
       </div>
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className='sm:max-w-md'>
+        <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle className={dialogMessage.type === 'error' ? 'text-red-500' : 'text-green-500'}>
+            <DialogTitle
+              className={
+                dialogMessage.type === 'error'
+                  ? 'text-red-500'
+                  : 'text-green-500'
+              }
+            >
               {dialogMessage.title}
             </DialogTitle>
-            <DialogDescription>
-              {dialogMessage.description}
-            </DialogDescription>
+            <DialogDescription>{dialogMessage.description}</DialogDescription>
           </DialogHeader>
         </DialogContent>
       </Dialog>

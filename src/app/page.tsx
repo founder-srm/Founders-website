@@ -1,12 +1,12 @@
-import CTA11 from "@/components/cta1";
-import Faq1 from "@/components/faqs";
-import { InfiniteSliderBanner } from "@/components/fc-banner-home";
-import Feature43 from "@/components/features";
-import Hero from "@/components/hero";
-import EventWriteUp from "@/components/recent-events";
-import RelatedPosts from "@/components/related-posts";
-import Testimonial10 from "@/components/testimonials";
-import { SanityLive } from "@/sanity/lib/live";
+import CTA11 from '@/components/cta1';
+import Faq1 from '@/components/faqs';
+import { InfiniteSliderBanner } from '@/components/fc-banner-home';
+import Feature43 from '@/components/features';
+import Hero from '@/components/hero';
+import EventWriteUp from '@/components/recent-events';
+import RelatedPosts from '@/components/related-posts';
+import Testimonial10 from '@/components/testimonials';
+import { SanityLive } from '@/sanity/lib/live';
 
 export default function Home() {
   return (

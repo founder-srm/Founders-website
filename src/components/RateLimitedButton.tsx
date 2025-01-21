@@ -1,12 +1,15 @@
-import React, { useState, useCallback, useEffect } from "react";
-import { Button, ButtonProps } from "@/components/ui/button";
+import React, { useState, useCallback, useEffect } from 'react';
+import { Button, type ButtonProps } from '@/components/ui/button';
 
 interface RateLimitedButtonProps extends ButtonProps {
   onRateLimitedClick: () => void | Promise<void>;
   cooldownMs?: number;
 }
 
-const RateLimitedButton = React.forwardRef<HTMLButtonElement, RateLimitedButtonProps>(
+const RateLimitedButton = React.forwardRef<
+  HTMLButtonElement,
+  RateLimitedButtonProps
+>(
   (
     {
       onRateLimitedClick,
@@ -54,14 +57,19 @@ const RateLimitedButton = React.forwardRef<HTMLButtonElement, RateLimitedButtonP
           setRemainingTime(0);
         }, cooldownMs);
       } catch (error) {
-        console.error("Error in button click handler:", error);
+        console.error('Error in button click handler:', error);
         setIsInCooldown(false);
         setRemainingTime(0);
       }
     }, [onRateLimitedClick, cooldownMs, isInCooldown, disabled]);
 
     return (
-      <Button {...buttonProps} ref={ref} onClick={handleClick} disabled={isInCooldown || disabled}>
+      <Button
+        {...buttonProps}
+        ref={ref}
+        onClick={handleClick}
+        disabled={isInCooldown || disabled}
+      >
         {children}
         {isInCooldown && remainingTime > 0 && ` (${remainingTime}s)`}
       </Button>
@@ -69,6 +77,6 @@ const RateLimitedButton = React.forwardRef<HTMLButtonElement, RateLimitedButtonP
   }
 );
 
-RateLimitedButton.displayName = "RateLimitedButton";
+RateLimitedButton.displayName = 'RateLimitedButton';
 
 export default RateLimitedButton;
