@@ -8,7 +8,7 @@ import { useEffect, useState, useRef } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import QRCode from 'react-qr-code';
 import confetti from 'canvas-confetti';
-import { Card, CardContent, CardFooter } from '@/components/ui/card';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import type { typeformInsertType } from '../../../../../../../schema.zod';
 import { Button } from '@/components/ui/button';
 import {
@@ -25,6 +25,9 @@ import ScratchToReveal from '@/components/ui/scratch-to-reveal';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 
 export default function CustomizeTicketPage() {
+  // Add new state for QR code size
+  const [qrCodeSize, setQrCodeSize] = useState(200);
+  
   const searchParams = useSearchParams();
   const Router = useRouter();
   const ticketId = searchParams.get('ticketid');
@@ -101,19 +104,38 @@ export default function CustomizeTicketPage() {
     }
   }, [registration]);
 
-  // Around line 135-145
+  // Update the resize effect to include QR code sizing
   useEffect(() => {
     const handleResize = () => {
-      const isMobile = window.innerWidth < 768;
-      setCanvasSize({
-        width: isMobile ? 320 : 600,
-        height: isMobile ? 213 : 400,
-      });
+      const screenWidth = window.innerWidth;
+      if (screenWidth < 640) { // mobile
+        setCanvasSize({
+          width: 300,
+          height: 200,
+        });
+        setQrCodeSize(100); // smaller QR for mobile
+        setFontSize(16); // smaller default font for mobile
+      } else if (screenWidth < 1024) { // tablet
+        setCanvasSize({
+          width: 450,
+          height: 300,
+        });
+        setQrCodeSize(150); // medium QR for tablet
+        setFontSize(20); // medium font for tablet
+      } else { // desktop
+        setCanvasSize({
+          width: 600,
+          height: 400,
+        });
+        setQrCodeSize(200); // large QR for desktop
+        setFontSize(24); // larger font for desktop
+      }
     };
     handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
   useEffect(() => {
     if (!registration || !canvasRef.current || !qrCodeImage) return;
 
@@ -208,14 +230,18 @@ export default function CustomizeTicketPage() {
       ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
 
-    // Draw content
+    // Draw content with adjusted position for mobile
     ctx.fillStyle = textColor;
     ctx.font = `bold ${fontSize}px Inter`;
     ctx.textAlign = 'center';
-    ctx.fillText(registration.event_title, canvas.width / 2, 80);
+    const isMobile = window.innerWidth < 640;
+    const titleY = isMobile ? 40 : 80; // Move title higher on mobile
+    ctx.fillText(registration.event_title, canvas.width / 2, titleY);
 
-    // Draw QR Code
-    ctx.drawImage(qrCodeImage, (canvas.width - 200) / 2, 120, 200, 200);
+    // Update QR code drawing with dynamic size and centered positioning
+    const qrX = (canvas.width - qrCodeSize) / 2;
+    const qrY = (canvas.height - qrCodeSize) / 2;
+    ctx.drawImage(qrCodeImage, qrX, qrY, qrCodeSize, qrCodeSize);
 
     // Draw additional info
     ctx.font = '16px Inter';
@@ -240,6 +266,7 @@ export default function CustomizeTicketPage() {
     patternContent,
     patternSize,
     patternRotation,
+    qrCodeSize, // Add qrCodeSize to dependencies
   ]);
 
   const downloadTicket = () => {
@@ -376,7 +403,7 @@ export default function CustomizeTicketPage() {
 
   return (
     <div className=" max-w-6xl mx-auto py-4 md:py-8">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-8">
         <Card className="p-6 space-y-6 order-2 md:order-1">
           <div className="text-center space-y-2">
             <h1 className="text-2xl md:text-2xl font-bold">Customize Your Ticket</h1>
@@ -384,8 +411,8 @@ export default function CustomizeTicketPage() {
           </div>
 
           <div className="space-y-4">
+            <Label className="text-sm font-medium">Theme</Label>
             <div>
-              <Label className="text-sm font-medium">Theme</Label>
               <Select value={selectedTheme} onValueChange={setSelectedTheme}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select theme" />
@@ -498,7 +525,7 @@ export default function CustomizeTicketPage() {
               )}
             </div>
 
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2">
               <Button onClick={downloadTicket} className="flex-1">
                 <Download className="mr-2 h-4 w-4" />
                 Download
@@ -528,42 +555,43 @@ export default function CustomizeTicketPage() {
 
         <div className="space-y-6 w-full order-1 md:order-2">
           <Card className="p-6 w-full overflow-hidden">
-            <CardContent className="flex justify-center items-center">
-              <ScratchToReveal
-                width={canvasSize.width}
-                height={canvasSize.height}
-                minScratchPercentage={70}
-                className="flex items-center justify-center overflow-hidden rounded-2xl border-2 bg-gray-100"
-                // onComplete={handleComplete}
-                gradientColors={[
-                  '#838487',
-                  '#8A8B8F',
-                  '#AFB0B3',
-                  '#A8A9AD',
-                  '#A1A2A5',
-                  '#929396',
-                ]}
-              >
-                <canvas
-                  ref={canvasRef}
-                  width={canvasSize.width}
-                  height={canvasSize.height}
-                  className="w-full h-auto border rounded-lg"
-                />
-              </ScratchToReveal>
-            </CardContent>
-            <CardFooter>
+            <CardHeader className="text-center">
               <p className="text-xs md:text-sm text-gray-500 text-center">
                 Scratch the ticket to reveal the QR code
               </p>
-            </CardFooter>
+            </CardHeader>
+            <CardContent className="flex justify-center items-center w-full">
+              <div className="w-full flex justify-center items-center">
+                <ScratchToReveal
+                  width={canvasSize.width}
+                  height={canvasSize.height}
+                  minScratchPercentage={40}
+                  className="w-full flex items-center justify-center overflow-hidden rounded-2xl border-2 bg-gray-100"
+                  gradientColors={[
+                    '#838487',
+                    '#8A8B8F',
+                    '#AFB0B3',
+                    '#A8A9AD',
+                    '#A1A2A5',
+                    '#929396',
+                  ]}
+                >
+                  <canvas
+                    ref={canvasRef}
+                    width={canvasSize.width}
+                    height={canvasSize.height}
+                    className="w-full h-auto max-w-full"
+                  />
+                </ScratchToReveal>
+              </div>
+            </CardContent>
           </Card>
 
           <div className="hidden">
             <QRCode
               id="QRCode"
               value={registration.id || ''}
-              size={200}
+              size={qrCodeSize}
               level="H"
             />
           </div>
