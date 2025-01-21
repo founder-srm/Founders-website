@@ -1,107 +1,357 @@
-"use client";
+import type { typeformInsertType } from '../../../schema.zod';
 
-import { Button } from "@/components/ui/button";
-import { TicketPercent, X } from "lucide-react";
-import { useEffect, useState } from "react";
-import type { BannerHeader } from "../../sanity.types";
-import Link from "next/link";
-
-interface TimeLeft {
-  days: number;
-  hours: number;
-  minutes: number;
-  seconds: number;
-  isExpired: boolean;
+interface EmailTemplateProps {
+  registration: typeformInsertType;
+  ticketImageUrl: string;
 }
 
-export default function Banner({ bannerData }: { bannerData: BannerHeader }) {
-  const [isVisible, setIsVisible] = useState(true);
-  const [timeLeft, setTimeLeft] = useState<TimeLeft>({
-    days: 0,
-    hours: 0,
-    minutes: 0,
-    seconds: 0,
-    isExpired: false,
-  });
+export const EmailTemplate = ({
+  registration,
+}: EmailTemplateProps) => {
+  // Get event date safely from registration details
+  const details = registration.details as { event_date?: string } | null;
+  const eventDate = details?.event_date ? new Date(details.event_date) : new Date();
+  const endDate = new Date(eventDate.getTime() + (2 * 60 * 60 * 1000)); // Assuming 2 hour event
 
-  useEffect(() => {
-    if (!bannerData?.endDate) return;
+  // Create Google Calendar link
+  const googleCalendarLink = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(registration.event_title)}&dates=${eventDate.toISOString().replace(/[-:]/g, '').replace('.000', '')}/${endDate.toISOString().replace(/[-:]/g, '').replace('.000', '')}&details=${encodeURIComponent(`Your Ticket ID: ${registration.ticket_id}\n\nThis is your ticket for ${registration.event_title}. Please keep it safe and present it at the event entrance.`)}&location=SRM%20Institute%20of%20Science%20and%20Technology%2C%20Kattankulathur`;
 
-    const calculateTimeLeft = () => {
-      const now = new Date().getTime();
-      const targetDate = bannerData.endDate ? new Date(bannerData.endDate).getTime() : 0;
-      const difference = targetDate - now;
+  return `
+    <!DOCTYPE html>
+<html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" lang="en">
 
-      if (difference <= 0) {
-        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0, isExpired: true });
-        return;
-      }
+<head>
+	<title></title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"><!--[if mso]><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch><o:AllowPNG/></o:OfficeDocumentSettings></xml><![endif]--><!--[if !mso]><!--><!--<![endif]-->
+	<style>
+		* {
+			box-sizing: border-box;
+		}
 
-      const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+		body {
+			margin: 0;
+			padding: 0;
+		}
 
-      setTimeLeft({
-        days,
-        hours,
-        minutes,
-        seconds,
-        isExpired: false,
-      });
-    };
+		a[x-apple-data-detectors] {
+			color: inherit !important;
+			text-decoration: inherit !important;
+		}
 
-    calculateTimeLeft();
-    const timer = setInterval(calculateTimeLeft, 1000);
+		#MessageViewBody a {
+			color: inherit;
+			text-decoration: none;
+		}
 
-    return () => clearInterval(timer);
-  }, [bannerData?.endDate]);
+		p {
+			line-height: inherit
+		}
 
-  if (!bannerData || !isVisible || !bannerData.isVisible || timeLeft.isExpired) return null;
+		.desktop_hide,
+		.desktop_hide table {
+			mso-hide: all;
+			display: none;
+			max-height: 0px;
+			overflow: hidden;
+		}
 
-  return (
-    <div className="dark bg-muted px-4 py-3 text-foreground">
-      <div className="flex gap-2 md:items-center">
-        <div className="flex grow gap-3 md:items-center">
-          <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary/15 max-md:mt-0.5" aria-hidden="true">
-            <TicketPercent className="opacity-80" size={16} strokeWidth={2} />
-          </div>
-          <div className="flex grow flex-col justify-between gap-3 md:flex-row md:items-center">
-            <div className="space-y-0.5">
-              <p className="text-sm font-medium">{bannerData.title}</p>
-              <p className="text-sm text-muted-foreground">{bannerData.description}</p>
-            </div>
-            <div className="flex gap-3 max-md:flex-wrap">
-              <div className="flex items-center divide-x divide-primary-foreground rounded-lg bg-primary/15 text-sm tabular-nums">
-                {timeLeft.days > 0 && (
-                  <span className="flex h-8 items-center justify-center p-2">
-                    {timeLeft.days}
-                    <span className="text-muted-foreground">d</span>
-                  </span>
-                )}
-                <span className="flex h-8 items-center justify-center p-2">
-                  {timeLeft.hours.toString().padStart(2, "0")}
-                  <span className="text-muted-foreground">h</span>
-                </span>
-                <span className="flex h-8 items-center justify-center p-2">
-                  {timeLeft.minutes.toString().padStart(2, "0")}
-                  <span className="text-muted-foreground">m</span>
-                </span>
-                <span className="flex h-8 items-center justify-center p-2">
-                  {timeLeft.seconds.toString().padStart(2, "0")}
-                  <span className="text-muted-foreground">s</span>
-                </span>
-              </div>
-              <Button size="sm" className="text-sm" asChild>
-                <Link href={bannerData.buttonLink || "/"}>{bannerData.buttonText}</Link>
-              </Button>
-            </div>
-          </div>
-        </div>
-        <Button variant="ghost" className="group -my-1.5 -me-2 size-8 shrink-0 p-0 hover:bg-transparent" onClick={() => setIsVisible(false)} aria-label="Close banner">
-          <X size={16} strokeWidth={2} className="opacity-60 transition-opacity group-hover:opacity-100" aria-hidden="true" />
-        </Button>
-      </div>
-    </div>
-  );
-}
+		.image_block img+div {
+			display: none;
+		}
+
+		sup,
+		sub {
+			font-size: 75%;
+			line-height: 0;
+		}
+
+		@media (max-width:660px) {
+			.desktop_hide table.icons-inner {
+				display: inline-block !important;
+			}
+
+			.icons-inner {
+				text-align: center;
+			}
+
+			.icons-inner td {
+				margin: 0 auto;
+			}
+
+			.mobile_hide {
+				display: none;
+			}
+
+			.row-content {
+				width: 100% !important;
+			}
+
+			.stack .column {
+				width: 100%;
+				display: block;
+			}
+
+			.mobile_hide {
+				min-height: 0;
+				max-height: 0;
+				max-width: 0;
+				overflow: hidden;
+				font-size: 0px;
+			}
+
+			.desktop_hide,
+			.desktop_hide table {
+				display: table !important;
+				max-height: none !important;
+			}
+
+			.row-2 .column-1 .block-1.image_block .alignment div {
+				margin: 0 auto !important;
+			}
+
+			.row-4 .column-1 .block-1.paragraph_block td.pad {
+				padding: 20px 28px 15px !important;
+			}
+
+			.row-4 .column-1 .block-2.paragraph_block td.pad {
+				padding: 10px 18px 0 !important;
+			}
+
+			.row-2 .column-1 {
+				padding: 0 !important;
+			}
+
+			.row-4 .column-1 {
+				padding: 30px 0 0 !important;
+			}
+		}
+	</style><!--[if mso ]><style>sup, sub { font-size: 100% !important; } sup { mso-text-raise:10% } sub { mso-text-raise:-10% }</style> <![endif]-->
+</head>
+
+<body class="body" style="margin: 0; background-color: #ffffff; padding: 0; -webkit-text-size-adjust: none; text-size-adjust: none;">
+	<table class="nl-container" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #ffffff; background-image: none; background-position: top left; background-size: auto; background-repeat: no-repeat;">
+		<tbody>
+			<tr>
+				<td>
+					<table class="row row-1" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+						<tbody>
+							<tr>
+								<td>
+									<table class="row-content stack" align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; color: #000000; background-color: #ffffff; width: 640px; margin: 0 auto;" width="640">
+										<tbody>
+											<tr>
+												<td class="column column-1" width="100%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
+													<table class="divider_block block-1 mobile_hide" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+														<tr>
+															<td class="pad">
+																<div class="alignment" align="center">
+																	<table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+																		<tr>
+																			<td class="divider_inner" style="font-size: 1px; line-height: 1px; border-top: 30px solid #F3F2F3;"><span style="word-break: break-word;">&#8202;</span></td>
+																		</tr>
+																	</table>
+																</div>
+															</td>
+														</tr>
+													</table>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<table class="row row-2" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+						<tbody>
+							<tr>
+								<td>
+									<table class="row-content" align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; color: #000000; background-color: #ffffff; width: 640px; margin: 0 auto;" width="640">
+										<tbody>
+											<tr>
+												<td class="column column-1" width="100%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; background-color: #ffffff; padding-left: 48px; padding-top: 33px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
+													<table class="image_block block-1" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+														<tr>
+															<td class="pad" style="width:100%;">
+																<div class="alignment" align="center" style="line-height:10px">
+																	<div style="max-width: 412px;"><img src="https://1abc3c0323.imgdist.com/pub/bfra/e9k9afrl/gqn/yy7/nh9/FC%20logo%20full.jpeg" style="display: block; height: auto; border: 0; width: 100%;" width="412" alt="Founders Club" title="Founders Club" height="auto"></div>
+																</div>
+															</td>
+														</tr>
+													</table>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<table class="row row-3" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+						<tbody>
+							<tr>
+								<td>
+									<table class="row-content stack" align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; color: #000000; background-color: #ffffff; width: 640px; margin: 0 auto;" width="640">
+										<tbody>
+											<tr>
+												<td class="column column-1" width="100%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
+													<div class="spacer_block block-1" style="height:1px;line-height:1px;font-size:1px;">&#8202;</div>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<table class="row row-4" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+						<tbody>
+							<tr>
+								<td>
+									<table class="row-content stack" align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; color: #000000; background-color: #ffffff; background-image: url('https://d1oco4z2z1fhwp.cloudfront.net/templates/default/781/bg-shade.jpg'); background-position: center top; background-repeat: repeat; width: 640px; margin: 0 auto;" width="640">
+										<tbody>
+											<tr>
+												<td class="column column-1" width="100%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; background-color: #ffffff; padding-top: 60px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
+													<table class="paragraph_block block-1" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+														<tr>
+															<td class="pad" style="padding-bottom:15px;padding-left:38px;padding-right:38px;padding-top:20px;">
+																<div style="color:#000000;font-family:Helvetica Neue, Helvetica, Arial, sans-serif;font-size:42px;line-height:120%;text-align:center;mso-line-height-alt:50.4px;">
+																	<p style="margin: 0; word-break: break-word;"><span style="word-break: break-word; color: #1d1f4e; background-color: #ffffff;"><strong>Thank you for reserving your spot!</strong></span></p>
+																</div>
+															</td>
+														</tr>
+													</table>
+													<table class="paragraph_block block-2" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+														<tr>
+															<td class="pad" style="padding-left:38px;padding-right:38px;padding-top:10px;">
+																<div style="color:#000000;font-family:Helvetica Neue, Helvetica, Arial, sans-serif;font-size:16px;line-height:150%;text-align:center;mso-line-height-alt:24px;">
+																	<p style="margin: 0;"><span style="word-break: break-word; color: #4b4949;">We have received and confirmed your participation at the event: ${registration.event_title}.</span><br><span style="word-break: break-word; color: #4b4949;">Kindly find your ticket attached below if you have not already saved it.</span><br><br><span style="word-break: break-word; color: #4b4949;">Note: No entry will be allowed without a valid ticket.</span></p>
+																</div>
+															</td>
+														</tr>
+													</table>
+													<table class="paragraph_block block-3" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+														<tr>
+															<td class="pad" style="padding-bottom:10px;padding-left:38px;padding-right:38px;">
+																<div style="color:#555555;font-family:Helvetica Neue, Helvetica, Arial, sans-serif;font-size:12px;line-height:150%;text-align:center;mso-line-height-alt:18px;">
+																	<p style="margin: 0; word-break: break-word;">&nbsp;</p>
+																</div>
+															</td>
+														</tr>
+													</table>
+													<table class="button_block block-4" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation">
+														<tr>
+															<td class="pad" style="text-align:center;">
+																<div class="alignment" align="center">
+																	<a href="${googleCalendarLink}" target="_blank" style="text-decoration: none;">
+																		<div class="button" style="background-color:#262d92;border-radius:60px;color:#ffffff;display:inline-block;font-family:Helvetica Neue, Helvetica, Arial, sans-serif;font-size:16px;font-weight:bold;padding:16px 32px;text-align:center;text-decoration:none;">
+																			<span>Add to the Calendar</span>
+																		</div>
+																	</a>
+																</div>
+															</td>
+														</tr>
+													</table>
+													<table class="image_block block-5" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+														<tr>
+															<td class="pad" style="width:100%;">
+																<div class="alignment" align="center" style="line-height:10px">
+																	<div style="max-width: 640px;"><img src="https://d1oco4z2z1fhwp.cloudfront.net/templates/default/781/reminder-hero-graph.png" style="display: block; height: auto; border: 0; width: 100%;" width="640" alt="Image" title="Image" height="auto"></div>
+																</div>
+															</td>
+														</tr>
+													</table>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<table class="row row-5" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+						<tbody>
+							<tr>
+								<td>
+									<table class="row-content stack" align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; color: #000000; background-color: #ffffff; width: 640px; margin: 0 auto;" width="640">
+										<tbody>
+											<tr>
+												<td class="column column-1" width="100%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
+													<div class="spacer_block block-1" style="height:1px;line-height:1px;font-size:1px;">&#8202;</div>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<table class="row row-6" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+						<tbody>
+							<tr>
+								<td>
+									<table class="row-content stack" align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; color: #000000; background-color: #ffffff; width: 640px; margin: 0 auto;" width="640">
+										<tbody>
+											<tr>
+												<td class="column column-1" width="100%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
+													<table class="divider_block mobile_hide block-1" width="100%" border="0" cellpadding="15" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+														<tr>
+															<td class="pad">
+																<div class="alignment" align="center">
+																	<table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+																		<tr>
+																			<td class="divider_inner" style="font-size: 1px; line-height: 1px; border-top: 0px solid #BBBBBB;"><span style="word-break: break-word;">&#8202;</span></td>
+																		</tr>
+																	</table>
+																</div>
+															</td>
+														</tr>
+													</table>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<table class="row row-7" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #ffffff;">
+						<tbody>
+							<tr>
+								<td>
+									<table class="row-content stack" align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; color: #000000; background-color: #ffffff; width: 640px; margin: 0 auto;" width="640">
+										<tbody>
+											<tr>
+												<td class="column column-1" width="100%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
+													<table class="icons_block block-1" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; text-align: center; line-height: 0;">
+														<tr>
+															<td class="pad" style="vertical-align: middle; color: #1e0e4b; font-family: 'Inter', sans-serif; font-size: 15px; padding-bottom: 5px; padding-top: 5px; text-align: center;"><!--[if vml]><table align="center" cellpadding="0" cellspacing="0" role="presentation" style="display:inline-block;padding-left:0px;padding-right:0px;mso-table-lspace: 0pt;mso-table-rspace: 0pt;"><![endif]-->
+																<!--[if !vml]><!-->
+																<table class="icons-inner" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; display: inline-block; padding-left: 0px; padding-right: 0px;" cellpadding="0" cellspacing="0" role="presentation"><!--<![endif]-->
+																	<tr>
+																		<td style="vertical-align: middle; text-align: center; padding-top: 5px; padding-bottom: 5px; padding-left: 5px; padding-right: 6px;"><a href="http://designedwithbeefree.com/" target="_blank" style="text-decoration: none;"><img class="icon" alt="Beefree Logo" src="https://d1oco4z2z1fhwp.cloudfront.net/assets/Beefree-logo.png" height="auto" width="34" align="center" style="display: block; height: auto; margin: 0 auto; border: 0;"></a></td>
+																		<td style="font-family: 'Inter', sans-serif; font-size: 15px; font-weight: undefined; color: #1e0e4b; vertical-align: middle; letter-spacing: undefined; text-align: center; line-height: normal;"><a href="http://designedwithbeefree.com/" target="_blank" style="color: #1e0e4b; text-decoration: none;">Designed with Beefree</a></td>
+																	</tr>
+																</table>
+															</td>
+														</tr>
+													</table>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</td>
+			</tr>
+		</tbody>
+	</table><!-- End -->
+</body>
+
+</html>
+
+  `;
+};
