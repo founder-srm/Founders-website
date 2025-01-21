@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { sanityFetch } from '@/sanity/lib/live';
 import type { Metadata, ResolvingMetadata } from 'next';
 import { EVENT_BY_SLUG_QUERY } from '@/sanity/lib/queries';
@@ -256,7 +257,6 @@ export default async function EventPage({ params }: { params: Params }) {
               </span>
               <nav className="mt-4 text-sm">
                 <ul className="space-y-2">
-                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                   {event.content
                     ?.filter((block: any) => block.style?.startsWith('h'))
                     .map((heading: any, index: number) => (
