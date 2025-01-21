@@ -1,7 +1,8 @@
 'use client';
 import { cn } from '@/lib/utils';
-import { motion, Transition, Variants } from 'motion/react';
-import React, { CSSProperties } from 'react';
+import { motion, type Transition, type Variants } from 'motion/react';
+import type React from 'react';
+import type { CSSProperties } from 'react';
 
 export type SpinningTextProps = {
   children: string;
@@ -19,7 +20,7 @@ export type SpinningTextProps = {
 };
 
 const BASE_TRANSITION = {
-  repeat: Infinity,
+  repeat: Number.POSITIVE_INFINITY,
   ease: 'linear',
 };
 
@@ -68,17 +69,17 @@ export function SpinningText({
       style={{
         ...style,
       }}
-      initial='hidden'
-      animate='visible'
+      initial="hidden"
+      animate="visible"
       variants={containerVariants}
       transition={finalTransition}
     >
       {letters.map((letter, index) => (
         <motion.span
-          aria-hidden='true'
+          aria-hidden="true"
           key={`${index}-${letter}`}
           variants={itemVariants}
-          className='absolute left-1/2 top-1/2 inline-block'
+          className="absolute left-1/2 top-1/2 inline-block"
           style={
             {
               '--index': index,
@@ -98,7 +99,7 @@ export function SpinningText({
           {letter}
         </motion.span>
       ))}
-      <span className='sr-only'>{children}</span>
+      <span className="sr-only">{children}</span>
     </motion.div>
   );
 }

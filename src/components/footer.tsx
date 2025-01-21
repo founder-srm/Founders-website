@@ -78,13 +78,12 @@ function SpinningTextCustom() {
           },
         },
       }}
-      className='font-[450]'
+      className="font-[450]"
     >
       {'Founders club • Founders club • Founders club • '}
     </SpinningText>
   );
 }
-
 
 const isPathExcluded = (pathname: string, excludedPaths: string[]) => {
   return excludedPaths.some(path => {

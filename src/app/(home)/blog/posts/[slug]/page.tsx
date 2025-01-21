@@ -61,8 +61,8 @@ export default async function BlogPostPage({ params }: { params: Params }) {
 
   return (
     <article className="container mx-auto py-12 max-w-4xl overflow-y-auto">
-      <Link 
-        href="/blog" 
+      <Link
+        href="/blog"
         className="inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors mb-6"
       >
         <ArrowLeft className="h-4 w-4" />

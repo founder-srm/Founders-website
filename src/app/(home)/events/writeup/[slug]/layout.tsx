@@ -20,7 +20,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <div className="pointer-events-none absolute left-0 top-0 w-full">
             <div className="absolute left-0 top-0 h-0.5 w-full dark:bg-[#111111]" />
             <ScrollProgress
-            // bg-[linear-gradient(to_right,rgba(0,0,0,0),#111111_75%,#111111_100%)] 
+              // bg-[linear-gradient(to_right,rgba(0,0,0,0),#111111_75%,#111111_100%)]
               className="absolute top-0 h-0.5 bg-[linear-gradient(to_right,rgba(255,255,255,0),#ffffff_75%,#ffffff_100%)]"
               containerRef={containerRef}
               springOptions={{

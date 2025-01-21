@@ -26,9 +26,7 @@ const EventWriteUp = async () => {
               <div className="sm:col-span-5">
                 <div className="mb-4 md:mb-6">
                   <div className="flex text-xs uppercase tracking-wider text-muted-foreground">
-                    <span className="mr-3 md:mr-5 lg:mr-6">
-                      {event.label}
-                    </span>
+                    <span className="mr-3 md:mr-5 lg:mr-6">{event.label}</span>
                     <span className="mr-3 md:mr-5 lg:mr-6">
                       {event.published
                         ? new Date(event.published).toLocaleDateString(
