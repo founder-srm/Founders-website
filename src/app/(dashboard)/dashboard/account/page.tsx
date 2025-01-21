@@ -36,6 +36,7 @@ import { useToast } from '@/hooks/use-toast';
 import { GoogleIcon } from '@/components/custom-icons/custom-icons';
 import { Badge } from '@/components/ui/badge';
 import type { UserIdentity } from '@supabase/supabase-js';
+import { useSearchParams } from 'next/navigation'
 
 export default function AccountPage() {
   const user = useUser();
@@ -47,6 +48,15 @@ export default function AccountPage() {
   const [identities, setIdentities] = useState<UserIdentity[]>([]);
   const Router = useRouter();
   const supabase = createClient();
+  const searchParams = useSearchParams()
+  const currentTab = searchParams.get('tab') || 'profile'; // Default to 'profile' if no query parameter
+
+
+    // Handle tab change
+    const handleTabChange = (tab: string) => {
+      Router.push(`?tab=${tab}`); // Update the URL with the selected tab
+    };
+  
 
   useEffect(() => {
     async function fetchRegistrations() {
@@ -184,7 +194,7 @@ export default function AccountPage() {
     <div className="container max-w-4xl mx-auto py-8">
       <h1 className="text-3xl font-bold mb-8">Account Settings</h1>
 
-      <Tabs defaultValue="profile" className="w-full">
+      <Tabs defaultValue={currentTab} onValueChange={handleTabChange} className="w-full">
         <TabsList className="">
           <TabsTrigger value="profile">Profile</TabsTrigger>
           <TabsTrigger value="security">Security</TabsTrigger>
