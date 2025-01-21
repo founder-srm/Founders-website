@@ -6,9 +6,9 @@ import path from 'node:path';
 import type { typeformInsertType } from '../../../../schema.zod';
 import { EmailTemplate } from '@/components/email-templates/template';
 
-if (!process.env.RESEND_API_KEY) {
-  throw new Error('Missing RESEND_API_KEY environment variable');
-}
+// if (!process.env.RESEND_API_KEY) {
+//   throw new Error('Missing RESEND_API_KEY environment variable');
+// }
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
