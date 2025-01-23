@@ -38,8 +38,15 @@ export default function SignupPage(props: {
 
   async function onSubmit(data: SignupFormData) {
     setLoading(true);
-    await signup(data);
-    setLoading(false);
+       try {
+         await signup(data); // Attempt the login
+       } catch (error) {
+         // Handle the error (e.g., show a message to the user)
+         console.error('You messed up,Login failed:', error);
+         // Optionally display an error toast or message to the user here
+       } finally {
+         setLoading(false); // Reset the button to allow retry
+       }
   }
 
   return (
