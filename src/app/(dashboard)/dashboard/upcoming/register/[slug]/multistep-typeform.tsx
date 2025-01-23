@@ -39,6 +39,7 @@ import { sendEventRegistration } from '@/actions/typeform-upload';
 import type { eventsInsertType } from '../../../../../../../schema.zod';
 import { useUser } from '@/stores/session';
 import { useRouter } from 'next/navigation';
+import { useToast } from '@/hooks/use-toast';
 
 type TypeFormField = {
   fieldType:
@@ -138,6 +139,7 @@ export function TypeformMultiStep({
   const Router = useRouter();
 
   const user = useUser();
+  const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -160,7 +162,10 @@ export function TypeformMultiStep({
         return;
       }
 
-      alert('Registration successful!');
+      toast({
+        title: 'Registration successful!',
+        description: 'You have successfully registered for the event.',
+      })
       Router.push(
         `/dashboard/upcoming/register/success?ticketid=${response[0].ticket_id}`
       );

@@ -9,7 +9,7 @@ import { createClient } from '@/utils/supabase/client';
 
 export default function Upcoming() {
   const [events, setEvents] = useState<eventsInsertType[]>([]);
-  const featuredEvent = events[0];
+  const featuredEvent = events.find((event) => event.is_featured);
   const [filteredEvents, setFilteredEvents] = useState(events);
 
   const getEvents = useCallback(async () => {
@@ -35,7 +35,7 @@ export default function Upcoming() {
 
   return (
     <>
-      <FeaturedPost event={featuredEvent} />
+      <FeaturedPost event={featuredEvent || events[0]} />
       <TabNavigation events={events} setFilteredEvents={setFilteredEvents} />
       <UpcomingGrid events={filteredEvents} />
       <Pagination />
