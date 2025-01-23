@@ -22,7 +22,7 @@ export function UpcomingCard({ post }: UpcomingCardProps) {
           />
         </div>
       </div>
-      <div className="mb-4">
+      <div className="mb-4 space-x-2">
         {post.tags?.map((tag, index) => (
           <Badge key={index} variant="default">
             {tag}
@@ -37,14 +37,20 @@ export function UpcomingCard({ post }: UpcomingCardProps) {
       </div>
       <div className="flex items-center gap-2">
         <Image
-          src="https://shadcnblocks.com/images/block/avatar-1.webp"
+          src="/FC-logo1.png"
           alt={post.title}
           width={48}
           height={48}
           className="rounded-full"
         />
         <div className="flex flex-col gap-px">
-          <span className="text-xs font-medium">{post.start_date}</span>
+          <span className="text-xs font-medium">
+            {new Date(post.start_date).toLocaleDateString('en-IN', {
+              day: '2-digit',
+              month: 'long',
+              year: 'numeric',
+            })}
+          </span>
           <span className="text-xs text-muted-foreground">
             {post.event_type}
           </span>

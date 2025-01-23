@@ -6,6 +6,9 @@ import type { eventsInsertType } from '../../schema.zod';
 // import { Button } from '@/components/ui/button';
 
 export function FeaturedPost({ event }: { event: eventsInsertType }) {
+  if (!event) {
+    return null;
+  }
   const tags = event.tags.map(tag => (
     <Badge key={tag} variant="default">
       {tag}
@@ -44,8 +47,8 @@ export function FeaturedPost({ event }: { event: eventsInsertType }) {
                 <span className="mb-2 text-xs font-medium">Conducted by</span>
                 <div className="flex flex-1 items-center gap-3">
                   <Image
-                    src="https://shadcnblocks.com/images/block/avatar-1.webp"
-                    alt="Jane Doe"
+                    src="/FC-logo1.png"
+                    alt="Founder's Club"
                     width={40}
                     height={40}
                     className="rounded-full"

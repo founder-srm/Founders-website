@@ -1,3 +1,4 @@
+'use client';
 import type { eventsInsertType } from '../../schema.zod';
 import { UpcomingCard } from './upcoming-card';
 
