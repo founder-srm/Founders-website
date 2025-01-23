@@ -5,6 +5,7 @@ import { TicketPercent, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import type { BannerHeader } from '../../sanity.types';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 interface TimeLeft {
   days: number;
@@ -14,8 +15,19 @@ interface TimeLeft {
   isExpired: boolean;
 }
 
+const isPathExcluded = (pathname: string, excludedPaths: string[]) => {
+  return excludedPaths.some(path => {
+    if (path.endsWith('/*')) {
+      const prefix = path.slice(0, -2); // Remove /* from the end
+      return pathname.startsWith(prefix);
+    }
+    return pathname === path;
+  });
+};
+
 export default function Banner({ bannerData }: { bannerData: BannerHeader }) {
   const [isVisible, setIsVisible] = useState(true);
+  const pathname = usePathname();
   const [timeLeft, setTimeLeft] = useState<TimeLeft>({
     days: 0,
     hours: 0,
@@ -23,6 +35,16 @@ export default function Banner({ bannerData }: { bannerData: BannerHeader }) {
     seconds: 0,
     isExpired: false,
   });
+
+  const excludedRoutes = [
+    '/studio/*',
+    '/events/writeup/*',
+    '/blog/posts/*',
+    '/upcoming/*',
+    '/auth/*',
+    '/signup',
+    '/admin/*',
+  ];
 
   useEffect(() => {
     if (!bannerData?.endDate) return;
@@ -67,8 +89,13 @@ export default function Banner({ bannerData }: { bannerData: BannerHeader }) {
     return () => clearInterval(timer);
   }, [bannerData?.endDate]);
 
-  if (!bannerData || !isVisible || !bannerData.isVisible || timeLeft.isExpired)
+  if (isPathExcluded(pathname, excludedRoutes)) {
     return null;
+  }
+
+  if (!bannerData || !isVisible || !bannerData.isVisible || timeLeft.isExpired){
+    return null;
+  }
 
   return (
     <div className="dark bg-muted px-4 py-3 text-foreground">
