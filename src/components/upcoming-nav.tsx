@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   Select,
@@ -27,15 +27,19 @@ export function TabNavigation({
   events: eventsInsertType[];
   setFilteredEvents: (events: eventsInsertType[]) => void;
 }) {
-  const [activeTab, setActiveTab] = useState('all');
+  const [activeTab, setActiveTab] = useState('All');
+
+  useEffect(() => {
+    setFilteredEvents(events);
+  }, [events, setFilteredEvents]);
 
   const handleTabChange = (value: string) => {
     setActiveTab(value);
-    if (value === 'all') {
+    if (value === 'All') {
       setFilteredEvents(events);
     } else {
       const filtered = events.filter(event =>
-        event.tags.map(tag => tag.toLowerCase()).includes(value)
+        event.tags.map(tag => tag.toLowerCase()).includes(value.toLowerCase())
       );
       setFilteredEvents(filtered);
     }
@@ -48,8 +52,8 @@ export function TabNavigation({
           <TabsList>
             {categories.map(category => (
               <TabsTrigger
-                key={category.toLowerCase()}
-                value={category.toLowerCase()}
+                key={category}
+                value={category}
               >
                 {category}
               </TabsTrigger>
