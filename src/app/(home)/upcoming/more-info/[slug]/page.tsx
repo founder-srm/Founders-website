@@ -97,6 +97,8 @@ export default async function EventRegistrationSection({
               day: '2-digit',
               month: 'long',
               year: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit',
             })}
           />
           <EventDetailCard
@@ -124,6 +126,8 @@ export default async function EventRegistrationSection({
               day: '2-digit',
               month: 'long',
               year: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit',
             })}
           />
           <EventDetailCard
