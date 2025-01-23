@@ -81,10 +81,16 @@ export default function TypeformPage() {
 
   const now = new Date();
   const publishDate = new Date(event.publish_date);
+  const endDate = new Date(event.start_date);
 
   if (publishDate > now) {
     return <div>Please wait until {publishDate.toLocaleString()}.</div>;
   }
+
+  if (endDate < now) {
+    return <div>Event Registration has already ended.</div>;
+  }
+
 
   return (
     <>
