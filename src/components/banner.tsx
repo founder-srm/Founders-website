@@ -93,7 +93,12 @@ export default function Banner({ bannerData }: { bannerData: BannerHeader }) {
     return null;
   }
 
-  if (!bannerData || !isVisible || !bannerData.isVisible || timeLeft.isExpired){
+  if (
+    !bannerData ||
+    !isVisible ||
+    !bannerData.isVisible ||
+    timeLeft.isExpired
+  ) {
     return null;
   }
 
