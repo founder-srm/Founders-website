@@ -11,13 +11,17 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { useToast } from '@/hooks/use-toast';
+
 
 export function ModeToggle() {
   const { setTheme } = useTheme();
-
+  const { toast } = useToast();
   const handleLightTheme = (): void => {
-    alert('Seriously? Light theme? 🤮');
-    alert('Have the Fun theme instead! 🎉');
+    toast({
+      title: 'Seriously? Light theme? 🤮',
+      description: 'Have the Fun theme instead! 🎉',
+    })
     setTheme('fun');
   };
 
@@ -30,7 +34,7 @@ export function ModeToggle() {
           <span className="sr-only">Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent align="end" className='z-[1000]'>
         <DropdownMenuItem onClick={() => setTheme('fun')}>Fun</DropdownMenuItem>
         <DropdownMenuItem onClick={handleLightTheme}>Light</DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme('dark')}>
