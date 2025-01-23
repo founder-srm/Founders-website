@@ -298,9 +298,31 @@ export default function CustomizeTicketPage() {
     });
   };
 
+  // ticketImageUrl to File object
+  async function createImageFile(url: string, filename: string) {
+    const response = await fetch(url);
+    const blob = await response.blob();
+    return new File([blob], filename, { type: blob.type });
+  }
+
   // Add new functions for share and email (to be implemented)
-  const shareTicket = () => {
-    // TODO: Implement sharing functionality
+  const shareTicket = async () => {
+    if (!canvasRef.current || !registration) return;
+    const ticketImageUrl = canvasRef.current.toDataURL('image/png');
+    const imageFile = await createImageFile(ticketImageUrl, "ticket.jpg");
+
+    const shareData = {
+      files: [imageFile],
+    };
+    console.log(shareData);
+
+    // Check if the Web Share API is supported with files
+    try {
+      await navigator.share(shareData);
+      console.log("Successfully shared!");
+    } catch (err) {
+      console.error("Sharing not supported on this browser. ERROR: ", err);
+    }
   };
 
   const emailTicket = async () => {
