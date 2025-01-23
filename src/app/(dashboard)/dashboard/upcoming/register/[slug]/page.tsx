@@ -79,6 +79,13 @@ export default function TypeformPage() {
     return <div>Event not found</div>;
   }
 
+  const now = new Date();
+  const publishDate = new Date(event.publish_date);
+
+  if (publishDate > now) {
+    return <div>Please wait until {publishDate.toLocaleString()}.</div>;
+  }
+
   return (
     <>
       <TypeformMultiStep eventData={event} fields={parseResult.data} />
