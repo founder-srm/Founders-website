@@ -14,6 +14,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 
+
 async function getEventsBySlug({ slug }: { slug: string }) {
   const supabase = await createClient();
 
