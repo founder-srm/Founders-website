@@ -9,22 +9,42 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import type { eventsInsertType } from '../../schema.zod';
 
 const categories = [
   'All',
-  'Design',
-  'Product',
-  'Software Engineering',
-  'Customer Success',
+  'Bootcamp',
+  'Triumph Talk',
+  'Open House',
+  'Foundathon',
+  'IdeaSpark',
 ];
 
-export function TabNavigation() {
+export function TabNavigation({
+  events,
+  setFilteredEvents,
+}: {
+  events: eventsInsertType[];
+  setFilteredEvents: (events: eventsInsertType[]) => void;
+}) {
   const [activeTab, setActiveTab] = useState('all');
+
+  const handleTabChange = (value: string) => {
+    setActiveTab(value);
+    if (value === 'all') {
+      setFilteredEvents(events);
+    } else {
+      const filtered = events.filter(event =>
+        event.tags.map(tag => tag.toLowerCase()).includes(value)
+      );
+      setFilteredEvents(filtered);
+    }
+  };
 
   return (
     <div className="mb-9 flex flex-col justify-between gap-8 md:mb-14 md:flex-row lg:mb-16">
       <div className="flex-1 overflow-x-auto max-md:container max-md:-mx-[2rem] max-md:w-[calc(100%+4rem)]">
-        <Tabs value={activeTab} onValueChange={setActiveTab}>
+        <Tabs value={activeTab} onValueChange={handleTabChange}>
           <TabsList>
             {categories.map(category => (
               <TabsTrigger

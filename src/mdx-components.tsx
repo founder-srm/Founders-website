@@ -166,7 +166,13 @@ const Lists = {
   ol: (props: any) => (
     <ol className="my-6 ml-6 list-decimal [&>li]:mt-2" {...props} />
   ),
-  li: (props: any) => <li className="text-muted-foreground pl-6 ml-6" style={{marginLeft: '1rem'}} {...props} />,
+  li: (props: any) => (
+    <li
+      className="text-muted-foreground pl-6 ml-6"
+      style={{ marginLeft: '1rem' }}
+      {...props}
+    />
+  ),
 };
 
 const components = {
