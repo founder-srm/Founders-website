@@ -15,7 +15,7 @@ export function FeaturedPost({ event }: { event: eventsInsertType }) {
     </Badge>
   ));
   return (
-    <Link href={`/upcoming/more-info/${event.slug}`}>
+    <Link href={`/upcoming/more-info/${event.slug}`} className=''>
       <div className="group relative mb-8 block md:mb-14 md:overflow-clip md:rounded-xl lg:mb-16">
         <div className="mb-4 aspect-[4/3] overflow-clip rounded-xl md:mb-0 md:aspect-[8/5] lg:rounded-2xl">
           <div className="h-full w-full transition duration-300 group-hover:scale-105">
