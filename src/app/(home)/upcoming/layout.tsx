@@ -2,7 +2,8 @@ import { createClient } from '@/utils/supabase/server';
 import type { Metadata, ResolvingMetadata } from 'next';
 import type { eventsInsertType } from '../../../../schema.zod';
 import { Suspense } from 'react';
-import { EventsHeader } from '@/components/upcoming-header';
+// import { EventsHeader } from '@/components/upcoming-header';
+// import { usePathname } from 'next/navigation';
 
 async function getEvents() {
   const supabase = await createClient();
@@ -74,11 +75,14 @@ export async function generateMetadata(
 export const revalidate = 3600; // revalidate every hour
 
 export default function Layout({ children }: { children: React.ReactNode }) {
+//   const pathname = usePathname();
+//   const isUpcomingRoute = pathname === '/upcoming';
+
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <main className=" flex flex-col items-center w-full min-h-screen">
+      <main className="flex flex-col items-center w-full min-h-screen">
         <div className="container py-32">
-          <EventsHeader />
+          {/* {isUpcomingRoute && <EventsHeader />} */}
           {children}
         </div>
       </main>
