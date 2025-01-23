@@ -165,7 +165,7 @@ export function TypeformMultiStep({
       toast({
         title: 'Registration successful!',
         description: 'You have successfully registered for the event.',
-      })
+      });
       Router.push(
         `/dashboard/upcoming/register/success?ticketid=${response[0].ticket_id}`
       );

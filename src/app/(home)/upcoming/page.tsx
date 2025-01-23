@@ -9,7 +9,7 @@ import { createClient } from '@/utils/supabase/client';
 
 export default function Upcoming() {
   const [events, setEvents] = useState<eventsInsertType[]>([]);
-  const featuredEvent = events.find((event) => event.is_featured);
+  const featuredEvent = events.find(event => event.is_featured);
   const [filteredEvents, setFilteredEvents] = useState(events);
 
   const getEvents = useCallback(async () => {

@@ -75,8 +75,8 @@ export async function generateMetadata(
 export const revalidate = 3600; // revalidate every hour
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-//   const pathname = usePathname();
-//   const isUpcomingRoute = pathname === '/upcoming';
+  //   const pathname = usePathname();
+  //   const isUpcomingRoute = pathname === '/upcoming';
 
   return (
     <Suspense fallback={<div>Loading...</div>}>

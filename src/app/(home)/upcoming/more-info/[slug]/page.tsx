@@ -6,7 +6,13 @@ import { Badge } from '@/components/ui/badge';
 import { createClient } from '@/utils/supabase/server';
 import type { eventsInsertType } from '../../../../../../schema.zod';
 import { CustomMDX } from '@/mdx-components';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 
 async function getEventsBySlug({ slug }: { slug: string }) {
   const supabase = await createClient();
