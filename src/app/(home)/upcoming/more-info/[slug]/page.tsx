@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { createClient } from '@/utils/supabase/server';
 import type { eventsInsertType } from '../../../../../../schema.zod';
 import { CustomMDX } from '@/mdx-components';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 
 async function getEventsBySlug({ slug }: { slug: string }) {
   const supabase = await createClient();
@@ -47,7 +47,7 @@ export default async function EventRegistrationSection({
           <p className="mb-6 font-medium text-muted-foreground lg:text-lg">
             {event.description}
           </p>
-          <div className="flex justify-center space-x-4 mb-10">
+          <div className="flex justify-center space-x-6 gap-6 mb-10">
             <Button asChild size="lg">
               <Link href={`/dashboard/upcoming/register/${slug}`}>
                 Register for this event
@@ -142,6 +142,18 @@ export default async function EventRegistrationSection({
           <CardContent className="ml-2">
             <CustomMDX source={event.rules || ''} />
           </CardContent>
+          <CardFooter>
+            <div className="flex w-full justify-center space-x-6 gap-6 mb-10">
+              <Button asChild size="lg">
+                <Link href={`/dashboard/upcoming/register/${slug}`}>
+                  Register for this event
+                </Link>
+              </Button>
+              <Button asChild size="lg" variant="outline">
+                <Link href={event.more_info || '#'}>More Information</Link>
+              </Button>
+            </div>
+          </CardFooter>
         </Card>
       </section>
     </main>
