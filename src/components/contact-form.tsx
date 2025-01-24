@@ -8,6 +8,12 @@ import { Label } from "@/components/ui/label";
 import { Avatar, AvatarImage } from "./ui/avatar";
 import Link from "next/link";
 
+interface Country {
+  name: {
+    common: string;
+  };
+}
+
 export function BookDemoForm() {
   const [formData, setFormData] = useState({
     fullName: "",
@@ -25,8 +31,8 @@ export function BookDemoForm() {
     const fetchCountries = async () => {
       try {
         const response = await fetch("https://restcountries.com/v3.1/all");
-        const data = await response.json();
-        const countryNames = data.map((country: any) => country.name.common).sort();
+        const data = (await response.json()) as Country[];
+        const countryNames = data.map((country) => country.name.common).sort();
         setCountries(countryNames);
       } catch (error) {
         console.error("Error fetching countries:", error);
