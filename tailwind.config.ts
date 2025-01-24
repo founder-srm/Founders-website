@@ -119,6 +119,77 @@ export default {
 				'padding-bottom': '5px'
 			}
 		})
+	}),
+	plugin(function ({ addUtilities }: any) {
+		addUtilities({
+			'.bg-noise': {
+				backgroundImage: 'url("/textures/noise.png")',
+
+				backgroundSize: 'cover',
+				backgroundBlendMode: 'overlay'
+			},
+			'.bg-chess': {
+				backgroundImage: 'url("/textures/chess.png")',
+
+				backgroundSize: 'cover',
+				backgroundBlendMode: 'overlay'
+			},
+			'.bg-crypto': {
+				backgroundImage: 'url("/textures/crypto.png")',
+
+				backgroundSize: 'cover',
+				backgroundBlendMode: 'overlay'
+			},
+			'.bg-dots': {
+				backgroundImage: 'url("/textures/dots.png")',
+
+				backgroundSize: 'cover',
+				backgroundBlendMode: 'overlay'
+			},
+			'.bg-lines': {
+				backgroundImage: 'url("/textures/lines.png")',
+
+				backgroundSize: 'cover',
+				backgroundBlendMode: 'overlay'
+			},
+			'.bg-metal': {
+				backgroundImage: 'url("/textures/metal.png")',
+
+				backgroundSize: 'cover',
+				backgroundBlendMode: 'overlay'
+			},
+			'.bg-pixels': {
+				backgroundImage: 'url("/textures/pixels.png")',
+
+				backgroundSize: 'cover',
+				backgroundBlendMode: 'overlay'
+			},
+			'.bg-retro': {
+				backgroundImage: 'url("/textures/retro.png")',
+
+				backgroundSize: 'cover',
+				backgroundBlendMode: 'overlay'
+			},
+			'.bg-stairs': {
+				backgroundImage: 'url("/textures/stairs.png")',
+
+				backgroundSize: 'cover',
+				backgroundBlendMode: 'overlay'
+			},
+			'.bg-twins': {
+				backgroundImage: 'url("/textures/twins.png")',
+
+				backgroundSize: 'cover',
+				backgroundBlendMode: 'overlay'
+			},
+			'.bg-wave': {
+				backgroundImage: 'url("/textures/wave.png")',
+
+				backgroundSize: 'cover',
+				backgroundBlendMode: 'overlay'
+			},
+			
+		})
 	})
   ],
 } satisfies Config;
