@@ -4,7 +4,6 @@ import { Suspense, useRef } from 'react';
 import { ScrollProgress } from '@/components/ui/scroll-progress';
 import DotPattern from '@/components/ui/dot-pattern';
 import { cn } from '@/lib/utils';
-import { SanityLive } from '@/sanity/lib/live';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -32,7 +31,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             />
           </div>
           {children}
-          <SanityLive />
         </div>
         <DotPattern
           width={20}
