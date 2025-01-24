@@ -25,6 +25,8 @@ const isPathExcluded = (pathname: string, excludedPaths: string[]) => {
   });
 };
 
+
+
 export default function Banner({ bannerData }: { bannerData: BannerHeader }) {
   const [isVisible, setIsVisible] = useState(true);
   const pathname = usePathname();

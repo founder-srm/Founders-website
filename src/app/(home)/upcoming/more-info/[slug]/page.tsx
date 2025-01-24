@@ -114,7 +114,7 @@ export default async function EventRegistrationSection({
             content={
               <div className="flex flex-wrap gap-2">
                 {event.tags.map(tag => (
-                  <Badge key={tag} variant="secondary">
+                  <Badge key={tag} variant="default">
                     {tag}
                   </Badge>
                 ))}
@@ -146,11 +146,11 @@ export default async function EventRegistrationSection({
       </section>
 
       <section className="container mt-14">
-        <Card>
+        <Card className=''>
           <CardHeader>
             <CardTitle className="text-2xl">Event Rules</CardTitle>
           </CardHeader>
-          <CardContent className="ml-2">
+          <CardContent className="ml-2" suppressHydrationWarning>
             <CustomMDX source={event.rules || ''} />
           </CardContent>
           <CardFooter>
@@ -177,7 +177,7 @@ function EventDetailCard({
   content,
 }: { icon: React.ReactNode; title: string; content: React.ReactNode }) {
   return (
-    <Card>
+    <Card className='bg-accent border-background'>
       <CardHeader>
         <CardTitle className="flex items-center text-lg font-medium">
           {icon}

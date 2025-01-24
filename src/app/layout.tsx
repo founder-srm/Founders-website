@@ -108,6 +108,14 @@ export const metadata: Metadata = {
     },
   },
 };
+function Noise() {
+  return (
+    <div
+      className="pointer-events-none w-full h-full overflow-hidden absolute inset-0 z-0 opacity-10 [mask-image:radial-gradient(#fff,transparent,75%)]"
+      style={{ backgroundImage: 'url(/textures/noise.png)', backgroundSize: '30%' }}
+    />
+  );
+}
 
 export default function RootLayout({
   children,
@@ -117,7 +125,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="antialiased" suppressHydrationWarning>
       <body
-        className={`${plusJakartaSans.variable} antialiased w-full bg-background font-plusJK [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-muted-foreground/20 [&::-webkit-scrollbar-track]:bg-transparent`}
+        className={`${plusJakartaSans.variable} antialiased w-full relative bg-background font-plusJK [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-muted-foreground/20 [&::-webkit-scrollbar-track]:bg-transparent`}
       >
         <ThemeProvider
           attribute="class"
@@ -132,6 +140,7 @@ export default function RootLayout({
             {children}
             <Footer2 />
             <Toaster />
+            <Noise />
           </SessionProvider>
         </ThemeProvider>
         <Analytics />
