@@ -1,5 +1,6 @@
 import CareersLarge from '@/components/careers-large';
 import config from '@/lib/config';
+import { SanityLive } from '@/sanity/lib/live';
 import type { Metadata } from 'next';
 
 type Params = Promise<{ slug: string }>;
@@ -43,6 +44,7 @@ export default async function Recruitments() {
   return (
     <main className="flex flex-col items-center w-full ">
       <CareersLarge />
+      <SanityLive />
     </main>
   );
 }
