@@ -116,7 +116,9 @@ export default function TypeformPage() {
                   .
                 </p>
               </div>
-              <Button size="sm" onClick={() => Router.back()}>Go Back</Button>
+              <Button size="sm" onClick={() => Router.back()}>
+                Go Back
+              </Button>
             </div>
           </div>
         </div>
@@ -126,39 +128,43 @@ export default function TypeformPage() {
   }
 
   if (endDate < now) {
-    return(
-        <main className="h-screen w-full flex items-center justify-center ">
-          <div className="z-[100] max-w-[400px] rounded-lg border border-border bg-accent p-4 shadow-lg shadow-black/5">
-            <div className="flex gap-2">
-              <div className="flex grow gap-3">
-                <Info
-                  className="mt-0.5 shrink-0 text-blue-500"
-                  size={16}
-                  strokeWidth={2}
-                  aria-hidden="true"
-                />
-                <div className="flex grow flex-col gap-3">
-                  <div className="space-y-1">
-                    <p className="text-sm font-medium">Event Registration has already ended.</p>
-                    <p className="text-sm text-muted-foreground">
-                      {endDate.toLocaleString('en-IN', {
-                        day: '2-digit',
-                        month: 'long',
-                        year: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                      })}
-                    </p>
-                  </div>
-                  <div className="flex gap-2">
-                    <Button size="sm" onClick={() => Router.push('/upcoming')}>Check out More events</Button>
-                  </div>
+    return (
+      <main className="h-screen w-full flex items-center justify-center ">
+        <div className="z-[100] max-w-[400px] rounded-lg border border-border bg-accent p-4 shadow-lg shadow-black/5">
+          <div className="flex gap-2">
+            <div className="flex grow gap-3">
+              <Info
+                className="mt-0.5 shrink-0 text-blue-500"
+                size={16}
+                strokeWidth={2}
+                aria-hidden="true"
+              />
+              <div className="flex grow flex-col gap-3">
+                <div className="space-y-1">
+                  <p className="text-sm font-medium">
+                    Event Registration has already ended.
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    {endDate.toLocaleString('en-IN', {
+                      day: '2-digit',
+                      month: 'long',
+                      year: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                    })}
+                  </p>
+                </div>
+                <div className="flex gap-2">
+                  <Button size="sm" onClick={() => Router.push('/upcoming')}>
+                    Check out More events
+                  </Button>
                 </div>
               </div>
             </div>
           </div>
-        </main>
-    ); 
+        </div>
+      </main>
+    );
     // <div>Event Registration has already ended.</div>;
   }
 

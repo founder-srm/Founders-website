@@ -309,7 +309,7 @@ export default function CustomizeTicketPage() {
   const shareTicket = async () => {
     if (!canvasRef.current || !registration) return;
     const ticketImageUrl = canvasRef.current.toDataURL('image/png');
-    const imageFile = await createImageFile(ticketImageUrl, "ticket.jpg");
+    const imageFile = await createImageFile(ticketImageUrl, 'ticket.jpg');
 
     const shareData = {
       files: [imageFile],
@@ -319,9 +319,9 @@ export default function CustomizeTicketPage() {
     // Check if the Web Share API is supported with files
     try {
       await navigator.share(shareData);
-      console.log("Successfully shared!");
+      console.log('Successfully shared!');
     } catch (err) {
-      console.error("Sharing not supported on this browser. ERROR: ", err);
+      console.error('Sharing not supported on this browser. ERROR: ', err);
     }
   };
 
