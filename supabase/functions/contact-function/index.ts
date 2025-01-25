@@ -7,7 +7,6 @@ import { Resend } from 'https://esm.sh/resend'
 
 // Initialize Resend with your API key
 const resend = new Resend(Deno.env.get('RESEND_API_KEY'))
-console.log(Deno.env.get('RESEND_API_KEY'))
 
 Deno.serve(async (req) => {
   // Get the payload from the request
@@ -39,7 +38,7 @@ Deno.serve(async (req) => {
     
     emailData = {
       from: 'The Founder\'s Club <no-reply@thefoundersclub.tech>',
-      to: ["adi.kul358@gmail.com"],
+      to: ["support@thefoundersclub.in"],
       subject: 'New Contact Request has been Submitted',
       html: `Name: ${record.name}<br/>Email: ${record.email}<br/>Phone: ${record.phone}<br/>Subject: <strong>${record.subject}</strong><br/>Description: ${record.description}<br/><br/>The Founder's Club<br/>Directorate of Entrepeunership and Innovation<br/>SRM Institute of Science and Technology<br/>Kattankulathur<br/>Tamil Nadu - 603203
       `
