@@ -28,11 +28,13 @@ export default async function CareersLarge() {
             </p>
           </div>
           <div>
-          {jobCategories && jobCategories.length > 0 ? (
-              jobCategories.map((jobCategory) => (
+            {jobCategories && jobCategories.length > 0 ? (
+              jobCategories.map(jobCategory => (
                 <div key={jobCategory.category}>
-                  <h2 className="px-6 pt-6 text-xl font-bold">{jobCategory.category}</h2>
-                  {jobCategory.openings?.map((job) => (
+                  <h2 className="px-6 pt-6 text-xl font-bold">
+                    {jobCategory.category}
+                  </h2>
+                  {jobCategory.openings?.map(job => (
                     <div
                       key={job.title}
                       className="grid items-center gap-6 border-b border-dashed px-6 py-10 lg:grid-cols-4"
@@ -45,7 +47,7 @@ export default async function CareersLarge() {
                         </div>
                       </div>
                       <Link
-                        href={job.link || "#"}
+                        href={job.link || '#'}
                         className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-fit gap-1 lg:ml-auto cursor-pointer"
                       >
                         Apply
@@ -58,7 +60,9 @@ export default async function CareersLarge() {
             ) : (
               <div className="flex flex-col items-center justify-center py-20">
                 <XCircle className="w-16 h-16 text-muted-foreground mb-4" />
-                <p className="text-xl font-semibold text-muted-foreground">We are currently not recruiting</p>
+                <p className="text-xl font-semibold text-muted-foreground">
+                  We are currently not recruiting
+                </p>
               </div>
             )}
           </div>

@@ -3,66 +3,73 @@
 // This enables autocomplete, go to definition, etc.
 
 // Setup type definitions for built-in Supabase Runtime APIs
-import { Resend } from 'https://esm.sh/resend'
-import { generateHTML } from './template.ts'
+import { Resend } from "https://esm.sh/resend@4.1.1";
+import { generateHTML } from './template.ts';
 
 // Initialize Resend with your API key
-const resend = new Resend(Deno.env.get('RESEND_API_KEY'))
+const resend = new Resend(Deno.env.get('RESEND_API_KEY'));
 
-Deno.serve(async (req) => {
+Deno.serve(async req => {
   // Get the payload from the request
-  const payload = await req.json()
-  const record = payload.record
+  const payload = await req.json();
+  const record = payload.record;
 
   try {
     // Verify this is an insert event
     if (payload.type !== 'INSERT') {
-      return new Response(JSON.stringify({
-        message: 'This function only handles INSERT events'
-      }), {
-        headers: { 'Content-Type': 'application/json' },
-        status: 400
-      })
+      return new Response(
+        JSON.stringify({
+          message: 'This function only handles INSERT events',
+        }),
+        {
+          headers: { 'Content-Type': 'application/json' },
+          status: 400,
+        }
+      );
     }
 
     // Send email using Resend
     const senderEmailData = {
-      from: 'The Founder\'s Club <no-reply@thefoundersclub.tech>',
+      from: "The Founder's Club <no-reply@thefoundersclub.tech>",
       to: [record.email],
       subject: 'Your Contact Request has been Submitted',
-      html: generateHTML(record)
-    }
-    console.log(`Sending email to contactor<br/>${JSON.stringify(emailData, null, 2)}`)
-    await resend.emails.send(emailData)
-    console.log(`Sent email to contactor\n${JSON.stringify(emailData, null, 2)}`)
-    
+      html: generateHTML(record),
+    };
+    console.log(
+      `Sending email to contactor<br/>${JSON.stringify(senderEmailData, null, 2)}`
+    );
+    await resend.emails.send(senderEmailData);
+    console.log(
+      `Sent email to contactor\n${JSON.stringify(senderEmailData, null, 2)}`
+    );
+
     const supportEmailData = {
-      from: 'The Founder\'s Club <no-reply@thefoundersclub.tech>',
-      to: ["support@thefoundersclub.in"],
+      from: "The Founder's Club <no-reply@thefoundersclub.tech>",
+      to: ['support@thefoundersclub.in'],
       subject: 'New Contact Request has been Submitted',
       html: `Name: ${record.name}<br/>Email: ${record.email}<br/>Phone: ${record.phone}<br/>Subject: <strong>${record.subject}</strong><br/>Description: ${record.description}<br/><br/>The Founder's Club<br/>Directorate of Entrepeunership and Innovation<br/>SRM Institute of Science and Technology<br/>Kattankulathur<br/>Tamil Nadu - 603203
-      `
-    }
-    console.log(`Sending email to support\n${JSON.stringify(supportEmailData, null, 2)}`)
-    await resend.emails.send(supportEmailData)
-    console.log(`Sent email to support\n${JSON.stringify(supportEmailData, null, 2)}`)
-    
+      `,
+    };
+    console.log(
+      `Sending email to support\n${JSON.stringify(supportEmailData, null, 2)}`
+    );
+    await resend.emails.send(supportEmailData);
+    console.log(
+      `Sent email to support\n${JSON.stringify(supportEmailData, null, 2)}`
+    );
+
     return new Response(
       JSON.stringify({ message: 'Email sent successfully', senderEmailData }),
       { headers: { 'Content-Type': 'application/json' } }
-    )
-
+    );
   } catch (error) {
-    console.error('Error:', error)
-    return new Response(
-      JSON.stringify({ error }),
-      { 
-        headers: { 'Content-Type': 'application/json' },
-        status: 500
-      }
-    )
+    console.error('Error:', error);
+    return new Response(JSON.stringify({ error }), {
+      headers: { 'Content-Type': 'application/json' },
+      status: 500,
+    });
   }
-})
+});
 
 /* To invoke locally:
 

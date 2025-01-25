@@ -1,16 +1,15 @@
-
 interface SupabaseRecord {
-    name: string,
-    email: string,
-    phone: number,
-    subject: string,
-    description: string,
-    id: string,
-    inserted_at: string,
-  }
-  
-  export const generateHTML = (record: SupabaseRecord) => {
-    return `
+  name: string;
+  email: string;
+  phone: number;
+  subject: string;
+  description: string;
+  id: string;
+  inserted_at: string;
+}
+
+export const generateHTML = (record: SupabaseRecord) => {
+  return `
     <!DOCTYPE html>
   <html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" lang="en">
   
@@ -325,5 +324,5 @@ interface SupabaseRecord {
   </body>
   
   </html>
-    `
-  }
+    `;
+};
