@@ -138,16 +138,14 @@ const Footer2 = () => {
             </div>
           ))}
         </div>
-        <div className="mt-24 flex flex-col justify-between gap-4 border-t pt-8 text-sm font-medium text-muted-foreground md:flex-row md:items-center">
-          <p>© 2025 Foundersclub. All rights reserved.</p>
-          <ul className="flex gap-4">
-            <li className="underline hover:text-primary">
-              <Link href="#"> Terms and Conditions</Link>
-            </li>
-            <li className="underline hover:text-primary">
-              <Link href="#"> Privacy Policy</Link>
-            </li>
-          </ul>
+        <div className="mt-24 mb-8 flex justify-center gap-4 border-t pt-8 text-sm font-medium text-muted-foreground md:flex-row md:items-center">
+          <p>
+            © {new Date().getFullYear()}{" "}
+            <Link href="https://github.com/founder-srm" target="_blank" rel="noopener noreferrer">
+              Founders Club
+            </Link>
+            . All rights reserved.
+          </p>
         </div>
       </footer>
     </section>

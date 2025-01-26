@@ -75,7 +75,7 @@ export default function CustomizeTicketPage() {
       const { data, error } = await supabase
         .from('eventsregistrations')
         .select('*')
-        .eq('ticket_id', ticketId)
+        .eq('ticket_id', Number.parseInt(ticketId as string))
         .single();
 
       if (!error && data) {
