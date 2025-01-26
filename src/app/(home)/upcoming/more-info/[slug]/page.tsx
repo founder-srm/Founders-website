@@ -84,8 +84,8 @@ export default async function EventRegistrationSection({ params }: { params: Pro
             title="Tags"
             content={
               <div className="flex flex-wrap gap-2">
-                {event.tags.map((tag) => (
-                  <Badge key={tag} variant="secondary">
+                {event.tags.map(tag => (
+                  <Badge key={tag} variant="default">
                     {tag}
                   </Badge>
                 ))}
@@ -107,14 +107,13 @@ export default async function EventRegistrationSection({ params }: { params: Pro
           <EventDetailCard icon={<Info className="h-5 w-5" />} title="Event Type" content={event.event_type} />
         </div>
       </section>
-
       <section className="container mt-8 md:mt-14 px-4 md:px-6">
         <Card>
           <CardHeader>
             <CardTitle className="text-xl md:text-2xl">Event Rules</CardTitle>
           </CardHeader>
-          <CardContent className="ml-2">
-            <CustomMDX source={event.rules || ""} />
+          <CardContent className="ml-2" suppressHydrationWarning>
+            <CustomMDX source={event.rules || ''} />
           </CardContent>
           <CardFooter>
             <div className="flex flex-col sm:flex-row w-full justify-center space-y-4 sm:space-y-0 sm:space-x-6 mb-6 md:mb-10">
@@ -134,7 +133,7 @@ export default async function EventRegistrationSection({ params }: { params: Pro
 
 function EventDetailCard({ icon, title, content }: { icon: React.ReactNode; title: string; content: React.ReactNode }) {
   return (
-    <Card>
+    <Card className='bg-accent border-background'>
       <CardHeader>
         <CardTitle className="flex items-center text-base md:text-lg font-medium">
           {icon}

@@ -25,6 +25,15 @@ const isPathExcluded = (pathname: string, excludedPaths: string[]) => {
   });
 };
 
+function Noise() {
+  return (
+    <div
+      className="pointer-events-none rounded-lg w-full h-full overflow-hidden absolute inset-0 z-0 opacity-10 [mask-image:radial-gradient(#fff,transparent,75%)]"
+      style={{ backgroundImage: 'url(/textures/pixels.png)', backgroundSize: '30%' }}
+    />
+  );
+}
+
 export default function Banner({ bannerData }: { bannerData: BannerHeader }) {
   const [isVisible, setIsVisible] = useState(true);
   const pathname = usePathname();
@@ -120,7 +129,7 @@ export default function Banner({ bannerData }: { bannerData: BannerHeader }) {
               </p>
             </div>
             <div className="flex gap-3 max-md:flex-wrap">
-              <div className="flex items-center divide-x divide-primary-foreground rounded-lg bg-primary/15 text-sm tabular-nums">
+              <div className="flex relative items-center divide-x divide-primary-foreground rounded-lg bg-primary/15 text-sm tabular-nums">
                 {timeLeft.days > 0 && (
                   <span className="flex h-8 items-center justify-center p-2">
                     {timeLeft.days}
@@ -139,6 +148,7 @@ export default function Banner({ bannerData }: { bannerData: BannerHeader }) {
                   {timeLeft.seconds.toString().padStart(2, '0')}
                   <span className="text-muted-foreground">s</span>
                 </span>
+                <Noise />
               </div>
               <Button size="sm" className="text-sm" asChild>
                 <Link href={bannerData.buttonLink || '/'}>
