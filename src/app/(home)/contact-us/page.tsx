@@ -16,8 +16,10 @@ export default function ContactUs() {
                 Contact Us
               </h1>
               <div className="text-muted-foreground md:text-base lg:text-lg lg:leading-7">
-                In non libero bibendum odio pellentesque ullamcorper. Aenean
-                condimentum, dolor commodo pulvinar bibendum.
+              We'd love to hear from you! Whether you have questions, feedback, or need assistance, feel free to reach out to us.
+              {/* biome-ignore lint/style/useSelfClosingElements: <explanation> */}
+              <br></br>
+              Our team is here to help you with any inquiries you may have.
               </div>
             </div>
             <div className="hidden md:block">
@@ -28,8 +30,8 @@ export default function ContactUs() {
                     <p className="text-sm font-semibold">
                       What you can expect:
                     </p>
-                    <ExpectationItem text="Detailed product presentation tailored to you" />
-                    <ExpectationItem text="Consulting on your messaging strategy" />
+                    <ExpectationItem text="Event inquiries" />
+                    <ExpectationItem text="Technical/Non-Tecnical support" />
                     <ExpectationItem text="Answers to all the questions you have" />
                   </div>
                 </div>
