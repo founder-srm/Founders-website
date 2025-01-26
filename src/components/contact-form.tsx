@@ -4,7 +4,10 @@ import { useEffect, useState } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-const supabase = createClient('https://eedplvopkhwuhhquagfw.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVlZHBsdm9wa2h3dWhocXVhZ2Z3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDcyNDM1ODUsImV4cCI6MjAyMjgxOTU4NX0.uXlL7xAorEiCd_kmbZ0v3hgB0FR5vskjCHLveoATQ6g');
+const supabase = createClient(
+  'https://eedplvopkhwuhhquagfw.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVlZHBsdm9wa2h3dWhocXVhZ2Z3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDcyNDM1ODUsImV4cCI6MjAyMjgxOTU4NX0.uXlL7xAorEiCd_kmbZ0v3hgB0FR5vskjCHLveoATQ6g'
+);
 import {
   Select,
   SelectContent,
@@ -60,8 +63,7 @@ export function BookDemoForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const {data, error} = await supabase.from('contactentries')
-    .insert([
+    const { data, error } = await supabase.from('contactentries').insert([
       {
         name: formData.fullName,
         company: formData.company,
@@ -70,15 +72,16 @@ export function BookDemoForm() {
         country: formData.country,
         company_size: formData.companySize,
         referral: formData.referral,
-
       },
     ]);
     if (error) {
       console.error('Error inserting data:', error);
-      alert(`There was an error! Details: "${error.message || error} That's all we know!`)
+      alert(
+        `There was an error! Details: "${error.message || error} That's all we know!`
+      );
     } else {
       console.log('Data inserted successfully:', data);
-      alert("We got your data !👍😊")
+      alert('We got your data !👍😊');
     }
 
     // After submition the data fields should be empty again :)
@@ -174,7 +177,10 @@ export function BookDemoForm() {
           <div className="text-xs text-muted-foreground">
             For more information about how we handle your personal information,
             please visit our{''}
-            <Link href="./components/PrivacyPolicy/page.tsx" className="underline">
+            <Link
+              href="./components/PrivacyPolicy/page.tsx"
+              className="underline"
+            >
               privacy policy
             </Link>
             .
