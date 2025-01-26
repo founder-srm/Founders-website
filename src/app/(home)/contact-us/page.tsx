@@ -16,10 +16,10 @@ export default function ContactUs() {
                 Contact Us
               </h1>
               <div className="text-muted-foreground md:text-base lg:text-lg lg:leading-7">
-              We'd love to hear from you! Whether you have questions, feedback, or need assistance, feel free to reach out to us.
-              {/* biome-ignore lint/style/useSelfClosingElements: <explanation> */}
-              <br></br>
-              Our team is here to help you with any inquiries you may have.
+                We&apos;d love to hear from you! Whether you have questions,
+                feedback, or need assistance, feel free to reach out to us.
+                <br/>
+                Our team is here to help you with any inquiries you may have.
               </div>
             </div>
             <div className="hidden md:block">

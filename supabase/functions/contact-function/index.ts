@@ -3,7 +3,7 @@
 // This enables autocomplete, go to definition, etc.
 
 // Setup type definitions for built-in Supabase Runtime APIs
-import { Resend } from "https://esm.sh/resend@4.1.1";
+import { Resend } from 'https://esm.sh/resend@4.1.1';
 import { generateHTML } from './template.ts';
 
 // Initialize Resend with your API key

@@ -40,12 +40,15 @@ const PrivacyPolicy = () => {
     <div style={containerStyle}>
       <h1 style={headerStyle}>Privacy Policy</h1>
       <p style={paragraphStyle}>
-        This Privacy Policy outlines how we collect, use, and protect your personal information when you use our website.
+        This Privacy Policy outlines how we collect, use, and protect your
+        personal information when you use our website.
       </p>
       <section style={sectionStyle}>
         <h2 style={subHeaderStyle}>1. Information We Collect</h2>
         <p style={paragraphStyle}>
-          We collect information that you provide to us, such as your name, email, company, phone number, etc., when you fill out forms or register on our website.
+          We collect information that you provide to us, such as your name,
+          email, company, phone number, etc., when you fill out forms or
+          register on our website.
         </p>
       </section>
 
@@ -65,21 +68,26 @@ const PrivacyPolicy = () => {
       <section style={sectionStyle}>
         <h2 style={subHeaderStyle}>3. Sharing Your Information</h2>
         <p style={paragraphStyle}>
-          We do not sell, trade, or rent your personal information to third parties. We may share it with trusted service providers who assist us in operating our website and conducting our business, as long as they agree to keep this information confidential.
+          We do not sell, trade, or rent your personal information to third
+          parties. We may share it with trusted service providers who assist us
+          in operating our website and conducting our business, as long as they
+          agree to keep this information confidential.
         </p>
       </section>
 
       <section style={sectionStyle}>
         <h2 style={subHeaderStyle}>4. Data Security</h2>
         <p style={paragraphStyle}>
-          We take reasonable precautions to protect your information from unauthorized access, alteration, or destruction.
+          We take reasonable precautions to protect your information from
+          unauthorized access, alteration, or destruction.
         </p>
       </section>
 
       <section style={sectionStyle}>
         <h2 style={subHeaderStyle}>5. Cookies</h2>
         <p style={paragraphStyle}>
-          Our website uses cookies to improve your experience. You can choose to disable cookies through your browser settings.
+          Our website uses cookies to improve your experience. You can choose to
+          disable cookies through your browser settings.
         </p>
       </section>
 
@@ -98,7 +106,9 @@ const PrivacyPolicy = () => {
       <section style={sectionStyle}>
         <h2 style={subHeaderStyle}>7. Changes to this Privacy Policy</h2>
         <p style={paragraphStyle}>
-          We may update this Privacy Policy from time to time. We will notify you of any significant changes by posting the updated policy on this page.
+          We may update this Privacy Policy from time to time. We will notify
+          you of any significant changes by posting the updated policy on this
+          page.
         </p>
       </section>
 
