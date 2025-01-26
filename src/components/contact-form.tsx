@@ -1,8 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { createClient } from '@supabase/supabase-js';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+const supabase = createClient(
+  'https://eedplvopkhwuhhquagfw.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVlZHBsdm9wa2h3dWhocXVhZ2Z3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDcyNDM1ODUsImV4cCI6MjAyMjgxOTU4NX0.uXlL7xAorEiCd_kmbZ0v3hgB0FR5vskjCHLveoATQ6g'
+);
 import {
   Select,
   SelectContent,
@@ -13,6 +18,12 @@ import {
 import { Label } from '@/components/ui/label';
 import { Avatar, AvatarImage } from './ui/avatar';
 import Link from 'next/link';
+
+interface Country {
+  name: {
+    common: string;
+  };
+}
 
 export function BookDemoForm() {
   const [formData, setFormData] = useState({
@@ -25,6 +36,23 @@ export function BookDemoForm() {
     referral: '',
   });
 
+  const [countries, setCountries] = useState<string[]>([]);
+
+  useEffect(() => {
+    const fetchCountries = async () => {
+      try {
+        const response = await fetch('https://restcountries.com/v3.1/all');
+        const data = (await response.json()) as Country[];
+        const countryNames = data.map(country => country.name.common).sort();
+        setCountries(countryNames);
+      } catch (error) {
+        console.error('Error fetching countries:', error);
+      }
+    };
+
+    fetchCountries();
+  }, []);
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -33,10 +61,39 @@ export function BookDemoForm() {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    // Handle form submission logic here
+    const { data, error } = await supabase.from('contactentries').insert([
+      {
+        name: formData.fullName,
+        company: formData.company,
+        phone: formData.phone,
+        email: formData.email,
+        country: formData.country,
+        company_size: formData.companySize,
+        referral: formData.referral,
+      },
+    ]);
+    if (error) {
+      console.error('Error inserting data:', error);
+      alert(
+        `There was an error! Details: "${error.message || error} That's all we know!`
+      );
+    } else {
+      console.log('Data inserted successfully:', data);
+      alert('We got your data !👍😊');
+    }
+
+    // After submition the data fields should be empty again :)
+    setFormData({
+      fullName: '',
+      company: '',
+      phone: '',
+      email: '',
+      country: '',
+      companySize: '',
+      referral: '',
+    });
   };
 
   return (
@@ -78,8 +135,13 @@ export function BookDemoForm() {
           onChange={handleSelectChange('country')}
           placeholder="Select country"
         >
-          <SelectItem value="aus">Australia</SelectItem>
-          {/* Add more countries as needed */}
+          <div style={{ maxHeight: '200px', overflowY: 'auto' }}>
+            {countries.map(country => (
+              <SelectItem key={country} value={country}>
+                {country}
+              </SelectItem>
+            ))}
+          </div>
         </FormSelect>
 
         <FormSelect
@@ -104,15 +166,21 @@ export function BookDemoForm() {
           optional
         >
           <SelectItem value="search">Web Search</SelectItem>
+          <SelectItem value="team">Founders Club Team</SelectItem>
+          <SelectItem value="socialmedia">Social Media</SelectItem>
+          <SelectItem value="we cool">Someone told you we are cool!</SelectItem>
           {/* Add more options as needed */}
         </FormSelect>
 
         <div className="flex w-full flex-col justify-end space-y-3 pt-2">
-          <Button type="submit">Book demo</Button>
+          <Button type="submit">Submit</Button>
           <div className="text-xs text-muted-foreground">
             For more information about how we handle your personal information,
-            please visit our{' '}
-            <Link href="/" className="underline">
+            please visit our{''}
+            <Link
+              href="./components/PrivacyPolicy/page.tsx"
+              className="underline"
+            >
               privacy policy
             </Link>
             .
