@@ -1,46 +1,34 @@
-'use client';
-import Image from 'next/image';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { SpinningText } from './ui/spinning-text';
+"use client";
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { SpinningText } from "./ui/spinning-text";
 
 const sections = [
   {
-    title: 'Product',
+    title: "Club Information",
     links: [
-      { name: 'Overview', href: '#' },
-      { name: 'Pricing', href: '#' },
-      { name: 'Marketplace', href: '#' },
-      { name: 'Features', href: '#' },
-      { name: 'Integrations', href: '#' },
-      { name: 'Pricing', href: '#' },
+      { name: "About Us", href: "/about" },
+      { name: "Team", href: "/about/team" },
+      { name: "Contact Us", href: "/contact-us" },
     ],
   },
   {
-    title: 'Company',
+    title: "Events & Resources",
     links: [
-      { name: 'About', href: '#' },
-      { name: 'Team', href: '#' },
-      { name: 'Blog', href: '#' },
-      { name: 'Careers', href: '#' },
-      { name: 'Contact', href: '#' },
-      { name: 'Privacy', href: '#' },
+      { name: "Events", href: "/events" },
+      { name: "Upcoming", href: "/upcoming" },
+      { name: "Blog", href: "/blog" },
+      { name: "Join the Club", href: "/recruitments" },
     ],
   },
   {
-    title: 'Resources',
+    title: "Social Media",
     links: [
-      { name: 'Help', href: '#' },
-      { name: 'Sales', href: '#' },
-      { name: 'Advertise', href: '#' },
-    ],
-  },
-  {
-    title: 'Social',
-    links: [
-      { name: 'Twitter', href: '#' },
-      { name: 'Instagram', href: '#' },
-      { name: 'LinkedIn', href: '#' },
+      { name: "Instagram", href: "https://www.instagram.com/club.founders/" },
+      { name: "Twitter/X", href: "https://x.com/foundersclubsrm" },
+      { name: "LinkedIn", href: "https://www.linkedin.com/company/foundersclub-srm" },
+      { name: "GitHub", href: "https://github.com/founder-srm" },
     ],
   },
 ];
@@ -59,7 +47,7 @@ function SpinningTextCustom() {
             opacity: 1,
             rotate: 360,
             transition: {
-              type: 'spring',
+              type: "spring",
               bounce: 0,
               duration: 6,
               repeat: Number.POSITIVE_INFINITY,
@@ -70,24 +58,24 @@ function SpinningTextCustom() {
         item: {
           hidden: {
             opacity: 0,
-            filter: 'blur(4px)',
+            filter: "blur(4px)",
           },
           visible: {
             opacity: 1,
-            filter: 'blur(0px)',
+            filter: "blur(0px)",
           },
         },
       }}
       className="font-[450]"
     >
-      {'Founders club • Founders club • Founders club • '}
+      {"Founders club • Founders club • Founders club • "}
     </SpinningText>
   );
 }
 
 const isPathExcluded = (pathname: string, excludedPaths: string[]) => {
-  return excludedPaths.some(path => {
-    if (path.endsWith('/*')) {
+  return excludedPaths.some((path) => {
+    if (path.endsWith("/*")) {
       const prefix = path.slice(0, -2); // Remove /* from the end
       return pathname.startsWith(prefix);
     }
@@ -97,13 +85,7 @@ const isPathExcluded = (pathname: string, excludedPaths: string[]) => {
 
 const Footer2 = () => {
   const pathname = usePathname();
-  const excludedRoutes = [
-    '/studio/*',
-    '/events/writeup/*',
-    '/blog/posts/*',
-    '/admin/*',
-    '/auth/*',
-  ];
+  const excludedRoutes = ["/studio/*", "/events/writeup/*", "/blog/posts/*", "/admin/*", "/auth/*"];
 
   if (isPathExcluded(pathname, excludedRoutes)) {
     return null;
@@ -117,13 +99,7 @@ const Footer2 = () => {
       <footer className="relative z-50 w-full mx-auto px-4 bg-background ">
         <div className="grid grid-cols-2 gap-8 lg:grid-cols-6">
           <div className="col-span-2 mb-8 lg:mb-0">
-            <Image
-              src="/fc-logo.png"
-              alt="logo"
-              width={500}
-              height={238}
-              className="mb-3 h-16 w-auto "
-            />
+            <Image src="/fc-logo.png" alt="logo" width={500} height={238} className="mb-3 h-16 w-auto " />
             <p className="font-bold">Startups and stuff.</p>
           </div>
           {sections.map((section, sectionIdx) => (
