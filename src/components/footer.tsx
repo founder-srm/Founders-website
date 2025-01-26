@@ -3,44 +3,42 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { SpinningText } from "./ui/spinning-text";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
 
 const sections = [
   {
-    title: "Product",
+    title: "Club Information",
     links: [
-      { name: "Overview", href: "#" },
-      { name: "Pricing", href: "#" },
-      { name: "Marketplace", href: "#" },
-      { name: "Features", href: "#" },
-      { name: "Integrations", href: "#" },
-      { name: "Pricing", href: "#" },
+      { name: "About Us", href: "/about" },
+      { name: "Team", href: "/about/team" },
+      { name: "Recruitments", href: "/recruitments" },
+      { name: "Contact Us", href: "/contact-us" },
     ],
   },
   {
-    title: "Company",
+    title: "Events & Resources",
     links: [
-      { name: "About", href: "#" },
-      { name: "Team", href: "#" },
-      { name: "Blog", href: "#" },
-      { name: "Careers", href: "#" },
-      { name: "Contact", href: "#" },
-      { name: "Privacy", href: "#" },
+      { name: "Events", href: "/events" },
+      { name: "Upcoming", href: "/upcoming" },
+      { name: "Blog", href: "/blog" },
+      { name: "Join the Club", href: "/recruitments" },
     ],
   },
   {
-    title: "Resources",
+    title: "Social Media",
     links: [
-      { name: "Help", href: "#" },
-      { name: "Sales", href: "#" },
-      { name: "Advertise", href: "#" },
+      { name: "Instagram", href: "https://www.instagram.com/club.founders/" },
+      { name: "Twitter/X", href: "https://x.com/foundersclubsrm" },
+      { name: "LinkedIn", href: "https://www.linkedin.com/company/foundersclub-srm" },
+      { name: "GitHub", href: "https://github.com/founder-srm" },
     ],
   },
   {
-    title: "Social",
+    title: "Directorate of Entrepreneurship and Innovation",
     links: [
-      { name: "Twitter", href: "#" },
-      { name: "Instagram", href: "#" },
-      { name: "LinkedIn", href: "#" },
+      { name: "Website", href: "https://www.srmdei.com/" },
+      { name: "LinkedIn", href: "https://www.linkedin.com/school/srmdei/" },
+      { name: "Instagram", href: "https://www.instagram.com/srmdei.official/" },
     ],
   },
 ];
@@ -120,7 +118,20 @@ const Footer2 = () => {
               <ul className="space-y-4 text-muted-foreground">
                 {section.links.map((link, linkIdx) => (
                   <li key={linkIdx} className="font-medium hover:text-primary">
-                    <a href={link.href}>{link.name}</a>
+                    {link.href === "https://www.srmdei.com/" ? (
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <a href={link.href}>{link.name}</a>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Yes, we made this!</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    ) : (
+                      <a href={link.href}>{link.name}</a>
+                    )}
                   </li>
                 ))}
               </ul>
