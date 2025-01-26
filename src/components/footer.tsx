@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { SpinningText } from "./ui/spinning-text";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
 
 const sections = [
   {
@@ -10,6 +11,7 @@ const sections = [
     links: [
       { name: "About Us", href: "/about" },
       { name: "Team", href: "/about/team" },
+      { name: "Recruitments", href: "/recruitments" },
       { name: "Contact Us", href: "/contact-us" },
     ],
   },
@@ -29,6 +31,14 @@ const sections = [
       { name: "Twitter/X", href: "https://x.com/foundersclubsrm" },
       { name: "LinkedIn", href: "https://www.linkedin.com/company/foundersclub-srm" },
       { name: "GitHub", href: "https://github.com/founder-srm" },
+    ],
+  },
+  {
+    title: "Directorate of Entrepreneurship and Innovation",
+    links: [
+      { name: "Website", href: "https://www.srmdei.com/" },
+      { name: "LinkedIn", href: "https://www.linkedin.com/school/srmdei/" },
+      { name: "Instagram", href: "https://www.instagram.com/srmdei.official/" },
     ],
   },
 ];
@@ -108,7 +118,20 @@ const Footer2 = () => {
               <ul className="space-y-4 text-muted-foreground">
                 {section.links.map((link, linkIdx) => (
                   <li key={linkIdx} className="font-medium hover:text-primary">
-                    <a href={link.href}>{link.name}</a>
+                    {link.href === "https://www.srmdei.com/" ? (
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <a href={link.href}>{link.name}</a>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Yes, we made this!</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    ) : (
+                      <a href={link.href}>{link.name}</a>
+                    )}
                   </li>
                 ))}
               </ul>
