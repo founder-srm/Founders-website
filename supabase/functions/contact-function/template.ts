@@ -5,7 +5,6 @@ interface SupabaseRecord {
   subject: string;
   description: string;
   id: string;
-  company: string;
   inserted_at: string;
 }
 

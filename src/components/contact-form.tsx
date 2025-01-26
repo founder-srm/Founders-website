@@ -63,7 +63,7 @@ export function BookDemoForm() {
     const {data, error} = await supabase.from('contactentries')
     .insert([
       {
-        full_name: formData.fullName,
+        name: formData.fullName,
         company: formData.company,
         phone: formData.phone,
         email: formData.email,
@@ -163,15 +163,18 @@ export function BookDemoForm() {
           optional
         >
           <SelectItem value="search">Web Search</SelectItem>
+          <SelectItem value="team">Founders Club Team</SelectItem>
+          <SelectItem value="socialmedia">Social Media</SelectItem>
+          <SelectItem value="we cool">Someone told you we are cool!</SelectItem>
           {/* Add more options as needed */}
         </FormSelect>
 
         <div className="flex w-full flex-col justify-end space-y-3 pt-2">
-          <Button type="submit">Book demo</Button>
+          <Button type="submit">Submit</Button>
           <div className="text-xs text-muted-foreground">
             For more information about how we handle your personal information,
-            please visit our{' '}
-            <Link href="/" className="underline">
+            please visit our{''}
+            <Link href="./components/PrivacyPolicy/page.tsx" className="underline">
               privacy policy
             </Link>
             .
