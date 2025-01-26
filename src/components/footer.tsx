@@ -130,9 +130,9 @@ const Footer2 = () => {
         <div className="mt-24 mb-8 flex justify-center gap-4 border-t pt-8 text-sm font-medium text-muted-foreground md:flex-row md:items-center">
           <p>
             © {new Date().getFullYear()}{" "}
-            <a href="https://github.com/founder-srm" target="_blank" rel="noopener noreferrer">
+            <Link href="https://github.com/founder-srm" target="_blank" rel="noopener noreferrer">
               Founders Club
-            </a>
+            </Link>
             . All rights reserved.
           </p>
         </div>
