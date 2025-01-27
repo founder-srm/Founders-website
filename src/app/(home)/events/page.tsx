@@ -4,8 +4,10 @@ import Link from "next/link";
 import Image from "next/image";
 import { urlFor } from "@/sanity/lib/image";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { SanityLive } from "@/sanity/lib/live";
 import { format } from "date-fns";
+import { Mail, ChevronLeft, ChevronRight } from "lucide-react";
 
 const categories = ["Webinar", "Bootcamp", "TriumphTalk", "Foundathon", "OpenHouse", "Workshop"];
 
@@ -118,6 +120,45 @@ export default async function EventsPage() {
               </div>
             </div>
           ))}
+        </div>
+
+        <div className="mt-12 border-t border-border py-8">
+          <h2 className="mb-6 text-xl sm:text-2xl font-semibold">Subscribe to Our Newsletter</h2>
+          <form className="flex flex-col sm:flex-row gap-2">
+            <Input type="email" placeholder="Enter your email" className="max-w-sm" />
+            <Button type="submit" className="w-full sm:w-auto">
+              Subscribe
+              <Mail className="ml-2 h-4 w-4" />
+            </Button>
+          </form>
+        </div>
+
+        <div className="mt-8 border-t border-border py-2 md:mt-10 lg:mt-12">
+          <nav aria-label="pagination" className="mx-auto flex w-full justify-center">
+            <ul className="flex flex-row items-center gap-1 w-full justify-between">
+              <li>
+                <Button variant="ghost" className="gap-1 pl-2.5" disabled={currentPage === 1}>
+                  <ChevronLeft className="h-4 w-4" />
+                  <span className="hidden sm:inline">Previous</span>
+                </Button>
+              </li>
+              <div className="hidden items-center gap-1 md:flex">
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                  <li key={page}>
+                    <Button variant={page === currentPage ? "default" : "ghost"} className="h-10 w-10">
+                      {page}
+                    </Button>
+                  </li>
+                ))}
+              </div>
+              <li>
+                <Button variant="ghost" className="gap-1 pr-2.5" disabled={currentPage === totalPages}>
+                  <span className="hidden sm:inline">Next</span>
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
+              </li>
+            </ul>
+          </nav>
         </div>
       </div>
       <SanityLive />
