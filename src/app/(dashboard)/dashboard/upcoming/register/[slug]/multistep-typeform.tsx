@@ -159,9 +159,9 @@ export function TypeformMultiStep({
   async function onSubmit(data: z.infer<typeof formSchema>) {
     if (!user?.email) {
       toast({
-        title: "Error",
-        description: "User email is required for registration",
-        variant: "destructive",
+        title: 'Error',
+        description: 'User email is required for registration',
+        variant: 'destructive',
       });
       return;
     }

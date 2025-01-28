@@ -33,7 +33,7 @@ export default function AdminLayout({
 
   return (
     <ReactQueryClientProvider>
-      <SidebarProvider className=''>
+      <SidebarProvider className="">
         <SidebarLeft />
         <SidebarInset className="overflow-x-hidden">
           <header className="sticky top-0 z-[60] w-full flex h-14 shrink-0 items-center gap-2 border-b bg-background">
@@ -53,9 +53,7 @@ export default function AdminLayout({
               <ModeToggle />
             </div>
           </header>
-          <div className="flex-1 overflow-x-hidden">
-            {children}
-          </div>
+          <div className="flex-1 overflow-x-hidden">{children}</div>
         </SidebarInset>
         <SidebarRight />
       </SidebarProvider>
