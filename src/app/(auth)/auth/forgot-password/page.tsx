@@ -65,7 +65,7 @@ const ResetPassword = () => {
             </Button>
           </form>
           {message && (
-            <Alert variant={message.includes("success") ? "success" : "destructive"} className="mt-4">
+            <Alert variant={message.includes("default") ? "default" : "destructive"} className="mt-4">
               <AlertDescription className="text-center text-sm text-muted-foreground">{message}</AlertDescription>
             </Alert>
           )}
