@@ -248,7 +248,7 @@ export const RegistrationColumns: ColumnDef<Registration>[] = [
 
       return (
         <div className="flex items-center">
-          <Link href={`/admin/registrations/${registration.id}`} passHref>
+          <Link href={`/admin/registrations/view/${registration.id}`} passHref>
             <Button
               variant="ghost"
               className="h-8 w-8 p-0"
@@ -371,9 +371,6 @@ export const RegistrationColumns: ColumnDef<Registration>[] = [
               >
                 Copy registration ID
               </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Edit registration</DropdownMenuItem>
-              <DropdownMenuItem>Cancel registration</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
