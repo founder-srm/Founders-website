@@ -42,7 +42,7 @@ export const sendResetPasswordLink = async (email: string): Promise<string> => {
   if (error) {
     return `Error: ${error.message}`;
   } else {
-    return `Password reset link sent! Please check your email: ${email}`;
+    return `Password reset link sent! Please check your email!`;
   }
 };
 
