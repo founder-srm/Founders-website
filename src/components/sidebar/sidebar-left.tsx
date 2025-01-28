@@ -2,6 +2,7 @@
 
 import type React from 'react';
 import {
+  Archive,
   AudioWaveform,
   Blocks,
   Calendar,
@@ -60,13 +61,16 @@ const data = {
       title: 'Home',
       url: '/admin',
       icon: Home,
-      isActive: true,
+    },
+    {
+      title: 'All Registrations',
+      url: '/admin/registrations',
+      icon: Archive,
     },
     {
       title: 'New Event',
-      url: '/admin/new-event',
+      url: '/admin/events/create/new-event',
       icon: FilePlus2,
-      badge: '10',
     },
   ],
   navSecondary: [
@@ -266,9 +270,9 @@ export function SidebarLeft({
         <TeamSwitcher teams={data.teams} />
         <NavMain items={data.navMain} />
       </SidebarHeader>
-      <SidebarContent>
-        <NavFavorites favorites={data.favorites} />
-        <NavWorkspaces workspaces={data.workspaces} />
+      <SidebarContent className=" overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-muted-foreground/20 [&::-webkit-scrollbar-track]:bg-transparent">
+        <NavFavorites />
+        <NavWorkspaces />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarRail />

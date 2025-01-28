@@ -7,6 +7,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
+import { usePathname } from 'next/navigation';
 
 export function NavMain({
   items,
@@ -15,14 +16,14 @@ export function NavMain({
     title: string;
     url: string;
     icon: LucideIcon;
-    isActive?: boolean;
   }[];
 }) {
+  const pathname = usePathname();
   return (
     <SidebarMenu>
       {items.map(item => (
         <SidebarMenuItem key={item.title}>
-          <SidebarMenuButton asChild isActive={item.isActive}>
+          <SidebarMenuButton asChild isActive={pathname === item.url}>
             <a href={item.url}>
               <item.icon />
               <span>{item.title}</span>
