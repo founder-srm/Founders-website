@@ -13,6 +13,8 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { formatInTimeZone } from 'date-fns-tz';
+// import { enGB } from 'date-fns/locale/';
 
 async function getEventsBySlug({ slug }: { slug: string }) {
   const supabase = await createClient();
@@ -102,13 +104,11 @@ export default async function EventRegistrationSection({
           <EventDetailCard
             icon={<CalendarDays className="h-5 w-5" />}
             title="Starting on"
-            content={new Date(event.start_date).toLocaleDateString('en-IN', {
-              day: '2-digit',
-              month: 'long',
-              year: 'numeric',
-              hour: '2-digit',
-              minute: '2-digit',
-            })}
+            content={formatInTimeZone(
+              new Date(event.start_date),
+              'Asia/Kolkata',
+              'dd MMMM yyyy, hh:mm a zzz'
+            )}
           />
           <EventDetailCard
             icon={<Tag className="h-5 w-5" />}
@@ -131,13 +131,11 @@ export default async function EventRegistrationSection({
           <EventDetailCard
             icon={<Clock className="h-5 w-5" />}
             title="End Date"
-            content={new Date(event.end_date).toLocaleDateString('en-IN', {
-              day: '2-digit',
-              month: 'long',
-              year: 'numeric',
-              hour: '2-digit',
-              minute: '2-digit',
-            })}
+            content={formatInTimeZone(
+              new Date(event.end_date),
+              'Asia/Kolkata',
+              'dd MMMM yyyy, hh:mm a zzz'
+            )}
           />
           <EventDetailCard
             icon={<Info className="h-5 w-5" />}

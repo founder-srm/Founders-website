@@ -1,4 +1,5 @@
 import { AlertCircle, ChevronRight, MoreHorizontal, Plus } from 'lucide-react';
+import { formatInTimeZone } from 'date-fns-tz';
 
 import {
   Collapsible,
@@ -94,15 +95,10 @@ export function NavWorkspaces() {
                         <SidebarMenuSubItem>
                           <SidebarMenuSubButton>
                             <span>
-                              {new Date(event.start_date).toLocaleDateString(
-                                'en-IN',
-                                {
-                                  day: '2-digit',
-                                  month: 'long',
-                                  year: 'numeric',
-                                  hour: '2-digit',
-                                  minute: '2-digit',
-                                }
+                              {formatInTimeZone(
+                                new Date(event.start_date),
+                                'Asia/Kolkata',
+                                'dd MMMM yyyy, hh:mm a zzz'
                               )}
                             </span>
                           </SidebarMenuSubButton>

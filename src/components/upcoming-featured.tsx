@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import { ArrowUpRight } from 'lucide-react';
 import type { eventsInsertType } from '../../schema.zod';
+import { formatInTimeZone } from 'date-fns-tz';
 
 export function FeaturedPost({ event }: { event: eventsInsertType }) {
   if (!event) {
@@ -69,11 +70,11 @@ export function FeaturedPost({ event }: { event: eventsInsertType }) {
                 <span className="mb-2 text-xs font-medium">Starting on</span>
                 <div className="flex flex-1 items-center">
                   <span className="text-sm font-medium">
-                    {new Date(event.start_date).toLocaleDateString('en-IN', {
-                      day: '2-digit',
-                      month: 'long',
-                      year: 'numeric',
-                    })}
+                    {formatInTimeZone(
+                      new Date(event.start_date),
+                      'Asia/Kolkata',
+                      'dd MMMM yyyy'
+                    )}
                   </span>
                 </div>
               </div>

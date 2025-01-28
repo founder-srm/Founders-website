@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import type { eventsInsertType } from '../../schema.zod';
+import { formatInTimeZone } from 'date-fns-tz';
 
 interface UpcomingCardProps {
   post: eventsInsertType;
@@ -48,11 +49,11 @@ export function UpcomingCard({ post }: UpcomingCardProps) {
         />
         <div className="flex flex-col gap-px">
           <span className="text-xs font-medium">
-            {new Date(post.start_date).toLocaleDateString('en-IN', {
-              day: '2-digit',
-              month: 'long',
-              year: 'numeric',
-            })}
+            {formatInTimeZone(
+              new Date(post.start_date),
+              'Asia/Kolkata',
+              'dd MMMM yyyy'
+            )}
           </span>
           <span className="text-xs text-muted-foreground">
             {post.event_type}
