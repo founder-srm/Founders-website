@@ -1,46 +1,44 @@
-'use client';
-import Image from 'next/image';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { SpinningText } from './ui/spinning-text';
+"use client";
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { SpinningText } from "./ui/spinning-text";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
 
 const sections = [
   {
-    title: 'Product',
+    title: "Club Information",
     links: [
-      { name: 'Overview', href: '#' },
-      { name: 'Pricing', href: '#' },
-      { name: 'Marketplace', href: '#' },
-      { name: 'Features', href: '#' },
-      { name: 'Integrations', href: '#' },
-      { name: 'Pricing', href: '#' },
+      { name: "About Us", href: "/about" },
+      { name: "Team", href: "/about/team" },
+      { name: "Recruitments", href: "/recruitments" },
+      { name: "Contact Us", href: "/contact-us" },
     ],
   },
   {
-    title: 'Company',
+    title: "Events & Resources",
     links: [
-      { name: 'About', href: '#' },
-      { name: 'Team', href: '#' },
-      { name: 'Blog', href: '#' },
-      { name: 'Careers', href: '#' },
-      { name: 'Contact', href: '#' },
-      { name: 'Privacy', href: '#' },
+      { name: "Events", href: "/events" },
+      { name: "Upcoming", href: "/upcoming" },
+      { name: "Blog", href: "/blog" },
+      { name: "Join the Club", href: "/recruitments" },
     ],
   },
   {
-    title: 'Resources',
+    title: "Social Media",
     links: [
-      { name: 'Help', href: '#' },
-      { name: 'Sales', href: '#' },
-      { name: 'Advertise', href: '#' },
+      { name: "Instagram", href: "https://www.instagram.com/club.founders/" },
+      { name: "Twitter/X", href: "https://x.com/foundersclubsrm" },
+      { name: "LinkedIn", href: "https://www.linkedin.com/company/foundersclub-srm" },
+      { name: "GitHub", href: "https://github.com/founder-srm" },
     ],
   },
   {
-    title: 'Social',
+    title: "Directorate of Entrepreneurship and Innovation",
     links: [
-      { name: 'Twitter', href: '#' },
-      { name: 'Instagram', href: '#' },
-      { name: 'LinkedIn', href: '#' },
+      { name: "Website", href: "https://www.srmdei.com/" },
+      { name: "LinkedIn", href: "https://www.linkedin.com/school/srmdei/" },
+      { name: "Instagram", href: "https://www.instagram.com/srmdei.official/" },
     ],
   },
 ];
@@ -59,7 +57,7 @@ function SpinningTextCustom() {
             opacity: 1,
             rotate: 360,
             transition: {
-              type: 'spring',
+              type: "spring",
               bounce: 0,
               duration: 6,
               repeat: Number.POSITIVE_INFINITY,
@@ -70,24 +68,24 @@ function SpinningTextCustom() {
         item: {
           hidden: {
             opacity: 0,
-            filter: 'blur(4px)',
+            filter: "blur(4px)",
           },
           visible: {
             opacity: 1,
-            filter: 'blur(0px)',
+            filter: "blur(0px)",
           },
         },
       }}
       className="font-[450]"
     >
-      {'Founders club • Founders club • Founders club • '}
+      {"Founders club • Founders club • Founders club • "}
     </SpinningText>
   );
 }
 
 const isPathExcluded = (pathname: string, excludedPaths: string[]) => {
-  return excludedPaths.some(path => {
-    if (path.endsWith('/*')) {
+  return excludedPaths.some((path) => {
+    if (path.endsWith("/*")) {
       const prefix = path.slice(0, -2); // Remove /* from the end
       return pathname.startsWith(prefix);
     }
@@ -97,13 +95,7 @@ const isPathExcluded = (pathname: string, excludedPaths: string[]) => {
 
 const Footer2 = () => {
   const pathname = usePathname();
-  const excludedRoutes = [
-    '/studio/*',
-    '/events/writeup/*',
-    '/blog/posts/*',
-    '/admin/*',
-    '/auth/*',
-  ];
+  const excludedRoutes = ["/studio/*", "/events/writeup/*", "/blog/posts/*", "/admin/*", "/auth/*"];
 
   if (isPathExcluded(pathname, excludedRoutes)) {
     return null;
@@ -117,13 +109,7 @@ const Footer2 = () => {
       <footer className="relative z-50 w-full mx-auto px-4 bg-background ">
         <div className="grid grid-cols-2 gap-8 lg:grid-cols-6">
           <div className="col-span-2 mb-8 lg:mb-0">
-            <Image
-              src="/fc-logo.png"
-              alt="logo"
-              width={500}
-              height={238}
-              className="mb-3 h-16 w-auto "
-            />
+            <Image src="/fc-logo.png" alt="logo" width={500} height={238} className="mb-3 h-16 w-auto " />
             <p className="font-bold">Startups and stuff.</p>
           </div>
           {sections.map((section, sectionIdx) => (
@@ -132,23 +118,34 @@ const Footer2 = () => {
               <ul className="space-y-4 text-muted-foreground">
                 {section.links.map((link, linkIdx) => (
                   <li key={linkIdx} className="font-medium hover:text-primary">
-                    <a href={link.href}>{link.name}</a>
+                    {link.href === "https://www.srmdei.com/" ? (
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <a href={link.href}>{link.name}</a>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Yes, we made this!</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    ) : (
+                      <a href={link.href}>{link.name}</a>
+                    )}
                   </li>
                 ))}
               </ul>
             </div>
           ))}
         </div>
-        <div className="mt-24 flex flex-col justify-between gap-4 border-t pt-8 text-sm font-medium text-muted-foreground md:flex-row md:items-center">
-          <p>© 2025 Foundersclub. All rights reserved.</p>
-          <ul className="flex gap-4">
-            <li className="underline hover:text-primary">
-              <Link href="#"> Terms and Conditions</Link>
-            </li>
-            <li className="underline hover:text-primary">
-              <Link href="#"> Privacy Policy</Link>
-            </li>
-          </ul>
+        <div className="mt-24 mb-8 flex justify-center gap-4 border-t pt-8 text-sm font-medium text-muted-foreground md:flex-row md:items-center">
+          <p>
+            © {new Date().getFullYear()}{" "}
+            <Link href="https://github.com/founder-srm" target="_blank" rel="noopener noreferrer">
+              Founders Club
+            </Link>
+            . All rights reserved.
+          </p>
         </div>
       </footer>
     </section>

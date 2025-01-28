@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { sanityFetch } from '@/sanity/lib/live';
+import { sanityFetch, SanityLive } from '@/sanity/lib/live';
 import type { Metadata, ResolvingMetadata } from 'next';
 import { EVENT_BY_SLUG_QUERY } from '@/sanity/lib/queries';
 import { urlFor } from '@/sanity/lib/image';
@@ -272,6 +272,7 @@ export default async function EventPage({ params }: { params: Params }) {
           </div>
         </div>
       </div>
+      <SanityLive />
     </section>
   );
 }

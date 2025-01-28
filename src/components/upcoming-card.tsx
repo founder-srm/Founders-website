@@ -9,7 +9,10 @@ interface UpcomingCardProps {
 
 export function UpcomingCard({ post }: UpcomingCardProps) {
   return (
-    <Link href={`/upcoming/more-info/${post.slug}`} className="group flex flex-col">
+    <Link
+      href={`/upcoming/more-info/${post.slug}`}
+      className="group flex flex-col"
+    >
       <div className="mb-4 flex overflow-clip rounded-xl md:mb-5">
         <div className="h-full w-full transition duration-300 group-hover:scale-105">
           <Image

@@ -67,8 +67,15 @@ export default function LoginPage(props: {
 
   async function onSubmit(data: LoginFormData) {
     setLoading(true);
-    await login(data);
-    setLoading(false);
+    try {
+      await login(data); // Attempt the login
+    } catch (error) {
+      // Handle the error (e.g., show a message to the user)
+      console.error('You messed up,Login failed:', error);
+      // Optionally display an error toast or message to the user here
+    } finally {
+      setLoading(false); // Reset the button to allow retry
+    }
   }
 
   return (

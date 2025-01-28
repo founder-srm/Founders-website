@@ -2,6 +2,7 @@ import About1 from '@/components/about-us';
 import Careers4 from '@/components/hiring';
 import OurStory from '@/components/our-story';
 import Timeline from '@/components/timeline';
+import { SanityLive } from '@/sanity/lib/live';
 // import Team1 from '@/components/team';
 
 export default function About() {
@@ -12,6 +13,7 @@ export default function About() {
       <Timeline />
       <Careers4 />
       {/* <Team1 /> */}
+      <SanityLive />
     </main>
   );
 }

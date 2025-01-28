@@ -14,14 +14,15 @@ import {
 import { NavUser } from './nav-user';
 import { DatePicker } from './date-picker';
 import { Calendars } from './calendars';
+import { useUser } from '@/stores/session';
 
 // This is sample data.
 const data = {
-  user: {
-    name: 'shadcn',
-    email: 'm@example.com',
-    avatar: '/avatars/shadcn.jpg',
-  },
+  // user: {
+  //   name: 'shadcn',
+  //   email: 'm@example.com',
+  //   avatar: '/avatars/shadcn.jpg',
+  // },
   calendars: [
     {
       name: 'My Calendars',
@@ -41,6 +42,8 @@ const data = {
 export function SidebarRight({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
+  const user = useUser();
+  if (!user) return null;
   return (
     <Sidebar
       collapsible="none"
@@ -48,7 +51,7 @@ export function SidebarRight({
       {...props}
     >
       <SidebarHeader className="h-16 border-b border-sidebar-border">
-        <NavUser user={data.user} />
+        <NavUser {...user} />
       </SidebarHeader>
       <SidebarContent>
         <DatePicker />

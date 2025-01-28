@@ -51,10 +51,7 @@ export function TabNavigation({
         <Tabs value={activeTab} onValueChange={handleTabChange}>
           <TabsList>
             {categories.map(category => (
-              <TabsTrigger
-                key={category}
-                value={category}
-              >
+              <TabsTrigger key={category} value={category}>
                 {category}
               </TabsTrigger>
             ))}

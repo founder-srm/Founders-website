@@ -29,6 +29,15 @@ const iconComponents = {
   ZoomIn,
 };
 
+function Noise() {
+  return (
+    <div
+      className="pointer-events-none w-full h-full overflow-hidden absolute inset-0 z-0 opacity-10 [mask-image:radial-gradient(#fff,transparent,75%)]"
+      style={{ backgroundImage: 'url(/textures/pixels.png)', backgroundSize: '30%' }}
+    />
+  );
+}
+
 export default function ShineCard({ reason }: ShineCardProps) {
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -68,6 +77,7 @@ export default function ShineCard({ reason }: ShineCardProps) {
         <h3 className="mb-3 text-xl font-semibold">{reason.title}</h3>
         <p className="text-muted-foreground">{reason.description}</p>
       </div>
+      <Noise />
     </div>
   );
 }

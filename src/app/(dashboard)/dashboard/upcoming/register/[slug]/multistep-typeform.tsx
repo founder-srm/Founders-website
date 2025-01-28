@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
-import { useState } from 'react';
+import { useEffect, useState} from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -39,6 +39,7 @@ import { sendEventRegistration } from '@/actions/typeform-upload';
 import type { eventsInsertType } from '../../../../../../../schema.zod';
 import { useUser } from '@/stores/session';
 import { useRouter } from 'next/navigation';
+import { useToast } from '@/hooks/use-toast';
 
 type TypeFormField = {
   fieldType:
@@ -138,10 +139,20 @@ export function TypeformMultiStep({
   const Router = useRouter();
 
   const user = useUser();
+  const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
+
+  // autofocus the inputs, don't recommend to use it
+  // biome-ignore lint/correctness/useExhaustiveDependencies: best soln is to ignore that it's not exhaustive
+    useEffect(() => {
+    const currentInput = document.querySelector('[data-current-field]') as HTMLElement;
+    if (currentInput) {
+      currentInput.focus();
+    }
+  }, [step]);
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     console.log('Final submission:', data);
@@ -160,7 +171,10 @@ export function TypeformMultiStep({
         return;
       }
 
-      alert('Registration successful!');
+      toast({
+        title: 'Registration successful!',
+        description: 'You have successfully registered for the event.',
+      });
       Router.push(
         `/dashboard/upcoming/register/success?ticketid=${response[0].ticket_id}`
       );
@@ -204,6 +218,7 @@ export function TypeformMultiStep({
                         <FormLabel>{field.label}</FormLabel>
                         <FormControl>
                           <Input
+                            data-current-field
                             value={formField.value ?? ''}
                             onChange={formField.onChange}
                             required={field.required}
@@ -455,6 +470,7 @@ export function TypeformMultiStep({
                         <FormLabel>{field.label}</FormLabel>
                         <FormControl>
                           <Textarea
+                            data-current-field
                             placeholder={`Enter ${field.label.toLowerCase()}`}
                             className="resize-none"
                             required={field.required}
