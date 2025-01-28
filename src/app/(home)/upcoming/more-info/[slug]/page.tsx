@@ -98,19 +98,19 @@ export default async function EventRegistrationSection({
                 <span>Founder&apos;s Club</span>
               </div>
             }
-          />
-          <EventDetailCard
+            />
+            <EventDetailCard
             icon={<CalendarDays className="h-5 w-5" />}
             title="Starting on"
-            content={new Date(event.start_date).toLocaleDateString('en-IN', {
+            content={new Date(new Date(event.start_date).getTime() + (5.5 * 60 * 60 * 1000)).toLocaleString('en-IN', {
               day: '2-digit',
               month: 'long',
               year: 'numeric',
               hour: '2-digit',
               minute: '2-digit',
             })}
-          />
-          <EventDetailCard
+            />
+            <EventDetailCard
             icon={<Tag className="h-5 w-5" />}
             title="Tags"
             content={
