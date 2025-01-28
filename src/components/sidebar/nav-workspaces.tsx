@@ -84,8 +84,10 @@ export function NavWorkspaces() {
                         <ChevronRight />
                       </SidebarMenuAction>
                     </CollapsibleTrigger>
-                    <SidebarMenuAction showOnHover>
-                      <Plus />
+                    <SidebarMenuAction asChild showOnHover>
+                      <Link href="/admin/events/create/new-event">
+                        <Plus />
+                      </Link>
                     </SidebarMenuAction>
                     <CollapsibleContent>
                       <SidebarMenuSub>
