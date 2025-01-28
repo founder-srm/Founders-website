@@ -845,32 +845,38 @@ export type Database = {
       eventsregistrations: {
         Row: {
           application_id: string
+          attendance: Database["public"]["Enums"]["attendance"]
           created_at: string
           details: Json
           event_id: string
           event_title: string
           id: string
           is_approved: boolean
+          registration_email: string
           ticket_id: number
         }
         Insert: {
           application_id?: string
+          attendance?: Database["public"]["Enums"]["attendance"]
           created_at?: string
           details: Json
           event_id?: string
           event_title: string
           id?: string
           is_approved?: boolean
+          registration_email: string
           ticket_id?: number
         }
         Update: {
           application_id?: string
+          attendance?: Database["public"]["Enums"]["attendance"]
           created_at?: string
           details?: Json
           event_id?: string
           event_title?: string
           id?: string
           is_approved?: boolean
+          registration_email?: string
           ticket_id?: number
         }
         Relationships: [
@@ -987,9 +993,31 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_event_registrations: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          registration_id: string
+          created_at: string
+          ticket_id: number
+          event_id: string
+          event_title_from_registration: string
+          application_id: string
+          details: Json
+          is_approved: boolean
+          attendance: Database["public"]["Enums"]["attendance"]
+          event_slug: string
+          user_email: string
+        }[]
+      }
+      mark_attendance: {
+        Args: {
+          registration_id: string
+        }
+        Returns: undefined
+      }
     }
     Enums: {
+      attendance: "Present" | "Absent"
       "blog-post-types":
         | "SuccessStories"
         | "StudentEntrepreneurs"

@@ -12,6 +12,7 @@ import { TypeformMultiStep } from './multistep-typeform';
 import { useParams } from 'next/navigation';
 import { Info, Radio } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { formatInTimeZone } from 'date-fns-tz';
 
 const typeformSchema = z
   .array(typeformFieldSchema)
@@ -106,13 +107,11 @@ export default function TypeformPage() {
                   hours
                 </p>
                 <p className="text-xs text-muted-foreground">
-                  {publishDate.toLocaleString('en-IN', {
-                    day: '2-digit',
-                    month: 'long',
-                    year: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                  })}
+                  {formatInTimeZone(
+                    publishDate,
+                    'Asia/Kolkata',
+                    'dd MMMM yyyy, hh:mm a zzz'
+                  )}
                   .
                 </p>
               </div>
@@ -145,13 +144,11 @@ export default function TypeformPage() {
                     Event Registration has already ended.
                   </p>
                   <p className="text-sm text-muted-foreground">
-                    {endDate.toLocaleString('en-IN', {
-                      day: '2-digit',
-                      month: 'long',
-                      year: 'numeric',
-                      hour: '2-digit',
-                      minute: '2-digit',
-                    })}
+                    {formatInTimeZone(
+                      endDate,
+                      'Asia/Kolkata',
+                      'dd MMMM yyyy, hh:mm a zzz'
+                    )}
                   </p>
                 </div>
                 <div className="flex gap-2">

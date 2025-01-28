@@ -37,6 +37,7 @@ import { GoogleIcon } from '@/components/custom-icons/custom-icons';
 import { Badge } from '@/components/ui/badge';
 import type { UserIdentity } from '@supabase/supabase-js';
 import { useSearchParams } from 'next/navigation';
+import { formatInTimeZone } from 'date-fns-tz';
 
 export default function AccountPage() {
   const user = useUser();
@@ -410,14 +411,11 @@ export default function AccountPage() {
                         <p>
                           Registered:{' '}
                           {reg.created_at
-                            ? new Date(reg.created_at).toLocaleString('en-IN', {
-                                day: '2-digit',
-                                month: 'long',
-                                year: 'numeric',
-                                hour: '2-digit',
-                                minute: '2-digit',
-                                hour12: true,
-                              })
+                            ? formatInTimeZone(
+                                new Date(reg.created_at),
+                                'Asia/Kolkata',
+                                'dd MMMM yyyy, hh:mm a zzz'
+                              )
                             : 'N/A'}
                         </p>
                       </div>

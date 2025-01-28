@@ -33,7 +33,10 @@ function Noise() {
   return (
     <div
       className="pointer-events-none w-full h-full overflow-hidden absolute inset-0 z-0 opacity-10 [mask-image:radial-gradient(#fff,transparent,75%)]"
-      style={{ backgroundImage: 'url(/textures/pixels.png)', backgroundSize: '30%' }}
+      style={{
+        backgroundImage: 'url(/textures/pixels.png)',
+        backgroundSize: '30%',
+      }}
     />
   );
 }
