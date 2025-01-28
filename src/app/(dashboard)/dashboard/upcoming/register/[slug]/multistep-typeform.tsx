@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
-import { useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -147,8 +147,10 @@ export function TypeformMultiStep({
 
   // autofocus the inputs, don't recommend to use it
   // biome-ignore lint/correctness/useExhaustiveDependencies: best soln is to ignore that it's not exhaustive
-    useEffect(() => {
-    const currentInput = document.querySelector('[data-current-field]') as HTMLElement;
+  useEffect(() => {
+    const currentInput = document.querySelector(
+      '[data-current-field]'
+    ) as HTMLElement;
     if (currentInput) {
       currentInput.focus();
     }

@@ -20,8 +20,6 @@ const BannerSingleton = memo(({ color }: BannerSingletonProps) => {
 
 BannerSingleton.displayName = 'BannerSingleton';
 
-
-
 export function InfiniteSliderBanner() {
   const presetColors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEEAD'];
 
