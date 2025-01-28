@@ -9,7 +9,6 @@ import type { Registration } from '@/types/registrations';
 import { createClient } from '@/utils/supabase/elevatedClient';
 import { useQuery } from '@supabase-cache-helpers/postgrest-react-query';
 import {
-  PlusCircle,
   ClipboardList,
   AlertCircle,
   FileSpreadsheet,
@@ -65,10 +64,6 @@ export default function RegistrationsPage() {
               <ClipboardList className="mr-2 h-8 w-8 text-primary" />
               Registrations Manager
             </h1>
-            <Button>
-              <PlusCircle className="mr-2 h-4 w-4" />
-              Add Registration
-            </Button>
           </div>
         </div>
       </header>
