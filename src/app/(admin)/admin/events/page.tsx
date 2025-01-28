@@ -53,7 +53,7 @@ export default function EventsPage() {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen overflow-x-hidden">
     <header className="shadow">
       <div className="container mx-auto py-6 px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center">
@@ -69,7 +69,7 @@ export default function EventsPage() {
       </div>
     </header>
     <main className="container mx-auto py-10 px-4 sm:px-6 lg:px-8">
-      <div className=" shadow rounded-lg p-6">
+      <div className=" shadow rounded-lg">
         <div className="flex justify-between items-center mb-6">
           <div>
             <h2 className="text-2xl font-semibold">All Events</h2>

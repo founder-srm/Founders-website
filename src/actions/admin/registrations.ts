@@ -4,6 +4,19 @@ export function getAllRegistrations(client: TypedSupabaseClient) {
   return client.from('eventsregistrations').select('*').throwOnError();
 }
 
+export function getAllRegistrationsWithUser(client: TypedSupabaseClient) {
+  return client
+    .from('eventsregistrations')
+    .select(`
+      *,
+      event_id(
+        title,
+        slug
+      )
+    `)
+    .throwOnError();
+}
+
 export function getRecentRegistrations(client: TypedSupabaseClient) {
   return client
     .from('eventsregistrations')

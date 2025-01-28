@@ -157,10 +157,20 @@ export function TypeformMultiStep({
   }, [step]);
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
+    if (!user?.email) {
+      toast({
+        title: "Error",
+        description: "User email is required for registration",
+        variant: "destructive",
+      });
+      return;
+    }
+
     console.log('Final submission:', data);
 
     try {
       const response = await sendEventRegistration({
+        registration_email: user.email,
         event_id: eventData.id,
         event_title: eventData.title,
         application_id: user?.id,
