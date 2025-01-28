@@ -1,14 +1,15 @@
-import type { Json } from '../../database.types';
+import type { Database, Json } from '../../database.types';
 
 export type Registration = {
-  application_id: string;
-  created_at: string;
+  application_id?: string;
+  attendance?: Database['public']['Enums']['attendance'];
+  created_at?: string;
   details: Json;
-  event_id: string;
+  event_id?: string;
   event_title: string;
-  id: string;
-  is_approved: boolean;
-  ticket_id: number;
+  id?: string;
+  is_approved?: boolean;
+  ticket_id?: number;
 };
 
 export type RegistrationCount = {
