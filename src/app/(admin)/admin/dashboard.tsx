@@ -31,7 +31,7 @@ export default function AdminDashboard() {
     if (!registrations) return [];
     return registrations.map(r => ({
       ...r,
-      event_type: r.is_approved ? 'Approved' : 'Pending',
+      event_type: r.is_approved === 'SUBMITTED' ? 'Checked' : 'Pending',
       registrations_count: 1,
     }));
   }, [registrations]);

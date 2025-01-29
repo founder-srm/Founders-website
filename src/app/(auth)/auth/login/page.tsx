@@ -211,7 +211,7 @@ export default function LoginPage(props: {
                           <FormLabel className="!mt-0">Remember me</FormLabel>
                         </div>
                         <Link
-                          href="#"
+                          href="/auth/forgot-password"
                           className="text-sm font-medium text-primary"
                         >
                           Forgot password
