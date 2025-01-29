@@ -8,11 +8,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import type { Registration } from '@/types/registrations';
 import { createClient } from '@/utils/supabase/elevatedClient';
 import { useQuery } from '@supabase-cache-helpers/postgrest-react-query';
-import {
-  ClipboardList,
-  AlertCircle,
-  FileSpreadsheet,
-} from 'lucide-react';
+import { ClipboardList, AlertCircle, FileSpreadsheet } from 'lucide-react';
 
 const TableSkeleton = () => (
   <div className="space-y-4">

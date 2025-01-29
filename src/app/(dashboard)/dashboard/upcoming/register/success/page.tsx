@@ -382,7 +382,7 @@ export default function CustomizeTicketPage() {
   if (loading) return <div>Loading...</div>;
   if (!registration) return <div>Registration not found</div>;
 
-  if (registration.is_approved === 'SUBMITTED' ) {
+  if (registration.is_approved === 'SUBMITTED') {
     return (
       <div className="h-screen w-full flex items-center justify-center bg-accent">
         <div className="z-[100] max-w-[400px] rounded-lg border border-border bg-background p-4 shadow-lg shadow-black/5">
@@ -438,7 +438,7 @@ export default function CustomizeTicketPage() {
     );
   }
 
-  if (registration.is_approved === 'INVALID' ) {
+  if (registration.is_approved === 'INVALID') {
     return (
       <div className="h-screen w-full flex items-center justify-center bg-accent">
         <div className="z-[100] max-w-[400px] rounded-lg border border-border bg-background p-4 shadow-lg shadow-black/5">
@@ -456,8 +456,9 @@ export default function CustomizeTicketPage() {
                     Registration Rejected by Admin
                   </p>
                   <p className="text-sm text-muted-foreground">
-                    Your registration has been rejected by the event organizers due to Invalid details.
-                    Please contact the event organizers for more information.
+                    Your registration has been rejected by the event organizers
+                    due to Invalid details. Please contact the event organizers
+                    for more information.
                   </p>
                   <p className="text-xs text-muted-foreground mt-3">
                     Ticket ID: {registration.ticket_id}
@@ -493,7 +494,7 @@ export default function CustomizeTicketPage() {
     );
   }
 
-  if (registration.is_approved === 'REJECTED' ) {
+  if (registration.is_approved === 'REJECTED') {
     return (
       <div className="h-screen w-full flex items-center justify-center bg-accent">
         <div className="z-[100] max-w-[400px] rounded-lg border border-border bg-background p-4 shadow-lg shadow-black/5">

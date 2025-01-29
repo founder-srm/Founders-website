@@ -10,7 +10,6 @@ export const loginSchema = z.object({
 
 export type LoginFormData = z.infer<typeof loginSchema>;
 
-
 export const newpasswordSchema = z
   .object({
     password: z
@@ -20,11 +19,11 @@ export const newpasswordSchema = z
         message: 'Password must contain at least one uppercase letter',
       })
       .regex(/[0-9]/, { message: 'Password must contain at least one number' }),
-    confirmPassword: z.string().nonempty("Please confirm your password."),
+    confirmPassword: z.string().nonempty('Please confirm your password.'),
   })
-  .refine((data) => data.password === data.confirmPassword, {
-    path: ["confirmPassword"],
-    message: "Passwords do not match.",
+  .refine(data => data.password === data.confirmPassword, {
+    path: ['confirmPassword'],
+    message: 'Passwords do not match.',
   });
 
 export const signupSchema = z

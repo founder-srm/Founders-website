@@ -88,7 +88,7 @@ const MenuBar = () => {
 
 const extensions = [
   Color.configure({ types: [TextStyle.name, ListItem.name] }),
-  TextStyle.configure(),  
+  TextStyle.configure(),
   StarterKit.configure({
     bulletList: {
       keepMarks: true,
@@ -136,7 +136,7 @@ const Tiptap = ({
               event.preventDefault();
               return true;
             },
-          }
+          },
         }}
       />
     </div>

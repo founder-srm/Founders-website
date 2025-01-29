@@ -11,19 +11,19 @@ import {
   type SignupFormData,
 } from '@/lib/schemas/auth';
 export async function updatePassword(newPassword: string) {
-
-
   if (!newPassword || newPassword.trim().length < 6) {
     return {
       success: false,
-      error: "Password must be at least 6 characters long.",
+      error: 'Password must be at least 6 characters long.',
     };
   }
   const supabase = await createClient();
-  const { data, error } = await supabase.auth.updateUser({ password: newPassword });
+  const { data, error } = await supabase.auth.updateUser({
+    password: newPassword,
+  });
 
   if (error) {
-    console.error("Error updating password:", error.message);
+    console.error('Error updating password:', error.message);
     return { success: false, error: error.message };
   }
 
@@ -33,10 +33,10 @@ export const sendResetPasswordLink = async (email: string): Promise<string> => {
   const supabase = await createClient();
   const { error, data } = await supabase.auth.resetPasswordForEmail(email, {
     // redirectTo: `http://localhost:3000/auth/new-password`, // Redirect URL
-    redirectTo: `http://${process.env.NEXT_PUBLIC_BASE_URL}/auth/new-password` // needs to be tested in prod
+    redirectTo: `http://${process.env.NEXT_PUBLIC_BASE_URL}/auth/new-password`, // needs to be tested in prod
   });
 
-  console.log("Supabase response:", { error, data });
+  console.log('Supabase response:', { error, data });
 
   // Check for errors and handle accordingly
   if (error) {
@@ -45,7 +45,6 @@ export const sendResetPasswordLink = async (email: string): Promise<string> => {
     return `Password reset link sent! Please check your email!`;
   }
 };
-
 
 export async function login(data: LoginFormData) {
   const result = loginSchema.safeParse(data);
