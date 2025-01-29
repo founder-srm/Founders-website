@@ -1,12 +1,15 @@
 export interface RegistrationEmailProps {
-    email: string;
-    event: string;
-    ticketid: string;
+  email: string;
+  event: string;
+  ticketid: string;
 }
 
-export const RegistrationApprovedEmail = ({ email, event, ticketid }: RegistrationEmailProps) => {
-
-    return`
+export const RegistrationApprovedEmail = ({
+  email,
+  event,
+  ticketid,
+}: RegistrationEmailProps) => {
+  return `
         <!DOCTYPE html>
 <html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" lang="en">
 
@@ -639,5 +642,5 @@ export const RegistrationApprovedEmail = ({ email, event, ticketid }: Registrati
 </body>
 
 </html>
-    `
-}
+    `;
+};
