@@ -87,4 +87,3 @@ export function getRegistrationsByDateRange(
     .lte('created_at', End_Date)
     .throwOnError();
 }
-

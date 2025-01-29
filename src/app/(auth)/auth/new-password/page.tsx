@@ -1,5 +1,5 @@
 'use client';
-import { z } from 'zod';
+import type { z } from 'zod';
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -24,7 +24,11 @@ import {
 export default function NewPasswordPage(props: {
   searchParams: Promise<{ message?: string; cause?: string; code?: string }>;
 }) {
-  const [searchParams, setSearchParams] = useState<{ message?: string; cause?: string; code?: string } | null>(null);
+  const [searchParams, setSearchParams] = useState<{
+    message?: string;
+    cause?: string;
+    code?: string;
+  } | null>(null);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
@@ -67,7 +71,10 @@ export default function NewPasswordPage(props: {
         <div className="container">
           <div className="flex flex-col gap-4">
             {searchParams?.message && (
-              <Alert variant="destructive" className="mx-auto w-full max-w-sm mt-8">
+              <Alert
+                variant="destructive"
+                className="mx-auto w-full max-w-sm mt-8"
+              >
                 <TriangleAlert className="h-4 w-4" />
                 <AlertDescription>
                   {searchParams.message}
@@ -93,11 +100,16 @@ export default function NewPasswordPage(props: {
                 className="mb-7 h-12 w-auto"
               />
               <h1 className="mb-2 text-2xl font-bold">Set New Password</h1>
-              <p className="text-muted-foreground">Create a new password to secure your account.</p>
+              <p className="text-muted-foreground">
+                Create a new password to secure your account.
+              </p>
             </div>
             <div className="z-10 mx-auto w-full max-w-sm rounded-md bg-background p-6 shadow">
               <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
+                <form
+                  onSubmit={form.handleSubmit(onSubmit)}
+                  className="grid gap-4"
+                >
                   <FormField
                     control={form.control}
                     name="password"
@@ -151,17 +163,28 @@ export default function NewPasswordPage(props: {
                     )}
                   />
                   {form.formState.errors.root?.message && (
-                    <p className="text-sm text-red-600">{form.formState.errors.root.message}</p>
+                    <p className="text-sm text-red-600">
+                      {form.formState.errors.root.message}
+                    </p>
                   )}
-                  <Button type="submit" disabled={loading} className="w-full flex items-center gap-2">
-                    {loading && <LucideLoaderPinwheel className="animate-spin" />} Update Password
+                  <Button
+                    type="submit"
+                    disabled={loading}
+                    className="w-full flex items-center gap-2"
+                  >
+                    {loading && (
+                      <LucideLoaderPinwheel className="animate-spin" />
+                    )}{' '}
+                    Update Password
                   </Button>
                 </form>
               </Form>
             </div>
             <div className="mx-auto mt-3 flex justify-center gap-1 text-sm text-muted-foreground">
               <p>Remember your password?</p>
-              <Link href="/auth/login" className="font-medium text-primary">Sign in</Link>
+              <Link href="/auth/login" className="font-medium text-primary">
+                Sign in
+              </Link>
             </div>
           </div>
         </div>

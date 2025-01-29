@@ -49,11 +49,11 @@ import { useState } from 'react';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import Tiptap from './tiptap-email';
-import { updateRegistrationApproval, updateRegistrationAttendance } from '@/actions/admin/hooks/registrations';
-import { useRouter } from 'next/navigation';
+import {
+  updateRegistrationApproval,
+  updateRegistrationAttendance,
+} from '@/actions/admin/hooks/registrations';
 import { useToast } from '@/hooks/use-toast';
-
-
 
 export const RegistrationColumns: ColumnDef<Registration>[] = [
   {
@@ -195,9 +195,19 @@ export const RegistrationColumns: ColumnDef<Registration>[] = [
       );
     },
     cell: ({ row }) => {
-      const isApproved = row.getValue('is_approved') as Database['public']['Enums']['registration-status'];
+      const isApproved = row.getValue(
+        'is_approved'
+      ) as Database['public']['Enums']['registration-status'];
       return (
-        <Badge variant={isApproved === 'ACCEPTED' ? 'default' : isApproved ==='INVALID'? 'destructive' : 'outline'}>
+        <Badge
+          variant={
+            isApproved === 'ACCEPTED'
+              ? 'default'
+              : isApproved === 'INVALID'
+                ? 'destructive'
+                : 'outline'
+          }
+        >
           {isApproved}
         </Badge>
       );
@@ -213,7 +223,6 @@ export const RegistrationColumns: ColumnDef<Registration>[] = [
   },
 ];
 
-
 const ActionColumnCell = (row: Row<Registration>) => {
   const registration = row.original;
   const [isEmailDialogOpen, setIsEmailDialogOpen] = useState(false);
@@ -222,15 +231,19 @@ const ActionColumnCell = (row: Row<Registration>) => {
   const [isSending, setIsSending] = useState(false);
   const [isUpdatingAttendance, setIsUpdatingAttendance] = useState(false);
   const [isUpdatingApproval, setIsUpdatingApproval] = useState(false);
-  const Router = useRouter();
   const { toast } = useToast();
 
-  const handleAttendanceUpdate = async (attendance: Database['public']['Enums']['attendance']) => {
+  const handleAttendanceUpdate = async (
+    attendance: Database['public']['Enums']['attendance']
+  ) => {
     if (!registration.id || isUpdatingAttendance) return;
-    
+
     setIsUpdatingAttendance(true);
     try {
-      const { error } = await updateRegistrationAttendance(registration.id, attendance);
+      const { error } = await updateRegistrationAttendance(
+        registration.id,
+        attendance
+      );
       if (error) {
         throw new Error(error.message);
       }
@@ -239,7 +252,6 @@ const ActionColumnCell = (row: Row<Registration>) => {
         description: `Registration ${registration.registration_email} marked as ${attendance}`,
       });
       setIsUpdatingAttendance(false);
-      Router.refresh();
     } catch (error) {
       console.error('Error updating attendance:', error);
       setIsUpdatingAttendance(false);
@@ -247,22 +259,46 @@ const ActionColumnCell = (row: Row<Registration>) => {
     }
   };
 
-  const handleApprovalUpdate = async (approval: Database['public']['Enums']['registration-status']) => {
+  const handleApprovalUpdate = async (
+    approval: Database['public']['Enums']['registration-status']
+  ) => {
     if (!registration.id || isUpdatingAttendance) return;
-    
+
     setIsUpdatingApproval(true);
     try {
-      const { error } = await updateRegistrationApproval(registration.id, approval);
+      const { error } = await updateRegistrationApproval(
+        registration.id,
+        approval
+      );
       if (error) {
         throw new Error(error.message);
       }
-      // setup asyc email for this
+      if (approval === 'ACCEPTED') {
+        const response = await fetch('/api/send-approved-email', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            to: registration.registration_email,
+            event: registration.event_title,
+            ticketid: registration.ticket_id,
+          }),
+        });
+        if (response.ok) {
+          console.log('Email sent successfully!');
+          toast({
+            title: 'Approval Email Sent',
+          });
+        } else {
+          throw new Error('Failed to send email');
+        }
+      }
       toast({
         title: 'Approval Updated',
         description: `Registration ${registration.registration_email} marked as ${approval}`,
       });
       setIsUpdatingApproval(false);
-      Router.refresh();
     } catch (error) {
       console.error('Error updating attendance:', error);
       alert('Failed to update attendance. Please try again.');
@@ -433,9 +469,7 @@ const ActionColumnCell = (row: Row<Registration>) => {
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuItem
-            onClick={() =>
-              navigator.clipboard.writeText(registration.id || '')
-            }
+            onClick={() => navigator.clipboard.writeText(registration.id || '')}
           >
             Copy registration ID
           </DropdownMenuItem>
@@ -447,7 +481,7 @@ const ActionColumnCell = (row: Row<Registration>) => {
             <DropdownMenuPortal>
               <DropdownMenuSubContent>
                 <DropdownMenuItem
-                  onClick={() => handleAttendanceUpdate("Present")}
+                  onClick={() => handleAttendanceUpdate('Present')}
                   disabled={isUpdatingAttendance}
                 >
                   <UserCheck className="mr-2 h-4 w-4" />
@@ -455,13 +489,13 @@ const ActionColumnCell = (row: Row<Registration>) => {
                     {isUpdatingAttendance ? (
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     ) : (
-                      "Mark Present"
+                      'Mark Present'
                     )}
                   </span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
-                  onClick={() => handleAttendanceUpdate("Absent")}
+                  onClick={() => handleAttendanceUpdate('Absent')}
                   disabled={isUpdatingAttendance}
                 >
                   <UserX className="mr-2 h-4 w-4" />
@@ -469,7 +503,7 @@ const ActionColumnCell = (row: Row<Registration>) => {
                     {isUpdatingAttendance ? (
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     ) : (
-                      "Mark Absent"
+                      'Mark Absent'
                     )}
                   </span>
                 </DropdownMenuItem>
@@ -485,7 +519,7 @@ const ActionColumnCell = (row: Row<Registration>) => {
             <DropdownMenuPortal>
               <DropdownMenuSubContent>
                 <DropdownMenuItem
-                  onClick={() => handleApprovalUpdate("ACCEPTED")}
+                  onClick={() => handleApprovalUpdate('ACCEPTED')}
                   disabled={isUpdatingApproval}
                 >
                   <TicketCheck className="mr-2 h-4 w-4" />
@@ -493,12 +527,12 @@ const ActionColumnCell = (row: Row<Registration>) => {
                     {isUpdatingApproval ? (
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     ) : (
-                      "Accept Entry"
+                      'Accept Entry'
                     )}
                   </span>
                 </DropdownMenuItem>
                 <DropdownMenuItem
-                  onClick={() => handleApprovalUpdate("REJECTED")}
+                  onClick={() => handleApprovalUpdate('REJECTED')}
                   disabled={isUpdatingApproval}
                 >
                   <TicketX className="mr-2 h-4 w-4" />
@@ -506,13 +540,13 @@ const ActionColumnCell = (row: Row<Registration>) => {
                     {isUpdatingApproval ? (
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     ) : (
-                      "Deny Entry"
+                      'Deny Entry'
                     )}
                   </span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
-                  onClick={() => handleApprovalUpdate("INVALID")}
+                  onClick={() => handleApprovalUpdate('INVALID')}
                   disabled={isUpdatingApproval}
                 >
                   <TicketSlash className="mr-2 h-4 w-4" />
@@ -520,7 +554,7 @@ const ActionColumnCell = (row: Row<Registration>) => {
                     {isUpdatingApproval ? (
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     ) : (
-                      "Invalid Entry"
+                      'Invalid Entry'
                     )}
                   </span>
                 </DropdownMenuItem>
@@ -531,4 +565,4 @@ const ActionColumnCell = (row: Row<Registration>) => {
       </DropdownMenu>
     </div>
   );
-}
+};
