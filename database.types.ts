@@ -793,6 +793,7 @@ export type Database = {
           id: string
           is_featured: boolean | null
           more_info: string | null
+          more_info_text: string | null
           publish_date: string
           rules: string | null
           slug: string
@@ -812,6 +813,7 @@ export type Database = {
           id?: string
           is_featured?: boolean | null
           more_info?: string | null
+          more_info_text?: string | null
           publish_date: string
           rules?: string | null
           slug?: string
@@ -831,6 +833,7 @@ export type Database = {
           id?: string
           is_featured?: boolean | null
           more_info?: string | null
+          more_info_text?: string | null
           publish_date?: string
           rules?: string | null
           slug?: string

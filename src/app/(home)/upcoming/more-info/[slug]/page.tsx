@@ -65,7 +65,7 @@ export default async function EventRegistrationSection({
               variant="outline"
               className="w-full sm:w-auto"
             >
-              <Link href={event.more_info || '#'}>More Information</Link>
+              <Link href={event.more_info || '#'}>{event.more_info_text}</Link>
             </Button>
           </div>
         </div>
