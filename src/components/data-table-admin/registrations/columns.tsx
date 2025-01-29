@@ -50,7 +50,6 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import Tiptap from './tiptap-email';
 import { updateRegistrationApproval, updateRegistrationAttendance } from '@/actions/admin/hooks/registrations';
-import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
 
 
@@ -222,7 +221,6 @@ const ActionColumnCell = (row: Row<Registration>) => {
   const [isSending, setIsSending] = useState(false);
   const [isUpdatingAttendance, setIsUpdatingAttendance] = useState(false);
   const [isUpdatingApproval, setIsUpdatingApproval] = useState(false);
-  const Router = useRouter();
   const { toast } = useToast();
 
   const handleAttendanceUpdate = async (attendance: Database['public']['Enums']['attendance']) => {
@@ -239,7 +237,6 @@ const ActionColumnCell = (row: Row<Registration>) => {
         description: `Registration ${registration.registration_email} marked as ${attendance}`,
       });
       setIsUpdatingAttendance(false);
-      Router.refresh();
     } catch (error) {
       console.error('Error updating attendance:', error);
       setIsUpdatingAttendance(false);
@@ -282,7 +279,6 @@ const ActionColumnCell = (row: Row<Registration>) => {
         description: `Registration ${registration.registration_email} marked as ${approval}`,
       });
       setIsUpdatingApproval(false);
-      Router.refresh();
     } catch (error) {
       console.error('Error updating attendance:', error);
       alert('Failed to update attendance. Please try again.');
