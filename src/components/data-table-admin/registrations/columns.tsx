@@ -256,7 +256,27 @@ const ActionColumnCell = (row: Row<Registration>) => {
       if (error) {
         throw new Error(error.message);
       }
-      // setup asyc email for this
+      if( approval === 'ACCEPTED'){
+        const response = await fetch('/api/send-approved-email', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            to: registration.registration_email,
+            event: registration.event_title,
+            ticketid: registration.ticket_id,
+          }),
+        });
+        if (response.ok) {
+          console.log('Email sent successfully!');
+          toast({
+            title: 'Approval Email Sent',
+          });
+        } else {
+          throw new Error('Failed to send email');
+        }
+      }
       toast({
         title: 'Approval Updated',
         description: `Registration ${registration.registration_email} marked as ${approval}`,
