@@ -382,14 +382,14 @@ export default function CustomizeTicketPage() {
   if (loading) return <div>Loading...</div>;
   if (!registration) return <div>Registration not found</div>;
 
-  if (!registration.is_approved) {
+  if (registration.is_approved === 'SUBMITTED' ) {
     return (
       <div className="h-screen w-full flex items-center justify-center bg-accent">
         <div className="z-[100] max-w-[400px] rounded-lg border border-border bg-background p-4 shadow-lg shadow-black/5">
           <div className="flex gap-2">
             <div className="flex grow gap-3">
               <TriangleAlert
-                className="mt-0.5 shrink-0 text-amber-500"
+                className="mt-0.5 shrink-0 text-emerald-500"
                 size={16}
                 strokeWidth={2}
                 aria-hidden="true"
@@ -424,6 +424,115 @@ export default function CustomizeTicketPage() {
               className="group -my-1.5 -me-2 size-8 shrink-0 p-0 hover:bg-transparent"
               aria-label="Close notification"
               // onClick={() => window.location.href = '/dashboard'}
+            >
+              <X
+                size={16}
+                strokeWidth={2}
+                className="opacity-60 transition-opacity group-hover:opacity-100"
+                aria-hidden="true"
+              />
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (registration.is_approved === 'INVALID' ) {
+    return (
+      <div className="h-screen w-full flex items-center justify-center bg-accent">
+        <div className="z-[100] max-w-[400px] rounded-lg border border-border bg-background p-4 shadow-lg shadow-black/5">
+          <div className="flex gap-2">
+            <div className="flex grow gap-3">
+              <TriangleAlert
+                className="mt-0.5 shrink-0 text-amber-500"
+                size={16}
+                strokeWidth={2}
+                aria-hidden="true"
+              />
+              <div className="flex grow flex-col gap-3">
+                <div className="space-y-2">
+                  <p className="text-sm font-medium">
+                    Registration Rejected by Admin
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    Your registration has been rejected by the event organizers due to Invalid details.
+                    Please contact the event organizers for more information.
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-3">
+                    Ticket ID: {registration.ticket_id}
+                  </p>
+                </div>
+                <div>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => Router.back()}
+                  >
+                    Return to Dashboard
+                  </Button>
+                </div>
+              </div>
+            </div>
+            <Button
+              variant="ghost"
+              className="group -my-1.5 -me-2 size-8 shrink-0 p-0 hover:bg-transparent"
+              aria-label="Close notification"
+              // onClick={() => window.location.href = '/dashboard'}
+            >
+              <X
+                size={16}
+                strokeWidth={2}
+                className="opacity-60 transition-opacity group-hover:opacity-100"
+                aria-hidden="true"
+              />
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (registration.is_approved === 'REJECTED' ) {
+    return (
+      <div className="h-screen w-full flex items-center justify-center bg-accent">
+        <div className="z-[100] max-w-[400px] rounded-lg border border-border bg-background p-4 shadow-lg shadow-black/5">
+          <div className="flex gap-2">
+            <div className="flex grow gap-3">
+              <TriangleAlert
+                className="mt-0.5 shrink-0 text-red-500"
+                size={16}
+                strokeWidth={2}
+                aria-hidden="true"
+              />
+              <div className="flex grow flex-col gap-3">
+                <div className="space-y-2">
+                  <p className="text-sm font-medium">
+                    Registration Rejected by Admin
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    Your registration has been rejected by the event organizers.
+                    Better luck next time!
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-3">
+                    Ticket ID: {registration.ticket_id}
+                  </p>
+                </div>
+                <div>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => Router.back()}
+                  >
+                    Return to Dashboard
+                  </Button>
+                </div>
+              </div>
+            </div>
+            <Button
+              variant="ghost"
+              className="group -my-1.5 -me-2 size-8 shrink-0 p-0 hover:bg-transparent"
+              aria-label="Close notification"
             >
               <X
                 size={16}

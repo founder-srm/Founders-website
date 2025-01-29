@@ -174,7 +174,7 @@ export function TypeformMultiStep({
         event_id: eventData.id,
         event_title: eventData.title,
         application_id: user?.id,
-        is_approved: eventData.always_approve,
+        is_approved: eventData.always_approve ? 'ACCEPTED' : 'SUBMITTED',
         details: data,
       });
       console.log('Response:', response);

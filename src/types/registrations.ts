@@ -9,7 +9,7 @@ export type Registration = {
   event_id?: string;
   event_title: string;
   id?: string;
-  is_approved?: boolean;
+  is_approved?: Database['public']['Enums']['registration-status'];
   ticket_id?: number;
 };
 
@@ -22,7 +22,7 @@ export type RegistrationWithUser = {
   event_id?: string;
   event_title: { slug: string; title: string };
   id?: string;
-  is_approved?: boolean;
+  is_approved?: Database['public']['Enums']['registration-status'];
   ticket_id?: number;
 };
 
