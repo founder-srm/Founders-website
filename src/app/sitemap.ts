@@ -2,12 +2,17 @@ import config from '@/lib/config';
 import { getAllPosts } from '@/lib/mdx';
 import { sanityFetch } from '@/sanity/lib/live';
 import { ALL_EVENTS_QUERY } from '@/sanity/lib/queries';
+import { createClient } from '@/utils/supabase/server';
 import type { MetadataRoute } from 'next';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = config.baseUrl;
   const posts = await getAllPosts();
   const { data: events } = await sanityFetch({ query: ALL_EVENTS_QUERY });
+  
+  const supabase = await createClient();
+  const { data: upcomingEvents } = await supabase.from('events').select('slug, created_at');
+
   return [
     {
       url: `${baseUrl}/`,
@@ -59,5 +64,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
       lastModified: event.published || new Date().toISOString(),
     })),
+    ...(upcomingEvents?.map(event => ({
+      url: `${baseUrl}/upcoming/more-info/${event.slug}`,
+      priority: 0.9,
+      lastModified: event.created_at || new Date().toISOString(),
+    })) ?? []),
   ];
 }
