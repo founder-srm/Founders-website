@@ -14,6 +14,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { formatInTimeZone } from 'date-fns-tz';
+import type { Metadata, ResolvingMetadata } from 'next';
 // import { enGB } from 'date-fns/locale/';
 
 async function getEventsBySlug({ slug }: { slug: string }) {
@@ -32,6 +33,55 @@ async function getEventsBySlug({ slug }: { slug: string }) {
 
   return events as eventsInsertType;
 }
+type Params = Promise<{ slug: string }>;
+
+export async function generateMetadata(
+  { params }: { params: Params },
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const event = await getEventsBySlug({ slug: (await params).slug });
+
+  const previousImages = (await parent).openGraph?.images || [];
+
+  if (!event) {
+    return {
+      title: 'Event Not Found - Upcoming Events | Founders',
+      description: 'Check out our latest events and workshops',
+    };
+  }
+
+  const eventDate = new Date(event.start_date).toLocaleDateString(
+    'en-US',
+    {
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric',
+    }
+  );
+
+  return {
+    title: `${event.title} - Upcoming Events | Founders`,
+    description: event.description,
+    openGraph: {
+      title: event.title,
+      description: event.description,
+      type: 'website',
+      images: [event.banner_image, ...previousImages],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: event.title,
+      description: event.description,
+      images: [event.banner_image],
+    },
+    other: {
+      'event:type': event.event_type || 'Online',
+      'event:date': eventDate,
+    },
+  };
+}
+
+export const revalidate = 3600; // revalidate every hour
 
 export default async function EventRegistrationSection({
   params,
