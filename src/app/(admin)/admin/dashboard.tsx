@@ -12,6 +12,8 @@ import { getAllRegistrations } from '@/actions/admin/registrations';
 import { Skeleton } from '@/components/ui/skeleton';
 import type { Event } from '@/types/events';
 import type { Registration } from '@/types/registrations';
+import { Component as BarChartHorizontal } from '@/components/charts-admin/bar-chart-horizontal';
+import { Component as AreaChartInteractive } from '@/components/charts-admin/area-chart-interactive';
 
 export default function AdminDashboard() {
   const supabase = createClient();
@@ -70,13 +72,55 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-      <Card className="col-span-full">
+    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 py-2">
+      <Card className="col-span-1 flex flex-col justify-between">
+        <CardHeader>
+          <CardTitle>Event Registrations</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <BarChartHorizontal
+            events={events ?? []}
+            registrations={registrations ?? []}
+          />
+        </CardContent>
+      </Card>
+      <Card className="col-span-1 flex flex-col justify-between">
         <CardHeader>
           <CardTitle>Registrations Overview</CardTitle>
         </CardHeader>
         <CardContent>
           <PieChartComponent data={registrationStats} />
+        </CardContent>
+      </Card>
+      <Card className="col-span-1 flex flex-col justify-between">
+        <CardHeader>
+          <CardTitle>Events Distribution</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <BarChartComponent data={events} />
+        </CardContent>
+      </Card>
+
+      <Card className="col-span-full">
+        <CardContent className="py-2">
+          <AreaChartInteractive
+            events={events ?? []}
+            registrations={registrations ?? []}
+          />
+        </CardContent>
+      </Card>
+
+      <Card className="col-span-full">
+        <CardHeader>
+          <CardTitle>All Events</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {events?.map(event => (
+            <div key={event.id}>
+              <h1>{event.title}</h1>
+              <p>{event.description}</p>
+            </div>
+          ))}
         </CardContent>
       </Card>
 
@@ -90,29 +134,6 @@ export default function AdminDashboard() {
               <h2>{r.event_title}</h2>
               <p>ID: {r.id}</p>
               <p>Approved: {String(r.is_approved)}</p>
-            </div>
-          ))}
-        </CardContent>
-      </Card>
-
-      <Card className="col-span-full md:col-span-2">
-        <CardHeader>
-          <CardTitle>Events Distribution</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <BarChartComponent data={events} />
-        </CardContent>
-      </Card>
-
-      <Card className="col-span-full">
-        <CardHeader>
-          <CardTitle>All Events</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {events?.map(event => (
-            <div key={event.id}>
-              <h1>{event.title}</h1>
-              <p>{event.description}</p>
             </div>
           ))}
         </CardContent>
