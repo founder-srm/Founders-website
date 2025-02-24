@@ -9,9 +9,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = config.baseUrl;
   const posts = await getAllPosts();
   const { data: events } = await sanityFetch({ query: ALL_EVENTS_QUERY });
-  
+
   const supabase = await createClient();
-  const { data: upcomingEvents } = await supabase.from('events').select('slug, created_at');
+  const { data: upcomingEvents } = await supabase
+    .from('events')
+    .select('slug, created_at');
 
   return [
     {

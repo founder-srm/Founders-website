@@ -88,7 +88,7 @@
     "sanity": "^3.68.3",
     "sanity-plugin-media": "^2.3.2",
     "styled-components": "^6.1.13",
-    "supabase": "^2.2.1",
+    "supabase": "^2.12.1",
     "supabase-cli": "^0.0.21",
     "supazod": "^1.1.2",
     "tailwind-merge": "^2.6.0",

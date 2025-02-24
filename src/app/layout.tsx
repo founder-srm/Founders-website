@@ -129,9 +129,22 @@ export default function RootLayout({
   return (
     <html lang="en" className="antialiased" suppressHydrationWarning>
       <head>
-        <meta name="google-site-verification" content="k3IhMiinZTFIeLqq_luo4BRqfQ4lchHmKsDWkpGGoTg" />
-        <script data-collect-dnt="true" async src="https://scripts.simpleanalyticscdn.com/latest.js" />
-        <noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif?collect-dnt=true" alt="" referrerPolicy="no-referrer-when-downgrade"/></noscript>
+        <meta
+          name="google-site-verification"
+          content="k3IhMiinZTFIeLqq_luo4BRqfQ4lchHmKsDWkpGGoTg"
+        />
+        <script
+          data-collect-dnt="true"
+          async
+          src="https://scripts.simpleanalyticscdn.com/latest.js"
+        />
+        <noscript>
+          <img
+            src="https://queue.simpleanalyticscdn.com/noscript.gif?collect-dnt=true"
+            alt=""
+            referrerPolicy="no-referrer-when-downgrade"
+          />
+        </noscript>
       </head>
       <body
         className={`${plusJakartaSans.variable} antialiased w-full relative bg-background font-plusJK [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-muted-foreground/20 [&::-webkit-scrollbar-track]:bg-transparent`}
