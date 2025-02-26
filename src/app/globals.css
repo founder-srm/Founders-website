@@ -250,10 +250,8 @@ code[class*="language-"] {
 }
 
 .user-banner {
-  background:linear-gradient(-45deg,#2C2E46 20%,#030712,#413960 20%);
+  background: linear-gradient(-45deg, #2c2e46 20%, #030712, #413960 20%);
 }
-
-
 
 @layer base {
   * {

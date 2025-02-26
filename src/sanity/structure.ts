@@ -126,9 +126,7 @@ export const structure: StructureResolver = S =>
         .child(
           S.list()
             .title('Teams Page')
-            .items([
-              S.documentTypeListItem('ourTeam').title('Team Members'),
-            ])
+            .items([S.documentTypeListItem('ourTeam').title('Team Members')])
         ),
       S.listItem()
         .title('Events Page')
@@ -148,19 +146,25 @@ export const structure: StructureResolver = S =>
               ),
             ])
         ),
-      S.listItem().title('Contact Us Page').child(
-        S.list().title('Contact Us Page').items([
-          S.listItem()
+      S.listItem()
+        .title('Contact Us Page')
+        .child(
+          S.list()
             .title('Contact Us Page')
-            .child(
-              S.list()
+            .items([
+              S.listItem()
                 .title('Contact Us Page')
-                .items([
-                  S.documentTypeListItem('contactUs').title('Contact Us Content'),
-                ])
-            ),
-        ])
-      ),
+                .child(
+                  S.list()
+                    .title('Contact Us Page')
+                    .items([
+                      S.documentTypeListItem('contactUs').title(
+                        'Contact Us Content'
+                      ),
+                    ])
+                ),
+            ])
+        ),
       S.divider(),
       S.listItem()
         .title('Authors')

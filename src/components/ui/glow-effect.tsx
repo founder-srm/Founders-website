@@ -56,7 +56,7 @@ export function GlowEffect({
     },
     pulse: {
       background: colors.map(
-        (color) =>
+        color =>
           `radial-gradient(circle at 50% 50%, ${color} 0%, transparent 100%)`
       ),
       scale: [1 * scale, 1.1 * scale, 1 * scale],
@@ -71,7 +71,7 @@ export function GlowEffect({
     breathe: {
       background: [
         ...colors.map(
-          (color) =>
+          color =>
             `radial-gradient(circle at 50% 50%, ${color} 0%, transparent 100%)`
         ),
       ],
@@ -96,7 +96,7 @@ export function GlowEffect({
       },
     },
     flowHorizontal: {
-      background: colors.map((color) => {
+      background: colors.map(color => {
         const nextColor = colors[(colors.indexOf(color) + 1) % colors.length];
         return `linear-gradient(to right, ${color}, ${nextColor})`;
       }),

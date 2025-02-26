@@ -152,7 +152,7 @@ export function TypeformMultiStep({
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    mode: "onSubmit" // Change validation mode to only validate on submit
+    mode: 'onSubmit', // Change validation mode to only validate on submit
   });
 
   // autofocus the inputs, don't recommend to use it
@@ -210,11 +210,13 @@ export function TypeformMultiStep({
     // Get the current field
     const currentField = fields[step];
     setTouchedFields(prev => new Set(prev).add(step));
-    
+
     // For optional fields, allow progression if the field is empty
     const fieldValue = form.getValues(currentField.name);
-    const isEmpty = !fieldValue || (typeof fieldValue === 'string' && fieldValue.trim() === '');
-    
+    const isEmpty =
+      !fieldValue ||
+      (typeof fieldValue === 'string' && fieldValue.trim() === '');
+
     if (!currentField.required && isEmpty) {
       setStep(step + 1);
       return;
@@ -238,9 +240,13 @@ export function TypeformMultiStep({
             return (
               <div key={field.name}>
                 <div className="flex items-center gap-2 mb-2">
-                  <h2 className="text-xl font-semibold">Question {step + 1}/{fields.length}</h2>
+                  <h2 className="text-xl font-semibold">
+                    Question {step + 1}/{fields.length}
+                  </h2>
                   {field.required && (
-                    <span className="text-sm text-red-500 font-medium">*Required</span>
+                    <span className="text-sm text-red-500 font-medium">
+                      *Required
+                    </span>
                   )}
                 </div>
                 {/* Existing switch statement for form fields */}
@@ -265,7 +271,9 @@ export function TypeformMultiStep({
                               </FormControl>
                               {touchedFields.has(step) && <FormMessage />}
                               {field.description && (
-                                <FormDescription>{field.description}</FormDescription>
+                                <FormDescription>
+                                  {field.description}
+                                </FormDescription>
                               )}
                             </FormItem>
                           )}
@@ -308,7 +316,9 @@ export function TypeformMultiStep({
                               </FormControl>
                               {touchedFields.has(step) && <FormMessage />}
                               {field.description && (
-                                <FormDescription>{field.description}</FormDescription>
+                                <FormDescription>
+                                  {field.description}
+                                </FormDescription>
                               )}
                             </FormItem>
                           )}
@@ -349,7 +359,9 @@ export function TypeformMultiStep({
                               </FormControl>
                               {touchedFields.has(step) && <FormMessage />}
                               {field.description && (
-                                <FormDescription>{field.description}</FormDescription>
+                                <FormDescription>
+                                  {field.description}
+                                </FormDescription>
                               )}
                             </FormItem>
                           )}
@@ -388,7 +400,9 @@ export function TypeformMultiStep({
                               </FormControl>
                               {touchedFields.has(step) && <FormMessage />}
                               {field.description && (
-                                <FormDescription>{field.description}</FormDescription>
+                                <FormDescription>
+                                  {field.description}
+                                </FormDescription>
                               )}
                             </FormItem>
                           )}
@@ -418,7 +432,9 @@ export function TypeformMultiStep({
                               </FormControl>
                               {touchedFields.has(step) && <FormMessage />}
                               {field.description && (
-                                <FormDescription>{field.description}</FormDescription>
+                                <FormDescription>
+                                  {field.description}
+                                </FormDescription>
                               )}
                             </FormItem>
                           )}
@@ -434,7 +450,8 @@ export function TypeformMultiStep({
                             <FormItem>
                               <FormLabel>{field.label}</FormLabel>
                               <FormControl>
-                                {field.checkboxType === 'multiple' && field.items ? (
+                                {field.checkboxType === 'multiple' &&
+                                field.items ? (
                                   <div className="space-y-2">
                                     {field.items.map(item => (
                                       <FormField
@@ -450,7 +467,9 @@ export function TypeformMultiStep({
                                               <Checkbox
                                                 required={field.required}
                                                 checked={
-                                                  Array.isArray(arrayField.value)
+                                                  Array.isArray(
+                                                    arrayField.value
+                                                  )
                                                     ? arrayField.value.includes(
                                                         item.id
                                                       )
@@ -459,7 +478,8 @@ export function TypeformMultiStep({
                                                 onCheckedChange={checked => {
                                                   return checked
                                                     ? arrayField.onChange([
-                                                        ...(arrayField.value || []),
+                                                        ...(arrayField.value ||
+                                                          []),
                                                         item.id,
                                                       ])
                                                     : arrayField.onChange(
@@ -492,7 +512,9 @@ export function TypeformMultiStep({
                               </FormControl>
                               {touchedFields.has(step) && <FormMessage />}
                               {field.description && (
-                                <FormDescription>{field.description}</FormDescription>
+                                <FormDescription>
+                                  {field.description}
+                                </FormDescription>
                               )}
                             </FormItem>
                           )}
@@ -518,7 +540,9 @@ export function TypeformMultiStep({
                               </FormControl>
                               {touchedFields.has(step) && <FormMessage />}
                               {field.description && (
-                                <FormDescription>{field.description}</FormDescription>
+                                <FormDescription>
+                                  {field.description}
+                                </FormDescription>
                               )}
                             </FormItem>
                           )}
@@ -540,17 +564,12 @@ export function TypeformMultiStep({
                 >
                   Previous
                 </Button>
-                <Button
-                  type="button"
-                  onClick={handleNext}
-                >
+                <Button type="button" onClick={handleNext}>
                   Next
                 </Button>
               </>
             ) : (
-              <Button type="submit">
-                Submit
-              </Button>
+              <Button type="submit">Submit</Button>
             )}
           </div>
         </form>

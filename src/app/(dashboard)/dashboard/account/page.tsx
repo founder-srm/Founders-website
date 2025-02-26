@@ -10,7 +10,7 @@ import {
   HoverCardTrigger,
 } from '@/components/ui/hover-card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import {
   Card,
   CardContent,
@@ -19,27 +19,23 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import {
-  Avatar,
-  AvatarImage,
-  AvatarFallback,
-} from '@/components/ui/avatar';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { useUser, useIsLoading } from '@/stores/session';
 import { createClient } from '@/utils/supabase/client';
 import { LeaveIcon } from '@sanity/icons';
 import { redirect, useRouter } from 'next/navigation';
 import type { typeformInsertType } from '../../../../../schema.zod';
-import { 
-  Ticket, 
-  Mail, 
-  Key, 
-  Github, 
-  Radio, 
-  Award, 
-  User, 
-  Calendar, 
-  Shield, 
-  BadgeCheck
+import {
+  Ticket,
+  Mail,
+  Key,
+  Github,
+  Radio,
+  Award,
+  User,
+  Calendar,
+  Shield,
+  BadgeCheck,
 } from 'lucide-react';
 import {
   updateUserEmail,
@@ -200,11 +196,12 @@ export default function AccountPage() {
 
   // Get user initials for avatar fallback
   const getUserInitials = () => {
-    const name = user?.user_metadata?.name || 
-                user?.user_metadata?.full_name ||
-                user?.email?.split('@')[0] || 
-                'User';
-    
+    const name =
+      user?.user_metadata?.name ||
+      user?.user_metadata?.full_name ||
+      user?.email?.split('@')[0] ||
+      'User';
+
     // Get first two letters of each word in name
     return name
       .split(' ')
@@ -216,10 +213,12 @@ export default function AccountPage() {
 
   // Get display name
   const getDisplayName = () => {
-    return user?.user_metadata?.name || 
-           user?.user_metadata?.full_name ||
-           user?.email?.split('@')[0] || 
-           'User';
+    return (
+      user?.user_metadata?.name ||
+      user?.user_metadata?.full_name ||
+      user?.email?.split('@')[0] ||
+      'User'
+    );
   };
 
   if (isLoading) {
@@ -238,25 +237,36 @@ export default function AccountPage() {
       <div className="container mx-auto px-4 max-w-4xl">
         <div className="relative -mt-24 mb-6 flex items-end">
           <Avatar className="h-[150px] w-[150px] border-4 border-background">
-            <AvatarImage 
-              src={user?.user_metadata?.picture || user?.user_metadata?.avatar_url} 
+            <AvatarImage
+              src={
+                user?.user_metadata?.picture || user?.user_metadata?.avatar_url
+              }
               alt={getDisplayName()}
             />
-            <AvatarFallback className="text-4xl">{getUserInitials()}</AvatarFallback>
+            <AvatarFallback className="text-4xl">
+              {getUserInitials()}
+            </AvatarFallback>
           </Avatar>
           <div className="ml-4 mb-2">
-            <h1 className="text-2xl font-bold text-foreground">{getDisplayName()}</h1>
+            <h1 className="text-2xl font-bold text-foreground">
+              {getDisplayName()}
+            </h1>
             <p className="text-muted-foreground">{user?.email}</p>
           </div>
           <div className="ml-auto mb-2">
-            <Button onClick={handleSignOut} variant="destructive" size="icon" className="rounded-full">
+            <Button
+              onClick={handleSignOut}
+              variant="destructive"
+              size="icon"
+              className="rounded-full"
+            >
               <LeaveIcon />
             </Button>
           </div>
         </div>
 
         {/* Main Content */}
-        <Tabs 
+        <Tabs
           defaultValue={currentTab}
           onValueChange={handleTabChange}
           className="mb-8"
@@ -267,38 +277,61 @@ export default function AccountPage() {
                 value="profile"
                 className="hover:bg-accent hover:text-foreground data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
               >
-                <User className="-ms-0.5 me-1.5 opacity-60" size={16} aria-hidden="true" />
+                <User
+                  className="-ms-0.5 me-1.5 opacity-60"
+                  size={16}
+                  aria-hidden="true"
+                />
                 Profile
               </TabsTrigger>
               <TabsTrigger
                 value="security"
                 className="hover:bg-accent hover:text-foreground data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
               >
-                <Key className="-ms-0.5 me-1.5 opacity-60" size={16} aria-hidden="true" />
+                <Key
+                  className="-ms-0.5 me-1.5 opacity-60"
+                  size={16}
+                  aria-hidden="true"
+                />
                 Security
               </TabsTrigger>
               <TabsTrigger
                 value="connections"
                 className="hover:bg-accent hover:text-foreground data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
               >
-                <Github className="-ms-0.5 me-1.5 opacity-60" size={16} aria-hidden="true" />
+                <Github
+                  className="-ms-0.5 me-1.5 opacity-60"
+                  size={16}
+                  aria-hidden="true"
+                />
                 Connections
               </TabsTrigger>
               <TabsTrigger
                 value="badges"
                 className="hover:bg-accent hover:text-foreground data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
               >
-                <BadgeCheck className="-ms-0.5 me-1.5 opacity-60" size={16} aria-hidden="true" />
+                <BadgeCheck
+                  className="-ms-0.5 me-1.5 opacity-60"
+                  size={16}
+                  aria-hidden="true"
+                />
                 Badges
               </TabsTrigger>
               <TabsTrigger
                 value="events"
                 className="hover:bg-accent hover:text-foreground data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
               >
-                <Ticket className="-ms-0.5 me-1.5 opacity-60" size={16} aria-hidden="true" />
+                <Ticket
+                  className="-ms-0.5 me-1.5 opacity-60"
+                  size={16}
+                  aria-hidden="true"
+                />
                 Events
                 {registrations.length > 0 && (
-                  <Badge className="bg-primary/15 ms-1.5 min-w-5" variant="secondary">
+                  <Badge
+                    className="bg-primary/15 ms-1.5 min-w-5"
+                    variant="secondary"
+                  >
                     {registrations.length}
                   </Badge>
                 )}
@@ -320,42 +353,58 @@ export default function AccountPage() {
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2 p-4 border rounded-lg">
-                    <p className="text-sm font-medium text-muted-foreground">Email</p>
+                    <p className="text-sm font-medium text-muted-foreground">
+                      Email
+                    </p>
                     <p className="font-medium">{user?.email}</p>
                   </div>
                   <div className="space-y-2 p-4 border rounded-lg">
-                    <p className="text-sm font-medium text-muted-foreground">User ID</p>
+                    <p className="text-sm font-medium text-muted-foreground">
+                      User ID
+                    </p>
                     <p className="font-medium text-xs truncate">{user?.id}</p>
                   </div>
                   <div className="space-y-2 p-4 border rounded-lg">
-                    <p className="text-sm font-medium text-muted-foreground">Email Verification</p>
+                    <p className="text-sm font-medium text-muted-foreground">
+                      Email Verification
+                    </p>
                     <div className="flex items-center gap-2">
-                      <Badge variant={user?.email_confirmed_at ? "default" : "destructive"}>
+                      <Badge
+                        variant={
+                          user?.email_confirmed_at ? 'default' : 'destructive'
+                        }
+                      >
                         {user?.email_confirmed_at ? 'Verified' : 'Not Verified'}
                       </Badge>
                     </div>
                   </div>
                   <div className="space-y-2 p-4 border rounded-lg">
-                    <p className="text-sm font-medium text-muted-foreground">Last Sign In</p>
+                    <p className="text-sm font-medium text-muted-foreground">
+                      Last Sign In
+                    </p>
                     <p className="font-medium">
                       {new Date(user?.last_sign_in_at || '').toLocaleString()}
                     </p>
                   </div>
                 </div>
-                
+
                 {/* Account Stats */}
                 <div className="mt-8">
                   <h3 className="font-semibold text-lg mb-4">Account Stats</h3>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     <div className="p-4 border rounded-lg text-center">
                       <Calendar className="h-8 w-8 mx-auto text-blue-500 mb-2" />
-                      <p className="font-bold text-2xl">{registrations.length}</p>
+                      <p className="font-bold text-2xl">
+                        {registrations.length}
+                      </p>
                       <p className="text-sm text-muted-foreground">Events</p>
                     </div>
                     <div className="p-4 border rounded-lg text-center">
                       <Shield className="h-8 w-8 mx-auto text-green-500 mb-2" />
                       <p className="font-bold text-2xl">{identities.length}</p>
-                      <p className="text-sm text-muted-foreground">Connections</p>
+                      <p className="text-sm text-muted-foreground">
+                        Connections
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -430,7 +479,9 @@ export default function AccountPage() {
                   <Github className="h-5 w-5" />
                   Connected Accounts
                 </CardTitle>
-                <CardDescription>Manage your connected accounts</CardDescription>
+                <CardDescription>
+                  Manage your connected accounts
+                </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between p-4 border rounded-lg bg-card hover:bg-accent transition-colors">
@@ -483,7 +534,9 @@ export default function AccountPage() {
                   <Award className="h-5 w-5" />
                   Badges Earned
                 </CardTitle>
-                <CardDescription>Your achievements and recognition</CardDescription>
+                <CardDescription>
+                  Your achievements and recognition
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="flex flex-wrap gap-3">
@@ -492,36 +545,50 @@ export default function AccountPage() {
                       <Award className="h-6 w-6 text-primary" />
                     </div>
                     <p className="font-medium text-center">Account Created</p>
-                    <p className="text-xs text-muted-foreground text-center mt-1">Joined the platform</p>
+                    <p className="text-xs text-muted-foreground text-center mt-1">
+                      Joined the platform
+                    </p>
                   </div>
-                  
+
                   {registrations.length > 0 && (
                     <div className="p-4 border rounded-lg bg-card flex flex-col items-center w-32">
                       <div className="bg-blue-500/10 p-3 rounded-full mb-3">
                         <Calendar className="h-6 w-6 text-blue-500" />
                       </div>
-                      <p className="font-medium text-center">Event Participant</p>
-                      <p className="text-xs text-muted-foreground text-center mt-1">Joined an event</p>
+                      <p className="font-medium text-center">
+                        Event Participant
+                      </p>
+                      <p className="text-xs text-muted-foreground text-center mt-1">
+                        Joined an event
+                      </p>
                     </div>
                   )}
-                  
+
                   {hasProvider('github') && (
                     <div className="p-4 border rounded-lg bg-card flex flex-col items-center w-32">
                       <div className="bg-gray-800/10 p-3 rounded-full mb-3">
                         <Github className="h-6 w-6 text-gray-800" />
                       </div>
-                      <p className="font-medium text-center">GitHub Connected</p>
-                      <p className="text-xs text-muted-foreground text-center mt-1">Linked GitHub</p>
+                      <p className="font-medium text-center">
+                        GitHub Connected
+                      </p>
+                      <p className="text-xs text-muted-foreground text-center mt-1">
+                        Linked GitHub
+                      </p>
                     </div>
                   )}
-                  
+
                   {hasProvider('google') && (
                     <div className="p-4 border rounded-lg bg-card flex flex-col items-center w-32">
                       <div className="bg-red-500/10 p-3 rounded-full mb-3">
                         <GoogleIcon className="h-6 w-6 text-red-500" />
                       </div>
-                      <p className="font-medium text-center">Google Connected</p>
-                      <p className="text-xs text-muted-foreground text-center mt-1">Linked Google</p>
+                      <p className="font-medium text-center">
+                        Google Connected
+                      </p>
+                      <p className="text-xs text-muted-foreground text-center mt-1">
+                        Linked Google
+                      </p>
                     </div>
                   )}
                 </div>
@@ -563,7 +630,10 @@ export default function AccountPage() {
                               Lets change that!
                             </p>
                           </div>
-                          <Button size="sm" onClick={() => Router.push('/dashboard/upcoming')}>
+                          <Button
+                            size="sm"
+                            onClick={() => Router.push('/dashboard/upcoming')}
+                          >
                             Lets Participate
                           </Button>
                         </div>
@@ -596,10 +666,14 @@ export default function AccountPage() {
                           </div>
                           <HoverCard>
                             <HoverCardTrigger>
-                              <Button 
-                                variant="outline" 
-                                size="sm" 
-                                onClick={() => Router.push(`/dashboard/upcoming/register/success?ticketid=${reg.ticket_id}`)}
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() =>
+                                  Router.push(
+                                    `/dashboard/upcoming/register/success?ticketid=${reg.ticket_id}`
+                                  )
+                                }
                               >
                                 <Ticket className="mr-2 h-4 w-4" />
                                 View Ticket

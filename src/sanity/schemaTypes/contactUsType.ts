@@ -59,7 +59,8 @@ export const contactUsType = defineType({
           to: [{ type: 'author' }],
         }),
       ],
-      validation: Rule => Rule.max(3).error('You can select up to 3 team members'),
+      validation: Rule =>
+        Rule.max(3).error('You can select up to 3 team members'),
       description: 'Select up to 3 team members to display in the avatar group',
     }),
   ],

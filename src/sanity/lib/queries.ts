@@ -208,7 +208,8 @@ export const CONTACT_US_QUERY = defineQuery(`*[_type == "contactUs"][0]{
   }
 }`);
 
-export const TEAM_QUERY = defineQuery(`*[_type == "ourTeam"] | order(order asc) {
+export const TEAM_QUERY =
+  defineQuery(`*[_type == "ourTeam"] | order(order asc) {
   _id,
   _createdAt,
   name,

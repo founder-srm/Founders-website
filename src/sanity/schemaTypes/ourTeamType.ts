@@ -38,7 +38,8 @@ export const ourTeamType = defineType({
     defineField({
       name: 'altText',
       title: 'Alt Text',
-      description: 'Brief description of the image for accessibility and SEO. This text will be read by screen readers and is important for users with visual impairments.',
+      description:
+        'Brief description of the image for accessibility and SEO. This text will be read by screen readers and is important for users with visual impairments.',
       type: 'string',
     }),
     defineField({
@@ -88,7 +89,8 @@ export const ourTeamType = defineType({
     defineField({
       name: 'order',
       title: 'Display Order',
-      description: 'Lower numbers appear first. Use this to control the order of team members within their domain. The default value is 100.',
+      description:
+        'Lower numbers appear first. Use this to control the order of team members within their domain. The default value is 100.',
       type: 'number',
       initialValue: 100,
       validation: Rule => Rule.integer().positive(),

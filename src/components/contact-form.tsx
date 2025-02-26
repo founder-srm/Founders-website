@@ -35,12 +35,12 @@ interface TeamMember {
 
 export function BookDemoForm({
   submitButtonText,
-  thankYouMessage
-}:{
-  title:string;
-  subtitle:string;
-  submitButtonText:string;
-  thankYouMessage:string;
+  thankYouMessage,
+}: {
+  title: string;
+  subtitle: string;
+  submitButtonText: string;
+  thankYouMessage: string;
 }) {
   const [formData, setFormData] = useState({
     fullName: '',
@@ -103,7 +103,7 @@ export function BookDemoForm({
       toast({
         title: 'Form submitted!',
         description: thankYouMessage,
-      })
+      });
     }
 
     // After submition the data fields should be empty again :)
@@ -275,8 +275,6 @@ function FormSelect({
   );
 }
 
-
-
 export function AvatarGroup({ teamMembers }: { teamMembers?: TeamMember[] }) {
   // If no team members are provided, use placeholder avatars
   if (!teamMembers || teamMembers.length === 0) {
@@ -308,12 +306,14 @@ export function AvatarGroup({ teamMembers }: { teamMembers?: TeamMember[] }) {
   return (
     <div className="mt-16 flex overflow-hidden">
       {teamMembers.map((member, index) => (
-        <Avatar 
-          key={member._id} 
+        <Avatar
+          key={member._id}
           className={`size-11 ${index === 0 ? '-ml-0' : '-ml-4'}`}
         >
           <AvatarImage
-            src={member.image ? urlFor(member.image).width(100).url() : undefined}
+            src={
+              member.image ? urlFor(member.image).width(100).url() : undefined
+            }
             alt={`${member.name || 'Team member'}`}
           />
           {!member.image && (
