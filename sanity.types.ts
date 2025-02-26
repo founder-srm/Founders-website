@@ -68,6 +68,59 @@ export type Geopoint = {
   alt?: number;
 };
 
+export type OurTeam = {
+  _id: string;
+  _type: "ourTeam";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name?: string;
+  role?: string;
+  description?: string;
+  avatar?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
+  altText?: string;
+  github?: string;
+  linkedin?: string;
+  website?: string;
+  domain?: "operations" | "technical" | "creatives" | "outreach" | "marketing" | "sponsorship" | "leadership";
+  isPresident?: boolean;
+  isVicePresident?: boolean;
+  order?: number;
+};
+
+export type ContactUs = {
+  _id: string;
+  _type: "contactUs";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  subtitle?: string;
+  expectationsTitle?: string;
+  expectations?: Array<string>;
+  formTitle?: string;
+  formSubtitle?: string;
+  submitButtonText?: string;
+  thankYouMessage?: string;
+  teamMembers?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "author";
+  }>;
+};
+
 export type BannerHeader = {
   _id: string;
   _type: "bannerHeader";
@@ -787,7 +840,7 @@ export type SanityAssistSchemaTypeField = {
   } & SanityAssistInstruction>;
 };
 
-export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityFileAsset | Geopoint | BannerHeader | Timeline | UpcomingEventsHeader | OurStory | AboutUsCta | AboutValues | AboutUsHero | Testimonial | Event | HeroComponent | Cta | Faq | Feature | JobCategory | Post | Author | Category | BlockContent | SanityImageCrop | SanityImageHotspot | SanityImageAsset | SanityAssetSourceData | SanityImageMetadata | MediaTag | Slug | SanityAssistInstructionTask | SanityAssistTaskStatus | SanityAssistSchemaTypeAnnotations | SanityAssistOutputType | SanityAssistOutputField | SanityAssistInstructionContext | AssistInstructionContext | SanityAssistInstructionUserInput | SanityAssistInstructionPrompt | SanityAssistInstructionFieldRef | SanityAssistInstruction | SanityAssistSchemaTypeField;
+export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityFileAsset | Geopoint | OurTeam | ContactUs | BannerHeader | Timeline | UpcomingEventsHeader | OurStory | AboutUsCta | AboutValues | AboutUsHero | Testimonial | Event | HeroComponent | Cta | Faq | Feature | JobCategory | Post | Author | Category | BlockContent | SanityImageCrop | SanityImageHotspot | SanityImageAsset | SanityAssetSourceData | SanityImageMetadata | MediaTag | Slug | SanityAssistInstructionTask | SanityAssistTaskStatus | SanityAssistSchemaTypeAnnotations | SanityAssistOutputType | SanityAssistOutputField | SanityAssistInstructionContext | AssistInstructionContext | SanityAssistInstructionUserInput | SanityAssistInstructionPrompt | SanityAssistInstructionFieldRef | SanityAssistInstruction | SanityAssistSchemaTypeField;
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ./src/sanity/lib/queries.ts
 // Variable: ABOUT_HERO_QUERY
@@ -1258,10 +1311,61 @@ export type TIMELINE_QUERYResult = {
 } | null;
 // Variable: CONTACT_US_QUERY
 // Query: *[_type == "contactUs"][0]{  _id,  _createdAt,  title,  subtitle,  expectationsTitle,  expectations,  formTitle,  formSubtitle,  submitButtonText,  thankYouMessage,  teamMembers[]->{    _id,    name,    title,    image  }}
-export type CONTACT_US_QUERYResult = null;
+export type CONTACT_US_QUERYResult = {
+  _id: string;
+  _createdAt: string;
+  title: string | null;
+  subtitle: string | null;
+  expectationsTitle: string | null;
+  expectations: Array<string> | null;
+  formTitle: string | null;
+  formSubtitle: string | null;
+  submitButtonText: string | null;
+  thankYouMessage: string | null;
+  teamMembers: Array<{
+    _id: string;
+    name: string | null;
+    title: string | null;
+    image: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: "image";
+    } | null;
+  }> | null;
+} | null;
 // Variable: TEAM_QUERY
 // Query: *[_type == "ourTeam"] | order(order asc) {  _id,  _createdAt,  name,  role,  description,  avatar,  github,  linkedin,  website,  domain,  isPresident,  isVicePresident,  order}
-export type TEAM_QUERYResult = Array<never>;
+export type TEAM_QUERYResult = Array<{
+  _id: string;
+  _createdAt: string;
+  name: string | null;
+  role: string | null;
+  description: string | null;
+  avatar: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  } | null;
+  github: string | null;
+  linkedin: string | null;
+  website: string | null;
+  domain: "creatives" | "leadership" | "marketing" | "operations" | "outreach" | "sponsorship" | "technical" | null;
+  isPresident: boolean | null;
+  isVicePresident: boolean | null;
+  order: number | null;
+}>;
 
 // Source: ./src/sanity/lib/queries/ctaQuery.ts
 // Variable: ctaQuery

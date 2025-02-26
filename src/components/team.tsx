@@ -5,7 +5,7 @@ import { Button } from './ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useState } from 'react';
 import { urlFor } from '@/sanity/lib/image';
-import type { SanityImageObject } from '@sanity/image-url/lib/types/types';
+import type { OurTeam, TEAM_QUERYResult } from '../../sanity.types';
 
 type SocialLink = {
   platform: 'github' | 'linkedin' | 'website';
@@ -13,22 +13,10 @@ type SocialLink = {
   icon: JSX.Element;
 };
 
-type TeamMember = {
-  _id: string;
-  name: string;
-  role: string;
-  description?: string;
-  avatar?: SanityImageObject;
-  github?: string;
-  linkedin?: string;
-  website?: string;
-  domain: string;
-  isPresident: boolean;
-  isVicePresident: boolean;
-};
+type TeamMember = OurTeam;
 
 type TeamSectionProps = {
-  teamMembers: TeamMember[];
+  teamMembers: TEAM_QUERYResult;
 };
 
 const domainLabels = {
@@ -93,11 +81,11 @@ const TeamSection = ({ teamMembers }: TeamSectionProps) => {
           {member.avatar ? (
             <AvatarImage
               src={urlFor(member.avatar).url()}
-              alt={member.name}
+              alt={member.name || ''}
               className="object-cover"
             />
           ) : (
-            <AvatarFallback>{member.name.charAt(0)}</AvatarFallback>
+            <AvatarFallback>{member.name?.charAt(0)}</AvatarFallback>
           )}
         </Avatar>
         <p className="font-medium">{member.name}</p>
@@ -144,7 +132,7 @@ const TeamSection = ({ teamMembers }: TeamSectionProps) => {
         <div className="container my-8">
           <h3 className="mb-8 text-xl font-bold">Leadership</h3>
           <div className="grid gap-x-12 gap-y-16 md:grid-cols-2 lg:grid-cols-2">
-            {leadershipTeam.map(renderTeamMember)}
+            {leadershipTeam.map((member) => renderTeamMember(member as TeamMember))}
           </div>
         </div>
       )}
@@ -187,7 +175,8 @@ const TeamSection = ({ teamMembers }: TeamSectionProps) => {
             return (
               <TabsContent key={domain} value={domain} className="pt-4">
                 <div className="grid gap-x-12 gap-y-16 md:grid-cols-2 lg:grid-cols-4">
-                  {domainMembers.map(renderTeamMember)}
+                  {/* //@ts-expect-error - TS doesn't know that domainMembers is not empty */}
+                  {domainMembers.map((member) => renderTeamMember(member as TeamMember))}
                 </div>
               </TabsContent>
             );

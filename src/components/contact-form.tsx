@@ -23,24 +23,14 @@ interface Country {
   };
 }
 
-interface TeamMember {
-  _id: string;
-  name?: string;
-  image?: {
-    asset: {
-      _ref: string;
-    };
-  };
-}
-
 export function BookDemoForm({
   submitButtonText,
   thankYouMessage,
 }: {
-  title: string;
-  subtitle: string;
-  submitButtonText: string;
-  thankYouMessage: string;
+  title: string | null;
+  subtitle: string | null;
+  submitButtonText: string | null;
+  thankYouMessage: string | null;
 }) {
   const [formData, setFormData] = useState({
     fullName: '',
@@ -275,7 +265,8 @@ function FormSelect({
   );
 }
 
-export function AvatarGroup({ teamMembers }: { teamMembers?: TeamMember[] }) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function AvatarGroup({ teamMembers }: { teamMembers?: any[] | null }) {
   // If no team members are provided, use placeholder avatars
   if (!teamMembers || teamMembers.length === 0) {
     return (
