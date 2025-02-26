@@ -1,6 +1,6 @@
 'use client';
 import { cn } from '@/lib/utils';
-import { motion, Transition } from 'motion/react';
+import { motion, type Transition } from 'motion/react';
 
 export type GlowEffectProps = {
   className?: string;
@@ -38,6 +38,7 @@ export function GlowEffect({
   duration = 5,
 }: GlowEffectProps) {
   const BASE_TRANSITION = {
+    // biome-ignore lint/style/useNumberNamespace: <explanation>
     repeat: Infinity,
     duration: duration,
     ease: 'linear',
