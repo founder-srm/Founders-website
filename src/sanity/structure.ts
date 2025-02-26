@@ -149,7 +149,15 @@ export const structure: StructureResolver = S =>
         ),
       S.listItem().title('Contact Us Page').child(
         S.list().title('Contact Us Page').items([
-          // Empty sections to be filled later
+          S.listItem()
+            .title('Contact Us Page')
+            .child(
+              S.list()
+                .title('Contact Us Page')
+                .items([
+                  S.documentTypeListItem('contactUs').title('Contact Us Content'),
+                ])
+            ),
         ])
       ),
       S.divider(),

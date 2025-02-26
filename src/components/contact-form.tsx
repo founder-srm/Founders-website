@@ -1,13 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { createClient } from '@supabase/supabase-js';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-const supabase = createClient(
-  'https://eedplvopkhwuhhquagfw.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVlZHBsdm9wa2h3dWhocXVhZ2Z3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDcyNDM1ODUsImV4cCI6MjAyMjgxOTU4NX0.uXlL7xAorEiCd_kmbZ0v3hgB0FR5vskjCHLveoATQ6g'
-);
 import {
   Select,
   SelectContent,
@@ -18,6 +13,9 @@ import {
 import { Label } from '@/components/ui/label';
 import { Avatar, AvatarImage } from './ui/avatar';
 import Link from 'next/link';
+import { useToast } from '@/hooks/use-toast';
+import { urlFor } from '@/sanity/lib/image';
+import { createClient } from '@/utils/supabase/client';
 
 interface Country {
   name: {
@@ -25,7 +23,25 @@ interface Country {
   };
 }
 
-export function BookDemoForm() {
+interface TeamMember {
+  _id: string;
+  name?: string;
+  image?: {
+    asset: {
+      _ref: string;
+    };
+  };
+}
+
+export function BookDemoForm({
+  submitButtonText,
+  thankYouMessage
+}:{
+  title:string;
+  subtitle:string;
+  submitButtonText:string;
+  thankYouMessage:string;
+}) {
   const [formData, setFormData] = useState({
     fullName: '',
     company: '',
@@ -36,7 +52,10 @@ export function BookDemoForm() {
     referral: '',
   });
 
+  const supabase = createClient();
+
   const [countries, setCountries] = useState<string[]>([]);
+  const { toast } = useToast();
 
   useEffect(() => {
     const fetchCountries = async () => {
@@ -67,7 +86,7 @@ export function BookDemoForm() {
       {
         name: formData.fullName,
         company: formData.company,
-        phone: formData.phone,
+        phone: Number.parseInt(formData.phone),
         email: formData.email,
         country: formData.country,
         company_size: formData.companySize,
@@ -81,7 +100,10 @@ export function BookDemoForm() {
       );
     } else {
       console.log('Data inserted successfully:', data);
-      alert('We got your data !👍😊');
+      toast({
+        title: 'Form submitted!',
+        description: thankYouMessage,
+      })
     }
 
     // After submition the data fields should be empty again :)
@@ -173,10 +195,10 @@ export function BookDemoForm() {
         </FormSelect>
 
         <div className="flex w-full flex-col justify-end space-y-3 pt-2">
-          <Button type="submit">Submit</Button>
+          <Button type="submit">{submitButtonText}</Button>
           <div className="text-xs text-muted-foreground">
             For more information about how we handle your personal information,
-            please visit our{''}
+            please visit our{' '}
             <Link
               href="./components/PrivacyPolicy/page.tsx"
               className="underline"
@@ -253,27 +275,54 @@ function FormSelect({
   );
 }
 
-export function AvatarGroup() {
+
+
+export function AvatarGroup({ teamMembers }: { teamMembers?: TeamMember[] }) {
+  // If no team members are provided, use placeholder avatars
+  if (!teamMembers || teamMembers.length === 0) {
+    return (
+      <div className="mt-16 flex overflow-hidden">
+        <Avatar className="size-11 -ml-0">
+          <AvatarImage
+            src="https://shadcnblocks.com/images/block/avatar-1.webp"
+            alt="Avatar 1"
+          />
+        </Avatar>
+        <Avatar className="size-11 -ml-4">
+          <AvatarImage
+            src="https://shadcnblocks.com/images/block/avatar-3.webp"
+            alt="Avatar 2"
+          />
+        </Avatar>
+        <Avatar className="size-11 -ml-4">
+          <AvatarImage
+            src="https://shadcnblocks.com/images/block/avatar-2.webp"
+            alt="Avatar 3"
+          />
+        </Avatar>
+      </div>
+    );
+  }
+
+  // Use team members from Sanity
   return (
     <div className="mt-16 flex overflow-hidden">
-      <Avatar className="size-11 -ml-0">
-        <AvatarImage
-          src="https://shadcnblocks.com/images/block/avatar-1.webp"
-          alt="Avatar 1"
-        />
-      </Avatar>
-      <Avatar className="size-11 -ml-4">
-        <AvatarImage
-          src="https://shadcnblocks.com/images/block/avatar-3.webp"
-          alt="Avatar 2"
-        />
-      </Avatar>
-      <Avatar className="size-11 -ml-4">
-        <AvatarImage
-          src="https://shadcnblocks.com/images/block/avatar-2.webp"
-          alt="Avatar 3"
-        />
-      </Avatar>
+      {teamMembers.map((member, index) => (
+        <Avatar 
+          key={member._id} 
+          className={`size-11 ${index === 0 ? '-ml-0' : '-ml-4'}`}
+        >
+          <AvatarImage
+            src={member.image ? urlFor(member.image).width(100).url() : undefined}
+            alt={`${member.name || 'Team member'}`}
+          />
+          {!member.image && (
+            <div className="bg-primary text-primary-foreground flex h-full w-full items-center justify-center">
+              {member.name?.charAt(0) || '?'}
+            </div>
+          )}
+        </Avatar>
+      ))}
     </div>
   );
 }

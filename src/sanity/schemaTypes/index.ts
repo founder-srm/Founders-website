@@ -20,6 +20,7 @@ import { ourStoryType } from './ourStoryType';
 import { timelineType } from './timelineType';
 import { upcompingEventsHeaderType } from './eventsHeaderType';
 import { bannerHeaderType } from './bannerHeaderType';
+import { contactUsType } from './contactUsType';
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -41,5 +42,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     upcompingEventsHeaderType,
     timelineType,
     bannerHeaderType,
+    contactUsType,
   ],
 };
