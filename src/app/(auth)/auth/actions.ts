@@ -41,9 +41,8 @@ export const sendResetPasswordLink = async (email: string): Promise<string> => {
   // Check for errors and handle accordingly
   if (error) {
     return `Error: ${error.message}`;
-  } else {
-    return `Password reset link sent! Please check your email!`;
   }
+  return 'Password reset link sent! Please check your email!';
 };
 
 export async function login(data: LoginFormData) {
