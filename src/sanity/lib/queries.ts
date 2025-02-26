@@ -207,3 +207,19 @@ export const CONTACT_US_QUERY = defineQuery(`*[_type == "contactUs"][0]{
     image
   }
 }`);
+
+export const TEAM_QUERY = defineQuery(`*[_type == "ourTeam"] | order(order asc) {
+  _id,
+  _createdAt,
+  name,
+  role,
+  description,
+  avatar,
+  github,
+  linkedin,
+  website,
+  domain,
+  isPresident,
+  isVicePresident,
+  order
+}`);

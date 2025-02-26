@@ -75,9 +75,6 @@ export const structure: StructureResolver = S =>
       S.listItem()
         .title('About Us Page')
         .child(
-          // S.list()
-          // .items([
-          // ])
           S.list()
             .title('About Us Components')
             .showIcons(false)
@@ -124,11 +121,15 @@ export const structure: StructureResolver = S =>
                 ),
             ])
         ),
-      S.listItem().title('Teams Page').child(
-        S.list().title('Teams Page').items([
-          // Empty sections to be filled later
-        ])
-      ),
+      S.listItem()
+        .title('Teams Page')
+        .child(
+          S.list()
+            .title('Teams Page')
+            .items([
+              S.documentTypeListItem('ourTeam').title('Team Members'),
+            ])
+        ),
       S.listItem()
         .title('Events Page')
         .child(
