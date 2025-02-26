@@ -1256,6 +1256,12 @@ export type TIMELINE_QUERYResult = {
     } | null;
   }> | null;
 } | null;
+// Variable: CONTACT_US_QUERY
+// Query: *[_type == "contactUs"][0]{  _id,  _createdAt,  title,  subtitle,  expectationsTitle,  expectations,  formTitle,  formSubtitle,  submitButtonText,  thankYouMessage,  teamMembers[]->{    _id,    name,    title,    image  }}
+export type CONTACT_US_QUERYResult = null;
+// Variable: TEAM_QUERY
+// Query: *[_type == "ourTeam"] | order(order asc) {  _id,  _createdAt,  name,  role,  description,  avatar,  github,  linkedin,  website,  domain,  isPresident,  isVicePresident,  order}
+export type TEAM_QUERYResult = Array<never>;
 
 // Source: ./src/sanity/lib/queries/ctaQuery.ts
 // Variable: ctaQuery
@@ -1357,6 +1363,8 @@ declare module "@sanity/client" {
     "*[_type == \"heroComponent\"][0]{\n    _id,\n    _createdAt,\n    title,\n    subtitle,\n    buttonText,\n    buttonLink,\n    showButton,\n    image1,\n    image2,\n    image3,\n    image4\n}": HERO_QUERYResult;
     "*[_type == \"ourStory\"][0]{\n  _id,\n  _createdAt,\n  title,\n  mainContent,\n  secondaryContent,\n  workplaceTitle,\n  workplaceContent,\n  workplaceSecondaryContent,\n  images\n}": OUR_STORY_QUERYResult;
     "*[_type == \"timeline\"][0]{\n  _id,\n  _createdAt,\n  title,\n  subtitle,\n  description,\n  buttonText,\n  buttonLink,\n  secondaryButtonText,\n  secondaryButtonLink,\n  showSecondaryButton,\n  items[]{\n    title,\n    description,\n    image\n  }\n}": TIMELINE_QUERYResult;
+    "*[_type == \"contactUs\"][0]{\n  _id,\n  _createdAt,\n  title,\n  subtitle,\n  expectationsTitle,\n  expectations,\n  formTitle,\n  formSubtitle,\n  submitButtonText,\n  thankYouMessage,\n  teamMembers[]->{\n    _id,\n    name,\n    title,\n    image\n  }\n}": CONTACT_US_QUERYResult;
+    "*[_type == \"ourTeam\"] | order(order asc) {\n  _id,\n  _createdAt,\n  name,\n  role,\n  description,\n  avatar,\n  github,\n  linkedin,\n  website,\n  domain,\n  isPresident,\n  isVicePresident,\n  order\n}": TEAM_QUERYResult;
     "*[_type == \"cta\"]{\n    _id,\n    _createdAt,\n    title,\n    description,\n    primaryButtonText,\n    primaryButtonLink,\n    secondaryButtonText,\n    secondaryButtonLink,\n    variant,\n    activateSecondaryButton,\n    showCTA\n}": CtaQueryResult;
     "*[_type == \"event\"]{\n    _id,\n    _createdAt,\n    id,\n    title,\n    summary,\n    image,\n    label,\n    author,\n    published,\n    href\n}": EventsQueryResult;
     "*[_type == \"faq\"]{\n    _id,\n    _createdAt,\n    question,\n    answer\n}": FaqsQueryResult;
