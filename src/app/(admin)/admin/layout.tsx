@@ -16,11 +16,14 @@ import { SidebarLeft } from '@/components/sidebar/sidebar-left';
 import { SidebarRight } from '@/components/sidebar/sidebar-right';
 import { ModeToggle } from '@/components/theme/theme-toggle';
 import { ReactQueryClientProvider } from '@/components/providers/QueryClientProvider';
+import { getRouteDisplayName } from '@/config/admin-routes';
+import { useCurrentRoute } from '@/hooks/useCurrentRoute';
 
 export default function AdminLayout({
   children,
 }: { children: React.ReactNode }) {
   const { isLoading } = useAdminCheck();
+  const { pathname } = useCurrentRoute();
 
   if (isLoading) {
     return (
@@ -44,9 +47,9 @@ export default function AdminLayout({
                 <BreadcrumbList>
                   <BreadcrumbItem>
                     <BreadcrumbPage className="line-clamp-1">
-                      Project Management & Task Tracking
+                      {getRouteDisplayName(pathname)}
                     </BreadcrumbPage>
-                  </BreadcrumbItem>
+                 </BreadcrumbItem>
                 </BreadcrumbList>
               </Breadcrumb>
               <Separator orientation="vertical" className="ml-2 h-4" />
