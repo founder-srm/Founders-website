@@ -20,16 +20,24 @@ type TeamSectionProps = {
 };
 
 const domainLabels = {
-  operations: 'Operations',
+  operations_marketing: 'Operations & Marketing',
+  operations: 'Operations & Marketing', // For backward compatibility [why tf do we merge them as one, this why the club is ass]
+  marketing: 'Operations & Marketing', // For backward compatibility
   technical: 'Technical',
   creatives: 'Creatives',
   outreach: 'Outreach',
-  marketing: 'Marketing',
   sponsorship: 'Sponsorship',
   leadership: 'Leadership',
 };
 
-const domains = Object.keys(domainLabels) as Array<keyof typeof domainLabels>;
+const domains = [
+  'operations_marketing',
+  'technical',
+  'creatives',
+  'outreach',
+  'sponsorship',
+  'leadership',
+] as const;
 
 const TeamSection = ({ teamMembers }: TeamSectionProps) => {
   const [activeTab, setActiveTab] = useState<string>(domains[0]);
@@ -114,6 +122,14 @@ const TeamSection = ({ teamMembers }: TeamSectionProps) => {
     );
   };
 
+  // Helper function to get the normalized domain
+  const getNormalizedDomain = (domain: string): string => {
+    if (domain === 'operations' || domain === 'marketing') {
+      return 'operations_marketing';
+    }
+    return domain;
+  };
+
   return (
     <section className="py-16 px-4 md:py-24 lg:py-32">
       <div className="container flex flex-col items-start text-left">
@@ -150,7 +166,9 @@ const TeamSection = ({ teamMembers }: TeamSectionProps) => {
           <TabsList className="mb-8 h-auto flex-wrap justify-start">
             {domains.map(domain => {
               const domainMembers = regularTeam.filter(
-                member => member.domain === domain
+                member => 
+                  // biome-ignore lint/style/noNonNullAssertion: gae as shit error
+                  getNormalizedDomain(member.domain!) === domain
               );
               if (domainMembers.length === 0) return null;
 
@@ -170,7 +188,9 @@ const TeamSection = ({ teamMembers }: TeamSectionProps) => {
 
           {domains.map(domain => {
             const domainMembers = regularTeam.filter(
-              member => member.domain === domain
+              member => 
+                // biome-ignore lint/style/noNonNullAssertion: same as b4
+                getNormalizedDomain(member.domain!) === domain
             );
             if (domainMembers.length === 0) return null;
 

@@ -63,11 +63,10 @@ export const ourTeamType = defineType({
       type: 'string',
       options: {
         list: [
-          { title: 'Operations', value: 'operations' },
+          { title: 'Operations & Marketing', value: 'operations_marketing' },
           { title: 'Technical', value: 'technical' },
           { title: 'Creatives', value: 'creatives' },
           { title: 'Outreach', value: 'outreach' },
-          { title: 'Marketing', value: 'marketing' },
           { title: 'Sponsorship', value: 'sponsorship' },
           { title: 'Leadership', value: 'leadership' },
         ],
