@@ -4,6 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { ArrowUpRight } from 'lucide-react';
 import type { eventsInsertType } from '../../schema.zod';
 import { formatInTimeZone } from 'date-fns-tz';
+import { GetBlurImage } from './blur-image';
 
 export function FeaturedPost({ event }: { event: eventsInsertType }) {
   if (!event) {
@@ -27,6 +28,7 @@ export function FeaturedPost({ event }: { event: eventsInsertType }) {
               height={1695}
               className="relative h-full w-full object-cover object-center"
               loading="eager"
+              placeholder={GetBlurImage()}
               priority
             />
           </div>

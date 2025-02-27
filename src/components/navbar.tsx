@@ -354,8 +354,8 @@ const Navbar1 = () => {
           )}
         </div>
       </nav>
-      <div className="block lg:hidden">
-        <div className="flex items-center justify-between">
+      <div className="block lg:hidden w-full px-4">
+        <div className="flex flex-row items-center w-full justify-between">
           <Link href={'/'} className="flex items-center gap-2 backdrop-blur-sm">
             <Image
               src="/FC-logo-short.png"

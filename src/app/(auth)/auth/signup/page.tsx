@@ -191,7 +191,7 @@ export default function SignupPage(props: {
               </div>
             </div>
             <Image
-              src="https://shadcnblocks.com/images/block/placeholder-1.svg"
+              src="https://eedplvopkhwuhhquagfw.supabase.co/storage/v1/object/public/team//IMG-20241027-WA0250.jpg"
               alt="placeholder"
               width={800}
               height={600}

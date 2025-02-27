@@ -248,3 +248,16 @@ code[class*="language-"] {
     margin: 2rem 0;
   }
 }
+
+.user-banner {
+  background: linear-gradient(-45deg, #2c2e46 20%, #030712, #413960 20%);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}

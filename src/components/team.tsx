@@ -1,114 +1,214 @@
 'use client';
-import { Dribbble, Github, Linkedin } from 'lucide-react';
-
+import { Github, Globe, Linkedin } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from './ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useState } from 'react';
+import { urlFor } from '@/sanity/lib/image';
+import type { OurTeam, TEAM_QUERYResult } from '../../sanity.types';
 
-const people = [
-  {
-    id: 'person-1',
-    name: 'Name',
-    role: 'Role',
-    description:
-      'Elig doloremque mollitia fugiat omnis! Porro facilis quo animi consequatur. Explicabo.',
-    avatar: 'https://shadcnblocks.com/images/block/avatar-1.webp',
-  },
-  {
-    id: 'person-2',
-    name: 'Name',
-    role: 'Role',
-    description: 'Elig doloremque mollitia fugiat omnis!',
-    avatar: 'https://shadcnblocks.com/images/block/avatar-2.webp',
-  },
-  {
-    id: 'person-3',
-    name: 'Name',
-    role: 'Role',
-    description:
-      'Elig doloremque mollitia fugiat omnis! Porro facilis quo animi consequatur. Explicabo.',
-    avatar: 'https://shadcnblocks.com/images/block/avatar-3.webp',
-  },
-  {
-    id: 'person-4',
-    name: 'Name',
-    role: 'Role',
-    description: 'Elig doloremque mollitia fugiat omnis!',
-    avatar: 'https://shadcnblocks.com/images/block/avatar-4.webp',
-  },
-  {
-    id: 'person-5',
-    name: 'Name',
-    role: 'Role',
-    description:
-      'Elig doloremque mollitia fugiat omnis! Porro facilis quo animi consequatur. Explicabo.',
-    avatar: 'https://shadcnblocks.com/images/block/avatar-5.webp',
-  },
-  {
-    id: 'person-6',
-    name: 'Name',
-    role: 'Role',
-    description:
-      'Elig doloremque mollitia fugiat omnis! Porro facilis quo animi consequatur. Explicabo.',
-    avatar: 'https://shadcnblocks.com/images/block/avatar-6.webp',
-  },
-  {
-    id: 'person-7',
-    name: 'Name',
-    role: 'Role',
-    description:
-      'Elig doloremque mollitia fugiat omnis! Porro facilis quo animi consequatur. Explicabo.',
-    avatar: 'https://shadcnblocks.com/images/block/avatar-7.webp',
-  },
-  {
-    id: 'person-8',
-    name: 'Name',
-    role: 'Role',
-    description:
-      'Elig doloremque mollitia fugiat omnis! Porro facilis quo animi consequatur. Explicabo.',
-    avatar: 'https://shadcnblocks.com/images/block/avatar-8.webp',
-  },
-];
+type SocialLink = {
+  platform: 'github' | 'linkedin' | 'website';
+  url: string;
+  icon: JSX.Element;
+};
 
-const Team2 = () => {
+type TeamMember = OurTeam;
+
+type TeamSectionProps = {
+  teamMembers: TEAM_QUERYResult;
+};
+
+const domainLabels = {
+  operations_marketing: 'Operations & Marketing',
+  operations: 'Operations & Marketing', // For backward compatibility [why tf do we merge them as one, this why the club is ass]
+  marketing: 'Operations & Marketing', // For backward compatibility
+  technical: 'Technical',
+  creatives: 'Creatives',
+  outreach: 'Outreach',
+  sponsorship: 'Sponsorship',
+  leadership: 'Leadership',
+};
+
+const domains = [
+  'operations_marketing',
+  'technical',
+  'creatives',
+  'outreach',
+  'sponsorship',
+  'leadership',
+] as const;
+
+const TeamSection = ({ teamMembers }: TeamSectionProps) => {
+  const [activeTab, setActiveTab] = useState<string>(domains[0]);
+
+  // Filter out president and vice president
+  const leadershipTeam = teamMembers.filter(
+    member => member.isPresident || member.isVicePresident
+  );
+  const regularTeam = teamMembers.filter(
+    member => !member.isPresident && !member.isVicePresident
+  );
+
+  const getSocialLinks = (member: TeamMember): SocialLink[] => {
+    const links: SocialLink[] = [];
+
+    if (member.github) {
+      links.push({
+        platform: 'github',
+        url: member.github,
+        icon: <Github className="size-5 text-muted-foreground" />,
+      });
+    }
+
+    if (member.linkedin) {
+      links.push({
+        platform: 'linkedin',
+        url: member.linkedin,
+        icon: <Linkedin className="size-5 text-muted-foreground" />,
+      });
+    }
+
+    if (member.website) {
+      links.push({
+        platform: 'website',
+        url: member.website,
+        icon: <Globe className="size-5 text-muted-foreground" />,
+      });
+    }
+
+    return links;
+  };
+
+  const renderTeamMember = (member: TeamMember) => {
+    const socialLinks = getSocialLinks(member);
+
+    return (
+      <div key={member._id} className="flex flex-col items-start">
+        <Avatar className="mb-4 size-28 md:mb-5 lg:size-32 rounded-md">
+          {member.avatar ? (
+            <AvatarImage
+              src={urlFor(member.avatar).url()}
+              alt={member.name || ''}
+              className="object-cover"
+            />
+          ) : (
+            <AvatarFallback>{member.name?.charAt(0)}</AvatarFallback>
+          )}
+        </Avatar>
+        <p className="font-medium">{member.name}</p>
+        <p className="text-muted-foreground">{member.role}</p>
+        {member.description && (
+          <p className="py-3 text-sm text-muted-foreground">
+            {member.description}
+          </p>
+        )}
+        {socialLinks.length > 0 && (
+          <div className="mt-2 flex gap-4">
+            {socialLinks.map(link => (
+              <Button
+                key={`${member._id}-${link.platform}`}
+                variant="ghost"
+                size="icon"
+                onClick={() => window.open(link.url, '_blank')}
+                aria-label={`${member.name}'s ${link.platform}`}
+              >
+                {link.icon}
+              </Button>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  // Helper function to get the normalized domain
+  const getNormalizedDomain = (domain: string): string => {
+    if (domain === 'operations' || domain === 'marketing') {
+      return 'operations_marketing';
+    }
+    return domain;
+  };
+
   return (
-    <section className="py-32">
+    <section className="py-16 px-4 md:py-24 lg:py-32">
       <div className="container flex flex-col items-start text-left">
-        <p className="semibold">Our team</p>
+        <p className="font-semibold">Our Team</p>
         <h2 className="my-6 text-pretty text-2xl font-bold lg:text-4xl">
-          The team you&apos;ll be working with
+          Meet The Team
         </h2>
         <p className="mb-8 max-w-3xl text-muted-foreground lg:text-xl">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit.
+          Our dedicated team of professionals working together to create amazing
+          experiences.
         </p>
       </div>
-      <div className="container mt-16 grid gap-x-12 gap-y-16 md:grid-cols-2 lg:grid-cols-4">
-        {people.map(person => (
-          <div key={person.id} className="flex flex-col items-start">
-            <Avatar className="mb-4 size-20 md:mb-5 lg:size-24">
-              <AvatarImage src={person.avatar} />
-              <AvatarFallback>{person.name}</AvatarFallback>
-            </Avatar>
-            <p className="font-medium">{person.name}</p>
-            <p className="text-muted-foreground">{person.role}</p>
-            <p className="py-3 text-sm text-muted-foreground">
-              {person.description}
-            </p>
-            <div className="mt-2 flex gap-4">
-              <Button onClick={() => window.open('#')}>
-                <Github className="size-5 text-muted-foreground" />
-              </Button>
-              <Button onClick={() => window.open('#')}>
-                <Linkedin className="size-5 text-muted-foreground" />
-              </Button>
-              <Button onClick={() => window.open('#')}>
-                <Dribbble className="size-5 text-muted-foreground" />
-              </Button>
-            </div>
+
+      {/* Leadership Team (President & Vice President) */}
+      {leadershipTeam.length > 0 && (
+        <div className="container my-8">
+          <h3 className="mb-8 text-xl font-bold">Leadership</h3>
+          <div className="grid gap-x-12 gap-y-16 md:grid-cols-2 lg:grid-cols-2">
+            {leadershipTeam.map(member =>
+              renderTeamMember(member as TeamMember)
+            )}
           </div>
-        ))}
+        </div>
+      )}
+
+      {/* Team Members by Domain */}
+      <div className="container mt-16">
+        <Tabs
+          defaultValue={domains[0]}
+          value={activeTab}
+          onValueChange={setActiveTab}
+          className="w-full"
+        >
+          <TabsList className="mb-8 h-auto flex-wrap justify-start">
+            {domains.map(domain => {
+              const domainMembers = regularTeam.filter(
+                member => 
+                  // biome-ignore lint/style/noNonNullAssertion: gae as shit error
+                  getNormalizedDomain(member.domain!) === domain
+              );
+              if (domainMembers.length === 0) return null;
+
+              return (
+                <TabsTrigger
+                  key={domain}
+                  value={domain}
+                  className="data-[state=active]:after:bg-primary relative rounded-md px-4 py-2 text-sm 
+                            after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 
+                            data-[state=active]:bg-accent data-[state=active]:shadow-sm"
+                >
+                  {domainLabels[domain]}
+                </TabsTrigger>
+              );
+            })}
+          </TabsList>
+
+          {domains.map(domain => {
+            const domainMembers = regularTeam.filter(
+              member => 
+                // biome-ignore lint/style/noNonNullAssertion: same as b4
+                getNormalizedDomain(member.domain!) === domain
+            );
+            if (domainMembers.length === 0) return null;
+
+            return (
+              <TabsContent key={domain} value={domain} className="pt-4">
+                <div className="grid gap-x-12 gap-y-16 md:grid-cols-2 lg:grid-cols-4">
+                  {/* //@ts-expect-error - TS doesn't know that domainMembers is not empty */}
+                  {domainMembers.map(member =>
+                    renderTeamMember(member as TeamMember)
+                  )}
+                </div>
+              </TabsContent>
+            );
+          })}
+        </Tabs>
       </div>
     </section>
   );
 };
 
-export default Team2;
+export default TeamSection;

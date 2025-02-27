@@ -86,7 +86,7 @@ export function SpinningText({
               '--total': totalLetters,
               '--font-size': fontSize,
               '--radius': radius,
-              fontSize: `calc(var(--font-size, 2) * 1rem)`,
+              fontSize: 'calc(var(--font-size, 2) * 1rem)',
               transform: `
                   translate(-50%, -50%)
                   rotate(calc(360deg / var(--total) * var(--index)))
