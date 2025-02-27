@@ -288,17 +288,13 @@ export default function AccountPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                   <div className="p-4 border rounded-lg text-center">
                     <Calendar className="h-8 w-8 mx-auto text-blue-500 mb-2" />
-                    <p className="font-bold text-2xl">
-                      {registrations.length}
-                    </p>
+                    <p className="font-bold text-2xl">{registrations.length}</p>
                     <p className="text-sm text-muted-foreground">Events</p>
                   </div>
                   <div className="p-4 border rounded-lg text-center">
                     <Shield className="h-8 w-8 mx-auto text-green-500 mb-2" />
                     <p className="font-bold text-2xl">{identities.length}</p>
-                    <p className="text-sm text-muted-foreground">
-                      Connections
-                    </p>
+                    <p className="text-sm text-muted-foreground">Connections</p>
                   </div>
                 </div>
               </div>
@@ -371,9 +367,7 @@ export default function AccountPage() {
                 <Github className="h-5 w-5" />
                 Connected Accounts
               </CardTitle>
-              <CardDescription>
-                Manage your connected accounts
-              </CardDescription>
+              <CardDescription>Manage your connected accounts</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex flex-col md:flex-row items-center justify-between p-4 border rounded-lg bg-card hover:bg-accent transition-colors">
@@ -391,7 +385,7 @@ export default function AccountPage() {
                 <Button
                   variant={hasProvider('github') ? 'destructive' : 'outline'}
                   onClick={() => handleIdentityConnection('github')}
-                  size={isMobile ? "sm" : "default"}
+                  size={isMobile ? 'sm' : 'default'}
                 >
                   {hasProvider('github') ? 'Disconnect' : 'Connect'}
                 </Button>
@@ -411,7 +405,7 @@ export default function AccountPage() {
                 <Button
                   variant={hasProvider('google') ? 'destructive' : 'outline'}
                   onClick={() => handleIdentityConnection('google')}
-                  size={isMobile ? "sm" : "default"}
+                  size={isMobile ? 'sm' : 'default'}
                 >
                   {hasProvider('google') ? 'Disconnect' : 'Connect'}
                 </Button>
@@ -437,7 +431,9 @@ export default function AccountPage() {
                   <div className="bg-primary/10 p-3 rounded-full mb-3">
                     <Award className="h-6 w-6 text-primary" />
                   </div>
-                  <p className="font-medium text-center text-sm md:text-base">Account Created</p>
+                  <p className="font-medium text-center text-sm md:text-base">
+                    Account Created
+                  </p>
                   <p className="text-xs text-muted-foreground text-center mt-1">
                     Joined the platform
                   </p>
@@ -594,21 +590,24 @@ export default function AccountPage() {
     <div className="min-h-screen bg-background">
       {/* Gradient Banner */}
       <div className="h-36 md:h-48 relative bg-[url('/user-banner.svg')] bg-cover bg-bottom bg-no-repeat" />
-      
+
       {/* Profile Image and Name */}
       <div className="container mx-auto px-4 max-w-4xl">
         <div className="relative -mt-16 md:-mt-24 mb-6">
           <div className="flex flex-col md:flex-row md:items-end">
             <Avatar className="w-[100px] h-auto md:h-[150px] md:w-[150px]">
               <AvatarImage
-                src={user?.user_metadata?.picture || user?.user_metadata?.avatar_url}
+                src={
+                  user?.user_metadata?.picture ||
+                  user?.user_metadata?.avatar_url
+                }
                 alt={getDisplayName()}
               />
               <AvatarFallback className="text-2xl md:text-4xl">
                 {getUserInitials()}
               </AvatarFallback>
             </Avatar>
-            
+
             <div className="mt-3 md:mt-0 md:ml-4 md:mb-2 flex flex-row md:items-center md:justify-between w-full">
               <div>
                 <h1 className="text-xl md:text-2xl font-bold text-foreground break-words">
@@ -618,7 +617,7 @@ export default function AccountPage() {
                   {user?.email}
                 </p>
               </div>
-              
+
               <div className="mt-3 ml-6 md:mt-0 md:ml-auto">
                 <Button
                   onClick={handleSignOut}
@@ -635,9 +634,9 @@ export default function AccountPage() {
 
         {/* Mobile View: Vertical Tabs */}
         {isMobile ? (
-          <Tabs 
+          <Tabs
             defaultValue={currentTab}
-            orientation="vertical" 
+            orientation="vertical"
             className="w-full flex-col mt-24 md:hidden"
             onValueChange={handleTabChange}
           >
@@ -647,35 +646,55 @@ export default function AccountPage() {
                   value="profile"
                   className="hover:bg-accent hover:text-foreground data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent relative w-full justify-start after:absolute after:inset-y-0 after:start-0 after:-ms-1 after:w-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
                 >
-                  <User className="-ms-0.5 me-1.5 opacity-60" size={16} aria-hidden="true" />
+                  <User
+                    className="-ms-0.5 me-1.5 opacity-60"
+                    size={16}
+                    aria-hidden="true"
+                  />
                   Profile
                 </TabsTrigger>
                 <TabsTrigger
                   value="security"
                   className="hover:bg-accent hover:text-foreground data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent relative w-full justify-start after:absolute after:inset-y-0 after:start-0 after:-ms-1 after:w-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
                 >
-                  <Key className="-ms-0.5 me-1.5 opacity-60" size={16} aria-hidden="true" />
+                  <Key
+                    className="-ms-0.5 me-1.5 opacity-60"
+                    size={16}
+                    aria-hidden="true"
+                  />
                   Security
                 </TabsTrigger>
                 <TabsTrigger
                   value="connections"
                   className="hover:bg-accent hover:text-foreground data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent relative w-full justify-start after:absolute after:inset-y-0 after:start-0 after:-ms-1 after:w-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
                 >
-                  <Github className="-ms-0.5 me-1.5 opacity-60" size={16} aria-hidden="true" />
+                  <Github
+                    className="-ms-0.5 me-1.5 opacity-60"
+                    size={16}
+                    aria-hidden="true"
+                  />
                   Links
                 </TabsTrigger>
                 <TabsTrigger
                   value="badges"
                   className="hover:bg-accent hover:text-foreground data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent relative w-full justify-start after:absolute after:inset-y-0 after:start-0 after:-ms-1 after:w-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
                 >
-                  <BadgeCheck className="-ms-0.5 me-1.5 opacity-60" size={16} aria-hidden="true" />
+                  <BadgeCheck
+                    className="-ms-0.5 me-1.5 opacity-60"
+                    size={16}
+                    aria-hidden="true"
+                  />
                   Badges
                 </TabsTrigger>
                 <TabsTrigger
                   value="events"
                   className="hover:bg-accent hover:text-foreground data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent relative w-full justify-start after:absolute after:inset-y-0 after:start-0 after:-ms-1 after:w-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
                 >
-                  <Ticket className="-ms-0.5 me-1.5 opacity-60" size={16} aria-hidden="true" />
+                  <Ticket
+                    className="-ms-0.5 me-1.5 opacity-60"
+                    size={16}
+                    aria-hidden="true"
+                  />
                   Events
                   {registrations.length > 0 && (
                     <Badge
@@ -687,13 +706,23 @@ export default function AccountPage() {
                   )}
                 </TabsTrigger>
               </TabsList>
-              
+
               <div className="grow w-2/3">
-                <TabsContent value="profile">{renderTabContent('profile')}</TabsContent>
-                <TabsContent value="security">{renderTabContent('security')}</TabsContent>
-                <TabsContent value="connections">{renderTabContent('connections')}</TabsContent>
-                <TabsContent value="badges">{renderTabContent('badges')}</TabsContent>
-                <TabsContent value="events">{renderTabContent('events')}</TabsContent>
+                <TabsContent value="profile">
+                  {renderTabContent('profile')}
+                </TabsContent>
+                <TabsContent value="security">
+                  {renderTabContent('security')}
+                </TabsContent>
+                <TabsContent value="connections">
+                  {renderTabContent('connections')}
+                </TabsContent>
+                <TabsContent value="badges">
+                  {renderTabContent('badges')}
+                </TabsContent>
+                <TabsContent value="events">
+                  {renderTabContent('events')}
+                </TabsContent>
               </div>
             </div>
           </Tabs>
@@ -773,11 +802,21 @@ export default function AccountPage() {
               <ScrollBar orientation="horizontal" />
             </ScrollArea>
 
-            <TabsContent value="profile">{renderTabContent('profile')}</TabsContent>
-            <TabsContent value="security">{renderTabContent('security')}</TabsContent>
-            <TabsContent value="connections">{renderTabContent('connections')}</TabsContent>
-            <TabsContent value="badges">{renderTabContent('badges')}</TabsContent>
-            <TabsContent value="events">{renderTabContent('events')}</TabsContent>
+            <TabsContent value="profile">
+              {renderTabContent('profile')}
+            </TabsContent>
+            <TabsContent value="security">
+              {renderTabContent('security')}
+            </TabsContent>
+            <TabsContent value="connections">
+              {renderTabContent('connections')}
+            </TabsContent>
+            <TabsContent value="badges">
+              {renderTabContent('badges')}
+            </TabsContent>
+            <TabsContent value="events">
+              {renderTabContent('events')}
+            </TabsContent>
           </Tabs>
         )}
       </div>

@@ -132,7 +132,9 @@ const TeamSection = ({ teamMembers }: TeamSectionProps) => {
         <div className="container my-8">
           <h3 className="mb-8 text-xl font-bold">Leadership</h3>
           <div className="grid gap-x-12 gap-y-16 md:grid-cols-2 lg:grid-cols-2">
-            {leadershipTeam.map((member) => renderTeamMember(member as TeamMember))}
+            {leadershipTeam.map(member =>
+              renderTeamMember(member as TeamMember)
+            )}
           </div>
         </div>
       )}
@@ -176,7 +178,9 @@ const TeamSection = ({ teamMembers }: TeamSectionProps) => {
               <TabsContent key={domain} value={domain} className="pt-4">
                 <div className="grid gap-x-12 gap-y-16 md:grid-cols-2 lg:grid-cols-4">
                   {/* //@ts-expect-error - TS doesn't know that domainMembers is not empty */}
-                  {domainMembers.map((member) => renderTeamMember(member as TeamMember))}
+                  {domainMembers.map(member =>
+                    renderTeamMember(member as TeamMember)
+                  )}
                 </div>
               </TabsContent>
             );
