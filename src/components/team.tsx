@@ -77,7 +77,7 @@ const TeamSection = ({ teamMembers }: TeamSectionProps) => {
 
     return (
       <div key={member._id} className="flex flex-col items-start">
-        <Avatar className="mb-4 size-20 md:mb-5 lg:size-24">
+        <Avatar className="mb-4 size-28 md:mb-5 lg:size-32 rounded-md">
           {member.avatar ? (
             <AvatarImage
               src={urlFor(member.avatar).url()}
@@ -115,7 +115,7 @@ const TeamSection = ({ teamMembers }: TeamSectionProps) => {
   };
 
   return (
-    <section className="py-16 md:py-24 lg:py-32">
+    <section className="py-16 px-4 md:py-24 lg:py-32">
       <div className="container flex flex-col items-start text-left">
         <p className="font-semibold">Our Team</p>
         <h2 className="my-6 text-pretty text-2xl font-bold lg:text-4xl">
