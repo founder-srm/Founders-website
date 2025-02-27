@@ -51,8 +51,10 @@ import { Badge } from '@/components/ui/badge';
 import type { UserIdentity } from '@supabase/supabase-js';
 import { useSearchParams } from 'next/navigation';
 import { formatInTimeZone } from 'date-fns-tz';
+import { useMediaQuery } from '@/hooks/use-media-query';
 
 export default function AccountPage() {
+  const isMobile = useMediaQuery('(max-width: 768px)');
   const user = useUser();
   const isLoading = useIsLoading();
   const { toast } = useToast();
@@ -229,469 +231,555 @@ export default function AccountPage() {
     );
   }
 
+  // Shared tab content for both desktop and mobile
+  const renderTabContent = (value: string) => {
+    switch (value) {
+      case 'profile':
+        return (
+          <Card className="border-0 shadow-none md:border md:shadow-sm">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <User size={20} />
+                Profile Information
+              </CardTitle>
+              <CardDescription>Manage your account details</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2 p-4 border rounded-lg">
+                  <p className="text-sm font-medium text-muted-foreground">
+                    Email
+                  </p>
+                  <p className="font-medium break-words">{user?.email}</p>
+                </div>
+                <div className="space-y-2 p-4 border rounded-lg">
+                  <p className="text-sm font-medium text-muted-foreground">
+                    User ID
+                  </p>
+                  <p className="font-medium text-xs truncate">{user?.id}</p>
+                </div>
+                <div className="space-y-2 p-4 border rounded-lg">
+                  <p className="text-sm font-medium text-muted-foreground">
+                    Email Verification
+                  </p>
+                  <div className="flex items-center gap-2">
+                    <Badge
+                      variant={
+                        user?.email_confirmed_at ? 'default' : 'destructive'
+                      }
+                    >
+                      {user?.email_confirmed_at ? 'Verified' : 'Not Verified'}
+                    </Badge>
+                  </div>
+                </div>
+                <div className="space-y-2 p-4 border rounded-lg">
+                  <p className="text-sm font-medium text-muted-foreground">
+                    Last Sign In
+                  </p>
+                  <p className="font-medium">
+                    {new Date(user?.last_sign_in_at || '').toLocaleString()}
+                  </p>
+                </div>
+              </div>
+
+              {/* Account Stats */}
+              <div className="mt-8">
+                <h3 className="font-semibold text-lg mb-4">Account Stats</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                  <div className="p-4 border rounded-lg text-center">
+                    <Calendar className="h-8 w-8 mx-auto text-blue-500 mb-2" />
+                    <p className="font-bold text-2xl">
+                      {registrations.length}
+                    </p>
+                    <p className="text-sm text-muted-foreground">Events</p>
+                  </div>
+                  <div className="p-4 border rounded-lg text-center">
+                    <Shield className="h-8 w-8 mx-auto text-green-500 mb-2" />
+                    <p className="font-bold text-2xl">{identities.length}</p>
+                    <p className="text-sm text-muted-foreground">
+                      Connections
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        );
+      case 'security':
+        return (
+          <div className="grid gap-4">
+            <Card className="border-0 shadow-none md:border md:shadow-sm">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Mail className="h-5 w-5" />
+                  Change Email
+                </CardTitle>
+                <CardDescription>Update your email address</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="email">New Email</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={newEmail}
+                    onChange={e => setNewEmail(e.target.value)}
+                  />
+                </div>
+              </CardContent>
+              <CardFooter>
+                <Button onClick={handleUpdateEmail}>
+                  <Mail className="mr-2 h-4 w-4" />
+                  Update Email
+                </Button>
+              </CardFooter>
+            </Card>
+
+            <Card className="border-0 shadow-none md:border md:shadow-sm">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Key className="h-5 w-5" />
+                  Change Password
+                </CardTitle>
+                <CardDescription>Update your password</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="new-password">New Password</Label>
+                  <Input
+                    id="new-password"
+                    type="password"
+                    value={newPassword}
+                    onChange={e => setNewPassword(e.target.value)}
+                  />
+                </div>
+              </CardContent>
+              <CardFooter>
+                <Button onClick={handleUpdatePassword}>
+                  <Key className="mr-2 h-4 w-4" />
+                  Update Password
+                </Button>
+              </CardFooter>
+            </Card>
+          </div>
+        );
+      case 'connections':
+        return (
+          <Card className="border-0 shadow-none md:border md:shadow-sm">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Github className="h-5 w-5" />
+                Connected Accounts
+              </CardTitle>
+              <CardDescription>
+                Manage your connected accounts
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex flex-col md:flex-row items-center justify-between p-4 border rounded-lg bg-card hover:bg-accent transition-colors">
+                <div className="flex flex-col md:flex-row max-md:justify-center items-center space-x-4">
+                  <div className="bg-muted p-2 rounded-full">
+                    <Github className="h-6 w-6" />
+                  </div>
+                  <div>
+                    <p className="font-medium">GitHub</p>
+                    <p className="text-sm text-muted-foreground">
+                      {hasProvider('github') ? 'Connected' : 'Not connected'}
+                    </p>
+                  </div>
+                </div>
+                <Button
+                  variant={hasProvider('github') ? 'destructive' : 'outline'}
+                  onClick={() => handleIdentityConnection('github')}
+                  size={isMobile ? "sm" : "default"}
+                >
+                  {hasProvider('github') ? 'Disconnect' : 'Connect'}
+                </Button>
+              </div>
+              <div className="flex flex-col md:flex-row items-center justify-between p-4 border rounded-lg bg-card hover:bg-accent transition-colors">
+                <div className="flex flex-col md:flex-row max-md:justify-center items-center space-x-4">
+                  <div className="bg-muted p-2 rounded-full">
+                    <GoogleIcon className="h-6 w-6" />
+                  </div>
+                  <div>
+                    <p className="font-medium">Google</p>
+                    <p className="text-sm text-muted-foreground">
+                      {hasProvider('google') ? 'Connected' : 'Not connected'}
+                    </p>
+                  </div>
+                </div>
+                <Button
+                  variant={hasProvider('google') ? 'destructive' : 'outline'}
+                  onClick={() => handleIdentityConnection('google')}
+                  size={isMobile ? "sm" : "default"}
+                >
+                  {hasProvider('google') ? 'Disconnect' : 'Connect'}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        );
+      case 'badges':
+        return (
+          <Card className="border-0 shadow-none md:border md:shadow-sm">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Award className="h-5 w-5" />
+                Badges Earned
+              </CardTitle>
+              <CardDescription>
+                Your achievements and recognition
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="flex flex-wrap gap-3">
+                <div className="p-4 border rounded-lg bg-card flex flex-col items-center w-32">
+                  <div className="bg-primary/10 p-3 rounded-full mb-3">
+                    <Award className="h-6 w-6 text-primary" />
+                  </div>
+                  <p className="font-medium text-center text-sm md:text-base">Account Created</p>
+                  <p className="text-xs text-muted-foreground text-center mt-1">
+                    Joined the platform
+                  </p>
+                </div>
+
+                {registrations.length > 0 && (
+                  <div className="p-4 border rounded-lg bg-card flex flex-col items-center w-32">
+                    <div className="bg-blue-500/10 p-3 rounded-full mb-3">
+                      <Calendar className="h-6 w-6 text-blue-500" />
+                    </div>
+                    <p className="font-medium text-center text-sm md:text-base">
+                      Event Participant
+                    </p>
+                    <p className="text-xs text-muted-foreground text-center mt-1">
+                      Joined an event
+                    </p>
+                  </div>
+                )}
+
+                {hasProvider('github') && (
+                  <div className="p-4 border rounded-lg bg-card flex flex-col items-center w-32">
+                    <div className="bg-gray-800/10 p-3 rounded-full mb-3">
+                      <Github className="h-6 w-6 text-gray-800" />
+                    </div>
+                    <p className="font-medium text-center text-sm md:text-base">
+                      GitHub Connected
+                    </p>
+                    <p className="text-xs text-muted-foreground text-center mt-1">
+                      Linked GitHub
+                    </p>
+                  </div>
+                )}
+
+                {hasProvider('google') && (
+                  <div className="p-4 border rounded-lg bg-card flex flex-col items-center w-32">
+                    <div className="bg-red-500/10 p-3 rounded-full mb-3">
+                      <GoogleIcon className="h-6 w-6 text-red-500" />
+                    </div>
+                    <p className="font-medium text-center text-sm md:text-base">
+                      Google Connected
+                    </p>
+                    <p className="text-xs text-muted-foreground text-center mt-1">
+                      Linked Google
+                    </p>
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        );
+      case 'events':
+        return (
+          <Card className="border-0 shadow-none md:border md:shadow-sm">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Ticket className="h-5 w-5" />
+                Event Registrations
+              </CardTitle>
+              <CardDescription>Your registered events</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {registrations.length === 0 ? (
+                  <div className="rounded-lg border border-border bg-background p-4 shadow-lg shadow-black/5">
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
+                      <div
+                        className="flex size-9 shrink-0 items-center justify-center rounded-full border border-border mb-2 md:mb-0"
+                        aria-hidden="true"
+                      >
+                        <Radio
+                          className="opacity-60"
+                          size={16}
+                          strokeWidth={2}
+                        />
+                      </div>
+                      <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-12 w-full">
+                        <div className="space-y-1">
+                          <p className="text-sm font-medium">
+                            No Events Registered yet
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            Lets change that!
+                          </p>
+                        </div>
+                        <Button
+                          size="sm"
+                          onClick={() => Router.push('/dashboard/upcoming')}
+                          className="w-full md:w-auto"
+                        >
+                          Lets Participate
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  registrations?.map(reg => (
+                    <div
+                      key={reg.id}
+                      className="border rounded-lg p-4 hover:bg-accent transition-colors relative"
+                    >
+                      <div className="w-full flex flex-col md:flex-row md:justify-between md:items-center space-y-3 md:space-y-0 md:space-x-4">
+                        <div>
+                          <h3 className="font-medium text-lg">
+                            {reg.event_title}
+                          </h3>
+                          <div className="text-sm text-gray-500 space-y-1 mt-1">
+                            <p>Ticket ID: {reg.ticket_id}</p>
+                            <p>
+                              Registered:{' '}
+                              {reg.created_at
+                                ? formatInTimeZone(
+                                    new Date(reg.created_at),
+                                    'Asia/Kolkata',
+                                    'dd MMMM yyyy, hh:mm a zzz'
+                                  )
+                                : 'N/A'}
+                            </p>
+                          </div>
+                        </div>
+                        <HoverCard>
+                          <HoverCardTrigger>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() =>
+                                Router.push(
+                                  `/dashboard/upcoming/register/success?ticketid=${reg.ticket_id}`
+                                )
+                              }
+                              className="w-full md:w-auto"
+                            >
+                              <Ticket className="mr-2 h-4 w-4" />
+                              View Ticket
+                            </Button>
+                          </HoverCardTrigger>
+                          <HoverCardContent>
+                            Get Your Ticket here, Incase you have lost it.
+                          </HoverCardContent>
+                        </HoverCard>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        );
+      default:
+        return null;
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background">
       {/* Gradient Banner */}
-      <div className="h-48 relative bg-[url('/user-banner.svg')] bg-cover bg-bottom bg-no-repeat" />
+      <div className="h-36 md:h-48 relative bg-[url('/user-banner.svg')] bg-cover bg-bottom bg-no-repeat" />
+      
       {/* Profile Image and Name */}
       <div className="container mx-auto px-4 max-w-4xl">
-        <div className="relative -mt-24 mb-6 flex items-end">
-          <Avatar className="h-[150px] w-[150px] border-4 border-background">
-            <AvatarImage
-              src={
-                user?.user_metadata?.picture || user?.user_metadata?.avatar_url
-              }
-              alt={getDisplayName()}
-            />
-            <AvatarFallback className="text-4xl">
-              {getUserInitials()}
-            </AvatarFallback>
-          </Avatar>
-          <div className="ml-4 mb-2">
-            <h1 className="text-2xl font-bold text-foreground">
-              {getDisplayName()}
-            </h1>
-            <p className="text-muted-foreground">{user?.email}</p>
-          </div>
-          <div className="ml-auto mb-2">
-            <Button
-              onClick={handleSignOut}
-              variant="destructive"
-              size="icon"
-              className="rounded-full"
-            >
-              <LeaveIcon />
-            </Button>
+        <div className="relative -mt-16 md:-mt-24 mb-6">
+          <div className="flex flex-col md:flex-row md:items-end">
+            <Avatar className="w-[100px] h-auto md:h-[150px] md:w-[150px]">
+              <AvatarImage
+                src={user?.user_metadata?.picture || user?.user_metadata?.avatar_url}
+                alt={getDisplayName()}
+              />
+              <AvatarFallback className="text-2xl md:text-4xl">
+                {getUserInitials()}
+              </AvatarFallback>
+            </Avatar>
+            
+            <div className="mt-3 md:mt-0 md:ml-4 md:mb-2 flex flex-row md:items-center md:justify-between w-full">
+              <div>
+                <h1 className="text-xl md:text-2xl font-bold text-foreground break-words">
+                  {getDisplayName()}
+                </h1>
+                <p className="text-sm md:text-base text-muted-foreground break-words">
+                  {user?.email}
+                </p>
+              </div>
+              
+              <div className="mt-3 ml-6 md:mt-0 md:ml-auto">
+                <Button
+                  onClick={handleSignOut}
+                  variant="destructive"
+                  size="icon"
+                  className="rounded-full"
+                >
+                  <LeaveIcon />
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Main Content */}
-        <Tabs
-          defaultValue={currentTab}
-          onValueChange={handleTabChange}
-          className="mb-8"
-        >
-          <ScrollArea>
-            <TabsList className="text-foreground mb-6 h-auto gap-2 rounded-none border-b bg-transparent px-0 py-1">
-              <TabsTrigger
-                value="profile"
-                className="hover:bg-accent hover:text-foreground data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
-              >
-                <User
-                  className="-ms-0.5 me-1.5 opacity-60"
-                  size={16}
-                  aria-hidden="true"
-                />
-                Profile
-              </TabsTrigger>
-              <TabsTrigger
-                value="security"
-                className="hover:bg-accent hover:text-foreground data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
-              >
-                <Key
-                  className="-ms-0.5 me-1.5 opacity-60"
-                  size={16}
-                  aria-hidden="true"
-                />
-                Security
-              </TabsTrigger>
-              <TabsTrigger
-                value="connections"
-                className="hover:bg-accent hover:text-foreground data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
-              >
-                <Github
-                  className="-ms-0.5 me-1.5 opacity-60"
-                  size={16}
-                  aria-hidden="true"
-                />
-                Connections
-              </TabsTrigger>
-              <TabsTrigger
-                value="badges"
-                className="hover:bg-accent hover:text-foreground data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
-              >
-                <BadgeCheck
-                  className="-ms-0.5 me-1.5 opacity-60"
-                  size={16}
-                  aria-hidden="true"
-                />
-                Badges
-              </TabsTrigger>
-              <TabsTrigger
-                value="events"
-                className="hover:bg-accent hover:text-foreground data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
-              >
-                <Ticket
-                  className="-ms-0.5 me-1.5 opacity-60"
-                  size={16}
-                  aria-hidden="true"
-                />
-                Events
-                {registrations.length > 0 && (
-                  <Badge
-                    className="bg-primary/15 ms-1.5 min-w-5"
-                    variant="secondary"
-                  >
-                    {registrations.length}
-                  </Badge>
-                )}
-              </TabsTrigger>
-            </TabsList>
-            <ScrollBar orientation="horizontal" />
-          </ScrollArea>
-
-          {/* Profile Tab */}
-          <TabsContent value="profile">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <User size={20} />
-                  Profile Information
-                </CardTitle>
-                <CardDescription>Manage your account details</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2 p-4 border rounded-lg">
-                    <p className="text-sm font-medium text-muted-foreground">
-                      Email
-                    </p>
-                    <p className="font-medium">{user?.email}</p>
-                  </div>
-                  <div className="space-y-2 p-4 border rounded-lg">
-                    <p className="text-sm font-medium text-muted-foreground">
-                      User ID
-                    </p>
-                    <p className="font-medium text-xs truncate">{user?.id}</p>
-                  </div>
-                  <div className="space-y-2 p-4 border rounded-lg">
-                    <p className="text-sm font-medium text-muted-foreground">
-                      Email Verification
-                    </p>
-                    <div className="flex items-center gap-2">
-                      <Badge
-                        variant={
-                          user?.email_confirmed_at ? 'default' : 'destructive'
-                        }
-                      >
-                        {user?.email_confirmed_at ? 'Verified' : 'Not Verified'}
-                      </Badge>
-                    </div>
-                  </div>
-                  <div className="space-y-2 p-4 border rounded-lg">
-                    <p className="text-sm font-medium text-muted-foreground">
-                      Last Sign In
-                    </p>
-                    <p className="font-medium">
-                      {new Date(user?.last_sign_in_at || '').toLocaleString()}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Account Stats */}
-                <div className="mt-8">
-                  <h3 className="font-semibold text-lg mb-4">Account Stats</h3>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div className="p-4 border rounded-lg text-center">
-                      <Calendar className="h-8 w-8 mx-auto text-blue-500 mb-2" />
-                      <p className="font-bold text-2xl">
-                        {registrations.length}
-                      </p>
-                      <p className="text-sm text-muted-foreground">Events</p>
-                    </div>
-                    <div className="p-4 border rounded-lg text-center">
-                      <Shield className="h-8 w-8 mx-auto text-green-500 mb-2" />
-                      <p className="font-bold text-2xl">{identities.length}</p>
-                      <p className="text-sm text-muted-foreground">
-                        Connections
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* Security Tab */}
-          <TabsContent value="security">
-            <div className="grid gap-4">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Mail className="h-5 w-5" />
-                    Change Email
-                  </CardTitle>
-                  <CardDescription>Update your email address</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="email">New Email</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      value={newEmail}
-                      onChange={e => setNewEmail(e.target.value)}
-                    />
-                  </div>
-                </CardContent>
-                <CardFooter>
-                  <Button onClick={handleUpdateEmail}>
-                    <Mail className="mr-2 h-4 w-4" />
-                    Update Email
-                  </Button>
-                </CardFooter>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Key className="h-5 w-5" />
-                    Change Password
-                  </CardTitle>
-                  <CardDescription>Update your password</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="new-password">New Password</Label>
-                    <Input
-                      id="new-password"
-                      type="password"
-                      value={newPassword}
-                      onChange={e => setNewPassword(e.target.value)}
-                    />
-                  </div>
-                </CardContent>
-                <CardFooter>
-                  <Button onClick={handleUpdatePassword}>
-                    <Key className="mr-2 h-4 w-4" />
-                    Update Password
-                  </Button>
-                </CardFooter>
-              </Card>
-            </div>
-          </TabsContent>
-
-          {/* Connections Tab */}
-          <TabsContent value="connections">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Github className="h-5 w-5" />
-                  Connected Accounts
-                </CardTitle>
-                <CardDescription>
-                  Manage your connected accounts
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-center justify-between p-4 border rounded-lg bg-card hover:bg-accent transition-colors">
-                  <div className="flex items-center space-x-4">
-                    <div className="bg-muted p-2 rounded-full">
-                      <Github className="h-6 w-6" />
-                    </div>
-                    <div>
-                      <p className="font-medium">GitHub</p>
-                      <p className="text-sm text-muted-foreground">
-                        {hasProvider('github') ? 'Connected' : 'Not connected'}
-                      </p>
-                    </div>
-                  </div>
-                  <Button
-                    variant={hasProvider('github') ? 'destructive' : 'outline'}
-                    onClick={() => handleIdentityConnection('github')}
-                  >
-                    {hasProvider('github') ? 'Disconnect' : 'Connect'}
-                  </Button>
-                </div>
-                <div className="flex items-center justify-between p-4 border rounded-lg bg-card hover:bg-accent transition-colors">
-                  <div className="flex items-center space-x-4">
-                    <div className="bg-muted p-2 rounded-full">
-                      <GoogleIcon className="h-6 w-6" />
-                    </div>
-                    <div>
-                      <p className="font-medium">Google</p>
-                      <p className="text-sm text-muted-foreground">
-                        {hasProvider('google') ? 'Connected' : 'Not connected'}
-                      </p>
-                    </div>
-                  </div>
-                  <Button
-                    variant={hasProvider('google') ? 'destructive' : 'outline'}
-                    onClick={() => handleIdentityConnection('google')}
-                  >
-                    {hasProvider('google') ? 'Disconnect' : 'Connect'}
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* Badges Tab */}
-          <TabsContent value="badges">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Award className="h-5 w-5" />
-                  Badges Earned
-                </CardTitle>
-                <CardDescription>
-                  Your achievements and recognition
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex flex-wrap gap-3">
-                  <div className="p-4 border rounded-lg bg-card flex flex-col items-center w-32">
-                    <div className="bg-primary/10 p-3 rounded-full mb-3">
-                      <Award className="h-6 w-6 text-primary" />
-                    </div>
-                    <p className="font-medium text-center">Account Created</p>
-                    <p className="text-xs text-muted-foreground text-center mt-1">
-                      Joined the platform
-                    </p>
-                  </div>
-
+        {/* Mobile View: Vertical Tabs */}
+        {isMobile ? (
+          <Tabs 
+            defaultValue={currentTab}
+            orientation="vertical" 
+            className="w-full flex-col mt-24 md:hidden"
+            onValueChange={handleTabChange}
+          >
+            <div className="flex">
+              <TabsList className="text-foreground flex-col gap-1 rounded-none bg-transparent px-1 py-0 w-1/3">
+                <TabsTrigger
+                  value="profile"
+                  className="hover:bg-accent hover:text-foreground data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent relative w-full justify-start after:absolute after:inset-y-0 after:start-0 after:-ms-1 after:w-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
+                >
+                  <User className="-ms-0.5 me-1.5 opacity-60" size={16} aria-hidden="true" />
+                  Profile
+                </TabsTrigger>
+                <TabsTrigger
+                  value="security"
+                  className="hover:bg-accent hover:text-foreground data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent relative w-full justify-start after:absolute after:inset-y-0 after:start-0 after:-ms-1 after:w-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
+                >
+                  <Key className="-ms-0.5 me-1.5 opacity-60" size={16} aria-hidden="true" />
+                  Security
+                </TabsTrigger>
+                <TabsTrigger
+                  value="connections"
+                  className="hover:bg-accent hover:text-foreground data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent relative w-full justify-start after:absolute after:inset-y-0 after:start-0 after:-ms-1 after:w-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
+                >
+                  <Github className="-ms-0.5 me-1.5 opacity-60" size={16} aria-hidden="true" />
+                  Links
+                </TabsTrigger>
+                <TabsTrigger
+                  value="badges"
+                  className="hover:bg-accent hover:text-foreground data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent relative w-full justify-start after:absolute after:inset-y-0 after:start-0 after:-ms-1 after:w-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
+                >
+                  <BadgeCheck className="-ms-0.5 me-1.5 opacity-60" size={16} aria-hidden="true" />
+                  Badges
+                </TabsTrigger>
+                <TabsTrigger
+                  value="events"
+                  className="hover:bg-accent hover:text-foreground data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent relative w-full justify-start after:absolute after:inset-y-0 after:start-0 after:-ms-1 after:w-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
+                >
+                  <Ticket className="-ms-0.5 me-1.5 opacity-60" size={16} aria-hidden="true" />
+                  Events
                   {registrations.length > 0 && (
-                    <div className="p-4 border rounded-lg bg-card flex flex-col items-center w-32">
-                      <div className="bg-blue-500/10 p-3 rounded-full mb-3">
-                        <Calendar className="h-6 w-6 text-blue-500" />
-                      </div>
-                      <p className="font-medium text-center">
-                        Event Participant
-                      </p>
-                      <p className="text-xs text-muted-foreground text-center mt-1">
-                        Joined an event
-                      </p>
-                    </div>
+                    <Badge
+                      className="bg-primary/15 ms-1.5 min-w-5"
+                      variant="secondary"
+                    >
+                      {registrations.length}
+                    </Badge>
                   )}
+                </TabsTrigger>
+              </TabsList>
+              
+              <div className="grow w-2/3">
+                <TabsContent value="profile">{renderTabContent('profile')}</TabsContent>
+                <TabsContent value="security">{renderTabContent('security')}</TabsContent>
+                <TabsContent value="connections">{renderTabContent('connections')}</TabsContent>
+                <TabsContent value="badges">{renderTabContent('badges')}</TabsContent>
+                <TabsContent value="events">{renderTabContent('events')}</TabsContent>
+              </div>
+            </div>
+          </Tabs>
+        ) : (
+          /* Desktop View: Horizontal Tabs */
+          <Tabs
+            defaultValue={currentTab}
+            onValueChange={handleTabChange}
+            className="mb-8 hidden md:block"
+          >
+            <ScrollArea>
+              <TabsList className="text-foreground mb-6 h-auto gap-2 rounded-none border-b bg-transparent px-0 py-1">
+                <TabsTrigger
+                  value="profile"
+                  className="hover:bg-accent hover:text-foreground data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
+                >
+                  <User
+                    className="-ms-0.5 me-1.5 opacity-60"
+                    size={16}
+                    aria-hidden="true"
+                  />
+                  Profile
+                </TabsTrigger>
+                <TabsTrigger
+                  value="security"
+                  className="hover:bg-accent hover:text-foreground data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
+                >
+                  <Key
+                    className="-ms-0.5 me-1.5 opacity-60"
+                    size={16}
+                    aria-hidden="true"
+                  />
+                  Security
+                </TabsTrigger>
+                <TabsTrigger
+                  value="connections"
+                  className="hover:bg-accent hover:text-foreground data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
+                >
+                  <Github
+                    className="-ms-0.5 me-1.5 opacity-60"
+                    size={16}
+                    aria-hidden="true"
+                  />
+                  Connections
+                </TabsTrigger>
+                <TabsTrigger
+                  value="badges"
+                  className="hover:bg-accent hover:text-foreground data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
+                >
+                  <BadgeCheck
+                    className="-ms-0.5 me-1.5 opacity-60"
+                    size={16}
+                    aria-hidden="true"
+                  />
+                  Badges
+                </TabsTrigger>
+                <TabsTrigger
+                  value="events"
+                  className="hover:bg-accent hover:text-foreground data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
+                >
+                  <Ticket
+                    className="-ms-0.5 me-1.5 opacity-60"
+                    size={16}
+                    aria-hidden="true"
+                  />
+                  Events
+                  {registrations.length > 0 && (
+                    <Badge
+                      className="bg-primary/15 ms-1.5 min-w-5"
+                      variant="secondary"
+                    >
+                      {registrations.length}
+                    </Badge>
+                  )}
+                </TabsTrigger>
+              </TabsList>
+              <ScrollBar orientation="horizontal" />
+            </ScrollArea>
 
-                  {hasProvider('github') && (
-                    <div className="p-4 border rounded-lg bg-card flex flex-col items-center w-32">
-                      <div className="bg-gray-800/10 p-3 rounded-full mb-3">
-                        <Github className="h-6 w-6 text-gray-800" />
-                      </div>
-                      <p className="font-medium text-center">
-                        GitHub Connected
-                      </p>
-                      <p className="text-xs text-muted-foreground text-center mt-1">
-                        Linked GitHub
-                      </p>
-                    </div>
-                  )}
-
-                  {hasProvider('google') && (
-                    <div className="p-4 border rounded-lg bg-card flex flex-col items-center w-32">
-                      <div className="bg-red-500/10 p-3 rounded-full mb-3">
-                        <GoogleIcon className="h-6 w-6 text-red-500" />
-                      </div>
-                      <p className="font-medium text-center">
-                        Google Connected
-                      </p>
-                      <p className="text-xs text-muted-foreground text-center mt-1">
-                        Linked Google
-                      </p>
-                    </div>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* Events Tab */}
-          <TabsContent value="events">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Ticket className="h-5 w-5" />
-                  Event Registrations
-                </CardTitle>
-                <CardDescription>Your registered events</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {registrations.length === 0 ? (
-                    <div className="rounded-lg border border-border bg-background p-4 shadow-lg shadow-black/5">
-                      <div className="flex items-center justify-between gap-2">
-                        <div
-                          className="flex size-9 shrink-0 items-center justify-center rounded-full border border-border"
-                          aria-hidden="true"
-                        >
-                          <Radio
-                            className="opacity-60"
-                            size={16}
-                            strokeWidth={2}
-                          />
-                        </div>
-                        <div className="flex grow items-center gap-12">
-                          <div className="space-y-1">
-                            <p className="text-sm font-medium">
-                              No Events Registered yet
-                            </p>
-                            <p className="text-xs text-muted-foreground">
-                              Lets change that!
-                            </p>
-                          </div>
-                          <Button
-                            size="sm"
-                            onClick={() => Router.push('/dashboard/upcoming')}
-                          >
-                            Lets Participate
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-                  ) : (
-                    registrations?.map(reg => (
-                      <div
-                        key={reg.id}
-                        className="border rounded-lg p-4 hover:bg-accent transition-colors relative"
-                      >
-                        <div className="w-full flex flex-row justify-between items-center space-x-4">
-                          <div>
-                            <h3 className="font-medium text-lg">
-                              {reg.event_title}
-                            </h3>
-                            <div className="text-sm text-gray-500 space-y-1 mt-1">
-                              <p>Ticket ID: {reg.ticket_id}</p>
-                              <p>
-                                Registered:{' '}
-                                {reg.created_at
-                                  ? formatInTimeZone(
-                                      new Date(reg.created_at),
-                                      'Asia/Kolkata',
-                                      'dd MMMM yyyy, hh:mm a zzz'
-                                    )
-                                  : 'N/A'}
-                              </p>
-                            </div>
-                          </div>
-                          <HoverCard>
-                            <HoverCardTrigger>
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() =>
-                                  Router.push(
-                                    `/dashboard/upcoming/register/success?ticketid=${reg.ticket_id}`
-                                  )
-                                }
-                              >
-                                <Ticket className="mr-2 h-4 w-4" />
-                                View Ticket
-                              </Button>
-                            </HoverCardTrigger>
-                            <HoverCardContent>
-                              Get Your Ticket here, Incase you have lost it.
-                            </HoverCardContent>
-                          </HoverCard>
-                        </div>
-                      </div>
-                    ))
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
+            <TabsContent value="profile">{renderTabContent('profile')}</TabsContent>
+            <TabsContent value="security">{renderTabContent('security')}</TabsContent>
+            <TabsContent value="connections">{renderTabContent('connections')}</TabsContent>
+            <TabsContent value="badges">{renderTabContent('badges')}</TabsContent>
+            <TabsContent value="events">{renderTabContent('events')}</TabsContent>
+          </Tabs>
+        )}
       </div>
     </div>
   );
