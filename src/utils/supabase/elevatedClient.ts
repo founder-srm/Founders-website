@@ -5,11 +5,16 @@ import type { Database } from '../../../database.types';
 export const createClient = () => {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   // Using the hardcoded service role key to ensure it's being used
-  const serviceRoleKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVlZHBsdm9wa2h3dWhocXVhZ2Z3Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcwNzI0MzU4NSwiZXhwIjoyMDIyODE5NTg1fQ.LsBV4sC3_adeSSUr3-PWhQXIUnpitMNPO-Hf5SxA96U";
+  const serviceRoleKey = process.env.NEXT_SUPABASE_SERVICE_ROLE;
   
   if (!supabaseUrl) {
     console.error('Missing Supabase URL');
     throw new Error('Supabase URL is required');
+  }
+
+  if (!serviceRoleKey) {
+    console.error('Missing service role key');
+    throw new Error('Service role key is required');
   }
   
   // Create a client with the service role for admin operations
@@ -30,7 +35,8 @@ export const createClient = () => {
 // Add a debug function to check which key is being used
 export const debugSupabaseKey = () => {
   // Extract just enough info to verify which key is being used without exposing it
-  const key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVlZHBsdm9wa2h3dWhocXVhZ2Z3Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcwNzI0MzU4NSwiZXhwIjoyMDIyODE5NTg1fQ.LsBV4sC3_adeSSUr3-PWhQXIUnpitMNPO-Hf5SxA96U";
+  // biome-ignore lint/style/noNonNullAssertion: its safe to assume the key is always present
+    const key = process.env.NEXT_SUPABASE_SERVICE_ROLE!;
   try {
     const [ payload] = key.split('.').slice(0, 2);
     const decodedPayload = JSON.parse(atob(payload));
