@@ -49,7 +49,7 @@ export function NavWorkspaces() {
 
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Workspaces</SidebarGroupLabel>
+      <SidebarGroupLabel>Recent Events</SidebarGroupLabel>
       <SidebarGroupContent>
         <SidebarMenu>
           {isLoading ? (

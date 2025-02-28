@@ -24,7 +24,7 @@
     "@radix-ui/react-avatar": "^1.1.2",
     "@radix-ui/react-checkbox": "^1.1.3",
     "@radix-ui/react-collapsible": "^1.1.2",
-    "@radix-ui/react-dialog": "^1.1.4",
+    "@radix-ui/react-dialog": "^1.1.6",
     "@radix-ui/react-dropdown-menu": "^2.1.4",
     "@radix-ui/react-hover-card": "^1.1.4",
     "@radix-ui/react-label": "^2.1.1",
@@ -63,6 +63,7 @@
     "canvas-confetti": "^1.9.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "cmdk": "1.0.0",
     "date-fns": "^4.1.0",
     "date-fns-tz": "^3.2.0",
     "esbuild": "^0.24.2",
@@ -89,13 +90,14 @@
     "sanity": "^3.68.3",
     "sanity-plugin-media": "^2.3.2",
     "styled-components": "^6.1.13",
-    "supabase": "^2.12.1",
+    "supabase": "^2.15.8",
     "supabase-cli": "^0.0.21",
     "supazod": "^1.1.2",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
     "zod": "^3.24.1",
-    "zustand": "^5.0.2"
+    "zustand": "^5.0.2",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
