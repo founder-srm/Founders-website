@@ -1,12 +1,11 @@
 'use client';
 
 import type React from 'react';
+import { useState } from 'react';
 import {
   Archive,
-  AudioWaveform,
   Blocks,
   Calendar,
-  Command,
   FilePlus2,
   Home,
   MessageCircleQuestion,
@@ -26,30 +25,18 @@ import { NavMain } from './nav-main';
 import { NavFavorites } from './nav-favorites';
 import { NavWorkspaces } from './nav-workspaces';
 import { NavSecondary } from './nav-secondary';
+import { CommandBox } from '@/components/command/command-box';
 
 const data = {
-  teams: [
-    {
-      name: 'Acme Inc',
-      logo: Command,
-      plan: 'Enterprise',
-    },
-    {
-      name: 'Acme Corp.',
-      logo: AudioWaveform,
-      plan: 'Startup',
-    },
-    {
-      name: 'Evil Corp.',
-      logo: Command,
-      plan: 'Free',
-    },
-  ],
   navMain: [
     {
       title: 'Search',
       url: '#',
       icon: Search,
+      onClick: (setCommandOpen: (open: boolean) => void) => {
+        setCommandOpen(true);
+        return false; // Prevent default navigation
+      }
     },
     {
       title: 'Home',
@@ -99,18 +86,26 @@ const data = {
 export function SidebarLeft({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
+  const [commandOpen, setCommandOpen] = useState(false);
+
   return (
-    <Sidebar className="border-r-0" {...props}>
-      <SidebarHeader>
-        <TeamSwitcher />
-        <NavMain items={data.navMain} />
-      </SidebarHeader>
-      <SidebarContent className=" overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-muted-foreground/20 [&::-webkit-scrollbar-track]:bg-transparent">
-        <NavFavorites />
-        <NavWorkspaces />
-        <NavSecondary items={data.navSecondary} className="mt-auto" />
-      </SidebarContent>
-      <SidebarRail />
-    </Sidebar>
+    <>
+      <Sidebar className="border-r-0" {...props}>
+        <SidebarHeader>
+          <TeamSwitcher />
+          <NavMain 
+            items={data.navMain} 
+            onSearchClick={() => setCommandOpen(true)}
+          />
+        </SidebarHeader>
+        <SidebarContent className=" overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-muted-foreground/20 [&::-webkit-scrollbar-track]:bg-transparent">
+          <NavFavorites />
+          <NavWorkspaces />
+          <NavSecondary items={data.navSecondary} className="mt-auto" />
+        </SidebarContent>
+        <SidebarRail />
+      </Sidebar>
+      <CommandBox open={commandOpen} setOpen={setCommandOpen} />
+    </>
   );
 }
