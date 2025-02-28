@@ -5,7 +5,7 @@ import type { Database } from '../../../database.types';
 export const createClient = () => {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   // Using the hardcoded service role key to ensure it's being used
-  const serviceRoleKey = process.env.NEXT_SUPABASE_SERVICE_ROLE;
+  const serviceRoleKey = process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE;
   
   if (!supabaseUrl) {
     console.error('Missing Supabase URL');
@@ -36,7 +36,7 @@ export const createClient = () => {
 export const debugSupabaseKey = () => {
   // Extract just enough info to verify which key is being used without exposing it
   // biome-ignore lint/style/noNonNullAssertion: its safe to assume the key is always present
-    const key = process.env.NEXT_SUPABASE_SERVICE_ROLE!;
+    const key = process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE!;
   try {
     const [ payload] = key.split('.').slice(0, 2);
     const decodedPayload = JSON.parse(atob(payload));
