@@ -12,7 +12,9 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
+  type RowSelectionState,
 } from '@tanstack/react-table';
+
 import {
   Table,
   TableBody,
@@ -35,16 +37,18 @@ import type { Registration } from '@/types/registrations';
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  onRowSelectionChange?: (rowSelection: RowSelectionState) => void;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  onRowSelectionChange,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = useState({});
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
   const [globalFilter, setGlobalFilter] = useState('');
 
   const table = useReactTable({
@@ -57,7 +61,22 @@ export function DataTable<TData, TValue>({
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
+    onRowSelectionChange: (updater) => {
+      // Handle the updater function or direct value
+      let newRowSelection: RowSelectionState;
+      
+      if (typeof updater === 'function') {
+        newRowSelection = updater(rowSelection);
+      } else {
+        newRowSelection = updater;
+      }
+      
+      setRowSelection(newRowSelection);
+      
+      if (onRowSelectionChange) {
+        onRowSelectionChange(newRowSelection);
+      }
+    },
     globalFilterFn: (row, columnId, filterValue) => {
       const registration = row.original as Registration;
       const searchValue = filterValue.toLowerCase();
@@ -74,6 +93,7 @@ export function DataTable<TData, TValue>({
       rowSelection,
       globalFilter,
     },
+    enableRowSelection: true,
   });
 
   return (
