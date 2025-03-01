@@ -1,7 +1,7 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from '@/hooks/use-toast';
 import type { Database } from '../../../database.types';
 import {
   Dialog,
@@ -22,7 +22,10 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useState, useMemo } from 'react';
-import { createClient, debugSupabaseKey } from '@/utils/supabase/elevatedClient';
+import {
+  createClient,
+  debugSupabaseKey,
+} from '@/utils/supabase/elevatedClient';
 import { DataTable } from './user-table/data-table';
 import { type UserData, columns } from './user-table/columns';
 import type { User } from '@supabase/supabase-js';
@@ -33,45 +36,54 @@ interface UserInviteDialogProps {
   currentUserRole?: string;
 }
 
-export function UserInviteDialog({ 
-  open, 
-  onOpenChange, 
-  currentUserRole 
+export function UserInviteDialog({
+  open,
+  onOpenChange,
+  currentUserRole,
 }: UserInviteDialogProps) {
   // Create client once when component mounts
   const supabase = useMemo(() => {
     const client = createClient();
-    console.log("UserInviteDialog: Supabase client created with key info:", debugSupabaseKey());
+    console.log(
+      'UserInviteDialog: Supabase client created with key info:',
+      debugSupabaseKey()
+    );
     return client;
   }, []);
-  
+
   // Fix: Corrected the type - removed quotes from the enum type
-  const [selectedRole, setSelectedRole] = useState<Database["public"]["Enums"]["user-role"] | undefined>('user');
+  const [selectedRole, setSelectedRole] = useState<
+    Database['public']['Enums']['user-role'] | undefined
+  >('user');
   const { toast } = useToast();
   // Track selected users
-  const [selectedUsers, setSelectedUsers] = useState<Record<string, boolean>>({});
+  const [selectedUsers, setSelectedUsers] = useState<Record<string, boolean>>(
+    {}
+  );
 
   // Get list of users from Supabase Auth
   const { data: users = [], isLoading } = useQuery({
     queryKey: ['users', open], // Add open to dependencies
     queryFn: async () => {
       if (!open) return [];
-      
-      console.log("UserInviteDialog: Attempting to list users with client");
+
+      console.log('UserInviteDialog: Attempting to list users with client');
       try {
         const { data, error } = await supabase.auth.admin.listUsers();
-        
+
         if (error) {
           console.error('Error fetching users:', error);
           toast({
-            title: "Error",
+            title: 'Error',
             description: `Failed to fetch users: ${error.message}`,
-            variant: "destructive"
+            variant: 'destructive',
           });
           return [];
         }
-        
-        console.log(`UserInviteDialog: Successfully fetched ${data.users.length} users`);
+
+        console.log(
+          `UserInviteDialog: Successfully fetched ${data.users.length} users`
+        );
         return data.users.map((user: User) => ({
           id: user.id,
           email: user.email || 'No email',
@@ -79,61 +91,70 @@ export function UserInviteDialog({
       } catch (error: unknown) {
         console.error('Exception fetching users:', error);
         toast({
-          title: "Error",
+          title: 'Error',
           description: `Exception: ${(error as Error)?.message || 'Unknown error'}`,
-          variant: "destructive"
+          variant: 'destructive',
         });
         return [];
       }
     },
-    enabled: open, 
+    enabled: open,
     staleTime: 30000, // Cache for 30 seconds
   });
 
   const handleInviteUsers = async () => {
     try {
-      console.log("UserInviteDialog: Handling invite users");
+      console.log('UserInviteDialog: Handling invite users');
       // Get selected users from the selectedUsers state
-      const selectedIds = Object.keys(selectedUsers).filter(id => selectedUsers[id]);
+      const selectedIds = Object.keys(selectedUsers).filter(
+        id => selectedUsers[id]
+      );
       const userEmails = users
         .filter(user => selectedIds.includes(user.id))
         .map(user => user.email);
-      
+
       if (userEmails.length === 0) {
         toast({
-          title: "No users selected",
-          description: "Please select at least one user to invite",
-          variant: "destructive"
+          title: 'No users selected',
+          description: 'Please select at least one user to invite',
+          variant: 'destructive',
         });
         return;
       }
 
       // If current user doesn't have role or trying to assign higher role
       const roleHierarchy = ['user', 'moderator', 'admin', 'owner'];
-      const currentUserRoleIndex = currentUserRole ? roleHierarchy.indexOf(currentUserRole) : -1;
+      const currentUserRoleIndex = currentUserRole
+        ? roleHierarchy.indexOf(currentUserRole)
+        : -1;
       const selectedRoleIndex = roleHierarchy.indexOf(selectedRole ?? 'user');
-      
-      if (currentUserRoleIndex === -1 || selectedRoleIndex > currentUserRoleIndex) {
+
+      if (
+        currentUserRoleIndex === -1 ||
+        selectedRoleIndex > currentUserRoleIndex
+      ) {
         toast({
-          title: "Permission Denied",
+          title: 'Permission Denied',
           description: `You cannot assign a role higher than your own (${currentUserRole})`,
-          variant: "destructive"
+          variant: 'destructive',
         });
         return;
       }
 
-      console.log(`UserInviteDialog: Inviting ${userEmails.length} users with role ${selectedRole}`);
-      
+      console.log(
+        `UserInviteDialog: Inviting ${userEmails.length} users with role ${selectedRole}`
+      );
+
       // Add users to adminuseraccount table with the selected role
-      const promises = userEmails.map(async (email) => {
-        console.log(`UserInviteDialog: Adding user ${email} with role ${selectedRole}`);
-        const { error } = await supabase
-          .from('adminuseraccount')
-          .upsert({
-            email,
-            user_role: selectedRole,
-            user_id: users.find(u => u.email === email)?.id || '',
-          });
+      const promises = userEmails.map(async email => {
+        console.log(
+          `UserInviteDialog: Adding user ${email} with role ${selectedRole}`
+        );
+        const { error } = await supabase.from('adminuseraccount').upsert({
+          email,
+          user_role: selectedRole,
+          user_id: users.find(u => u.email === email)?.id || '',
+        });
 
         if (error) {
           console.error(`Error adding user ${email}:`, error);
@@ -142,20 +163,20 @@ export function UserInviteDialog({
       });
 
       await Promise.all(promises);
-      
+
       toast({
-        title: "Success",
+        title: 'Success',
         description: `${userEmails.length} user(s) have been granted ${selectedRole} privileges`,
-        variant: "default"
+        variant: 'default',
       });
-      
+
       onOpenChange(false);
     } catch (error: unknown) {
       console.error('Error inviting users:', error);
       toast({
-        title: "Error",
+        title: 'Error',
         description: `Failed to invite users: ${(error as Error)?.message || 'Unknown error'}`,
-        variant: "destructive"
+        variant: 'destructive',
       });
     }
   };
@@ -166,15 +187,20 @@ export function UserInviteDialog({
         <DialogHeader>
           <DialogTitle>Invite Moderators</DialogTitle>
           <DialogDescription>
-            Select users to grant moderation privileges. You can only assign roles up to your current role level.
+            Select users to grant moderation privileges. You can only assign
+            roles up to your current role level.
           </DialogDescription>
         </DialogHeader>
 
         <div className="flex items-center mb-4 gap-2 justify-end">
-          <div className="text-sm text-muted-foreground">Roles available for {currentUserRole}</div>
-          <Select 
-            value={selectedRole} 
-            onValueChange={(value: string) => setSelectedRole(value as Database["public"]["Enums"]["user-role"])}
+          <div className="text-sm text-muted-foreground">
+            Roles available for {currentUserRole}
+          </div>
+          <Select
+            value={selectedRole}
+            onValueChange={(value: string) =>
+              setSelectedRole(value as Database['public']['Enums']['user-role'])
+            }
           >
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Select a role" />
@@ -183,10 +209,13 @@ export function UserInviteDialog({
               <SelectGroup>
                 <SelectLabel>Roles</SelectLabel>
                 <SelectItem value="user">User</SelectItem>
-                {(currentUserRole === 'moderator' || currentUserRole === 'admin' || currentUserRole === 'owner') && (
+                {(currentUserRole === 'moderator' ||
+                  currentUserRole === 'admin' ||
+                  currentUserRole === 'owner') && (
                   <SelectItem value="moderator">Moderator</SelectItem>
                 )}
-                {(currentUserRole === 'admin' || currentUserRole === 'owner') && (
+                {(currentUserRole === 'admin' ||
+                  currentUserRole === 'owner') && (
                   <SelectItem value="admin">Admin</SelectItem>
                 )}
                 {currentUserRole === 'owner' && (
@@ -214,9 +243,7 @@ export function UserInviteDialog({
           <Button variant="secondary" onClick={() => onOpenChange(false)}>
             Cancel
           </Button>
-          <Button onClick={handleInviteUsers}>
-            Invite Selected Users
-          </Button>
+          <Button onClick={handleInviteUsers}>Invite Selected Users</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

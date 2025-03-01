@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   Table,
   TableBody,
@@ -8,7 +8,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from '@/components/ui/table';
 import {
   type ColumnDef,
   flexRender,
@@ -19,11 +19,11 @@ import {
   type RowSelectionState,
   getFilteredRowModel,
   type ColumnFiltersState,
-} from "@tanstack/react-table";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
+} from '@tanstack/react-table';
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Input } from '@/components/ui/input';
+import { Search } from 'lucide-react';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -41,14 +41,17 @@ export function DataTable<TData, TValue>({
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
   // Create a wrapper function for onRowSelectionChange that conforms to OnChangeFn<RowSelectionState>
-  const handleRowSelectionChange: OnChangeFn<RowSelectionState> = (updaterOrValue) => {
+  const handleRowSelectionChange: OnChangeFn<
+    RowSelectionState
+  > = updaterOrValue => {
     if (!onRowSelectionChange) return;
-    
+
     // Handle both function updaters and direct values
-    const newState = typeof updaterOrValue === 'function' 
-      ? updaterOrValue(rowSelection as RowSelectionState)
-      : updaterOrValue;
-    
+    const newState =
+      typeof updaterOrValue === 'function'
+        ? updaterOrValue(rowSelection as RowSelectionState)
+        : updaterOrValue;
+
     onRowSelectionChange(newState as Record<string, boolean>);
   };
 
@@ -76,21 +79,21 @@ export function DataTable<TData, TValue>({
           <Search className="absolute left-2 top-2 h-4 w-4 text-muted-foreground" />
           <Input
             placeholder="Search by email..."
-            value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
-            onChange={(event) =>
-              table.getColumn("email")?.setFilterValue(event.target.value)
+            value={(table.getColumn('email')?.getFilterValue() as string) ?? ''}
+            onChange={event =>
+              table.getColumn('email')?.setFilterValue(event.target.value)
             }
             className="pl-8"
           />
         </div>
       </div>
-      
+
       <div className="border rounded-md">
         <Table>
           <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
+            {table.getHeaderGroups().map(headerGroup => (
               <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
+                {headerGroup.headers.map(header => (
                   <TableHead key={header.id}>
                     {header.isPlaceholder
                       ? null
@@ -105,32 +108,35 @@ export function DataTable<TData, TValue>({
           </TableHeader>
           <TableBody>
             {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
+              table.getRowModel().rows.map(row => (
                 <TableRow
                   key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
+                  data-state={row.getIsSelected() && 'selected'}
                   onClick={() => {
                     row.toggleSelected(!row.getIsSelected());
-                    console.log("Row clicked", row.id, !row.getIsSelected());
+                    console.log('Row clicked', row.id, !row.getIsSelected());
                   }}
                   className="cursor-pointer"
                 >
-                  {row.getVisibleCells().map((cell) => (
+                  {row.getVisibleCells().map(cell => (
                     <TableCell key={cell.id}>
-                      {cell.column.id === "select" ? (
+                      {cell.column.id === 'select' ? (
                         <Checkbox
                           checked={row.getIsSelected()}
-                          onCheckedChange={(value) => {
+                          onCheckedChange={value => {
                             row.toggleSelected(!!value);
                           }}
-                          onClick={(e) => {
+                          onClick={e => {
                             // Prevent row click event from firing
                             e.stopPropagation();
                           }}
                           aria-label="Select row"
                         />
                       ) : (
-                        flexRender(cell.column.columnDef.cell, cell.getContext())
+                        flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )
                       )}
                     </TableCell>
                   ))}
@@ -151,7 +157,7 @@ export function DataTable<TData, TValue>({
       </div>
       <div className="flex justify-between items-center">
         <div className="text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} of{" "}
+          {table.getFilteredSelectedRowModel().rows.length} of{' '}
           {table.getFilteredRowModel().rows.length} row(s) selected.
         </div>
         <div className="flex space-x-2">

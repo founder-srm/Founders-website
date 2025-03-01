@@ -24,7 +24,7 @@ export function NavMain({ items, className, onSearchClick }: NavMainProps) {
 
   return (
     <div className={cn('flex flex-col gap-1', className)}>
-      {items.map((item) => {
+      {items.map(item => {
         const Icon = item.icon;
         const isActive = pathname === item.url;
 
@@ -32,7 +32,7 @@ export function NavMain({ items, className, onSearchClick }: NavMainProps) {
         if (item.title === 'Search' && onSearchClick) {
           return (
             <button
-              type='button'
+              type="button"
               key={item.title}
               onClick={onSearchClick}
               className={cn(
@@ -44,10 +44,10 @@ export function NavMain({ items, className, onSearchClick }: NavMainProps) {
               <Icon className="mr-2 h-4 w-4" />
               {item.title}
               <div className="ml-auto">
-                <KeyboardShortcut 
-                  keys={['Ctrl', 'K']} 
+                <KeyboardShortcut
+                  keys={['Ctrl', 'K']}
                   size="sm"
-                  className="opacity-60 group-hover:opacity-100" 
+                  className="opacity-60 group-hover:opacity-100"
                 />
               </div>
             </button>

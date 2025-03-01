@@ -166,7 +166,7 @@ const TeamSection = ({ teamMembers }: TeamSectionProps) => {
           <TabsList className="mb-8 h-auto flex-wrap justify-start">
             {domains.map(domain => {
               const domainMembers = regularTeam.filter(
-                member => 
+                member =>
                   // biome-ignore lint/style/noNonNullAssertion: gae as shit error
                   getNormalizedDomain(member.domain!) === domain
               );
@@ -188,7 +188,7 @@ const TeamSection = ({ teamMembers }: TeamSectionProps) => {
 
           {domains.map(domain => {
             const domainMembers = regularTeam.filter(
-              member => 
+              member =>
                 // biome-ignore lint/style/noNonNullAssertion: same as b4
                 getNormalizedDomain(member.domain!) === domain
             );

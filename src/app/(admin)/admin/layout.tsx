@@ -18,7 +18,12 @@ import { ModeToggle } from '@/components/theme/theme-toggle';
 import { ReactQueryClientProvider } from '@/components/providers/QueryClientProvider';
 import { getRouteDisplayName } from '@/config/admin-routes';
 import { useCurrentRoute } from '@/hooks/useCurrentRoute';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 
 export default function AdminLayout({
   children,

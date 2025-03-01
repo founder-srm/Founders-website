@@ -36,7 +36,7 @@ const data = {
       onClick: (setCommandOpen: (open: boolean) => void) => {
         setCommandOpen(true);
         return false; // Prevent default navigation
-      }
+      },
     },
     {
       title: 'Home',
@@ -93,8 +93,8 @@ export function SidebarLeft({
       <Sidebar className="border-r-0" {...props}>
         <SidebarHeader>
           <TeamSwitcher />
-          <NavMain 
-            items={data.navMain} 
+          <NavMain
+            items={data.navMain}
             onSearchClick={() => setCommandOpen(true)}
           />
         </SidebarHeader>

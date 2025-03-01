@@ -61,18 +61,18 @@ export function DataTable<TData, TValue>({
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: (updater) => {
+    onRowSelectionChange: updater => {
       // Handle the updater function or direct value
       let newRowSelection: RowSelectionState;
-      
+
       if (typeof updater === 'function') {
         newRowSelection = updater(rowSelection);
       } else {
         newRowSelection = updater;
       }
-      
+
       setRowSelection(newRowSelection);
-      
+
       if (onRowSelectionChange) {
         onRowSelectionChange(newRowSelection);
       }

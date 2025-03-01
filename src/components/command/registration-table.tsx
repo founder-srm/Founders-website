@@ -7,12 +7,12 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
-import { Check, X } from "lucide-react";
-import { formatDistanceToNow } from "date-fns";
-import { useRouter } from "next/navigation";
-import type { Json } from "../../../database.types";
+} from '@/components/ui/table';
+import { Badge } from '@/components/ui/badge';
+import { Check, X } from 'lucide-react';
+import { formatDistanceToNow } from 'date-fns';
+import { useRouter } from 'next/navigation';
+import type { Json } from '../../../database.types';
 
 type RegistrationData = {
   id: string;
@@ -22,9 +22,9 @@ type RegistrationData = {
   event_title: string;
   application_id: string;
   details: Json;
-  attendance: "Present" | "Absent";
+  attendance: 'Present' | 'Absent';
   registration_email: string;
-  is_approved: "SUBMITTED" | "APPROVED" | "REJECTED" | "INVALID";
+  is_approved: 'SUBMITTED' | 'APPROVED' | 'REJECTED' | 'INVALID';
 };
 
 interface RegistrationTableProps {
@@ -49,8 +49,8 @@ export function RegistrationTable({ data }: RegistrationTableProps) {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {data.map((registration) => (
-          <TableRow 
+        {data.map(registration => (
+          <TableRow
             key={registration.id}
             onClick={() => handleRowClick(registration.id)}
             className="cursor-pointer hover:bg-muted"
@@ -60,32 +60,43 @@ export function RegistrationTable({ data }: RegistrationTableProps) {
             </TableCell>
             <TableCell>{registration.registration_email}</TableCell>
             <TableCell>
-              {registration.is_approved === "APPROVED" ? (
+              {registration.is_approved === 'APPROVED' ? (
                 <Badge className="bg-green-500 hover:bg-green-600 inline-flex items-center gap-1">
                   <Check size={12} />
                   <span>Approved</span>
                 </Badge>
-              ) : registration.is_approved === "REJECTED" ? (
-                <Badge variant="destructive" className="inline-flex items-center gap-1">
+              ) : registration.is_approved === 'REJECTED' ? (
+                <Badge
+                  variant="destructive"
+                  className="inline-flex items-center gap-1"
+                >
                   <X size={12} />
                   <span>Rejected</span>
                 </Badge>
-              ) : registration.is_approved === "INVALID" ? (
-                <Badge variant="outline" className="text-red-500 border-red-500 inline-flex items-center gap-1">
+              ) : registration.is_approved === 'INVALID' ? (
+                <Badge
+                  variant="outline"
+                  className="text-red-500 border-red-500 inline-flex items-center gap-1"
+                >
                   <X size={12} />
                   <span>Invalid</span>
                 </Badge>
               ) : (
-                <Badge variant="outline" className="text-amber-500 border-amber-500 inline-flex items-center gap-1">
+                <Badge
+                  variant="outline"
+                  className="text-amber-500 border-amber-500 inline-flex items-center gap-1"
+                >
                   <X size={12} />
                   <span>Pending</span>
                 </Badge>
               )}
             </TableCell>
             <TableCell className="text-muted-foreground">
-              {registration.created_at 
-                ? formatDistanceToNow(new Date(registration.created_at), { addSuffix: true }) 
-                : "N/A"}
+              {registration.created_at
+                ? formatDistanceToNow(new Date(registration.created_at), {
+                    addSuffix: true,
+                  })
+                : 'N/A'}
             </TableCell>
           </TableRow>
         ))}

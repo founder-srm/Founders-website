@@ -12,7 +12,12 @@ import type { Registration } from '@/types/registrations';
 import { exportToExcel } from '@/utils/export';
 import { createClient } from '@/utils/supabase/elevatedClient';
 import { useQuery } from '@supabase-cache-helpers/postgrest-react-query';
-import { ClipboardList, AlertCircle, FileSpreadsheet, Download } from 'lucide-react';
+import {
+  ClipboardList,
+  AlertCircle,
+  FileSpreadsheet,
+  Download,
+} from 'lucide-react';
 import { useState, useMemo, useEffect } from 'react';
 import type { RowSelectionState } from '@tanstack/react-table';
 
@@ -29,17 +34,20 @@ export default function RegistrationsPage() {
   const supabase = createClient();
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
-  
+
   // Debug state to check event IDs
-  const [, setDebug] = useState<{eventIds: string[], registrationEventIds: string[]}>({
+  const [, setDebug] = useState<{
+    eventIds: string[];
+    registrationEventIds: string[];
+  }>({
     eventIds: [],
-    registrationEventIds: []
+    registrationEventIds: [],
   });
 
   const {
     data: events,
     isLoading: eventsLoading,
-    isError: eventsError
+    isError: eventsError,
   } = useQuery<Event[]>(getAllEvents(supabase));
 
   const {
@@ -52,13 +60,19 @@ export default function RegistrationsPage() {
   useEffect(() => {
     if (events && registrations) {
       const eventIds = events.map(event => event.id);
-      const registrationEventIds = Array.from(new Set(registrations.map(reg => reg.event_id).filter((id): id is string => id !== undefined)));
-      
+      const registrationEventIds = Array.from(
+        new Set(
+          registrations
+            .map(reg => reg.event_id)
+            .filter((id): id is string => id !== undefined)
+        )
+      );
+
       setDebug({
         eventIds,
-        registrationEventIds
+        registrationEventIds,
       });
-      
+
       console.log('Events:', events);
       console.log('Event IDs:', eventIds);
       console.log('Registration Event IDs:', registrationEventIds);
@@ -70,7 +84,7 @@ export default function RegistrationsPage() {
     if (!events) return [];
     return events.map(event => ({
       id: event.id,
-      name: event.title
+      name: event.title,
     }));
   }, [events]);
 
@@ -78,13 +92,15 @@ export default function RegistrationsPage() {
   const filteredRegistrations = useMemo(() => {
     if (!registrations) return [];
     if (!selectedEventId) return registrations;
-    
+
     const filtered = registrations.filter(reg => {
       // Ensure we're comparing the same data types and handle possible null values
       return reg.event_id && reg.event_id === selectedEventId;
     });
-    
-    console.log(`Filtered for event ${selectedEventId}: ${filtered.length} registrations`);
+
+    console.log(
+      `Filtered for event ${selectedEventId}: ${filtered.length} registrations`
+    );
     return filtered;
   }, [registrations, selectedEventId]);
 
@@ -92,15 +108,19 @@ export default function RegistrationsPage() {
   const selectedRegistrations = useMemo(() => {
     if (!filteredRegistrations) return [];
     const selected: Registration[] = [];
-    
+
     // biome-ignore lint/complexity/noForEach: it works fine
     Object.keys(rowSelection).forEach(key => {
       const index = Number.parseInt(key, 10);
-      if (!Number.isNaN(index) && rowSelection[key] && filteredRegistrations[index]) {
+      if (
+        !Number.isNaN(index) &&
+        rowSelection[key] &&
+        filteredRegistrations[index]
+      ) {
         selected.push(filteredRegistrations[index]);
       }
     });
-    
+
     return selected;
   }, [filteredRegistrations, rowSelection]);
 
@@ -117,8 +137,8 @@ export default function RegistrationsPage() {
   // Handle exports
   const handleExportAll = () => {
     if (filteredRegistrations.length > 0) {
-      const filename = selectedEventId 
-        ? `${events?.find(e => e.id === selectedEventId)?.title || 'event'}_registrations` 
+      const filename = selectedEventId
+        ? `${events?.find(e => e.id === selectedEventId)?.title || 'event'}_registrations`
         : 'all_registrations';
       exportToExcel(filteredRegistrations, filename);
     }
@@ -126,8 +146,8 @@ export default function RegistrationsPage() {
 
   const handleExportSelected = () => {
     if (selectedRegistrations.length > 0) {
-      const filename = selectedEventId 
-        ? `${events?.find(e => e.id === selectedEventId)?.title || 'event'}_selected` 
+      const filename = selectedEventId
+        ? `${events?.find(e => e.id === selectedEventId)?.title || 'event'}_selected`
         : 'selected_registrations';
       exportToExcel(selectedRegistrations, filename);
     }
@@ -157,10 +177,12 @@ export default function RegistrationsPage() {
   }
 
   // Calculate registration counts per event for display
-  const eventCounts = events?.map(event => {
-    const count = registrations?.filter(reg => reg.event_id === event.id).length || 0;
-    return { id: event.id, name: event.title, count };
-  }) || [];
+  const eventCounts =
+    events?.map(event => {
+      const count =
+        registrations?.filter(reg => reg.event_id === event.id).length || 0;
+      return { id: event.id, name: event.title, count };
+    }) || [];
 
   return (
     <div className="min-h-screen">
@@ -184,16 +206,16 @@ export default function RegistrationsPage() {
               </p>
             </div>
             <div className="flex items-center space-x-2">
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 className="flex gap-2 items-center"
                 onClick={handleExportAll}
               >
                 <FileSpreadsheet /> Export All
                 {selectedEventId && ` (${filteredRegistrations.length})`}
               </Button>
-              <Button 
-                variant="default" 
+              <Button
+                variant="default"
                 className="flex gap-2 items-center"
                 onClick={handleExportSelected}
                 disabled={selectedRegistrations.length === 0}
@@ -202,17 +224,17 @@ export default function RegistrationsPage() {
               </Button>
             </div>
           </div>
-          
-          <EventFilterToggle 
+
+          <EventFilterToggle
             events={eventOptions}
             selectedEventId={selectedEventId}
             onSelectEvent={setSelectedEventId}
             eventCounts={eventCounts}
           />
-          
-          <DataTable 
-            columns={RegistrationColumns} 
-            data={filteredRegistrations} 
+
+          <DataTable
+            columns={RegistrationColumns}
+            data={filteredRegistrations}
             onRowSelectionChange={handleRowSelectionChange}
           />
         </div>

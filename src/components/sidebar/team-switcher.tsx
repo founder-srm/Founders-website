@@ -18,7 +18,10 @@ import {
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { useUser } from '@/stores/session';
-import { createClient, debugSupabaseKey } from '@/utils/supabase/elevatedClient';
+import {
+  createClient,
+  debugSupabaseKey,
+} from '@/utils/supabase/elevatedClient';
 import { UserInviteDialog } from './user-invite-dialog';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
@@ -27,11 +30,11 @@ export function TeamSwitcher() {
   const user = useUser();
   const { toast } = useToast();
   const [isInviteDialogOpen, setIsInviteDialogOpen] = React.useState(false);
-  
+
   // Create client once when component mounts
   const supabase = React.useMemo(() => {
     const client = createClient();
-    console.log("Supabase client created with key info:", debugSupabaseKey());
+    console.log('Supabase client created with key info:', debugSupabaseKey());
     return client;
   }, []);
 
@@ -40,21 +43,21 @@ export function TeamSwitcher() {
     queryKey: ['moderationLevel', user?.email],
     queryFn: async () => {
       if (!user?.email) return null;
-      
+
       try {
-        console.log("Fetching moderation data for:", user.email);
+        console.log('Fetching moderation data for:', user.email);
         const { data, error } = await supabase
           .from('adminuseraccount')
           .select('*')
           .eq('email', user.email)
           .single();
-        
+
         if (error) {
           console.error('Error fetching moderation level:', error);
           return null;
         }
-        
-        console.log("Moderation data retrieved:", data);
+
+        console.log('Moderation data retrieved:', data);
         return data;
       } catch (error) {
         console.error('Error in moderation level query:', error);
@@ -66,15 +69,16 @@ export function TeamSwitcher() {
 
   const handleEscalationRequest = () => {
     toast({
-      title: "Feature Coming Soon",
-      description: "Role escalation request will be available in a future update.",
-      variant: "default"
+      title: 'Feature Coming Soon',
+      description:
+        'Role escalation request will be available in a future update.',
+      variant: 'default',
     });
   };
 
   // Add debug info to check client initialization
   React.useEffect(() => {
-    console.log("TeamSwitcher mounted, user:", user?.email);
+    console.log('TeamSwitcher mounted, user:', user?.email);
   }, [user?.email]);
 
   return (
@@ -101,25 +105,25 @@ export function TeamSwitcher() {
             <DropdownMenuLabel className="text-xs text-muted-foreground">
               Moderation Settings
             </DropdownMenuLabel>
-            
+
             <DropdownMenuItem className="flex flex-col items-start gap-1 p-2">
               <div className="text-sm font-medium">Current Role</div>
               <Badge variant="outline" className="font-normal">
                 {moderationData?.user_role || 'No Role Assigned'}
               </Badge>
             </DropdownMenuItem>
-            
+
             <DropdownMenuSeparator />
-            
-            <DropdownMenuItem 
+
+            <DropdownMenuItem
               className="gap-2 p-2"
               onClick={handleEscalationRequest}
             >
               <Shield className="size-4" />
               <div className="font-medium">Request Role Escalation</div>
             </DropdownMenuItem>
-            
-            <DropdownMenuItem 
+
+            <DropdownMenuItem
               className="gap-2 p-2"
               onClick={() => setIsInviteDialogOpen(true)}
             >
@@ -129,9 +133,9 @@ export function TeamSwitcher() {
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>
-      
-      <UserInviteDialog 
-        open={isInviteDialogOpen} 
+
+      <UserInviteDialog
+        open={isInviteDialogOpen}
         onOpenChange={setIsInviteDialogOpen}
         currentUserRole={moderationData?.user_role}
       />
