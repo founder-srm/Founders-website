@@ -8,25 +8,27 @@ body {
 
 @layer base {
   :root {
-    --background: 224 71.4% 4.1%;
-    --foreground: 210 20% 98%;
-    --card: 224 71.4% 4.1%;
-    --card-foreground: 210 20% 98%;
-    --popover: 224 71.4% 4.1%;
-    --popover-foreground: 210 20% 98%;
-    --primary: 263.4 70% 50.4%;
-    --primary-foreground: 210 20% 98%;
-    --secondary: 215 27.9% 16.9%;
-    --secondary-foreground: 210 20% 98%;
-    --muted: 215 27.9% 16.9%;
-    --muted-foreground: 217.9 10.6% 64.9%;
-    --accent: 215 27.9% 16.9%;
-    --accent-foreground: 210 20% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 20% 98%;
-    --border: 215 27.9% 16.9%;
-    --input: 215 27.9% 16.9%;
-    --ring: 263.4 70% 50.4%;
+    --background: 0 50% 5%;
+    --foreground: 0 5% 90%;
+    --background: 0 12% 10%;
+    --foreground: 0 5% 90%;
+    --card: 0 12% 10%;
+    --card-foreground: 0 5% 90%;
+    --popover: 0 12% 5%;
+    --popover-foreground: 0 5% 90%;
+    --primary: 0 62.8% 30.6%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 12% 20%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: -38 12% 25%;
+    --muted-foreground: 0 5% 60%;
+    --accent: -38 12% 25%;
+    --accent-foreground: 0 5% 90%;
+    --destructive: 0 50% 32%;
+    --destructive-foreground: 0 5% 90%;
+    --border: 0 20% 32%;
+    --input: 0 20% 32%;
+    --ring: 0 62.8% 30.6%;
     --chart-1: 347 77% 50%;
     --chart-2: 352 83% 91%;
     --chart-3: 350 80% 72%;
@@ -149,11 +151,7 @@ code[class*="language-"] {
 .heading-gradient {
   color: rgba(0, 0, 0, 0);
   -webkit-text-fill-color: transparent;
-  background-image: radial-gradient(
-    circle farthest-side at 45%,
-    #fff,
-    rgba(255, 255, 255, 0.43)
-  );
+  background-image: radial-gradient(circle farthest-side at 45%, #fff, rgba(255, 255, 255, 0.43));
   -webkit-background-clip: text;
   background-clip: text;
 }
