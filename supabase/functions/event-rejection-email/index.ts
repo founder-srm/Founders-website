@@ -47,6 +47,19 @@ Deno.serve(async req => {
         }
       );
     }
+    // Only send email if approval status is REJECTED
+    if (record.is_approved !== 'REJECTED') {
+      return new Response(
+        JSON.stringify({
+          message: 'No email sent - approval status is not REJECTED',
+          status: record.is_approved
+        }),
+        {
+          headers: { 'Content-Type': 'application/json' },
+          status: 200,
+        }
+      );
+    }
     // Send confirmation email to registrant
     const registrantEmailData = {
       from: "The Founder's Club <no-reply@thefoundersclub.tech>",
