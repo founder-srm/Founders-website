@@ -90,14 +90,14 @@
     "sanity": "^3.68.3",
     "sanity-plugin-media": "^2.3.2",
     "styled-components": "^6.1.13",
-    "supabase": "^2.15.8",
+    "supabase": "^2.20.5",
     "supabase-cli": "^0.0.21",
     "supazod": "^1.1.2",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
+    "xlsx": "^0.18.5",
     "zod": "^3.24.1",
-    "zustand": "^5.0.2",
-    "xlsx": "^0.18.5"
+    "zustand": "^5.0.2"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
