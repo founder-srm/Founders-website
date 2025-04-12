@@ -19,7 +19,10 @@ interface AchievementsState {
 }
 
 // Define all possible achievements
-const defaultAchievements: Record<string, Omit<Achievement, 'earned' | 'earnedAt'>> = {
+const defaultAchievements: Record<
+  string,
+  Omit<Achievement, 'earned' | 'earnedAt'>
+> = {
   accountCreated: {
     id: 'accountCreated',
     title: 'Account Created',
@@ -57,7 +60,7 @@ const defaultAchievements: Record<string, Omit<Achievement, 'earned' | 'earnedAt
     iconBg: 'indigo',
   },
   contentCreator: {
-    id: 'contentCreator', 
+    id: 'contentCreator',
     title: 'Content Creator',
     description: 'Created a blog post or article',
     icon: 'PenLine',
@@ -89,15 +92,15 @@ const defaultAchievements: Record<string, Omit<Achievement, 'earned' | 'earnedAt
 // Initialize achievements with earned=false
 const initializeAchievements = () => {
   const initialAchievements: Record<string, Achievement> = {};
-  
+
   // biome-ignore lint/complexity/noForEach: its fine
-    Object.entries(defaultAchievements).forEach(([key, achievement]) => {
+  Object.entries(defaultAchievements).forEach(([key, achievement]) => {
     initialAchievements[key] = {
       ...achievement,
       earned: false,
     };
   });
-  
+
   return initialAchievements;
 };
 
@@ -105,10 +108,10 @@ export const useAchievementsStore = create<AchievementsState>()(
   persist(
     (set, get) => ({
       achievements: initializeAchievements(),
-      
+
       unlockAchievement: (id: string) => {
         const { achievements } = get();
-        
+
         // If achievement exists and is not already earned
         if (achievements[id] && !achievements[id].earned) {
           set({
@@ -121,21 +124,21 @@ export const useAchievementsStore = create<AchievementsState>()(
               },
             },
           });
-          
+
           // You could trigger notifications here or other side effects
           console.log(`Achievement unlocked: ${achievements[id].title}`);
-          
+
           return true;
         }
-        
+
         return false;
       },
-      
+
       hasAchievement: (id: string) => {
         const { achievements } = get();
         return achievements[id]?.earned || false;
       },
-      
+
       resetAchievements: () => {
         set({ achievements: initializeAchievements() });
       },
@@ -150,7 +153,7 @@ export const useAchievementsStore = create<AchievementsState>()(
 // Helper hook to get all earned achievements
 export const useEarnedAchievements = () => {
   const { achievements } = useAchievementsStore();
-  
+
   return Object.values(achievements).filter(achievement => achievement.earned);
 };
 

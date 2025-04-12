@@ -151,7 +151,11 @@ code[class*="language-"] {
 .heading-gradient {
   color: rgba(0, 0, 0, 0);
   -webkit-text-fill-color: transparent;
-  background-image: radial-gradient(circle farthest-side at 45%, #fff, rgba(255, 255, 255, 0.43));
+  background-image: radial-gradient(
+    circle farthest-side at 45%,
+    #fff,
+    rgba(255, 255, 255, 0.43)
+  );
   -webkit-background-clip: text;
   background-clip: text;
 }

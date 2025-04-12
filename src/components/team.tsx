@@ -48,7 +48,8 @@ const TeamSection = ({ teamMembers }: TeamSectionProps) => {
   );
   const advisoryTeam = teamMembers.filter(member => member.isAdvisor);
   const regularTeam = teamMembers.filter(
-    member => !member.isPresident && !member.isVicePresident && !member.isAdvisor
+    member =>
+      !member.isPresident && !member.isVicePresident && !member.isAdvisor
   );
 
   const getSocialLinks = (member: TeamMember): SocialLink[] => {

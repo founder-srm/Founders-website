@@ -97,7 +97,8 @@ export const ourTeamType = defineType({
     defineField({
       name: 'advisorRole',
       title: 'Advisor Role',
-      description: 'Role as an advisor (e.g., Advisory Head, Technical Advisor)',
+      description:
+        'Role as an advisor (e.g., Advisory Head, Technical Advisor)',
       type: 'string',
       hidden: ({ document }) => !document?.isAdvisor,
     }),
@@ -123,7 +124,7 @@ export const ourTeamType = defineType({
     prepare({ title, subtitle, media, domain, isAdvisor, advisorRole }) {
       const displayRole = isAdvisor ? advisorRole || subtitle : subtitle;
       const displayType = isAdvisor ? 'Advisor' : domain;
-      
+
       return {
         title,
         subtitle: `${displayRole} (${displayType})`,

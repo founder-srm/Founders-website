@@ -52,7 +52,7 @@ Deno.serve(async req => {
       return new Response(
         JSON.stringify({
           message: 'No email sent - approval status is not REJECTED',
-          status: record.is_approved
+          status: record.is_approved,
         }),
         {
           headers: { 'Content-Type': 'application/json' },

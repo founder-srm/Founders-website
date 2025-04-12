@@ -3,7 +3,9 @@ import { useToast } from '@/hooks/use-toast';
 import { useUser } from '@/stores/session';
 
 export function useTrackAchievement() {
-  const unlockAchievement = useAchievementsStore(state => state.unlockAchievement);
+  const unlockAchievement = useAchievementsStore(
+    state => state.unlockAchievement
+  );
   const hasAchievement = useAchievementsStore(state => state.hasAchievement);
   const user = useUser();
   const { toast } = useToast();
@@ -11,7 +13,7 @@ export function useTrackAchievement() {
   // Function to track event registration
   const trackEventRegistration = () => {
     if (!user) return;
-    
+
     if (!hasAchievement('eventParticipant')) {
       unlockAchievement('eventParticipant');
       toast({
@@ -25,7 +27,7 @@ export function useTrackAchievement() {
   // Function to track event attendance
   const trackEventAttendance = () => {
     if (!user) return;
-    
+
     if (!hasAchievement('eventAttendee')) {
       unlockAchievement('eventAttendee');
       toast({
@@ -39,7 +41,7 @@ export function useTrackAchievement() {
   // Function to track content creation
   const trackContentCreation = () => {
     if (!user) return;
-    
+
     if (!hasAchievement('contentCreator')) {
       unlockAchievement('contentCreator');
       toast({
@@ -53,12 +55,13 @@ export function useTrackAchievement() {
   // Function to track feedback submission
   const trackFeedbackSubmission = () => {
     if (!user) return;
-    
+
     if (!hasAchievement('feedbackProvider')) {
       unlockAchievement('feedbackProvider');
       toast({
         title: '🎉 Achievement Unlocked!',
-        description: 'Feedback Provider - Thank you for your valuable feedback!',
+        description:
+          'Feedback Provider - Thank you for your valuable feedback!',
         duration: 5000,
       });
     }
@@ -67,7 +70,7 @@ export function useTrackAchievement() {
   // Function to track GitHub connection
   const trackGithubConnection = () => {
     if (!user) return;
-    
+
     if (!hasAchievement('githubConnected')) {
       unlockAchievement('githubConnected');
       toast({
@@ -81,7 +84,7 @@ export function useTrackAchievement() {
   // Function to track Google connection
   const trackGoogleConnection = () => {
     if (!user) return;
-    
+
     if (!hasAchievement('googleConnected')) {
       unlockAchievement('googleConnected');
       toast({
@@ -99,6 +102,6 @@ export function useTrackAchievement() {
     trackContentCreation,
     trackFeedbackSubmission,
     trackGithubConnection,
-    trackGoogleConnection
+    trackGoogleConnection,
   };
 }

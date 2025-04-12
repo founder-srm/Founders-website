@@ -74,14 +74,14 @@ export default function AccountPage() {
   const supabase = createClient();
   const searchParams = useSearchParams();
   const currentTab = searchParams.get('tab') || 'profile'; // Default to 'profile' if no query parameter
-  
+
   // Achievement tracking
   // const { unlockAchievement } = useAchievementsStore();
   const earnedAchievements = useEarnedAchievements();
-  const { 
-    trackEventRegistration, 
-    trackGithubConnection, 
-    trackGoogleConnection 
+  const {
+    trackEventRegistration,
+    trackGithubConnection,
+    trackGoogleConnection,
   } = useTrackAchievement();
 
   // Handle tab change
@@ -101,7 +101,7 @@ export default function AccountPage() {
 
       if (!error && data) {
         setRegistrations(data);
-        
+
         // Unlock event participant achievement if they have registrations
         if (data.length > 0) {
           trackEventRegistration();
@@ -118,12 +118,12 @@ export default function AccountPage() {
       const { data, error } = await getUserIdentities();
       if (!error && data) {
         setIdentities(data);
-        
+
         // Check for GitHub and Google connections and unlock achievements
         if (data.some(identity => identity.provider === 'github')) {
           trackGithubConnection();
         }
-        
+
         if (data.some(identity => identity.provider === 'google')) {
           trackGoogleConnection();
         }
@@ -224,7 +224,7 @@ export default function AccountPage() {
         const { data } = await getUserIdentities();
         if (data) {
           setIdentities(data);
-          
+
           // Track achievements when connecting accounts
           if (provider === 'github') {
             trackGithubConnection();
@@ -274,16 +274,26 @@ export default function AccountPage() {
   // Helper to get icon based on name
   const getIconComponent = (iconName: string) => {
     switch (iconName) {
-      case 'Award': return <Award className="h-6 w-6" />;
-      case 'Calendar': return <Calendar className="h-6 w-6" />;
-      case 'Github': return <Github className="h-6 w-6" />;
-      case 'GoogleIcon': return <GoogleIcon className="h-6 w-6" />;
-      case 'Users': return <Users className="h-6 w-6" />;
-      case 'PenLine': return <PenLine className="h-6 w-6" />;
-      case 'TicketCheck': return <TicketCheck className="h-6 w-6" />;
-      case 'MessageSquare': return <MessageSquare className="h-6 w-6" />;
-      case 'Flame': return <Flame className="h-6 w-6" />;
-      default: return <Award className="h-6 w-6" />;
+      case 'Award':
+        return <Award className="h-6 w-6" />;
+      case 'Calendar':
+        return <Calendar className="h-6 w-6" />;
+      case 'Github':
+        return <Github className="h-6 w-6" />;
+      case 'GoogleIcon':
+        return <GoogleIcon className="h-6 w-6" />;
+      case 'Users':
+        return <Users className="h-6 w-6" />;
+      case 'PenLine':
+        return <PenLine className="h-6 w-6" />;
+      case 'TicketCheck':
+        return <TicketCheck className="h-6 w-6" />;
+      case 'MessageSquare':
+        return <MessageSquare className="h-6 w-6" />;
+      case 'Flame':
+        return <Flame className="h-6 w-6" />;
+      default:
+        return <Award className="h-6 w-6" />;
     }
   };
 
@@ -354,13 +364,17 @@ export default function AccountPage() {
                   </div>
                   <div className="p-4 border rounded-lg text-center">
                     <Award className="h-8 w-8 mx-auto text-amber-500 mb-2" />
-                    <p className="font-bold text-2xl">{earnedAchievements.length}</p>
-                    <p className="text-sm text-muted-foreground">Achievements</p>
+                    <p className="font-bold text-2xl">
+                      {earnedAchievements.length}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      Achievements
+                    </p>
                   </div>
                 </div>
               </div>
             </CardContent>
-            
+
             {/* Test Achievement Panel (only for development) */}
             {/* <CardContent className="mt-6 pt-6 border-t">
               <AchievementTester />
@@ -495,14 +509,19 @@ export default function AccountPage() {
               <div className="flex flex-wrap gap-3">
                 {earnedAchievements.length === 0 ? (
                   <div className="p-4 border rounded-lg bg-card w-full text-center">
-                    <p className="text-muted-foreground">No badges earned yet. Start exploring the platform to unlock achievements!</p>
+                    <p className="text-muted-foreground">
+                      No badges earned yet. Start exploring the platform to
+                      unlock achievements!
+                    </p>
                   </div>
                 ) : (
                   earnedAchievements.map(achievement => (
                     <HoverCard key={achievement.id}>
                       <HoverCardTrigger asChild>
                         <div className="p-4 border rounded-lg bg-card flex flex-col items-center w-32 cursor-pointer hover:border-primary transition-colors">
-                          <div className={`bg-${achievement.iconBg}-500/10 p-3 rounded-full mb-3`}>
+                          <div
+                            className={`bg-${achievement.iconBg}-500/10 p-3 rounded-full mb-3`}
+                          >
                             {getIconComponent(achievement.icon)}
                           </div>
                           <p className="font-medium text-center text-sm md:text-base">
@@ -513,22 +532,31 @@ export default function AccountPage() {
                           </p>
                           {achievement.earnedAt && (
                             <p className="text-xs text-muted-foreground text-center mt-3">
-                              {new Date(achievement.earnedAt).toLocaleDateString()}
+                              {new Date(
+                                achievement.earnedAt
+                              ).toLocaleDateString()}
                             </p>
                           )}
                         </div>
                       </HoverCardTrigger>
                       <HoverCardContent className="w-64">
                         <div className="flex justify-between space-x-4">
-                          <div className={`bg-${achievement.iconBg}-500/10 p-3 rounded-full`}>
+                          <div
+                            className={`bg-${achievement.iconBg}-500/10 p-3 rounded-full`}
+                          >
                             {getIconComponent(achievement.icon)}
                           </div>
                           <div className="space-y-1">
-                            <h4 className="text-sm font-semibold">{achievement.title}</h4>
+                            <h4 className="text-sm font-semibold">
+                              {achievement.title}
+                            </h4>
                             <p className="text-sm">{achievement.description}</p>
                             {achievement.earnedAt && (
                               <p className="text-xs text-muted-foreground">
-                                Earned on {new Date(achievement.earnedAt).toLocaleDateString()}
+                                Earned on{' '}
+                                {new Date(
+                                  achievement.earnedAt
+                                ).toLocaleDateString()}
                               </p>
                             )}
                           </div>
