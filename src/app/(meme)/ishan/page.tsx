@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { useEffect, useRef, useState } from "react";
@@ -20,6 +19,8 @@ export default function IshanPage() {
     "/ishan/ishan2.jpg",
     "/ishan/ishan3.jpg",
     "/ishan/ishan4.jpg",
+    "/ishan/ishan5.jpg",
+    "/ishan/ishan6.png",
   ];
 
   // Preload images
