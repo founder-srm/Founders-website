@@ -20,8 +20,9 @@ export default function IshanPage() {
   const [isClient, setIsClient] = useState(false);
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const loadedImagesRef = useRef<HTMLImageElement[]>([]);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
-  // Sample images for the physics elements - you can add more or change these
+  // Fix image paths to ensure they're properly loaded
   const images = [
     '/FC-logo-short.png',
     '/FC-logo.png',
@@ -33,7 +34,7 @@ export default function IshanPage() {
     '/ishan/ishan6.png',
   ];
 
-  // Preload images
+  // Preload images with better error handling
   useEffect(() => {
     if (!isClient) {
       setIsClient(true);
@@ -42,29 +43,62 @@ export default function IshanPage() {
 
     const imageElements: HTMLImageElement[] = [];
     let loadedCount = 0;
+    let errorCount = 0;
 
-    // biome-ignore lint/complexity/noForEach: fack u
-    images.forEach(src => {
+    const checkAllImagesProcessed = () => {
+      if (loadedCount + errorCount === images.length) {
+        if (imageElements.length > 0) {
+          setImagesLoaded(true);
+        } else {
+          setLoadError('Failed to load any images');
+        }
+      }
+    };
+
+    for (const src of images) {
+      // Add base URL for production if needed
+      const fullSrc = process.env.NODE_ENV === 'production' 
+        ? `${process.env.NEXT_PUBLIC_BASE_URL || ''}${src}`
+        : src;
+      
       const img = new Image();
+      
+      // Set crossOrigin if needed for CORS issues
+      img.crossOrigin = "anonymous";
+      
       img.onload = () => {
+        console.log(`Image loaded successfully: ${fullSrc}`);
         loadedCount++;
-        if (loadedCount === images.length) {
-          setImagesLoaded(true);
-        }
+        imageElements.push(img);
+        checkAllImagesProcessed();
       };
-      img.onerror = e => {
-        console.error(`Failed to load image: ${src}`, e);
-        loadedCount++;
-        if (loadedCount === images.length) {
-          setImagesLoaded(true);
-        }
+      
+      img.onerror = (e) => {
+        console.error(`Failed to load image: ${fullSrc}`, e);
+        errorCount++;
+        checkAllImagesProcessed();
       };
-      img.src = src;
-      imageElements.push(img);
-    });
+      
+      // Set src last to start loading
+      img.src = fullSrc;
+    }
 
     loadedImagesRef.current = imageElements;
-  }, [isClient]);
+    
+    // Safety timeout in case images take too long
+    const timeoutId = setTimeout(() => {
+      if (!imagesLoaded && imageElements.length > 0) {
+        console.warn('Image loading timed out, proceeding with loaded images');
+        setImagesLoaded(true);
+      } else if (!imagesLoaded && imageElements.length === 0) {
+        setLoadError('Image loading timed out');
+      }
+    }, 10000); // 10 second timeout
+    
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [isClient, imagesLoaded]);
 
   // Create physics simulation with images
   useEffect(() => {
@@ -226,7 +260,11 @@ export default function IshanPage() {
 
       {!imagesLoaded && (
         <div className="absolute inset-0 flex items-center justify-center bg-black/70 text-white">
-          <p className="text-xl">Loading physics playground...</p>
+          {loadError ? (
+            <p className="text-xl text-red-500">{loadError}</p>
+          ) : (
+            <p className="text-xl">Loading physics playground...</p>
+          )}
         </div>
       )}
     </main>
