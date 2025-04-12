@@ -1,31 +1,211 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-import {
-  Engine,
-  Render,
-  Bodies,
-  World,
-  Mouse,
-  MouseConstraint,
-  Runner,
-  Body,
-  Vector,
-} from 'matter-js';
+import { useState, useEffect, useRef } from 'react';
+import { Canvas, useFrame} from '@react-three/fiber';
+import { useTexture } from '@react-three/drei';
+import * as THREE from 'three';
+
+// Physics settings
+const GRAVITY = 0.01;
+const BOUNCE = 0.7;
+const DRAG = 0.99;
+const FLOOR_Y = -2.5;
+const WALL_LEFT = -4;
+const WALL_RIGHT = 4;
+
+// Interactive image component with physics
+function PhysicsImage({ 
+  url, 
+  initialPosition,
+  initialVelocity = { x: 0, y: 0 },
+  scale = 1,
+}: { 
+  url: string;
+  initialPosition: { x: number, y: number };
+  initialVelocity?: { x: number, y: number };
+  scale?: number;
+}) {
+  const texture = useTexture(url);
+  const meshRef = useRef<THREE.Mesh>(null);
+  const velocity = useRef(initialVelocity);
+  const [dimensions, setDimensions] = useState<[number, number]>([1, 1]);
+  const [isDragging, setIsDragging] = useState(false);
+  
+  // Handle image loading and set dimensions
+  useEffect(() => {
+    if (texture?.image) {
+      const aspectRatio = texture.image.width / texture.image.height;
+      const maxSize = 1.5 * scale;
+      
+      if (aspectRatio > 1) {
+        setDimensions([maxSize, maxSize / aspectRatio]);
+      } else {
+        setDimensions([maxSize * aspectRatio, maxSize]);
+      }
+      
+      // Improve texture quality
+      texture.minFilter = THREE.LinearFilter;
+      texture.magFilter = THREE.LinearFilter;
+    }
+  }, [texture, scale]);
+
+  // Physics update on each frame
+  useFrame(() => {
+    if (!meshRef.current || isDragging) return;
+
+    const mesh = meshRef.current;
+    const position = mesh.position;
+    const width = dimensions[0] / 2;
+    const height = dimensions[1] / 2;
+
+    // Apply gravity if not on floor
+    if (position.y - height > FLOOR_Y) {
+      velocity.current.y -= GRAVITY;
+    } 
+    
+    // Apply velocity
+    position.x += velocity.current.x;
+    position.y += velocity.current.y;
+    
+    // Handle floor collision
+    if (position.y - height < FLOOR_Y) {
+      position.y = FLOOR_Y + height;
+      velocity.current.y = -velocity.current.y * BOUNCE;
+      // Add some random horizontal movement on bounce
+      velocity.current.x += (Math.random() - 0.5) * 0.05;
+    }
+    
+    // Handle wall collisions
+    if (position.x - width < WALL_LEFT) {
+      position.x = WALL_LEFT + width;
+      velocity.current.x = -velocity.current.x * BOUNCE;
+    } 
+    else if (position.x + width > WALL_RIGHT) {
+      position.x = WALL_RIGHT - width;
+      velocity.current.x = -velocity.current.x * BOUNCE;
+    }
+    
+    // Apply drag
+    velocity.current.x *= DRAG;
+    velocity.current.y *= DRAG;
+
+    // Add some rotation based on movement
+    mesh.rotation.z += velocity.current.x * 0.1;
+  });
+
+  // Handle drag interactions
+  const handlePointerDown = (e: any) => {
+    e.stopPropagation();
+    setIsDragging(true);
+  };
+
+  const handlePointerUp = () => {
+    setIsDragging(false);
+    // Give a random velocity when released
+    velocity.current = {
+      x: (Math.random() - 0.5) * 0.1,
+      y: (Math.random() - 0.5) * 0.1
+    };
+  };
+
+  const handlePointerMove = (e: any) => {
+    if (isDragging && meshRef.current) {
+      // Convert mouse position to world coordinates
+      const x = (e.point.x);
+      const y = (e.point.y);
+      
+      // Calculate velocity based on movement
+      velocity.current = {
+        x: (x - meshRef.current.position.x) * 0.5,
+        y: (y - meshRef.current.position.y) * 0.5
+      };
+      
+      // Update position
+      meshRef.current.position.x = x;
+      meshRef.current.position.y = y;
+    }
+  };
+  
+  return (
+    // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
+    <mesh
+      ref={meshRef}
+      position={[initialPosition.x, initialPosition.y, 0]}
+      onPointerDown={handlePointerDown}
+      onPointerUp={handlePointerUp}
+      onPointerOut={handlePointerUp}
+      onPointerMove={handlePointerMove}
+      onClick={(e) => e.stopPropagation()}
+      castShadow
+    >
+      <planeGeometry args={dimensions} />
+      <meshStandardMaterial 
+        map={texture}
+        transparent={true}
+        side={THREE.DoubleSide}
+      />
+    </mesh>
+  );
+}
+
+// Floor component
+function Floor() {
+  return (
+    <mesh position={[0, FLOOR_Y, -0.1]} receiveShadow>
+      <planeGeometry args={[10, 0.2]} />
+      <meshStandardMaterial color="#444" />
+    </mesh>
+  );
+}
+
+// Walls
+function Walls() {
+  return (
+    <>
+      <mesh position={[WALL_LEFT, 0, -0.1]} receiveShadow>
+        <planeGeometry args={[0.2, 10]} />
+        <meshStandardMaterial color="#444" />
+      </mesh>
+      <mesh position={[WALL_RIGHT, 0, -0.1]} receiveShadow>
+        <planeGeometry args={[0.2, 10]} />
+        <meshStandardMaterial color="#444" />
+      </mesh>
+    </>
+  );
+}
+
+// Background
+function Background() {
+  const texture = useTexture('/textures/noise.png');
+  
+  useEffect(() => {
+    if (texture) {
+      texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+      texture.repeat.set(5, 5);
+    }
+  }, [texture]);
+  
+  return (
+    <>
+      <color attach="background" args={['#111']} />
+      <ambientLight intensity={0.5} />
+      <directionalLight position={[0, 5, 5]} intensity={0.8} castShadow />
+      <mesh position={[0, 0, -1]} receiveShadow>
+        <planeGeometry args={[20, 20]} />
+        <meshStandardMaterial map={texture} color="#222" />
+      </mesh>
+    </>
+  );
+}
 
 export default function IshanPage() {
-  const canvasRef = useRef<HTMLDivElement>(null);
-  const engineRef = useRef<Matter.Engine | null>(null);
-  const renderRef = useRef<Matter.Render | null>(null);
   const [isClient, setIsClient] = useState(false);
-  const [imagesLoaded, setImagesLoaded] = useState(false);
-  const loadedImagesRef = useRef<HTMLImageElement[]>([]);
-  const [loadError, setLoadError] = useState<string | null>(null);
-
-  // Fix image paths to ensure they're properly loaded
+  
+  // Image paths
   const images = [
     '/FC-logo-short.png',
-    '/FC-logo.png',
+    '/fc-logo.png',
     '/ishan/ishan.jpg',
     '/ishan/ishan2.jpg',
     '/ishan/ishan3.jpg',
@@ -34,237 +214,47 @@ export default function IshanPage() {
     '/ishan/ishan6.png',
   ];
 
-  // Preload images with better error handling
   useEffect(() => {
-    if (!isClient) {
-      setIsClient(true);
-      return;
-    }
-
-    const imageElements: HTMLImageElement[] = [];
-    let loadedCount = 0;
-    let errorCount = 0;
-
-    const checkAllImagesProcessed = () => {
-      if (loadedCount + errorCount === images.length) {
-        if (imageElements.length > 0) {
-          setImagesLoaded(true);
-        } else {
-          setLoadError('Failed to load any images');
-        }
-      }
-    };
-
-    for (const src of images) {
-      // Add base URL for production if needed
-      const fullSrc = process.env.NODE_ENV === 'production' 
-        ? `${process.env.NEXT_PUBLIC_BASE_URL || ''}${src}`
-        : src;
-      
-      const img = new Image();
-      
-      // Set crossOrigin if needed for CORS issues
-      img.crossOrigin = "anonymous";
-      
-      img.onload = () => {
-        console.log(`Image loaded successfully: ${fullSrc}`);
-        loadedCount++;
-        imageElements.push(img);
-        checkAllImagesProcessed();
-      };
-      
-      img.onerror = (e) => {
-        console.error(`Failed to load image: ${fullSrc}`, e);
-        errorCount++;
-        checkAllImagesProcessed();
-      };
-      
-      // Set src last to start loading
-      img.src = fullSrc;
-    }
-
-    loadedImagesRef.current = imageElements;
-    
-    // Safety timeout in case images take too long
-    const timeoutId = setTimeout(() => {
-      if (!imagesLoaded && imageElements.length > 0) {
-        console.warn('Image loading timed out, proceeding with loaded images');
-        setImagesLoaded(true);
-      } else if (!imagesLoaded && imageElements.length === 0) {
-        setLoadError('Image loading timed out');
-      }
-    }, 10000); // 10 second timeout
-    
-    return () => {
-      clearTimeout(timeoutId);
-    };
-  }, [isClient, imagesLoaded]);
-
-  // Create physics simulation with images
-  useEffect(() => {
-    if (
-      !isClient ||
-      !imagesLoaded ||
-      !canvasRef.current ||
-      loadedImagesRef.current.length === 0
-    )
-      return;
-
-    // Setup Matter.js
-    const engine = Engine.create({
-      gravity: { x: 0, y: 1 }, // Enable gravity right away
-    });
-    engineRef.current = engine;
-
-    const render = Render.create({
-      element: canvasRef.current,
-      engine: engine,
-      options: {
-        width: window.innerWidth,
-        height: window.innerHeight,
-        wireframes: false,
-        background: 'transparent',
-      },
-    });
-    renderRef.current = render;
-
-    // Add walls to contain the elements within viewport
-    const wallOptions = { isStatic: true, render: { visible: false } };
-    const walls = [
-      // Bottom wall
-      Bodies.rectangle(
-        window.innerWidth / 2,
-        window.innerHeight + 25,
-        window.innerWidth,
-        50,
-        wallOptions
-      ),
-      // Left wall
-      Bodies.rectangle(
-        -25,
-        window.innerHeight / 2,
-        50,
-        window.innerHeight * 2,
-        wallOptions
-      ),
-      // Right wall
-      Bodies.rectangle(
-        window.innerWidth + 25,
-        window.innerHeight / 2,
-        50,
-        window.innerHeight * 2,
-        wallOptions
-      ),
-    ];
-
-    World.add(engine.world, walls);
-
-    // Add mouse control for dragging
-    const mouse = Mouse.create(render.canvas);
-    const mouseConstraint = MouseConstraint.create(engine, {
-      mouse: mouse,
-      constraint: {
-        stiffness: 0.2,
-        render: {
-          visible: false,
-        },
-      },
-    });
-
-    World.add(engine.world, mouseConstraint);
-
-    // Create image bodies that will fall with physics
-    const MAX_HEIGHT = 200;
-    const imageBodies: Matter.Body[] = [];
-
-    loadedImagesRef.current.forEach((img, index) => {
-      // Calculate aspect ratio to maintain proportions
-      const aspectRatio = img.naturalWidth / img.naturalHeight;
-
-      // Set height to max height and calculate width based on aspect ratio
-      const height = Math.min(MAX_HEIGHT, img.naturalHeight);
-      const width = height * aspectRatio;
-
-      // Distribute images across the top of the screen
-      const totalWidth = window.innerWidth * 0.8;
-      const spacing = totalWidth / images.length;
-      const xPosition = window.innerWidth * 0.1 + index * spacing + spacing / 2;
-
-      // Start above viewport
-      const yPosition = -height * (Math.random() + 0.5);
-
-      const body = Bodies.rectangle(xPosition, yPosition, width, height, {
-        chamfer: { radius: 5 },
-        render: {
-          sprite: {
-            texture: img.src,
-            xScale: width / img.naturalWidth,
-            yScale: height / img.naturalHeight,
-          },
-        },
-        restitution: 0.7, // Bounciness
-        friction: 0.01, // Low friction to make it more playful
-      });
-
-      imageBodies.push(body);
-    });
-
-    World.add(engine.world, imageBodies);
-
-    // Create a runner
-    const runner = Runner.create();
-
-    // Start the engine using Runner
-    Runner.run(runner, engine);
-    Render.run(render);
-
-    // Handle window resize
-    const handleResize = () => {
-      render.options.width = window.innerWidth;
-      render.options.height = window.innerHeight;
-      Render.setPixelRatio(render, window.devicePixelRatio);
-      render.canvas.width = window.innerWidth;
-      render.canvas.height = window.innerHeight;
-
-      // Update walls
-      Body.setPosition(
-        walls[0],
-        Vector.create(window.innerWidth / 2, window.innerHeight + 25)
-      );
-      Body.setPosition(
-        walls[2],
-        Vector.create(window.innerWidth + 25, window.innerHeight / 2)
-      );
-    };
-
-    window.addEventListener('resize', handleResize);
-
-    // Clean up
-    return () => {
-      window.removeEventListener('resize', handleResize);
-
-      // Stop the runner
-      Runner.stop(runner);
-      Render.stop(render);
-      World.clear(engine.world, false);
-      Engine.clear(engine);
-      render.canvas.remove();
-      render.textures = {};
-    };
-  }, [isClient, imagesLoaded]);
+    setIsClient(true);
+  }, []);
+  
+  // Create random initial positions for images
+  const initialPositions = images.map(() => ({
+    x: (Math.random() * 6) - 3, // Between -3 and 3
+    y: Math.random() * 5 + 2,   // Between 2 and 7
+  }));
+  
+  // Create random initial velocities
+  const initialVelocities = images.map(() => ({
+    x: (Math.random() - 0.5) * 0.05,
+    y: 0,
+  }));
 
   return (
-    <main className="w-full h-screen overflow-hidden bg-gradient-to-br from-gray-900 to-black">
-      {/* Physics canvas container that's always visible */}
-      <div ref={canvasRef} className="w-full h-full" />
-
-      {!imagesLoaded && (
+    <main className="w-full h-screen overflow-hidden bg-black">
+      {isClient ? (
+        <Canvas 
+          shadows
+          camera={{ position: [0, 0, 5], fov: 50 }}
+          className="w-full h-full"
+        >
+          <Background />
+          <Floor />
+          <Walls />
+          
+          {images.map((url, i) => (
+            <PhysicsImage 
+              key={i}
+              url={url}
+              initialPosition={initialPositions[i]}
+              initialVelocity={initialVelocities[i]}
+              scale={0.8}
+            />
+          ))}
+        </Canvas>
+      ) : (
         <div className="absolute inset-0 flex items-center justify-center bg-black/70 text-white">
-          {loadError ? (
-            <p className="text-xl text-red-500">{loadError}</p>
-          ) : (
-            <p className="text-xl">Loading physics playground...</p>
-          )}
+          <p className="text-xl">Loading physics playground...</p>
         </div>
       )}
     </main>

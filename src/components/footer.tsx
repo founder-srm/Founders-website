@@ -110,6 +110,7 @@ const Footer2 = () => {
     '/admin/*',
     '/auth/*',
     '/ishan',
+    '/fling',
   ];
 
   if (isPathExcluded(pathname, excludedRoutes)) {
