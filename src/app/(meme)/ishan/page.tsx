@@ -2,7 +2,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { Canvas, useFrame} from '@react-three/fiber';
+import { Canvas, useFrame } from '@react-three/fiber';
 import { useTexture } from '@react-three/drei';
 import * as THREE from 'three';
 
@@ -15,15 +15,15 @@ const WALL_LEFT = -4;
 const WALL_RIGHT = 4;
 
 // Interactive image component with physics
-function PhysicsImage({ 
-  url, 
+function PhysicsImage({
+  url,
   initialPosition,
   initialVelocity = { x: 0, y: 0 },
   scale = 1,
-}: { 
+}: {
   url: string;
-  initialPosition: { x: number, y: number };
-  initialVelocity?: { x: number, y: number };
+  initialPosition: { x: number; y: number };
+  initialVelocity?: { x: number; y: number };
   scale?: number;
 }) {
   const texture = useTexture(url);
@@ -31,19 +31,19 @@ function PhysicsImage({
   const velocity = useRef(initialVelocity);
   const [dimensions, setDimensions] = useState<[number, number]>([1, 1]);
   const [isDragging, setIsDragging] = useState(false);
-  
+
   // Handle image loading and set dimensions
   useEffect(() => {
     if (texture?.image) {
       const aspectRatio = texture.image.width / texture.image.height;
       const maxSize = 1.5 * scale;
-      
+
       if (aspectRatio > 1) {
         setDimensions([maxSize, maxSize / aspectRatio]);
       } else {
         setDimensions([maxSize * aspectRatio, maxSize]);
       }
-      
+
       // Improve texture quality
       texture.minFilter = THREE.LinearFilter;
       texture.magFilter = THREE.LinearFilter;
@@ -62,12 +62,12 @@ function PhysicsImage({
     // Apply gravity if not on floor
     if (position.y - height > FLOOR_Y) {
       velocity.current.y -= GRAVITY;
-    } 
-    
+    }
+
     // Apply velocity
     position.x += velocity.current.x;
     position.y += velocity.current.y;
-    
+
     // Handle floor collision
     if (position.y - height < FLOOR_Y) {
       position.y = FLOOR_Y + height;
@@ -75,17 +75,16 @@ function PhysicsImage({
       // Add some random horizontal movement on bounce
       velocity.current.x += (Math.random() - 0.5) * 0.05;
     }
-    
+
     // Handle wall collisions
     if (position.x - width < WALL_LEFT) {
       position.x = WALL_LEFT + width;
       velocity.current.x = -velocity.current.x * BOUNCE;
-    } 
-    else if (position.x + width > WALL_RIGHT) {
+    } else if (position.x + width > WALL_RIGHT) {
       position.x = WALL_RIGHT - width;
       velocity.current.x = -velocity.current.x * BOUNCE;
     }
-    
+
     // Apply drag
     velocity.current.x *= DRAG;
     velocity.current.y *= DRAG;
@@ -105,28 +104,28 @@ function PhysicsImage({
     // Give a random velocity when released
     velocity.current = {
       x: (Math.random() - 0.5) * 0.1,
-      y: (Math.random() - 0.5) * 0.1
+      y: (Math.random() - 0.5) * 0.1,
     };
   };
 
   const handlePointerMove = (e: any) => {
     if (isDragging && meshRef.current) {
       // Convert mouse position to world coordinates
-      const x = (e.point.x);
-      const y = (e.point.y);
-      
+      const x = e.point.x;
+      const y = e.point.y;
+
       // Calculate velocity based on movement
       velocity.current = {
         x: (x - meshRef.current.position.x) * 0.5,
-        y: (y - meshRef.current.position.y) * 0.5
+        y: (y - meshRef.current.position.y) * 0.5,
       };
-      
+
       // Update position
       meshRef.current.position.x = x;
       meshRef.current.position.y = y;
     }
   };
-  
+
   return (
     // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
     <mesh
@@ -136,11 +135,11 @@ function PhysicsImage({
       onPointerUp={handlePointerUp}
       onPointerOut={handlePointerUp}
       onPointerMove={handlePointerMove}
-      onClick={(e) => e.stopPropagation()}
+      onClick={e => e.stopPropagation()}
       castShadow
     >
       <planeGeometry args={dimensions} />
-      <meshStandardMaterial 
+      <meshStandardMaterial
         map={texture}
         transparent={true}
         side={THREE.DoubleSide}
@@ -178,14 +177,14 @@ function Walls() {
 // Background
 function Background() {
   const texture = useTexture('/textures/noise.png');
-  
+
   useEffect(() => {
     if (texture) {
       texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
       texture.repeat.set(5, 5);
     }
   }, [texture]);
-  
+
   return (
     <>
       <color attach="background" args={['#111']} />
@@ -201,7 +200,7 @@ function Background() {
 
 export default function IshanPage() {
   const [isClient, setIsClient] = useState(false);
-  
+
   // Image paths
   const images = [
     '/FC-logo-short.png',
@@ -217,13 +216,13 @@ export default function IshanPage() {
   useEffect(() => {
     setIsClient(true);
   }, []);
-  
+
   // Create random initial positions for images
   const initialPositions = images.map(() => ({
-    x: (Math.random() * 6) - 3, // Between -3 and 3
-    y: Math.random() * 5 + 2,   // Between 2 and 7
+    x: Math.random() * 6 - 3, // Between -3 and 3
+    y: Math.random() * 5 + 2, // Between 2 and 7
   }));
-  
+
   // Create random initial velocities
   const initialVelocities = images.map(() => ({
     x: (Math.random() - 0.5) * 0.05,
@@ -233,7 +232,7 @@ export default function IshanPage() {
   return (
     <main className="w-full h-screen overflow-hidden bg-black">
       {isClient ? (
-        <Canvas 
+        <Canvas
           shadows
           camera={{ position: [0, 0, 5], fov: 50 }}
           className="w-full h-full"
@@ -241,9 +240,9 @@ export default function IshanPage() {
           <Background />
           <Floor />
           <Walls />
-          
+
           {images.map((url, i) => (
-            <PhysicsImage 
+            <PhysicsImage
               key={i}
               url={url}
               initialPosition={initialPositions[i]}
