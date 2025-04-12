@@ -186,6 +186,7 @@ const Navbar1 = () => {
     '/auth/*',
     '/signup',
     '/admin/*',
+    '/ishan',
   ];
 
   if (isPathExcluded(pathname, excludedRoutes)) {

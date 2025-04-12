@@ -109,6 +109,7 @@ const Footer2 = () => {
     '/blog/posts/*',
     '/admin/*',
     '/auth/*',
+    '/ishan',
   ];
 
   if (isPathExcluded(pathname, excludedRoutes)) {
