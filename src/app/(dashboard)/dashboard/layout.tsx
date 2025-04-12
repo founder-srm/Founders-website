@@ -1,4 +1,7 @@
+'use client';
+
 import { SessionProvider } from '@/components/providers/SessionProvider';
+import { AchievementTracker } from '@/components/ui/achievement-tracker';
 
 export default function DashboardLayout({
   children,
@@ -7,7 +10,9 @@ export default function DashboardLayout({
 }) {
   return (
     <SessionProvider>
-      <main className="dashboard-layout">{children}</main>
+      <AchievementTracker>
+        <main className="dashboard-layout">{children}</main>
+      </AchievementTracker>
     </SessionProvider>
   );
 }

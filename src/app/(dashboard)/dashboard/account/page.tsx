@@ -36,6 +36,11 @@ import {
   Calendar,
   Shield,
   BadgeCheck,
+  Users,
+  PenLine,
+  TicketCheck,
+  MessageSquare,
+  Flame,
 } from 'lucide-react';
 import {
   updateUserEmail,
@@ -52,6 +57,9 @@ import type { UserIdentity } from '@supabase/supabase-js';
 import { useSearchParams } from 'next/navigation';
 import { formatInTimeZone } from 'date-fns-tz';
 import { useMediaQuery } from '@/hooks/use-media-query';
+import { useEarnedAchievements } from '@/stores/achievements';
+import { useTrackAchievement } from '@/hooks/useTrackAchievement';
+// import AchievementTester from '@/components/ui/achievement-test';
 
 export default function AccountPage() {
   const isMobile = useMediaQuery('(max-width: 768px)');
@@ -66,6 +74,15 @@ export default function AccountPage() {
   const supabase = createClient();
   const searchParams = useSearchParams();
   const currentTab = searchParams.get('tab') || 'profile'; // Default to 'profile' if no query parameter
+  
+  // Achievement tracking
+  // const { unlockAchievement } = useAchievementsStore();
+  const earnedAchievements = useEarnedAchievements();
+  const { 
+    trackEventRegistration, 
+    trackGithubConnection, 
+    trackGoogleConnection 
+  } = useTrackAchievement();
 
   // Handle tab change
   const handleTabChange = (tab: string) => {
@@ -84,11 +101,16 @@ export default function AccountPage() {
 
       if (!error && data) {
         setRegistrations(data);
+        
+        // Unlock event participant achievement if they have registrations
+        if (data.length > 0) {
+          trackEventRegistration();
+        }
       }
     }
 
     fetchRegistrations();
-  }, [user?.id, supabase]);
+  }, [user?.id, supabase, trackEventRegistration]);
 
   useEffect(() => {
     async function fetchIdentities() {
@@ -96,11 +118,20 @@ export default function AccountPage() {
       const { data, error } = await getUserIdentities();
       if (!error && data) {
         setIdentities(data);
+        
+        // Check for GitHub and Google connections and unlock achievements
+        if (data.some(identity => identity.provider === 'github')) {
+          trackGithubConnection();
+        }
+        
+        if (data.some(identity => identity.provider === 'google')) {
+          trackGoogleConnection();
+        }
       }
     }
 
     fetchIdentities();
-  }, [user?.id]);
+  }, [user?.id, trackGithubConnection, trackGoogleConnection]);
 
   async function handleUpdateEmail() {
     const result = await updateUserEmail(newEmail);
@@ -191,7 +222,16 @@ export default function AccountPage() {
         });
         // Refresh identities
         const { data } = await getUserIdentities();
-        if (data) setIdentities(data);
+        if (data) {
+          setIdentities(data);
+          
+          // Track achievements when connecting accounts
+          if (provider === 'github') {
+            trackGithubConnection();
+          } else if (provider === 'google') {
+            trackGoogleConnection();
+          }
+        }
       }
     }
   }
@@ -204,7 +244,7 @@ export default function AccountPage() {
       user?.email?.split('@')[0] ||
       'User';
 
-    // Get first two letters of each word in name
+    // Get first letters of each word in name
     return name
       .split(' ')
       .map((part: string): string => part[0])
@@ -230,6 +270,22 @@ export default function AccountPage() {
       </div>
     );
   }
+
+  // Helper to get icon based on name
+  const getIconComponent = (iconName: string) => {
+    switch (iconName) {
+      case 'Award': return <Award className="h-6 w-6" />;
+      case 'Calendar': return <Calendar className="h-6 w-6" />;
+      case 'Github': return <Github className="h-6 w-6" />;
+      case 'GoogleIcon': return <GoogleIcon className="h-6 w-6" />;
+      case 'Users': return <Users className="h-6 w-6" />;
+      case 'PenLine': return <PenLine className="h-6 w-6" />;
+      case 'TicketCheck': return <TicketCheck className="h-6 w-6" />;
+      case 'MessageSquare': return <MessageSquare className="h-6 w-6" />;
+      case 'Flame': return <Flame className="h-6 w-6" />;
+      default: return <Award className="h-6 w-6" />;
+    }
+  };
 
   // Shared tab content for both desktop and mobile
   const renderTabContent = (value: string) => {
@@ -296,9 +352,19 @@ export default function AccountPage() {
                     <p className="font-bold text-2xl">{identities.length}</p>
                     <p className="text-sm text-muted-foreground">Connections</p>
                   </div>
+                  <div className="p-4 border rounded-lg text-center">
+                    <Award className="h-8 w-8 mx-auto text-amber-500 mb-2" />
+                    <p className="font-bold text-2xl">{earnedAchievements.length}</p>
+                    <p className="text-sm text-muted-foreground">Achievements</p>
+                  </div>
                 </div>
               </div>
             </CardContent>
+            
+            {/* Test Achievement Panel (only for development) */}
+            {/* <CardContent className="mt-6 pt-6 border-t">
+              <AchievementTester />
+            </CardContent> */}
           </Card>
         );
       case 'security':
@@ -427,58 +493,49 @@ export default function AccountPage() {
             </CardHeader>
             <CardContent>
               <div className="flex flex-wrap gap-3">
-                <div className="p-4 border rounded-lg bg-card flex flex-col items-center w-32">
-                  <div className="bg-primary/10 p-3 rounded-full mb-3">
-                    <Award className="h-6 w-6 text-primary" />
+                {earnedAchievements.length === 0 ? (
+                  <div className="p-4 border rounded-lg bg-card w-full text-center">
+                    <p className="text-muted-foreground">No badges earned yet. Start exploring the platform to unlock achievements!</p>
                   </div>
-                  <p className="font-medium text-center text-sm md:text-base">
-                    Account Created
-                  </p>
-                  <p className="text-xs text-muted-foreground text-center mt-1">
-                    Joined the platform
-                  </p>
-                </div>
-
-                {registrations.length > 0 && (
-                  <div className="p-4 border rounded-lg bg-card flex flex-col items-center w-32">
-                    <div className="bg-blue-500/10 p-3 rounded-full mb-3">
-                      <Calendar className="h-6 w-6 text-blue-500" />
-                    </div>
-                    <p className="font-medium text-center text-sm md:text-base">
-                      Event Participant
-                    </p>
-                    <p className="text-xs text-muted-foreground text-center mt-1">
-                      Joined an event
-                    </p>
-                  </div>
-                )}
-
-                {hasProvider('github') && (
-                  <div className="p-4 border rounded-lg bg-card flex flex-col items-center w-32">
-                    <div className="bg-gray-800/10 p-3 rounded-full mb-3">
-                      <Github className="h-6 w-6 text-gray-800" />
-                    </div>
-                    <p className="font-medium text-center text-sm md:text-base">
-                      GitHub Connected
-                    </p>
-                    <p className="text-xs text-muted-foreground text-center mt-1">
-                      Linked GitHub
-                    </p>
-                  </div>
-                )}
-
-                {hasProvider('google') && (
-                  <div className="p-4 border rounded-lg bg-card flex flex-col items-center w-32">
-                    <div className="bg-red-500/10 p-3 rounded-full mb-3">
-                      <GoogleIcon className="h-6 w-6 text-red-500" />
-                    </div>
-                    <p className="font-medium text-center text-sm md:text-base">
-                      Google Connected
-                    </p>
-                    <p className="text-xs text-muted-foreground text-center mt-1">
-                      Linked Google
-                    </p>
-                  </div>
+                ) : (
+                  earnedAchievements.map(achievement => (
+                    <HoverCard key={achievement.id}>
+                      <HoverCardTrigger asChild>
+                        <div className="p-4 border rounded-lg bg-card flex flex-col items-center w-32 cursor-pointer hover:border-primary transition-colors">
+                          <div className={`bg-${achievement.iconBg}-500/10 p-3 rounded-full mb-3`}>
+                            {getIconComponent(achievement.icon)}
+                          </div>
+                          <p className="font-medium text-center text-sm md:text-base">
+                            {achievement.title}
+                          </p>
+                          <p className="text-xs text-muted-foreground text-center mt-1">
+                            {achievement.description}
+                          </p>
+                          {achievement.earnedAt && (
+                            <p className="text-xs text-muted-foreground text-center mt-3">
+                              {new Date(achievement.earnedAt).toLocaleDateString()}
+                            </p>
+                          )}
+                        </div>
+                      </HoverCardTrigger>
+                      <HoverCardContent className="w-64">
+                        <div className="flex justify-between space-x-4">
+                          <div className={`bg-${achievement.iconBg}-500/10 p-3 rounded-full`}>
+                            {getIconComponent(achievement.icon)}
+                          </div>
+                          <div className="space-y-1">
+                            <h4 className="text-sm font-semibold">{achievement.title}</h4>
+                            <p className="text-sm">{achievement.description}</p>
+                            {achievement.earnedAt && (
+                              <p className="text-xs text-muted-foreground">
+                                Earned on {new Date(achievement.earnedAt).toLocaleDateString()}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                      </HoverCardContent>
+                    </HoverCard>
+                  ))
                 )}
               </div>
             </CardContent>
