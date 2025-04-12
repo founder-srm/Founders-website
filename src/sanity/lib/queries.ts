@@ -222,5 +222,7 @@ export const TEAM_QUERY =
   domain,
   isPresident,
   isVicePresident,
+  isAdvisor,
+  advisorRole,
   order
 }`);

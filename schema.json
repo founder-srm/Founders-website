@@ -478,7 +478,7 @@
           "of": [
             {
               "type": "string",
-              "value": "operations"
+              "value": "operations_marketing"
             },
             {
               "type": "string",
@@ -491,10 +491,6 @@
             {
               "type": "string",
               "value": "outreach"
-            },
-            {
-              "type": "string",
-              "value": "marketing"
             },
             {
               "type": "string",
@@ -519,6 +515,20 @@
         "type": "objectAttribute",
         "value": {
           "type": "boolean"
+        },
+        "optional": true
+      },
+      "isAdvisor": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "boolean"
+        },
+        "optional": true
+      },
+      "advisorRole": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
         },
         "optional": true
       },

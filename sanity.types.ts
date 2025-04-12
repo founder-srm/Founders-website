@@ -92,9 +92,11 @@ export type OurTeam = {
   github?: string;
   linkedin?: string;
   website?: string;
-  domain?: "operations" | "technical" | "creatives" | "outreach" | "marketing" | "sponsorship" | "leadership";
+  domain?: "operations_marketing" | "technical" | "creatives" | "outreach" | "sponsorship" | "leadership";
   isPresident?: boolean;
   isVicePresident?: boolean;
+  isAdvisor?: boolean;
+  advisorRole?: string;
   order?: number;
 };
 
@@ -1340,7 +1342,7 @@ export type CONTACT_US_QUERYResult = {
   }> | null;
 } | null;
 // Variable: TEAM_QUERY
-// Query: *[_type == "ourTeam"] | order(order asc) {  _id,  _createdAt,  name,  role,  description,  avatar,  github,  linkedin,  website,  domain,  isPresident,  isVicePresident,  order}
+// Query: *[_type == "ourTeam"] | order(order asc) {  _id,  _createdAt,  name,  role,  description,  avatar,  github,  linkedin,  website,  domain,  isPresident,  isVicePresident,  isAdvisor,  advisorRole,  order}
 export type TEAM_QUERYResult = Array<{
   _id: string;
   _createdAt: string;
@@ -1361,9 +1363,11 @@ export type TEAM_QUERYResult = Array<{
   github: string | null;
   linkedin: string | null;
   website: string | null;
-  domain: "creatives" | "leadership" | "marketing" | "operations" | "outreach" | "sponsorship" | "technical" | null;
+  domain: "creatives" | "leadership" | "operations_marketing" | "outreach" | "sponsorship" | "technical" | null;
   isPresident: boolean | null;
   isVicePresident: boolean | null;
+  isAdvisor: boolean | null;
+  advisorRole: string | null;
   order: number | null;
 }>;
 
@@ -1468,7 +1472,7 @@ declare module "@sanity/client" {
     "*[_type == \"ourStory\"][0]{\n  _id,\n  _createdAt,\n  title,\n  mainContent,\n  secondaryContent,\n  workplaceTitle,\n  workplaceContent,\n  workplaceSecondaryContent,\n  images\n}": OUR_STORY_QUERYResult;
     "*[_type == \"timeline\"][0]{\n  _id,\n  _createdAt,\n  title,\n  subtitle,\n  description,\n  buttonText,\n  buttonLink,\n  secondaryButtonText,\n  secondaryButtonLink,\n  showSecondaryButton,\n  items[]{\n    title,\n    description,\n    image\n  }\n}": TIMELINE_QUERYResult;
     "*[_type == \"contactUs\"][0]{\n  _id,\n  _createdAt,\n  title,\n  subtitle,\n  expectationsTitle,\n  expectations,\n  formTitle,\n  formSubtitle,\n  submitButtonText,\n  thankYouMessage,\n  teamMembers[]->{\n    _id,\n    name,\n    title,\n    image\n  }\n}": CONTACT_US_QUERYResult;
-    "*[_type == \"ourTeam\"] | order(order asc) {\n  _id,\n  _createdAt,\n  name,\n  role,\n  description,\n  avatar,\n  github,\n  linkedin,\n  website,\n  domain,\n  isPresident,\n  isVicePresident,\n  order\n}": TEAM_QUERYResult;
+    "*[_type == \"ourTeam\"] | order(order asc) {\n  _id,\n  _createdAt,\n  name,\n  role,\n  description,\n  avatar,\n  github,\n  linkedin,\n  website,\n  domain,\n  isPresident,\n  isVicePresident,\n  isAdvisor,\n  advisorRole,\n  order\n}": TEAM_QUERYResult;
     "*[_type == \"cta\"]{\n    _id,\n    _createdAt,\n    title,\n    description,\n    primaryButtonText,\n    primaryButtonLink,\n    secondaryButtonText,\n    secondaryButtonLink,\n    variant,\n    activateSecondaryButton,\n    showCTA\n}": CtaQueryResult;
     "*[_type == \"event\"]{\n    _id,\n    _createdAt,\n    id,\n    title,\n    summary,\n    image,\n    label,\n    author,\n    published,\n    href\n}": EventsQueryResult;
     "*[_type == \"faq\"]{\n    _id,\n    _createdAt,\n    question,\n    answer\n}": FaqsQueryResult;

@@ -76,14 +76,30 @@ export const ourTeamType = defineType({
     defineField({
       name: 'isPresident',
       title: 'Is President',
+      description: 'Check if this person is the President of the club',
       type: 'boolean',
       initialValue: false,
     }),
     defineField({
       name: 'isVicePresident',
       title: 'Is Vice President',
+      description: 'Check if this person is the Vice President of the club',
       type: 'boolean',
       initialValue: false,
+    }),
+    defineField({
+      name: 'isAdvisor',
+      title: 'Is Advisor',
+      description: 'Check if this person is an advisor to the club',
+      type: 'boolean',
+      initialValue: false,
+    }),
+    defineField({
+      name: 'advisorRole',
+      title: 'Advisor Role',
+      description: 'Role as an advisor (e.g., Advisory Head, Technical Advisor)',
+      type: 'string',
+      hidden: ({ document }) => !document?.isAdvisor,
     }),
     defineField({
       name: 'order',
@@ -101,11 +117,16 @@ export const ourTeamType = defineType({
       subtitle: 'role',
       media: 'avatar',
       domain: 'domain',
+      isAdvisor: 'isAdvisor',
+      advisorRole: 'advisorRole',
     },
-    prepare({ title, subtitle, media, domain }) {
+    prepare({ title, subtitle, media, domain, isAdvisor, advisorRole }) {
+      const displayRole = isAdvisor ? advisorRole || subtitle : subtitle;
+      const displayType = isAdvisor ? 'Advisor' : domain;
+      
       return {
         title,
-        subtitle: `${subtitle} (${domain})`,
+        subtitle: `${displayRole} (${displayType})`,
         media,
       };
     },
