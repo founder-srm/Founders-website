@@ -161,7 +161,7 @@ const TeamSection = ({ teamMembers }: TeamSectionProps) => {
       {advisoryTeam.length > 0 && (
         <div className="container my-8">
           <h3 className="mb-8 text-xl font-bold">Advisors</h3>
-          <div className="grid gap-x-12 gap-y-16 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-x-12 gap-y-16 md:grid-cols-2 lg:grid-cols-4">
             {advisoryTeam.map(member => {
               // For advisors, use advisorRole if available, otherwise fallback to role
               const advisorMember = {
