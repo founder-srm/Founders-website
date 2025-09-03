@@ -84,8 +84,8 @@ Deno.serve(async req => {
       { headers: { 'Content-Type': 'application/json' } }
     );
   } catch (error) {
-    console.error('Error:', error);
-    return new Response(JSON.stringify({ error }), {
+    console.error('Error:', error); // Log the full error details on the server
+    return new Response(JSON.stringify({ message: "An internal server error occurred" }), {
       headers: { 'Content-Type': 'application/json' },
       status: 500,
     });
