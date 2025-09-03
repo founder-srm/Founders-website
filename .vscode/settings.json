@@ -20,5 +20,27 @@
     "net"
   ],
   "doppler.autocomplete.enable": true,
-  "doppler.hover.enable": true
+  "doppler.hover.enable": true,
+
+  "files.readonlyInclude": {
+		"**/next-env.d.ts": true,
+    "**/*.md": true,
+    "**/*.mjs": true,
+    "LICENSE": true,
+    "**/CODEOWNERS": true
+	},
+	"files.watcherExclude": {
+		"**/next-env.d.ts": true,
+    "**/*.md": true,
+    "**/*.mjs": true,
+    "LICENSE": true,
+    "**/CODEOWNERS": true
+	},
+	"search.exclude": {
+		"**/next-env.d.ts": true
+	},
+	"editor.codeActionsOnSave": {
+		"source.organizeImports.biome": "explicit",
+		"source.fixAll.biome": "explicit"
+	}
 }
