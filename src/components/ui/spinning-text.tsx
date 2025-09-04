@@ -1,5 +1,10 @@
 'use client';
-import { motion, type Transition, type Variants } from 'motion/react';
+import {
+  type Easing,
+  motion,
+  type Transition,
+  type Variants,
+} from 'motion/react';
 import type React from 'react';
 import type { CSSProperties } from 'react';
 import { cn } from '@/lib/utils';
@@ -20,8 +25,8 @@ export type SpinningTextProps = {
 };
 
 const BASE_TRANSITION = {
-  repeat: Number.POSITIVE_INFINITY,
-  ease: 'linear',
+  repeat: Infinity,
+  ease: 'linear' as Easing,
 };
 
 const BASE_ITEM_VARIANTS = {
@@ -86,7 +91,7 @@ export function SpinningText({
               '--total': totalLetters,
               '--font-size': fontSize,
               '--radius': radius,
-              fontSize: 'calc(var(--font-size, 2) * 1rem)',
+              fontSize: `calc(var(--font-size, 2) * 1rem)`,
               transform: `
                   translate(-50%, -50%)
                   rotate(calc(360deg / var(--total) * var(--index)))
