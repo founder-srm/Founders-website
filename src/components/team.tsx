@@ -1,6 +1,6 @@
 'use client';
 import { Github, Globe, Linkedin } from 'lucide-react';
-import { useState } from 'react';
+import { type JSX, useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { urlFor } from '@/sanity/lib/image';
