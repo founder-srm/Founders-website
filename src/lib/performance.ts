@@ -12,6 +12,7 @@ export function useDebounce<T extends (...args: never[]) => unknown>(
 ): T {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: idek
   return useCallback(
     ((...args: Parameters<T>) => {
       if (timeoutRef.current) {

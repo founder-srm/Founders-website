@@ -71,7 +71,7 @@ export default function DevBlogPage() {
   useEffect(() => {
     loadPosts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [loadPosts]);
 
   // Refresh posts when returning to this page
   useEffect(() => {
@@ -92,8 +92,7 @@ export default function DevBlogPage() {
           post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
           post.author.toLowerCase().includes(searchTerm.toLowerCase()) ||
           post.summary.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          (post.tag &&
-            post.tag.toLowerCase().includes(searchTerm.toLowerCase()))
+          (post.tag?.toLowerCase().includes(searchTerm.toLowerCase()))
       );
       setFilteredPosts(filtered);
     }

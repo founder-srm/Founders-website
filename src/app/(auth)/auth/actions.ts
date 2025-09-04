@@ -48,7 +48,7 @@ export async function login(data: LoginFormData) {
   const result = loginSchema.safeParse(data);
 
   if (!result.success) {
-    const errorMessage = result.error.errors
+    const errorMessage = result.error.issues
       .map(error => error.message)
       .join(', ');
     redirect(`/auth/login?message=${errorMessage}`);
@@ -75,7 +75,7 @@ export async function signup(data: SignupFormData) {
   const result = signupSchema.safeParse(data);
 
   if (!result.success) {
-    const errorMessage = result.error.errors
+    const errorMessage = result.error.issues
       .map(error => error.message)
       .join(', ');
     redirect(`/auth/signup?message=${errorMessage}`);

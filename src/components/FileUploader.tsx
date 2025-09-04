@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/a11y/noStaticElementInteractions: its a wierd world */
 'use client';
 
 import { AlertCircleIcon, ImageIcon, UploadIcon, XIcon } from 'lucide-react';

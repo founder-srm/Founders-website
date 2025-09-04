@@ -39,6 +39,7 @@ import { Slider } from '@/components/ui/slider';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { useUser } from '@/stores/session';
+import type { Json } from '../../../../../../../database.types';
 import type { eventsInsertType } from '../../../../../../../schema.zod';
 
 type TypeFormField = {
@@ -188,7 +189,7 @@ export function TypeformMultiStep({
         event_title: eventData.title,
         application_id: user?.id,
         is_approved: eventData.always_approve ? 'ACCEPTED' : 'SUBMITTED',
-        details: data,
+        details: data as Json,
       });
       console.log('Response:', response);
       if (!Array.isArray(response)) {
@@ -267,7 +268,7 @@ export function TypeformMultiStep({
                               <FormControl>
                                 <Input
                                   data-current-field
-                                  value={formField.value ?? ''}
+                                  value={(formField.value as string) ?? ''}
                                   onChange={formField.onChange}
                                   required={field.required}
                                 />
@@ -295,7 +296,8 @@ export function TypeformMultiStep({
                                 <Popover>
                                   <PopoverTrigger asChild>
                                     <Button variant="outline">
-                                      {formField.value ? (
+                                      {formField.value &&
+                                      formField.value instanceof Date ? (
                                         format(formField.value, 'PPP')
                                       ) : (
                                         <span>Pick a date</span>
@@ -309,7 +311,11 @@ export function TypeformMultiStep({
                                   >
                                     <Calendar
                                       mode="single"
-                                      selected={formField.value}
+                                      selected={
+                                        formField.value instanceof Date
+                                          ? formField.value
+                                          : undefined
+                                      }
                                       onSelect={formField.onChange}
                                       required={field.required}
                                       initialFocus
@@ -338,7 +344,7 @@ export function TypeformMultiStep({
                               <FormLabel>{field.label}</FormLabel>
                               <FormControl>
                                 <RadioGroup
-                                  value={formField.value ?? ''}
+                                  value={(formField.value as string) ?? ''}
                                   onValueChange={formField.onChange}
                                   className="flex flex-col space-y-1"
                                 >
@@ -381,7 +387,7 @@ export function TypeformMultiStep({
                               <FormLabel>{field.label}</FormLabel>
                               <FormControl>
                                 <Select
-                                  value={formField.value ?? ''}
+                                  value={(formField.value as string) ?? ''}
                                   onValueChange={formField.onChange}
                                   required={field.required}
                                 >
@@ -422,9 +428,19 @@ export function TypeformMultiStep({
                               <FormLabel>{field.label}</FormLabel>
                               <FormControl>
                                 <div className="space-y-2">
-                                  <div>{formField.value ?? field.min ?? 0}</div>
+                                  <div>
+                                    {String(
+                                      typeof formField.value === 'number'
+                                        ? formField.value
+                                        : (field.min ?? 0)
+                                    )}
+                                  </div>
                                   <Slider
-                                    value={[formField.value ?? field.min ?? 0]}
+                                    value={[
+                                      typeof formField.value === 'number'
+                                        ? formField.value
+                                        : (field.min ?? 0),
+                                    ]}
                                     max={field.max || 100}
                                     step={1}
                                     onValueChange={([value]) =>
@@ -479,14 +495,19 @@ export function TypeformMultiStep({
                                                     : false
                                                 }
                                                 onCheckedChange={checked => {
+                                                  const currentValue =
+                                                    Array.isArray(
+                                                      arrayField.value
+                                                    )
+                                                      ? arrayField.value
+                                                      : [];
                                                   return checked
                                                     ? arrayField.onChange([
-                                                        ...(arrayField.value ||
-                                                          []),
+                                                        ...currentValue,
                                                         item.id,
                                                       ])
                                                     : arrayField.onChange(
-                                                        arrayField.value?.filter(
+                                                        currentValue.filter(
                                                           (value: string) =>
                                                             value !== item.id
                                                         )
@@ -506,7 +527,7 @@ export function TypeformMultiStep({
                                   <div className="flex flex-row items-start space-x-3 space-y-0">
                                     <FormControl>
                                       <Checkbox
-                                        checked={formField.value}
+                                        checked={formField.value as boolean}
                                         onCheckedChange={formField.onChange}
                                       />
                                     </FormControl>
@@ -538,7 +559,8 @@ export function TypeformMultiStep({
                                   placeholder={`Enter ${field.label.toLowerCase()}`}
                                   className="resize-none"
                                   required={field.required}
-                                  {...formField}
+                                  value={(formField.value as string) ?? ''}
+                                  onChange={formField.onChange}
                                 />
                               </FormControl>
                               {touchedFields.has(step) && <FormMessage />}
