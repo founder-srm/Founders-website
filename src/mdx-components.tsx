@@ -2,6 +2,8 @@
 
 import Image from 'next/image';
 import { MDXRemote, type MDXRemoteProps } from 'next-mdx-remote/rsc';
+import type { JSX } from 'react';
+import React from 'react';
 import { CodeBlock } from '@/components/mdx/code-block';
 import {
   Table,
@@ -50,7 +52,6 @@ function slugify(str: string): string {
     .replace(/[^\w-]+/g, '') // Remove all non-word characters except for -
     .replace(/--+/g, '-'); // Replace multiple - with single -
 }
-
 function LinkHeading({
   Tag,
   slug,
@@ -62,21 +63,24 @@ function LinkHeading({
   children: React.ReactNode;
   [key: string]: any;
 }) {
-  return (
-    <Tag
-      id={slug}
-      className={cn('group flex items-center gap-2', props.className)}
-      {...props}
-    >
-      {children}
-      <a
-        href={`#${slug}`}
-        className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-foreground transition-all"
-        aria-label={`Link to ${children}`}
-      >
-        #
-      </a>
-    </Tag>
+  return React.createElement(
+    Tag,
+    {
+      id: slug,
+      className: cn('group flex items-center gap-2', props.className),
+      ...props,
+    },
+    children,
+    React.createElement(
+      'a',
+      {
+        href: `#${slug}`,
+        className:
+          'opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-foreground transition-all',
+        'aria-label': `Link to ${children}`,
+      },
+      '#'
+    )
   );
 }
 
@@ -220,7 +224,6 @@ export function CustomMDX(props: CustomMDXProps) {
   return (
     <MDXRemote
       {...props}
-      // @ts-expect-error components prop is not in the MDXRemoteProps type
       components={{ ...components, ...(props.components || {}) }}
     />
   );
