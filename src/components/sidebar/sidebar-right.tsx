@@ -54,7 +54,7 @@ export function SidebarRight({
         <NavUser {...user} />
       </SidebarHeader>
       <SidebarContent>
-        <DatePicker />
+        {/* <DatePicker /> */}
         <SidebarSeparator className="mx-0" />
         <Calendars calendars={data.calendars} />
       </SidebarContent>
