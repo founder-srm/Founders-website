@@ -5,10 +5,10 @@ import { useState } from 'react';
 import {
   Archive,
   Blocks,
-  Calendar,
   FilePlus2,
   Home,
   MessageCircleQuestion,
+  Rss,
   Search,
   Settings2,
   Trash2,
@@ -56,9 +56,9 @@ const data = {
   ],
   navSecondary: [
     {
-      title: 'Calendar',
-      url: '#',
-      icon: Calendar,
+      title: 'DevBlog',
+      url: '/admin/devblog',
+      icon: Rss,
     },
     {
       title: 'Settings',

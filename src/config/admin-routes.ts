@@ -7,8 +7,11 @@ export const adminRouteNames: RouteMap = {
   '/admin/registrations': 'Overall Registrations Dashboard',
   '/admin/events': 'Overall Events Dashboard',
   '/admin/events/create/new-event': 'Create New Event [Alpha: WIP]',
-  '/admin/registrations/view/': 'Registration Details',
-  '/admin/events/view/': 'Event Details',
+  '/admin/registrations/view': 'Registration Details',
+  '/admin/events/view': 'Event Details',
+  '/admin/devblog': 'Dev Blog Posts',
+  '/admin/devblog/new': 'New Blog Post',
+  '/admin/devblog/edit': 'Edit Blog Post',
 };
 
 export function getRouteDisplayName(route: string): string {
