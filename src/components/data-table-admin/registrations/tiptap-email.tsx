@@ -1,8 +1,5 @@
 'use client';
 
-import { Color } from '@tiptap/extension-color'
-import ListItem from '@tiptap/extension-list-item';
-import TextStyle from '@tiptap/extension-text-style';
 import { EditorProvider, useCurrentEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import {
@@ -87,8 +84,6 @@ const MenuBar = () => {
 };
 
 const extensions = [
-  Color.configure({ types: [TextStyle.name, ListItem.name] }),
-  TextStyle.configure(),
   StarterKit.configure({
     bulletList: {
       keepMarks: true,
