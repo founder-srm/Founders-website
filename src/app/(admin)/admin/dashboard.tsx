@@ -1,19 +1,19 @@
 'use client';
 
-import { useMemo } from 'react';
 import { useQuery } from '@supabase-cache-helpers/postgrest-react-query';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { BarChartComponent } from '@/components/charts-admin/bar-chart';
-import PieChartComponent from '@/components/charts-admin/pie-chart';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { createClient } from '@/utils/supabase/client';
+import { useMemo } from 'react';
 import { getAllEvents } from '@/actions/admin/events';
 import { getAllRegistrations } from '@/actions/admin/registrations';
+import { Component as AreaChartInteractive } from '@/components/charts-admin/area-chart-interactive';
+import { BarChartComponent } from '@/components/charts-admin/bar-chart';
+import { Component as BarChartHorizontal } from '@/components/charts-admin/bar-chart-horizontal';
+import PieChartComponent from '@/components/charts-admin/pie-chart';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import type { Event } from '@/types/events';
 import type { Registration } from '@/types/registrations';
-import { Component as BarChartHorizontal } from '@/components/charts-admin/bar-chart-horizontal';
-import { Component as AreaChartInteractive } from '@/components/charts-admin/area-chart-interactive';
+import { createClient } from '@/utils/supabase/client';
 
 export default function AdminDashboard() {
   const supabase = createClient();

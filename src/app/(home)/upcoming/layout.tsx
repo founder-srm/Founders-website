@@ -1,7 +1,8 @@
-import { createClient } from '@/utils/supabase/server';
 import type { Metadata, ResolvingMetadata } from 'next';
-import type { eventsInsertType } from '../../../../schema.zod';
 import { Suspense } from 'react';
+import { createClient } from '@/utils/supabase/server';
+import type { eventsInsertType } from '../../../../schema.zod';
+
 // import { EventsHeader } from '@/components/upcoming-header';
 // import { usePathname } from 'next/navigation';
 

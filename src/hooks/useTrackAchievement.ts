@@ -1,5 +1,5 @@
-import { useAchievementsStore } from '@/stores/achievements';
 import { useToast } from '@/hooks/use-toast';
+import { useAchievementsStore } from '@/stores/achievements';
 import { useUser } from '@/stores/session';
 
 export function useTrackAchievement() {

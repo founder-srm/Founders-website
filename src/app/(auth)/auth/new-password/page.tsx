@@ -1,17 +1,14 @@
 'use client';
-import type { z } from 'zod';
-import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-import Image from 'next/image';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { LucideLoaderPinwheel, TriangleAlert, Eye, EyeOff } from 'lucide-react';
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { newpasswordSchema } from '@/lib/schemas/auth';
-import { updatePassword } from '../actions';
+import { Eye, EyeOff, LucideLoaderPinwheel, TriangleAlert } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import type { z } from 'zod';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -20,6 +17,9 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { newpasswordSchema } from '@/lib/schemas/auth';
+import { updatePassword } from '../actions';
 
 export default function NewPasswordPage(props: {
   searchParams: Promise<{ message?: string; cause?: string; code?: string }>;

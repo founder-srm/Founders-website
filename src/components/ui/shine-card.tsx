@@ -1,6 +1,5 @@
 'use client';
 import { motion, useMotionTemplate, useMotionValue } from 'framer-motion';
-import { createElement, type MouseEvent } from 'react';
 import {
   BarChartHorizontal,
   BatteryCharging,
@@ -9,6 +8,7 @@ import {
   WandSparkles,
   ZoomIn,
 } from 'lucide-react';
+import { createElement, type MouseEvent } from 'react';
 
 type ShineCardProps = {
   reason: {

@@ -1,7 +1,7 @@
+import { ArrowRight, MapPin, XCircle } from 'lucide-react';
 import Link from 'next/link';
-import { MapPin, ArrowRight, XCircle } from 'lucide-react';
-import { JOBS_QUERY } from '@/sanity/lib/queries';
 import { sanityFetch } from '@/sanity/lib/live';
+import { JOBS_QUERY } from '@/sanity/lib/queries';
 
 export const revalidate = 3600;
 

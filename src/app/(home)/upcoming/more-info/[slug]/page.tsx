@@ -1,11 +1,10 @@
+import { formatInTimeZone } from 'date-fns-tz';
+import { CalendarDays, Clock, Info, MapPin, Tag, User } from 'lucide-react';
+import type { Metadata, ResolvingMetadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import { CalendarDays, Tag, User, MapPin, Clock, Info } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { createClient } from '@/utils/supabase/server';
-import type { eventsInsertType } from '../../../../../../schema.zod';
-import { CustomMDX } from '@/mdx-components';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -13,8 +12,10 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { formatInTimeZone } from 'date-fns-tz';
-import type { Metadata, ResolvingMetadata } from 'next';
+import { CustomMDX } from '@/mdx-components';
+import { createClient } from '@/utils/supabase/server';
+import type { eventsInsertType } from '../../../../../../schema.zod';
+
 // import { enGB } from 'date-fns/locale/';
 
 async function getEventsBySlug({ slug }: { slug: string }) {
@@ -82,7 +83,9 @@ export const revalidate = 3600; // revalidate every hour
 
 export default async function EventRegistrationSection({
   params,
-}: { params: Promise<{ slug: string }> }) {
+}: {
+  params: Promise<{ slug: string }>;
+}) {
   const slug = (await params).slug;
   const event = await getEventsBySlug({ slug });
 
@@ -228,7 +231,11 @@ function EventDetailCard({
   icon,
   title,
   content,
-}: { icon: React.ReactNode; title: string; content: React.ReactNode }) {
+}: {
+  icon: React.ReactNode;
+  title: string;
+  content: React.ReactNode;
+}) {
   return (
     <Card className="bg-accent border-background">
       <CardHeader>

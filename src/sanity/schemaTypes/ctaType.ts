@@ -1,5 +1,5 @@
-import { defineType, defineField } from 'sanity';
 import { GrAnnounce } from 'react-icons/gr';
+import { defineField, defineType } from 'sanity';
 
 export const ctaType = defineType({
   name: 'cta',

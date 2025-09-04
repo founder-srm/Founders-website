@@ -1,8 +1,7 @@
-import { AvatarGroup, BookDemoForm } from '@/components/contact-form';
-import { sanityFetch } from '@/sanity/lib/live';
-import { CONTACT_US_QUERY } from '@/sanity/lib/queries';
-import { SanityLive } from '@/sanity/lib/live';
 import type { Key } from 'react';
+import { AvatarGroup, BookDemoForm } from '@/components/contact-form';
+import { SanityLive, sanityFetch } from '@/sanity/lib/live';
+import { CONTACT_US_QUERY } from '@/sanity/lib/queries';
 
 export const revalidate = 3600; // revalidate every hour
 

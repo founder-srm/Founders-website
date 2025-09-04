@@ -1,6 +1,6 @@
+import type { Event } from '@/types/events';
 import { createClient } from '@/utils/supabase/client';
 import { eventsInsertSchema, type typeformInsertType } from '../../schema.zod';
-import type { Event } from '@/types/events';
 
 export async function createEvent(eventData: Event) {
   const supabase = createClient();

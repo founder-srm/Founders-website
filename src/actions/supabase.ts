@@ -1,10 +1,10 @@
-import { createClient } from '@/utils/supabase/client';
 import type {
   AuthError,
   Provider,
   User,
   UserIdentity,
 } from '@supabase/supabase-js';
+import { createClient } from '@/utils/supabase/client';
 
 type ActionResponse = {
   error: null | AuthError;

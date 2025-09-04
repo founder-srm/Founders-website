@@ -1,13 +1,13 @@
 'use client';
 
-import Link from 'next/link';
-import Image from 'next/image';
 import { format } from 'date-fns';
-import { type BlogPost, getAllPosts } from '@/lib/mdx';
-import { useEffect, useState } from 'react';
-import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import BlurFade from '@/components/ui/blur-fade';
+import { Button } from '@/components/ui/button';
+import { type BlogPost, getAllPosts } from '@/lib/mdx';
 
 // // Set revalidation time to 1 hour (3600 seconds)
 // export const revalidate = 3600;

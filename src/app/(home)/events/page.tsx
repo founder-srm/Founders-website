@@ -1,13 +1,12 @@
-import { sanityFetch } from '@/sanity/lib/live';
-import { ALL_EVENTS_QUERY } from '@/sanity/lib/queries';
-import Link from 'next/link';
+import { format } from 'date-fns';
+import { ChevronLeft, ChevronRight, Mail } from 'lucide-react';
 import Image from 'next/image';
-import { urlFor } from '@/sanity/lib/image';
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { SanityLive } from '@/sanity/lib/live';
-import { format } from 'date-fns';
-import { Mail, ChevronLeft, ChevronRight } from 'lucide-react';
+import { urlFor } from '@/sanity/lib/image';
+import { SanityLive, sanityFetch } from '@/sanity/lib/live';
+import { ALL_EVENTS_QUERY } from '@/sanity/lib/queries';
 
 const categories = [
   'Webinar',

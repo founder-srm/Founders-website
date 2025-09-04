@@ -1,8 +1,8 @@
+import { formatInTimeZone } from 'date-fns-tz';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import type { eventsInsertType } from '../../schema.zod';
-import { formatInTimeZone } from 'date-fns-tz';
 
 interface UpcomingCardProps {
   post: eventsInsertType;

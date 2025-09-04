@@ -1,5 +1,5 @@
-import { defineType, defineField } from 'sanity';
 import { FaBookOpen } from 'react-icons/fa';
+import { defineField, defineType } from 'sanity';
 
 export const ourStoryType = defineType({
   name: 'ourStory',

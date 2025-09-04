@@ -1,16 +1,24 @@
 'use client';
 
-import { Download, Share2, Mail, TriangleAlert, X } from 'lucide-react';
+import confetti from 'canvas-confetti';
+import { Download, Mail, Share2, TriangleAlert, X } from 'lucide-react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useRef, useState } from 'react';
+import QRCode from 'react-qr-code';
 // Remove useToast import
 import RateLimitedButton from '@/components/RateLimitedButton';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState, useRef } from 'react';
-import { createClient } from '@/utils/supabase/client';
-import QRCode from 'react-qr-code';
-import confetti from 'canvas-confetti';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import type { typeformInsertType } from '../../../../../../../schema.zod';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import ScratchToReveal from '@/components/ui/scratch-to-reveal';
 import {
   Select,
   SelectContent,
@@ -19,16 +27,8 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import ScratchToReveal from '@/components/ui/scratch-to-reveal';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
+import { createClient } from '@/utils/supabase/client';
+import type { typeformInsertType } from '../../../../../../../schema.zod';
 
 export default function CustomizeTicketPage() {
   // Add new state for QR code size

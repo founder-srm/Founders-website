@@ -187,7 +187,7 @@ code[class*="language-"] {
     line-height: 1.1;
     margin-top: 2.5rem;
     text-wrap: pretty;
-    color: #f0f0f0
+    color: #f0f0f0;
   }
 
   h1,
@@ -222,12 +222,12 @@ code[class*="language-"] {
     font-size: 0.85rem;
     padding: 0.25em 0.3em;
   }
-  
+
   pre {
     background: var(--black);
     border-radius: 0.5rem;
     color: var(--white);
-    font-family: 'JetBrainsMono', monospace;
+    font-family: "JetBrainsMono", monospace;
     margin: 1.5rem 0;
     padding: 0.75rem 1rem;
 
@@ -304,87 +304,94 @@ code[class*="language-"] {
     margin: 2rem 0;
   }
   /* TipTap Editor Styles */
-.ProseMirror {
-  outline: none;
-  padding: 1rem;
-  min-height: 400px;
-}
+  .ProseMirror {
+    outline: none;
+    padding: 1rem;
+    min-height: 400px;
+  }
 
-.ProseMirror p.is-editor-empty:first-child::before {
-  color: #adb5bd;
-  content: attr(data-placeholder);
-  float: left;
-  height: 0;
-  pointer-events: none;
-}
+  .ProseMirror p.is-editor-empty:first-child::before {
+    color: #adb5bd;
+    content: attr(data-placeholder);
+    float: left;
+    height: 0;
+    pointer-events: none;
+  }
 
-.ProseMirror .is-empty::before {
-  color: #adb5bd;
-  content: attr(data-placeholder);
-  float: left;
-  height: 0;
-  pointer-events: none;
-}
+  .ProseMirror .is-empty::before {
+    color: #adb5bd;
+    content: attr(data-placeholder);
+    float: left;
+    height: 0;
+    pointer-events: none;
+  }
 
-/* Highlight styles */
-.ProseMirror mark {
-  background-color: #fef08a;
-  padding: 0.125rem 0.25rem;
-  border-radius: 0.25rem;
-}
+  /* Highlight styles */
+  .ProseMirror mark {
+    background-color: #fef08a;
+    padding: 0.125rem 0.25rem;
+    border-radius: 0.25rem;
+  }
 
-/* Focus styles */
-.ProseMirror:focus {
-  outline: none;
-}
+  /* Focus styles */
+  .ProseMirror:focus {
+    outline: none;
+  }
 
-/* List styles */
-.ProseMirror ul, .ProseMirror ol {
-  padding-left: 1.5rem;
-}
+  /* List styles */
+  .ProseMirror ul,
+  .ProseMirror ol {
+    padding-left: 1.5rem;
+  }
 
-.ProseMirror li {
-  margin: 0.25rem 0;
-}
+  .ProseMirror li {
+    margin: 0.25rem 0;
+  }
 
-/* Blockquote styles */
-.ProseMirror blockquote {
-  border-left: 4px solid #e5e7eb;
-  padding-left: 1rem;
-  margin: 1rem 0;
-  color: #6b7280;
-  font-style: italic;
-}
+  /* Blockquote styles */
+  .ProseMirror blockquote {
+    border-left: 4px solid #e5e7eb;
+    padding-left: 1rem;
+    margin: 1rem 0;
+    color: #6b7280;
+    font-style: italic;
+  }
 
-/* Code styles */
-.ProseMirror code {
-  background-color: #f3f4f6;
-  padding: 0.125rem 0.25rem;
-  border-radius: 0.25rem;
-  font-family: ui-monospace, SFMono-Regular, 'Cascadia Code', Consolas, 'Liberation Mono', Menlo, monospace;
-  font-size: 0.875em;
-}
+  /* Code styles */
+  .ProseMirror code {
+    background-color: #f3f4f6;
+    padding: 0.125rem 0.25rem;
+    border-radius: 0.25rem;
+    font-family:
+      ui-monospace, SFMono-Regular, "Cascadia Code", Consolas, "Liberation Mono",
+      Menlo, monospace;
+    font-size: 0.875em;
+  }
 
-/* Heading styles */
-.ProseMirror h1, .ProseMirror h2, .ProseMirror h3, .ProseMirror h4, .ProseMirror h5, .ProseMirror h6 {
-  margin: 1.5rem 0 0.5rem 0;
-  font-weight: 600;
-  line-height: 1.25;
-  color: #f0f0f0
-}
+  /* Heading styles */
+  .ProseMirror h1,
+  .ProseMirror h2,
+  .ProseMirror h3,
+  .ProseMirror h4,
+  .ProseMirror h5,
+  .ProseMirror h6 {
+    margin: 1.5rem 0 0.5rem 0;
+    font-weight: 600;
+    line-height: 1.25;
+    color: #f0f0f0;
+  }
 
-.ProseMirror h1 {
-  font-size: 2rem;
-}
+  .ProseMirror h1 {
+    font-size: 2rem;
+  }
 
-.ProseMirror h2 {
-  font-size: 1.5rem;
-}
+  .ProseMirror h2 {
+    font-size: 1.5rem;
+  }
 
-.ProseMirror h3 {
-  font-size: 1.25rem;
-}
-
+  .ProseMirror h3 {
+    font-size: 1.25rem;
+  }
 }
 
 .user-banner {
@@ -425,7 +432,7 @@ code[class*="language-"] {
   padding: 1rem;
   overflow-x: auto;
   margin: 0;
-  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
   font-size: 0.875rem;
   line-height: 1.5;
 }
@@ -448,4 +455,3 @@ code[class*="language-"] {
   background: #1f2937;
   color: #f9fafb;
 }
-

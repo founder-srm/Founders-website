@@ -1,7 +1,7 @@
-import { cn } from '@/lib/utils';
-import type React from 'react';
-import { useRef, useEffect, useState } from 'react';
 import { motion, useAnimation } from 'motion/react';
+import type React from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { cn } from '@/lib/utils';
 
 interface ScratchToRevealProps {
   children: React.ReactNode;

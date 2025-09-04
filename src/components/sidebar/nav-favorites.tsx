@@ -1,8 +1,9 @@
 'use client';
 
-import { AlertCircle, Link2 } from 'lucide-react';
-import { ArrowUpRight, MoreHorizontal } from 'lucide-react';
-
+import { useQuery } from '@supabase-cache-helpers/postgrest-react-query';
+import { AlertCircle, ArrowUpRight, Link2, MoreHorizontal } from 'lucide-react';
+import Link from 'next/link';
+import { getRecentRegistrations } from '@/actions/admin/registrations';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,12 +21,9 @@ import {
   SidebarMenuSkeleton,
   useSidebar,
 } from '@/components/ui/sidebar';
-import { getRecentRegistrations } from '@/actions/admin/registrations';
-import { createClient } from '@/utils/supabase/client';
-import { useQuery } from '@supabase-cache-helpers/postgrest-react-query';
-import type { Registration } from '@/types/registrations';
-import Link from 'next/link';
 import config from '@/lib/config';
+import type { Registration } from '@/types/registrations';
+import { createClient } from '@/utils/supabase/client';
 
 function LoadingSkeleton() {
   return (

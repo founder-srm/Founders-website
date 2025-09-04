@@ -1,11 +1,11 @@
 'use client';
 
+import Image from 'next/image';
 import { useState } from 'react';
-import { sendResetPasswordLink } from '../actions'; // Import the function
+import { Alert, AlertDescription } from '@/components/ui/alert'; // Tailwind UI components
 import { Button } from '@/components/ui/button'; // Tailwind UI components
 import { Input } from '@/components/ui/input'; // Tailwind UI components
-import { Alert, AlertDescription } from '@/components/ui/alert'; // Tailwind UI components
-import Image from 'next/image';
+import { sendResetPasswordLink } from '../actions'; // Import the function
 
 const ResetPassword = () => {
   const [email, setEmail] = useState('');

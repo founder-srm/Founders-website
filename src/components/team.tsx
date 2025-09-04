@@ -1,11 +1,11 @@
 'use client';
 import { Github, Globe, Linkedin } from 'lucide-react';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from './ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useState } from 'react';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { urlFor } from '@/sanity/lib/image';
 import type { OurTeam, TEAM_QUERYResult } from '../../sanity.types';
+import { Button } from './ui/button';
 
 type SocialLink = {
   platform: 'github' | 'linkedin' | 'website';

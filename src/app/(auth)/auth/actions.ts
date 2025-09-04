@@ -2,14 +2,13 @@
 
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-
-import { createClient } from '@/utils/supabase/server';
 import {
-  loginSchema,
-  signupSchema,
   type LoginFormData,
+  loginSchema,
   type SignupFormData,
+  signupSchema,
 } from '@/lib/schemas/auth';
+import { createClient } from '@/utils/supabase/server';
 export async function updatePassword(newPassword: string) {
   if (!newPassword || newPassword.trim().length < 6) {
     return {

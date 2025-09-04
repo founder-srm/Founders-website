@@ -1,6 +1,7 @@
 'use client';
 
 import { TrendingUp } from 'lucide-react';
+import { useMemo } from 'react';
 import {
   Bar,
   BarChart,
@@ -9,10 +10,6 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-import { useMemo } from 'react';
-import type { Event } from '@/types/events';
-import type { Registration } from '@/types/registrations';
-
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import {
   type ChartConfig,
@@ -20,6 +17,8 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
+import type { Event } from '@/types/events';
+import type { Registration } from '@/types/registrations';
 
 const chartConfig = {
   registrations: {

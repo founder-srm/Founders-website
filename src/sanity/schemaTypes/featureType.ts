@@ -1,5 +1,5 @@
-import { defineType, defineField } from 'sanity';
 import { RiSettings4Line } from 'react-icons/ri';
+import { defineField, defineType } from 'sanity';
 
 export const featureType = defineType({
   name: 'feature',

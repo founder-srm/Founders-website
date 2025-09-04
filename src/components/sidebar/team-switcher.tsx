@@ -1,9 +1,9 @@
 'use client';
 
-import * as React from 'react';
-import { ChevronDown, Shield, UserPlus } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
-
+import { ChevronDown, Shield, UserPlus } from 'lucide-react';
+import * as React from 'react';
+import { Badge } from '@/components/ui/badge';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,14 +17,13 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
+import { useToast } from '@/hooks/use-toast';
 import { useUser } from '@/stores/session';
 import {
   createClient,
   debugSupabaseKey,
 } from '@/utils/supabase/elevatedClient';
 import { UserInviteDialog } from './user-invite-dialog';
-import { Badge } from '@/components/ui/badge';
-import { useToast } from '@/hooks/use-toast';
 
 export function TeamSwitcher() {
   const user = useUser();

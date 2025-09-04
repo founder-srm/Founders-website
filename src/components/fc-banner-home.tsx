@@ -1,7 +1,7 @@
 'use client';
 import { Sparkle } from 'lucide-react';
+import { memo, useEffect, useState } from 'react';
 import { InfiniteSlider } from './ui/infinite-slider';
-import { memo, useState, useEffect } from 'react';
 
 interface BannerSingletonProps {
   color: string;

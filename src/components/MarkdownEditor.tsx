@@ -1,40 +1,45 @@
 'use client';
 
-import React from 'react';
-import { EditorContent, useEditor, useEditorState, ReactNodeViewRenderer } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
+import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
 import Highlight from '@tiptap/extension-highlight';
 import Typography from '@tiptap/extension-typography';
-import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
-import { createLowlight } from 'lowlight';
+import {
+  EditorContent,
+  ReactNodeViewRenderer,
+  useEditor,
+  useEditorState,
+} from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import bash from 'highlight.js/lib/languages/bash';
 import css from 'highlight.js/lib/languages/css';
 import js from 'highlight.js/lib/languages/javascript';
+import json from 'highlight.js/lib/languages/json';
+import python from 'highlight.js/lib/languages/python';
 import ts from 'highlight.js/lib/languages/typescript';
 import html from 'highlight.js/lib/languages/xml';
-import python from 'highlight.js/lib/languages/python';
-import bash from 'highlight.js/lib/languages/bash';
-import json from 'highlight.js/lib/languages/json';
-import CodeBlockComponent from './CodeBlockComponent';
-import { Button } from '@/components/ui/button';
-import { 
-  Bold, 
-  Italic, 
-  Strikethrough, 
-  Code, 
+import { createLowlight } from 'lowlight';
+import {
+  Bold,
+  Code,
   Code2,
-  Heading1, 
-  Heading2, 
+  Heading1,
+  Heading2,
   Heading3,
+  Highlighter,
+  Italic,
   List,
   ListOrdered,
   Quote,
-  Undo,
   Redo,
-  Highlighter
+  Strikethrough,
+  Undo,
 } from 'lucide-react';
-import { Toggle } from '@/components/ui/toggle';
+import React from 'react';
+import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import { Toggle } from '@/components/ui/toggle';
 import { cn } from '@/lib/utils';
+import CodeBlockComponent from './CodeBlockComponent';
 
 // Create lowlight instance with common languages
 const lowlight = createLowlight();
@@ -55,11 +60,11 @@ interface MarkdownEditorProps {
   className?: string;
 }
 
-const MarkdownEditor = React.memo(function MarkdownEditor({ 
-  content, 
-  onChange, 
-  placeholder = "Start writing your blog post...",
-  className 
+const MarkdownEditor = React.memo(function MarkdownEditor({
+  content,
+  onChange,
+  placeholder = 'Start writing your blog post...',
+  className,
 }: MarkdownEditorProps) {
   const editor = useEditor({
     extensions: [
@@ -103,9 +108,9 @@ const MarkdownEditor = React.memo(function MarkdownEditor({
   // Use selective editor state to minimize re-renders
   const editorState = useEditorState({
     editor,
-    selector: (ctx) => {
+    selector: ctx => {
       if (!ctx.editor) return null;
-      
+
       return {
         isBold: ctx.editor.isActive('bold'),
         isItalic: ctx.editor.isActive('italic'),
@@ -126,7 +131,7 @@ const MarkdownEditor = React.memo(function MarkdownEditor({
     equalityFn: (prev, next) => {
       if (!prev && !next) return true;
       if (!prev || !next) return false;
-      
+
       return (
         prev.isBold === next.isBold &&
         prev.isItalic === next.isItalic &&
@@ -170,7 +175,7 @@ const MarkdownEditor = React.memo(function MarkdownEditor({
         >
           <Bold className="h-4 w-4" />
         </Toggle>
-        
+
         <Toggle
           pressed={editorState?.isItalic || false}
           onPressedChange={() => editor.chain().focus().toggleItalic().run()}
@@ -179,7 +184,7 @@ const MarkdownEditor = React.memo(function MarkdownEditor({
         >
           <Italic className="h-4 w-4" />
         </Toggle>
-        
+
         <Toggle
           pressed={editorState?.isStrike || false}
           onPressedChange={() => editor.chain().focus().toggleStrike().run()}
@@ -188,7 +193,7 @@ const MarkdownEditor = React.memo(function MarkdownEditor({
         >
           <Strikethrough className="h-4 w-4" />
         </Toggle>
-        
+
         <Toggle
           pressed={editorState?.isCode || false}
           onPressedChange={() => editor.chain().focus().toggleCode().run()}
@@ -221,25 +226,31 @@ const MarkdownEditor = React.memo(function MarkdownEditor({
         {/* Headings */}
         <Toggle
           pressed={editorState?.isHeading1 || false}
-          onPressedChange={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+          onPressedChange={() =>
+            editor.chain().focus().toggleHeading({ level: 1 }).run()
+          }
           size="sm"
           aria-label="Heading 1"
         >
           <Heading1 className="h-4 w-4" />
         </Toggle>
-        
+
         <Toggle
           pressed={editorState?.isHeading2 || false}
-          onPressedChange={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+          onPressedChange={() =>
+            editor.chain().focus().toggleHeading({ level: 2 }).run()
+          }
           size="sm"
           aria-label="Heading 2"
         >
           <Heading2 className="h-4 w-4" />
         </Toggle>
-        
+
         <Toggle
           pressed={editorState?.isHeading3 || false}
-          onPressedChange={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+          onPressedChange={() =>
+            editor.chain().focus().toggleHeading({ level: 3 }).run()
+          }
           size="sm"
           aria-label="Heading 3"
         >
@@ -251,16 +262,20 @@ const MarkdownEditor = React.memo(function MarkdownEditor({
         {/* Lists */}
         <Toggle
           pressed={editorState?.isBulletList || false}
-          onPressedChange={() => editor.chain().focus().toggleBulletList().run()}
+          onPressedChange={() =>
+            editor.chain().focus().toggleBulletList().run()
+          }
           size="sm"
           aria-label="Bullet List"
         >
           <List className="h-4 w-4" />
         </Toggle>
-        
+
         <Toggle
           pressed={editorState?.isOrderedList || false}
-          onPressedChange={() => editor.chain().focus().toggleOrderedList().run()}
+          onPressedChange={() =>
+            editor.chain().focus().toggleOrderedList().run()
+          }
           size="sm"
           aria-label="Ordered List"
         >
@@ -269,7 +284,9 @@ const MarkdownEditor = React.memo(function MarkdownEditor({
 
         <Toggle
           pressed={editorState?.isBlockquote || false}
-          onPressedChange={() => editor.chain().focus().toggleBlockquote().run()}
+          onPressedChange={() =>
+            editor.chain().focus().toggleBlockquote().run()
+          }
           size="sm"
           aria-label="Quote"
         >
@@ -288,7 +305,7 @@ const MarkdownEditor = React.memo(function MarkdownEditor({
         >
           <Undo className="h-4 w-4" />
         </Button>
-        
+
         <Button
           variant="ghost"
           size="sm"
@@ -302,17 +319,15 @@ const MarkdownEditor = React.memo(function MarkdownEditor({
 
       {/* Editor Content */}
       <div className="min-h-[400px]">
-        <EditorContent 
-          editor={editor} 
-          placeholder={placeholder}
-        />
+        <EditorContent editor={editor} placeholder={placeholder} />
       </div>
 
       {/* Help Text */}
       <div className="border-t bg-muted/30 p-2 text-xs text-muted-foreground">
         <p>
-          <strong>Markdown shortcuts:</strong> Use # for headings, * for bold, _ for italic, 
-          ` for code, {'>'}  for quotes, - or * for lists. Type == to highlight text.
+          <strong>Markdown shortcuts:</strong> Use # for headings, * for bold, _
+          for italic, ` for code, {'>'} for quotes, - or * for lists. Type == to
+          highlight text.
         </p>
       </div>
     </div>

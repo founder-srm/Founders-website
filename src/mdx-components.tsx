@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { MDXRemote, type MDXRemoteProps } from 'next-mdx-remote/rsc';
+
 import Image from 'next/image';
+import { MDXRemote, type MDXRemoteProps } from 'next-mdx-remote/rsc';
+import { CodeBlock } from '@/components/mdx/code-block';
 import {
   Table,
   TableBody,
@@ -9,12 +11,13 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { CodeBlock } from '@/components/mdx/code-block';
 import { cn } from './lib/utils';
 
 function ShadcnTable({
   data,
-}: { data: { headers: string[]; rows: string[][] } }) {
+}: {
+  data: { headers: string[]; rows: string[][] };
+}) {
   return (
     <Table>
       <TableHeader>
@@ -44,8 +47,8 @@ function slugify(str: string): string {
     .trim() // Remove whitespace from both ends of a string
     .replace(/\s+/g, '-') // Replace spaces with -
     .replace(/&/g, '-and-') // Replace & with 'and'
-    .replace(/[^\w\-]+/g, '') // Remove all non-word characters except for -
-    .replace(/\-\-+/g, '-'); // Replace multiple - with single -
+    .replace(/[^\w-]+/g, '') // Remove all non-word characters except for -
+    .replace(/--+/g, '-'); // Replace multiple - with single -
 }
 
 function LinkHeading({

@@ -1,5 +1,5 @@
-import type * as React from 'react';
 import { Plus } from 'lucide-react';
+import type * as React from 'react';
 
 import {
   Sidebar,
@@ -11,10 +11,10 @@ import {
   SidebarMenuItem,
   SidebarSeparator,
 } from '@/components/ui/sidebar';
-import { NavUser } from './nav-user';
-import { DatePicker } from './date-picker';
-import { Calendars } from './calendars';
 import { useUser } from '@/stores/session';
+import { Calendars } from './calendars';
+import { DatePicker } from './date-picker';
+import { NavUser } from './nav-user';
 
 // This is sample data.
 const data = {

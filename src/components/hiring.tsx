@@ -1,9 +1,9 @@
-import { cn } from '@/lib/utils';
-import { buttonVariants } from '@/components/ui/button';
-import { sanityFetch } from '@/sanity/lib/live';
-import { JOBS_QUERY } from '@/sanity/lib/queries';
 import { XCircle } from 'lucide-react';
 import Link from 'next/link';
+import { buttonVariants } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+import { sanityFetch } from '@/sanity/lib/live';
+import { JOBS_QUERY } from '@/sanity/lib/queries';
 
 export const revalidate = 3600; // revalidate every hour
 

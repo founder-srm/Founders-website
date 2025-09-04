@@ -1,5 +1,5 @@
-import { defineType, defineField } from 'sanity';
 import { FaStream } from 'react-icons/fa';
+import { defineField, defineType } from 'sanity';
 
 export const timelineType = defineType({
   name: 'timeline',

@@ -1,24 +1,22 @@
 'use client';
 
-import React, { use, useState } from 'react';
-import { login } from '../actions';
-import Image from 'next/image';
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Input } from '@/components/ui/input';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { GoogleIcon } from '@/components/custom-icons/custom-icons';
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
+  Eye,
+  EyeOff,
   Github,
   LucideLoaderPinwheel,
   TriangleAlert,
-  Eye,
-  EyeOff,
 } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import React, { use, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { loginSchema, type LoginFormData } from '@/lib/schemas/auth';
+import { signInWithOAuth } from '@/actions/supabase';
+import { GoogleIcon } from '@/components/custom-icons/custom-icons';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Form,
   FormControl,
@@ -27,8 +25,10 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { signInWithOAuth } from '@/actions/supabase';
+import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
+import { type LoginFormData, loginSchema } from '@/lib/schemas/auth';
+import { login } from '../actions';
 
 export default function LoginPage(props: {
   searchParams: Promise<{ message: string; cause: string; code: string }>;

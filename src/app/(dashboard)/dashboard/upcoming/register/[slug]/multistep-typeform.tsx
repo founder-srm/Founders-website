@@ -1,26 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
-import { useEffect, useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 import { format } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { sendEventRegistration } from '@/actions/typeform-upload';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import { Slider } from '@/components/ui/slider';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Calendar } from '@/components/ui/calendar';
-import { Progress } from '@/components/ui/progress';
-import { Textarea } from '@/components/ui/textarea';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Form,
   FormControl,
@@ -30,16 +20,26 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { sendEventRegistration } from '@/actions/typeform-upload';
-import type { eventsInsertType } from '../../../../../../../schema.zod';
-import { useUser } from '@/stores/session';
-import { useRouter } from 'next/navigation';
+import { Progress } from '@/components/ui/progress';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Slider } from '@/components/ui/slider';
+import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
+import { useUser } from '@/stores/session';
+import type { eventsInsertType } from '../../../../../../../schema.zod';
 
 type TypeFormField = {
   fieldType:
@@ -140,7 +140,10 @@ function generateZodSchema(fields: TypeFormField[]) {
 export function TypeformMultiStep({
   eventData,
   fields,
-}: { eventData: eventsInsertType; fields: TypeFormField[] }) {
+}: {
+  eventData: eventsInsertType;
+  fields: TypeFormField[];
+}) {
   const [step, setStep] = useState(0);
   const [touchedFields, setTouchedFields] = useState<Set<number>>(new Set());
   const formSchema = generateZodSchema(fields);

@@ -1,18 +1,17 @@
 'use client';
+import { formatInTimeZone } from 'date-fns-tz';
+import { Info, Radio } from 'lucide-react';
+import { useParams, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { z } from 'zod';
-import { createClient } from '@/utils/supabase/client';
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { Button } from '@/components/ui/button';
 import { useUser } from '@/stores/session';
+import { createClient } from '@/utils/supabase/client';
 import {
-  typeformFieldSchema,
   type eventsInsertType,
+  typeformFieldSchema,
 } from '../../../../../../../schema.zod';
 import { TypeformMultiStep } from './multistep-typeform';
-import { useParams } from 'next/navigation';
-import { Info, Radio } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { formatInTimeZone } from 'date-fns-tz';
 
 const typeformSchema = z
   .array(typeformFieldSchema)

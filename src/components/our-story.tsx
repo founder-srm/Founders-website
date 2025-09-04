@@ -1,7 +1,7 @@
+import Image from 'next/image';
 import { urlFor } from '@/sanity/lib/image';
 import { sanityFetch } from '@/sanity/lib/live';
 import { OUR_STORY_QUERY } from '@/sanity/lib/queries';
-import Image from 'next/image';
 
 export const revalidate = 3600; // revalidate every hour
 

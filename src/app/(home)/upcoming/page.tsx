@@ -4,8 +4,8 @@ import { FeaturedPost } from '@/components/upcoming-featured';
 import { UpcomingGrid } from '@/components/upcoming-grid';
 import { TabNavigation } from '@/components/upcoming-nav';
 import { Pagination } from '@/components/upcoming-pagination';
-import type { eventsInsertType } from '../../../../schema.zod';
 import { createClient } from '@/utils/supabase/client';
+import type { eventsInsertType } from '../../../../schema.zod';
 
 export default function Upcoming() {
   const [events, setEvents] = useState<eventsInsertType[]>([]);

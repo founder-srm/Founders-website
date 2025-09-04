@@ -1,5 +1,5 @@
-import { defineField, defineType } from 'sanity';
 import { MobileDeviceIcon } from '@sanity/icons';
+import { defineField, defineType } from 'sanity';
 
 export const contactUsType = defineType({
   name: 'contactUs',

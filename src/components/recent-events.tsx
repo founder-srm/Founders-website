@@ -1,9 +1,9 @@
 import { ArrowRight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { urlFor } from '@/sanity/lib/image';
 import { sanityFetch } from '@/sanity/lib/live';
 import { EVENTS_QUERY } from '@/sanity/lib/queries';
-import { urlFor } from '@/sanity/lib/image';
 
 export const revalidate = 3600; // revalidate every hour
 

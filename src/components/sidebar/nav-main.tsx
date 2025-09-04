@@ -1,11 +1,11 @@
 'use client';
 
+import type { LucideIcon } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { cn } from '@/lib/utils';
-import type { LucideIcon } from 'lucide-react';
 import { buttonVariants } from '@/components/ui/button';
 import { KeyboardShortcut } from '@/components/ui/keyboard-shortcut';
+import { cn } from '@/lib/utils';
 
 interface NavMainProps {
   items: {

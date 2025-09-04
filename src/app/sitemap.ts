@@ -1,9 +1,9 @@
+import type { MetadataRoute } from 'next';
 import config from '@/lib/config';
 import { getAllPosts } from '@/lib/mdx';
 import { sanityFetch } from '@/sanity/lib/live';
 import { ALL_EVENTS_QUERY } from '@/sanity/lib/queries';
 import { createClient } from '@/utils/supabase/server';
-import type { MetadataRoute } from 'next';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = config.baseUrl;

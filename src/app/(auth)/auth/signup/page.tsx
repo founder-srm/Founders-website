@@ -1,17 +1,14 @@
 'use client';
 
-import { use, useState } from 'react';
-import { signup } from '../actions';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { LucideLoaderPinwheel, TriangleAlert } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { use, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Input } from '@/components/ui/input';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { LucideLoaderPinwheel, TriangleAlert } from 'lucide-react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { signupSchema, type SignupFormData } from '@/lib/schemas/auth';
 import {
   Form,
   FormControl,
@@ -20,6 +17,9 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { type SignupFormData, signupSchema } from '@/lib/schemas/auth';
+import { signup } from '../actions';
 
 export default function SignupPage(props: {
   searchParams: Promise<{ message: string; cause: string; code: string }>;

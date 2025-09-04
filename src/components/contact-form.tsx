@@ -1,8 +1,10 @@
 'use client';
 
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
@@ -10,12 +12,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Label } from '@/components/ui/label';
-import { Avatar, AvatarImage } from './ui/avatar';
-import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
 import { urlFor } from '@/sanity/lib/image';
 import { createClient } from '@/utils/supabase/client';
+import { Avatar, AvatarImage } from './ui/avatar';
 
 interface Country {
   name: {

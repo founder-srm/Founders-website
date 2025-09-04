@@ -1,11 +1,25 @@
 'use client';
 
-import { getRegistrationById } from '@/actions/admin/registrations';
-import type { Registration } from '@/types/registrations';
-import type { Database } from '../../../database.types';
-import { createClient } from '@/utils/supabase/client';
 import { useQuery } from '@supabase-cache-helpers/postgrest-react-query';
+import { formatInTimeZone } from 'date-fns-tz';
+import {
+  AlertTriangle,
+  CheckCircle,
+  FilePlus,
+  Loader2,
+  Mail,
+  XCircle,
+} from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import {
+  useUpdateRegistrationApprovalMutation,
+  useUpdateRegistrationAttendanceMutation,
+} from '@/actions/admin/hooks/registrations';
+import { getRegistrationById } from '@/actions/admin/registrations';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -20,23 +34,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import {
-  CheckCircle,
-  XCircle,
-  AlertTriangle,
-  Mail,
-  FilePlus,
-  Loader2,
-} from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { formatInTimeZone } from 'date-fns-tz';
+import { useToast } from '@/hooks/use-toast';
+import type { Registration } from '@/types/registrations';
+import { createClient } from '@/utils/supabase/client';
+import type { Database } from '../../../database.types';
+import Tiptap from '../data-table-admin/registrations/tiptap-email';
 import {
   Dialog,
   DialogContent,
@@ -46,14 +52,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '../ui/dialog';
-import { Label } from '../ui/label';
 import { Input } from '../ui/input';
-import Tiptap from '../data-table-admin/registrations/tiptap-email';
-import { useToast } from '@/hooks/use-toast';
-import {
-  useUpdateRegistrationApprovalMutation,
-  useUpdateRegistrationAttendanceMutation,
-} from '@/actions/admin/hooks/registrations';
+import { Label } from '../ui/label';
 
 const isValidDate = (value: string) => {
   const date = new Date(value);

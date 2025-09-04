@@ -1,5 +1,5 @@
-import { defineType, defineField } from 'sanity';
 import { RiSpeakAiLine } from 'react-icons/ri';
+import { defineField, defineType } from 'sanity';
 
 export const testimonialType = defineType({
   name: 'testimonial',

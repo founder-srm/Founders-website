@@ -1,9 +1,9 @@
 'use client';
 
+import type { SanityImageSource } from '@sanity/image-url/lib/types/types';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { urlFor } from '@/sanity/lib/image';
-import type { SanityImageSource } from '@sanity/image-url/lib/types/types';
 import type { SanityImageCrop, SanityImageHotspot } from '../../sanity.types';
 
 interface TimelineItemProps {

@@ -85,9 +85,12 @@ Deno.serve(async req => {
     );
   } catch (error) {
     console.error('Error:', error); // Log the full error details on the server
-    return new Response(JSON.stringify({ message: "An internal server error occurred" }), {
-      headers: { 'Content-Type': 'application/json' },
-      status: 500,
-    });
+    return new Response(
+      JSON.stringify({ message: 'An internal server error occurred' }),
+      {
+        headers: { 'Content-Type': 'application/json' },
+        status: 500,
+      }
+    );
   }
 });

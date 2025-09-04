@@ -1,20 +1,21 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { sanityFetch, SanityLive } from '@/sanity/lib/live';
-import type { Metadata, ResolvingMetadata } from 'next';
-import { EVENT_BY_SLUG_QUERY } from '@/sanity/lib/queries';
-import { urlFor } from '@/sanity/lib/image';
-import { getImageDimensions } from '@sanity/asset-utils';
-import Image from 'next/image';
+
 import {
   PortableText,
-  type PortableTextComponentProps,
   type PortableTextBlock,
+  type PortableTextComponentProps,
 } from '@portabletext/react';
-import Link from 'next/link';
+import { getImageDimensions } from '@sanity/asset-utils';
 import { format } from 'date-fns';
-import { AlignLeft, Calendar, ArrowLeft } from 'lucide-react';
+import { AlignLeft, ArrowLeft, Calendar } from 'lucide-react';
+import type { Metadata, ResolvingMetadata } from 'next';
+import Image from 'next/image';
+import Link from 'next/link';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { urlFor } from '@/sanity/lib/image';
+import { SanityLive, sanityFetch } from '@/sanity/lib/live';
+import { EVENT_BY_SLUG_QUERY } from '@/sanity/lib/queries';
 
 const Header1 = ({
   children,
@@ -72,7 +73,10 @@ const BlockQuote = ({
 const CustomLink = ({
   value,
   children,
-}: { value?: { href: string }; children: React.ReactNode }) => {
+}: {
+  value?: { href: string };
+  children: React.ReactNode;
+}) => {
   if (!value?.href) return null;
   return (
     <Link href={value.href} className="text-blue-600 hover:underline">

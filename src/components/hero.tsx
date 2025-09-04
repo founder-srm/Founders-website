@@ -1,9 +1,9 @@
 import Image from 'next/image';
-import Particles from './ui/particles';
 import { urlFor } from '@/sanity/lib/image';
-import { HERO_QUERY } from '@/sanity/lib/queries';
 import { sanityFetch } from '@/sanity/lib/live';
+import { HERO_QUERY } from '@/sanity/lib/queries';
 import InteractiveHoverButton from './ui/interactive-hover-button';
+import Particles from './ui/particles';
 
 export const revalidate = 3600; // revalidate every hour
 

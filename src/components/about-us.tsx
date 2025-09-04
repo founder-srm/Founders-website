@@ -1,9 +1,9 @@
-import { urlFor } from '@/sanity/lib/image';
-import { sanityFetch } from '@/sanity/lib/live';
-import { ABOUT_HERO_QUERY } from '@/sanity/lib/queries';
 import { CircleArrowRight, Files, Settings } from 'lucide-react';
 import Image from 'next/image';
 import { createElement } from 'react';
+import { urlFor } from '@/sanity/lib/image';
+import { sanityFetch } from '@/sanity/lib/live';
+import { ABOUT_HERO_QUERY } from '@/sanity/lib/queries';
 
 const iconComponents = {
   CircleArrowRight,

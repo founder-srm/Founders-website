@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
 import type { Config } from "tailwindcss";
+
 const plugin = require('tailwindcss/plugin')
 export default {
     darkMode: ["class"],

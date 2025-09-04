@@ -1,5 +1,9 @@
 'use client';
 
+import { formatDistanceToNow } from 'date-fns';
+import { Check, X } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { Badge } from '@/components/ui/badge';
 import {
   Table,
   TableBody,
@@ -8,10 +12,6 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
-import { Check, X } from 'lucide-react';
-import { formatDistanceToNow } from 'date-fns';
-import { useRouter } from 'next/navigation';
 import type { Json } from '../../../database.types';
 
 type RegistrationData = {

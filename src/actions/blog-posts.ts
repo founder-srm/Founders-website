@@ -1,8 +1,8 @@
 'use server';
 
-import { createClient } from '@/utils/supabase/server';
-import { Database } from '../../database.types';
 import { revalidatePath } from 'next/cache';
+import { createClient } from '@/utils/supabase/server';
+import type { Database } from '../../database.types';
 
 type BlogPostInsert = Database['public']['Tables']['posts']['Insert'];
 type BlogPostUpdate = Database['public']['Tables']['posts']['Update'];
@@ -59,10 +59,7 @@ export async function deleteBlogPost(id: number) {
   const supabase = await createClient();
 
   try {
-    const { error } = await supabase
-      .from('posts')
-      .delete()
-      .eq('id', id);
+    const { error } = await supabase.from('posts').delete().eq('id', id);
 
     if (error) {
       console.error('Error deleting blog post:', error);
@@ -148,8 +145,8 @@ export async function publishBlogPost(id: number) {
   try {
     const { data: post, error } = await supabase
       .from('posts')
-      .update({ 
-        published_at: new Date().toISOString() 
+      .update({
+        published_at: new Date().toISOString(),
       })
       .eq('id', id)
       .select()
@@ -175,8 +172,8 @@ export async function unpublishBlogPost(id: number) {
   try {
     const { data: post, error } = await supabase
       .from('posts')
-      .update({ 
-        published_at: '' 
+      .update({
+        published_at: '',
       })
       .eq('id', id)
       .select()

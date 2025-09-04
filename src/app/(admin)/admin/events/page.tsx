@@ -1,20 +1,20 @@
 'use client';
 
-import { getAllEvents } from '@/actions/admin/events';
-import { EventColumns } from '@/components/data-table-admin/events/columns';
-import { DataTable } from '@/components/data-table-admin/events/data-table';
-import type { Event } from '@/types/events';
-import { createClient } from '@/utils/supabase/client';
 import { useQuery } from '@supabase-cache-helpers/postgrest-react-query';
-import { Skeleton } from '@/components/ui/skeleton';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import {
   AlertCircle,
   Calendar,
   FileSpreadsheet,
   PlusCircle,
 } from 'lucide-react';
+import { getAllEvents } from '@/actions/admin/events';
+import { EventColumns } from '@/components/data-table-admin/events/columns';
+import { DataTable } from '@/components/data-table-admin/events/data-table';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
+import { Skeleton } from '@/components/ui/skeleton';
+import type { Event } from '@/types/events';
+import { createClient } from '@/utils/supabase/client';
 
 const TableSkeleton = () => (
   <div className="space-y-4">

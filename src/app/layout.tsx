@@ -1,18 +1,18 @@
 /* eslint-disable @next/next/no-img-element */
-import type { Metadata } from 'next';
 
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
+import type { Metadata } from 'next';
 
 import { Plus_Jakarta_Sans } from 'next/font/google';
 import './globals.css';
-import { ThemeProvider } from '@/components/theme/theme-provider';
-import { SessionProvider } from '@/components/providers/SessionProvider';
-import Navbar1 from '@/components/navbar';
 import Footer2 from '@/components/footer';
+import Navbar1 from '@/components/navbar';
+import BannerProvider from '@/components/providers/BannerProvider';
+import { SessionProvider } from '@/components/providers/SessionProvider';
+import { ThemeProvider } from '@/components/theme/theme-provider';
 import { Toaster } from '@/components/ui/toaster';
 import config from '@/lib/config';
-import BannerProvider from '@/components/providers/BannerProvider';
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   variable: '--font-plus-jakarta-sans',

@@ -2,13 +2,15 @@
 
 import type { ColumnDef } from '@tanstack/react-table';
 import {
-  MoreHorizontal,
-  ArrowUpDown,
-  ArrowUp,
   ArrowDown,
-  Maximize2,
+  ArrowUp,
+  ArrowUpDown,
   Eye,
+  Maximize2,
+  MoreHorizontal,
 } from 'lucide-react';
+import Link from 'next/link';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -19,10 +21,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import Link from 'next/link';
-import type { Event } from '@/types/events';
-import { Badge } from '@/components/ui/badge';
 import config from '@/lib/config';
+import type { Event } from '@/types/events';
 
 export const EventColumns: ColumnDef<Event>[] = [
   {

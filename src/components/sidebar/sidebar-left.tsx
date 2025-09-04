@@ -1,7 +1,5 @@
 'use client';
 
-import type React from 'react';
-import { useState } from 'react';
 import {
   Archive,
   Blocks,
@@ -13,19 +11,20 @@ import {
   Settings2,
   Trash2,
 } from 'lucide-react';
-
+import type React from 'react';
+import { useState } from 'react';
+import { CommandBox } from '@/components/command/command-box';
 import {
   Sidebar,
   SidebarContent,
   SidebarHeader,
   SidebarRail,
 } from '@/components/ui/sidebar';
-import { TeamSwitcher } from './team-switcher';
-import { NavMain } from './nav-main';
 import { NavFavorites } from './nav-favorites';
-import { NavWorkspaces } from './nav-workspaces';
+import { NavMain } from './nav-main';
 import { NavSecondary } from './nav-secondary';
-import { CommandBox } from '@/components/command/command-box';
+import { NavWorkspaces } from './nav-workspaces';
+import { TeamSwitcher } from './team-switcher';
 
 const data = {
   navMain: [

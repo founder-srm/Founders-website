@@ -1,5 +1,5 @@
-import { defineArrayMember, defineField, defineType } from 'sanity';
 import { PiGlobeLight } from 'react-icons/pi';
+import { defineArrayMember, defineField, defineType } from 'sanity';
 
 export const aboutUsHeroType = defineType({
   name: 'aboutUsHero',

@@ -1,10 +1,10 @@
 'use client';
 
+import { Check, Copy } from 'lucide-react';
+import Prism from 'prismjs';
+import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { Check, Copy } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import Prism from 'prismjs';
 import 'prismjs/components/prism-typescript';
 import 'prismjs/components/prism-javascript';
 import 'prismjs/components/prism-jsx';

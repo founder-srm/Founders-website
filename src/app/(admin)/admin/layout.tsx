@@ -1,10 +1,8 @@
 'use client';
-import { useAdminCheck } from '@/hooks/useAdminCheck';
-import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
-} from '@/components/ui/sidebar';
+import { ReactQueryClientProvider } from '@/components/providers/QueryClientProvider';
+import { SidebarLeft } from '@/components/sidebar/sidebar-left';
+import { SidebarRight } from '@/components/sidebar/sidebar-right';
+import { ModeToggle } from '@/components/theme/theme-toggle';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -12,22 +10,26 @@ import {
   BreadcrumbPage,
 } from '@/components/ui/breadcrumb';
 import { Separator } from '@/components/ui/separator';
-import { SidebarLeft } from '@/components/sidebar/sidebar-left';
-import { SidebarRight } from '@/components/sidebar/sidebar-right';
-import { ModeToggle } from '@/components/theme/theme-toggle';
-import { ReactQueryClientProvider } from '@/components/providers/QueryClientProvider';
-import { getRouteDisplayName } from '@/config/admin-routes';
-import { useCurrentRoute } from '@/hooks/useCurrentRoute';
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from '@/components/ui/sidebar';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { getRouteDisplayName } from '@/config/admin-routes';
+import { useAdminCheck } from '@/hooks/useAdminCheck';
+import { useCurrentRoute } from '@/hooks/useCurrentRoute';
 
 export default function AdminLayout({
   children,
-}: { children: React.ReactNode }) {
+}: {
+  children: React.ReactNode;
+}) {
   const { isLoading } = useAdminCheck();
   const { pathname } = useCurrentRoute();
 

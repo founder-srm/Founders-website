@@ -1,8 +1,27 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import {
+  Calendar,
+  Edit,
+  Eye,
+  MoreHorizontal,
+  Plus,
+  Search,
+  Tag,
+  Trash2,
+  User,
+} from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useCallback, useEffect, useState } from 'react';
+import { deleteBlogPost, getBlogPosts } from '@/actions/blog-posts';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import {
   Table,
@@ -12,27 +31,8 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { getBlogPosts, deleteBlogPost } from '@/actions/blog-posts';
 import { useToast } from '@/hooks/use-toast';
-import { Database } from '../../../../../database.types';
-import { 
-  Plus, 
-  Search, 
-  MoreHorizontal, 
-  Edit, 
-  Trash2, 
-  Eye,
-  Calendar,
-  User,
-  Tag
-} from 'lucide-react';
+import type { Database } from '../../../../../database.types';
 
 type BlogPost = Database['public']['Tables']['posts']['Row'];
 
@@ -70,7 +70,7 @@ export default function DevBlogPage() {
 
   useEffect(() => {
     loadPosts();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Refresh posts when returning to this page
@@ -88,11 +88,12 @@ export default function DevBlogPage() {
       setFilteredPosts(posts);
     } else {
       const filtered = posts.filter(
-        (post) =>
+        post =>
           post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
           post.author.toLowerCase().includes(searchTerm.toLowerCase()) ||
           post.summary.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          (post.tag && post.tag.toLowerCase().includes(searchTerm.toLowerCase()))
+          (post.tag &&
+            post.tag.toLowerCase().includes(searchTerm.toLowerCase()))
       );
       setFilteredPosts(filtered);
     }
@@ -166,7 +167,7 @@ export default function DevBlogPage() {
           <Input
             placeholder="Search posts..."
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={e => setSearchTerm(e.target.value)}
             className="pl-8"
           />
         </div>
@@ -196,11 +197,13 @@ export default function DevBlogPage() {
             ) : filteredPosts.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={7} className="text-center py-8">
-                  {searchTerm ? 'No posts found matching your search.' : 'No blog posts yet.'}
+                  {searchTerm
+                    ? 'No posts found matching your search.'
+                    : 'No blog posts yet.'}
                 </TableCell>
               </TableRow>
             ) : (
-              filteredPosts.map((post) => (
+              filteredPosts.map(post => (
                 <TableRow key={post.id}>
                   <TableCell className="font-medium">
                     <div>
@@ -218,14 +221,19 @@ export default function DevBlogPage() {
                   </TableCell>
                   <TableCell>
                     {post.tag && (
-                      <Badge variant="outline" className="flex items-center space-x-1">
+                      <Badge
+                        variant="outline"
+                        className="flex items-center space-x-1"
+                      >
                         <Tag className="w-3 h-3" />
                         <span>{post.tag}</span>
                       </Badge>
                     )}
                   </TableCell>
                   <TableCell>
-                    <Badge variant={post.published_at ? 'default' : 'secondary'}>
+                    <Badge
+                      variant={post.published_at ? 'default' : 'secondary'}
+                    >
                       {post.published_at ? 'Published' : 'Draft'}
                     </Badge>
                   </TableCell>
@@ -258,14 +266,16 @@ export default function DevBlogPage() {
                           Edit
                         </DropdownMenuItem>
                         {post.published_at && (
-                          <DropdownMenuItem 
-                            onClick={() => window.open(`/blog/posts/${post.slug}`, '_blank')}
+                          <DropdownMenuItem
+                            onClick={() =>
+                              window.open(`/blog/posts/${post.slug}`, '_blank')
+                            }
                           >
                             <Eye className="mr-2 h-4 w-4" />
                             View
                           </DropdownMenuItem>
                         )}
-                        <DropdownMenuItem 
+                        <DropdownMenuItem
                           onClick={() => handleDelete(post)}
                           className="text-destructive"
                         >

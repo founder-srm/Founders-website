@@ -1,8 +1,8 @@
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import TimelineItem from './timeline-item';
 import { sanityFetch } from '@/sanity/lib/live';
 import { TIMELINE_QUERY } from '@/sanity/lib/queries';
-import Link from 'next/link';
+import TimelineItem from './timeline-item';
 
 export const revalidate = 3600; // revalidate every hour
 

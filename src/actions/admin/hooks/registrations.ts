@@ -1,8 +1,8 @@
-import { createClient } from '@/utils/supabase/client';
 import type { PostgrestError } from '@supabase/supabase-js';
-import type { Database } from '../../../../database.types';
-import type { TypedSupabaseClient } from '@/utils/types';
 import { useMutation } from '@tanstack/react-query';
+import { createClient } from '@/utils/supabase/client';
+import type { TypedSupabaseClient } from '@/utils/types';
+import type { Database } from '../../../../database.types';
 
 export async function updateRegistrationAttendance(
   RegistrationId: string,

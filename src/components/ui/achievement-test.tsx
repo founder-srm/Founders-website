@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
-import { useTrackAchievement } from '@/hooks/useTrackAchievement';
 import { useToast } from '@/hooks/use-toast';
+import { useTrackAchievement } from '@/hooks/useTrackAchievement';
 
 export default function AchievementTester() {
   const {

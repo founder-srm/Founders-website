@@ -1,10 +1,10 @@
-"use client"
+'use client';
 
-import React from "react"
-import { AlertCircleIcon, ImageIcon, UploadIcon, XIcon } from "lucide-react"
-import { formatBytes, useFileUpload } from "@/hooks/use-file-upload"
-import { Button } from "@/components/ui/button"
-import Image from "next/image"
+import { AlertCircleIcon, ImageIcon, UploadIcon, XIcon } from 'lucide-react';
+import Image from 'next/image';
+import React from 'react';
+import { Button } from '@/components/ui/button';
+import { formatBytes, useFileUpload } from '@/hooks/use-file-upload';
 
 interface FileUploaderProps {
   onFileSelect?: (files: File[]) => void;
@@ -26,12 +26,12 @@ export default function FileUploader({
   onFileSelect,
   maxSizeMB = 5,
   maxFiles = 1,
-  accept = "image/svg+xml,image/png,image/jpeg,image/jpg,image/gif",
+  accept = 'image/svg+xml,image/png,image/jpeg,image/jpg,image/gif',
   multiple = false,
   initialFiles = [],
-  className = "",
+  className = '',
 }: FileUploaderProps) {
-  const maxSize = maxSizeMB * 1024 * 1024
+  const maxSize = maxSizeMB * 1024 * 1024;
 
   const [
     { files, isDragging, errors },
@@ -51,7 +51,7 @@ export default function FileUploader({
     multiple,
     maxFiles,
     initialFiles,
-  })
+  });
 
   // Notify parent component when files change
   React.useEffect(() => {
@@ -108,7 +108,7 @@ export default function FileUploader({
       {/* File list */}
       {files.length > 0 && (
         <div className="space-y-2">
-          {files.map((file) => (
+          {files.map(file => (
             <div
               key={file.id}
               className="bg-background flex items-center justify-between gap-2 rounded-lg border p-2 pe-3"
@@ -156,5 +156,5 @@ export default function FileUploader({
         </div>
       )}
     </div>
-  )
+  );
 }

@@ -1,11 +1,11 @@
-import { notFound } from 'next/navigation';
+import { format } from 'date-fns';
+import { ArrowLeft } from 'lucide-react';
 import type { Metadata, ResolvingMetadata } from 'next';
 import Image from 'next/image';
-import { format } from 'date-fns';
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
 import { getPostBySlug } from '@/lib/mdx';
 import { CustomMDX } from '@/mdx-components';
-import { ArrowLeft } from 'lucide-react';
-import Link from 'next/link';
 
 export const revalidate = 3600;
 

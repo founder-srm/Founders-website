@@ -1,6 +1,6 @@
-import { createClient } from '@/utils/supabase/client';
-import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { createClient } from '@/utils/supabase/client';
 
 export const useAdminCheck = () => {
   const [isLoading, setIsLoading] = useState(true);

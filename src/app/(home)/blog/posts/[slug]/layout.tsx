@@ -1,8 +1,8 @@
 'use client';
 import type React from 'react';
 import { Suspense, useRef } from 'react';
-import { ScrollProgress } from '@/components/ui/scroll-progress';
 import DotPattern from '@/components/ui/dot-pattern';
+import { ScrollProgress } from '@/components/ui/scroll-progress';
 import { cn } from '@/lib/utils';
 
 export default function Layout({ children }: { children: React.ReactNode }) {

@@ -1,5 +1,5 @@
-import { defineType, defineField } from 'sanity';
 import { RiQuestionLine } from 'react-icons/ri';
+import { defineField, defineType } from 'sanity';
 
 export const faqType = defineType({
   name: 'faq',

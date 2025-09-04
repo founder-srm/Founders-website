@@ -1,13 +1,13 @@
 'use client';
 
-import { useRouter, useParams } from 'next/navigation';
+import { ArrowLeft, Loader2 } from 'lucide-react';
+import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { getBlogPost } from '@/actions/blog-posts';
 import BlogPostForm from '@/components/BlogPostForm';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Loader2 } from 'lucide-react';
-import { getBlogPost } from '@/actions/blog-posts';
 import { useToast } from '@/hooks/use-toast';
-import { Database } from '../../../../../../../database.types';
+import type { Database } from '../../../../../../../database.types';
 
 type BlogPost = Database['public']['Tables']['posts']['Row'];
 
@@ -79,9 +79,9 @@ export default function EditPostPage() {
     return (
       <div className="space-y-6">
         <div className="flex items-center gap-4">
-          <Button 
-            variant="ghost" 
-            size="sm" 
+          <Button
+            variant="ghost"
+            size="sm"
             onClick={handleBack}
             className="flex items-center gap-2"
           >
@@ -95,14 +95,12 @@ export default function EditPostPage() {
             </p>
           </div>
         </div>
-        
+
         <div className="text-center py-12">
           <p className="text-lg text-muted-foreground mb-4">
             {error || 'The blog post you are looking for could not be found.'}
           </p>
-          <Button onClick={handleBack}>
-            Go Back
-          </Button>
+          <Button onClick={handleBack}>Go Back</Button>
         </div>
       </div>
     );
@@ -112,9 +110,7 @@ export default function EditPostPage() {
     <div className="space-y-6 mx-auto px-4 py-6">
       {/* Header with back button */}
       <div className="flex items-center gap-4">
-        <p className="text-muted-foreground">
-        Editing: {post.title}
-        </p>
+        <p className="text-muted-foreground">Editing: {post.title}</p>
       </div>
 
       {/* Blog Post Form */}

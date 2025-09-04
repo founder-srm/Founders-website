@@ -1,6 +1,6 @@
-import { RegistrationApprovedEmail } from '@/components/email-templates/registrationApprovedEmail';
 import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
+import { RegistrationApprovedEmail } from '@/components/email-templates/registrationApprovedEmail';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 

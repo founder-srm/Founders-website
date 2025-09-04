@@ -1,5 +1,5 @@
 import { MdOutlineCampaign } from 'react-icons/md';
-import { defineType, defineField } from 'sanity';
+import { defineField, defineType } from 'sanity';
 
 export const bannerHeaderType = defineType({
   name: 'bannerHeader',

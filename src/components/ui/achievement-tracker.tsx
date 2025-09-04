@@ -1,13 +1,15 @@
+import { usePathname } from 'next/navigation';
 import type React from 'react';
 import { useEffect } from 'react';
-import { usePathname } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
 import { useAchievementsStore } from '@/stores/achievements';
 import { useUser } from '@/stores/session';
 
 export function AchievementTracker({
   children,
-}: { children: React.ReactNode }) {
+}: {
+  children: React.ReactNode;
+}) {
   const { toast } = useToast();
   const pathname = usePathname();
   const unlockAchievement = useAchievementsStore(

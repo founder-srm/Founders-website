@@ -1,7 +1,10 @@
 'use client';
 
+import type { User } from '@supabase/supabase-js';
 import { ChevronsUpDown, CircleUser, House, LogOut } from 'lucide-react';
-
+import Link from 'next/link';
+import { redirect } from 'next/navigation';
+import { signOutUser } from '@/actions/supabase';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,
@@ -18,11 +21,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar';
-import type { User } from '@supabase/supabase-js';
-import Link from 'next/link';
-import { signOutUser } from '@/actions/supabase';
 import { toast } from '@/hooks/use-toast';
-import { redirect } from 'next/navigation';
 
 export function NavUser({ user_metadata, email }: User) {
   const { isMobile } = useSidebar();

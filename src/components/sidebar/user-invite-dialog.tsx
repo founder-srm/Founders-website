@@ -1,8 +1,9 @@
 'use client';
 
+import type { User } from '@supabase/supabase-js';
 import { useQuery } from '@tanstack/react-query';
-import { useToast } from '@/hooks/use-toast';
-import type { Database } from '../../../database.types';
+import { useMemo, useState } from 'react';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -11,7 +12,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
 import {
   Select,
   SelectContent,
@@ -21,14 +21,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { useState, useMemo } from 'react';
+import { useToast } from '@/hooks/use-toast';
 import {
   createClient,
   debugSupabaseKey,
 } from '@/utils/supabase/elevatedClient';
+import type { Database } from '../../../database.types';
+import { columns, type UserData } from './user-table/columns';
 import { DataTable } from './user-table/data-table';
-import { type UserData, columns } from './user-table/columns';
-import type { User } from '@supabase/supabase-js';
 
 interface UserInviteDialogProps {
   open: boolean;

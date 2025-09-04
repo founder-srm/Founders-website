@@ -2,9 +2,6 @@
 
 import * as React from 'react';
 import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts';
-import type { Event } from '@/types/events';
-import type { Registration } from '@/types/registrations';
-
 import {
   Card,
   CardContent,
@@ -27,6 +24,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import type { Event } from '@/types/events';
+import type { Registration } from '@/types/registrations';
 
 const chartConfig = {
   registrations: {

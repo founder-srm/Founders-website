@@ -1,10 +1,9 @@
-import { NextResponse } from 'next/server';
-import { Resend } from 'resend';
 import fs from 'node:fs';
 import path from 'node:path';
-
-import type { typeformInsertType } from '../../../../schema.zod';
+import { NextResponse } from 'next/server';
+import { Resend } from 'resend';
 import { EmailTemplate } from '@/components/email-templates/template';
+import type { typeformInsertType } from '../../../../schema.zod';
 
 // if (!process.env.RESEND_API_KEY) {
 //   throw new Error('Missing RESEND_API_KEY environment variable');

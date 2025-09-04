@@ -1,9 +1,9 @@
+import { formatInTimeZone } from 'date-fns-tz';
+import { ArrowUpRight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
-import { ArrowUpRight } from 'lucide-react';
 import type { eventsInsertType } from '../../schema.zod';
-import { formatInTimeZone } from 'date-fns-tz';
 import { GetBlurImage } from './blur-image';
 
 export function FeaturedPost({ event }: { event: eventsInsertType }) {

@@ -1,6 +1,8 @@
-import { AlertCircle, ChevronRight, MoreHorizontal, Plus } from 'lucide-react';
+import { useQuery } from '@supabase-cache-helpers/postgrest-react-query';
 import { formatInTimeZone } from 'date-fns-tz';
-
+import { AlertCircle, ChevronRight, MoreHorizontal, Plus } from 'lucide-react';
+import Link from 'next/link';
+import { getRecentEvents } from '@/actions/admin/events';
 import {
   Collapsible,
   CollapsibleContent,
@@ -18,11 +20,8 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from '@/components/ui/sidebar';
-import Link from 'next/link';
-import { createClient } from '@/utils/supabase/client';
 import type { Event } from '@/types/events';
-import { useQuery } from '@supabase-cache-helpers/postgrest-react-query';
-import { getRecentEvents } from '@/actions/admin/events';
+import { createClient } from '@/utils/supabase/client';
 import { Badge } from '../ui/badge';
 
 function LoadingSkeleton() {

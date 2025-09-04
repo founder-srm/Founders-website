@@ -1,5 +1,5 @@
 import { MdOutlineUpcoming } from 'react-icons/md';
-import { defineType, defineField } from 'sanity';
+import { defineField, defineType } from 'sanity';
 
 export const upcompingEventsHeaderType = defineType({
   name: 'upcomingEventsHeader',

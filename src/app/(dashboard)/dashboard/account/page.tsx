@@ -1,16 +1,39 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { LeaveIcon } from '@sanity/icons';
+import type { UserIdentity } from '@supabase/supabase-js';
+import { formatInTimeZone } from 'date-fns-tz';
 import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from '@/components/ui/hover-card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+  Award,
+  BadgeCheck,
+  Calendar,
+  Flame,
+  Github,
+  Key,
+  Mail,
+  MessageSquare,
+  PenLine,
+  Radio,
+  Shield,
+  Ticket,
+  TicketCheck,
+  User,
+  Users,
+} from 'lucide-react';
+import { redirect, useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import {
+  getUserIdentities,
+  linkIdentity,
+  signOutUser,
+  unlinkIdentity,
+  updateUserEmail,
+  updateUserPassword,
+} from '@/actions/supabase';
+import { GoogleIcon } from '@/components/custom-icons/custom-icons';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -19,46 +42,22 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
-import { useUser, useIsLoading } from '@/stores/session';
-import { createClient } from '@/utils/supabase/client';
-import { LeaveIcon } from '@sanity/icons';
-import { redirect, useRouter } from 'next/navigation';
-import type { typeformInsertType } from '../../../../../schema.zod';
 import {
-  Ticket,
-  Mail,
-  Key,
-  Github,
-  Radio,
-  Award,
-  User,
-  Calendar,
-  Shield,
-  BadgeCheck,
-  Users,
-  PenLine,
-  TicketCheck,
-  MessageSquare,
-  Flame,
-} from 'lucide-react';
-import {
-  updateUserEmail,
-  updateUserPassword,
-  signOutUser,
-  getUserIdentities,
-  linkIdentity,
-  unlinkIdentity,
-} from '@/actions/supabase';
-import { useToast } from '@/hooks/use-toast';
-import { GoogleIcon } from '@/components/custom-icons/custom-icons';
-import { Badge } from '@/components/ui/badge';
-import type { UserIdentity } from '@supabase/supabase-js';
-import { useSearchParams } from 'next/navigation';
-import { formatInTimeZone } from 'date-fns-tz';
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from '@/components/ui/hover-card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useMediaQuery } from '@/hooks/use-media-query';
-import { useEarnedAchievements } from '@/stores/achievements';
+import { useToast } from '@/hooks/use-toast';
 import { useTrackAchievement } from '@/hooks/useTrackAchievement';
+import { useEarnedAchievements } from '@/stores/achievements';
+import { useIsLoading, useUser } from '@/stores/session';
+import { createClient } from '@/utils/supabase/client';
+import type { typeformInsertType } from '../../../../../schema.zod';
 // import AchievementTester from '@/components/ui/achievement-test';
 
 export default function AccountPage() {

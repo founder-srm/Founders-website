@@ -1,17 +1,23 @@
 'use client';
 import { Book, Menu, Sunset, Trees, UsersRound, Zap } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
-
-import { cn } from '@/lib/utils';
-
+import { ModeToggle } from '@/components/theme/theme-toggle';
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button, buttonVariants } from '@/components/ui/button';
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from '@/components/ui/hover-card';
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -28,28 +34,23 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from '@/components/ui/hover-card';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-
-import { ModeToggle } from '@/components/theme/theme-toggle';
-import Image from 'next/image';
-import Link from 'next/link';
-import { useUser } from '@/stores/session';
-import { usePresence } from '@/hooks/usePresence';
 import useAdmin from '@/hooks/use-admin';
+import { usePresence } from '@/hooks/usePresence';
+import { cn } from '@/lib/utils';
+import { useUser } from '@/stores/session';
 import { AdminUserIcon } from './custom-icons/custom-icons';
 import { LineShadowText } from './ui/line-shadow-text';
 import SparklesText from './ui/sparkles-text';
+
 // import { useTheme } from 'next-themes';
 
 function AvatarButton({
   Image,
   name,
-}: { Image: string | undefined; name: string }) {
+}: {
+  Image: string | undefined;
+  name: string;
+}) {
   const isPresent = usePresence();
 
   const getInitials = (name: string) => {

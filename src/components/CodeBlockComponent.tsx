@@ -1,6 +1,6 @@
-import { NodeViewContent, NodeViewWrapper } from '@tiptap/react'
-import type { NodeViewProps } from '@tiptap/core'
-import React from 'react'
+import type { NodeViewProps } from '@tiptap/core';
+import { NodeViewContent, NodeViewWrapper } from '@tiptap/react';
+import React from 'react';
 
 export default function CodeBlockComponent(props: NodeViewProps) {
   const { node, updateAttributes, extension } = props;
@@ -16,15 +16,17 @@ export default function CodeBlockComponent(props: NodeViewProps) {
       >
         <option value="null">auto</option>
         <option disabled>—</option>
-        {extension.options.lowlight.listLanguages().map((lang: string, index: number) => (
-          <option key={index} value={lang}>
-            {lang}
-          </option>
-        ))}
+        {extension.options.lowlight
+          .listLanguages()
+          .map((lang: string, index: number) => (
+            <option key={index} value={lang}>
+              {lang}
+            </option>
+          ))}
       </select>
       <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto">
         <NodeViewContent as="div" />
       </pre>
     </NodeViewWrapper>
-  )
+  );
 }

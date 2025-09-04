@@ -1,9 +1,9 @@
-import { type BlogPost, getPostsRange } from '@/lib/mdx';
+import { ArrowUpRight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowUpRight } from 'lucide-react';
-import { Button } from './ui/button';
+import { type BlogPost, getPostsRange } from '@/lib/mdx';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
+import { Button } from './ui/button';
 
 export default async function RelatedPosts() {
   const posts = await getPostsRange(0, 1);

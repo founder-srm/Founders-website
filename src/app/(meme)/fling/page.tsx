@@ -1,17 +1,17 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
 import {
-  Engine,
-  Render,
   Bodies,
-  World,
+  Body,
+  Engine,
   Mouse,
   MouseConstraint,
+  Render,
   Runner,
-  Body,
   Vector,
+  World,
 } from 'matter-js';
+import { useEffect, useRef, useState } from 'react';
 
 export default function FlingPage() {
   const canvasRef = useRef<HTMLDivElement>(null);

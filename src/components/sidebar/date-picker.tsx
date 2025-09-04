@@ -1,17 +1,17 @@
-"use client"
+'use client';
 
-import { useState } from "react"
-import { addDays } from "date-fns"
-import { DateRange } from "react-day-picker"
+import { addDays } from 'date-fns';
+import { useState } from 'react';
+import type { DateRange } from 'react-day-picker';
 
-import { Calendar } from "@/components/ui/calendar"
+import { Calendar } from '@/components/ui/calendar';
 
 export function DatePicker() {
-  const today = new Date()
+  const today = new Date();
   const [date, setDate] = useState<DateRange | undefined>({
     from: today,
     to: addDays(today, 3),
-  })
+  });
 
   return (
     <div>
@@ -26,7 +26,7 @@ export function DatePicker() {
         role="region"
         aria-live="polite"
       >
-        Range calendar -{" "}
+        Range calendar -{' '}
         <a
           className="hover:text-foreground underline"
           href="https://daypicker.dev/"
@@ -37,5 +37,5 @@ export function DatePicker() {
         </a>
       </p>
     </div>
-  )
+  );
 }

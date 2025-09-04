@@ -1,25 +1,25 @@
 'use client';
-import { getAllRegistrationsWithUser } from '@/actions/admin/registrations';
+import { useQuery } from '@supabase-cache-helpers/postgrest-react-query';
+import type { RowSelectionState } from '@tanstack/react-table';
+import {
+  AlertCircle,
+  ClipboardList,
+  Download,
+  FileSpreadsheet,
+} from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
 import { getAllEvents } from '@/actions/admin/events';
-import type { Event } from '@/types/events';
+import { getAllRegistrationsWithUser } from '@/actions/admin/registrations';
 import { RegistrationColumns } from '@/components/data-table-admin/registrations/columns';
 import { DataTable } from '@/components/data-table-admin/registrations/data-table';
 import { EventFilterToggle } from '@/components/EventFilterToggle';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
+import type { Event } from '@/types/events';
 import type { Registration } from '@/types/registrations';
 import { exportToExcel } from '@/utils/export';
 import { createClient } from '@/utils/supabase/elevatedClient';
-import { useQuery } from '@supabase-cache-helpers/postgrest-react-query';
-import {
-  ClipboardList,
-  AlertCircle,
-  FileSpreadsheet,
-  Download,
-} from 'lucide-react';
-import { useState, useMemo, useEffect } from 'react';
-import type { RowSelectionState } from '@tanstack/react-table';
 
 const TableSkeleton = () => (
   <div className="space-y-4">

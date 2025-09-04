@@ -15,7 +15,7 @@ export default function NewPostPage() {
       {/* Header with back button */}
       <div className="flex items-center gap-4">
         <p className="text-muted-foreground">
-            Write and publish a new blog post
+          Write and publish a new blog post
         </p>
       </div>
 

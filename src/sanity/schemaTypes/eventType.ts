@@ -1,5 +1,5 @@
-import { defineType, defineField } from 'sanity';
 import { RiCalendarEventLine } from 'react-icons/ri';
+import { defineField, defineType } from 'sanity';
 
 export const eventType = defineType({
   name: 'event',

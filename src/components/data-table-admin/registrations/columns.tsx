@@ -2,23 +2,39 @@
 
 import type { ColumnDef, Row } from '@tanstack/react-table';
 import {
-  MoreHorizontal,
-  ArrowUp,
   ArrowDown,
+  ArrowUp,
   ArrowUpDown,
   Eye,
-  Mail,
-  Loader2,
   FilePlus,
-  UserRoundCog,
-  UserCheck,
-  UserX,
+  Loader2,
+  Mail,
+  MoreHorizontal,
   TicketCheck,
   TicketSlash,
   TicketX,
+  UserCheck,
+  UserRoundCog,
+  UserX,
 } from 'lucide-react';
+import Link from 'next/link';
+import { useState } from 'react';
+import {
+  updateRegistrationApproval,
+  updateRegistrationAttendance,
+} from '@/actions/admin/hooks/registrations';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -31,29 +47,13 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
-import Link from 'next/link';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useToast } from '@/hooks/use-toast';
+import { cn } from '@/lib/utils';
 import type { Registration } from '@/types/registrations';
 import type { Database } from '../../../../database.types';
-import { Badge } from '@/components/ui/badge';
-import { cn } from '@/lib/utils';
-import { useState } from 'react';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
 import Tiptap from './tiptap-email';
-import {
-  updateRegistrationApproval,
-  updateRegistrationAttendance,
-} from '@/actions/admin/hooks/registrations';
-import { useToast } from '@/hooks/use-toast';
 
 export const RegistrationColumns: ColumnDef<Registration>[] = [
   {

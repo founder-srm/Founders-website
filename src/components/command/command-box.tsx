@@ -1,6 +1,21 @@
 'use client';
 
+import {
+  Archive,
+  ArrowLeft,
+  Blocks,
+  FilePlus2,
+  FileSearch,
+  Home,
+  Loader2,
+  MessageCircleQuestion,
+  Rss,
+  Settings2,
+  Trash2,
+} from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import * as React from 'react';
+import { useCallback, useEffect } from 'react';
 import {
   CommandDialog,
   CommandEmpty,
@@ -11,26 +26,11 @@ import {
   CommandSeparator,
   CommandShortcut,
 } from '@/components/ui/command';
-import {
-  FilePlus2,
-  Home,
-  Archive,
-  Settings2,
-  Blocks,
-  Trash2,
-  MessageCircleQuestion,
-  FileSearch,
-  ArrowLeft,
-  Loader2,
-  Rss,
-} from 'lucide-react';
-import { useRouter } from 'next/navigation';
 import { DialogTitle } from '@/components/ui/dialog';
 import { VisuallyHidden } from '@/components/ui/visually-hidden';
 import { createClient } from '@/utils/supabase/client';
-import { useCallback, useEffect } from 'react';
-import { RegistrationTable } from './registration-table';
 import type { Json } from '../../../database.types';
+import { RegistrationTable } from './registration-table';
 
 interface CommandBoxProps {
   open: boolean;

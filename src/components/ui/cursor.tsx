@@ -1,15 +1,15 @@
 'use client';
-import type React from 'react';
-import { useEffect, useState, useRef } from 'react';
+import type { SpringOptions } from 'framer-motion';
 import {
+  AnimatePresence,
   motion,
+  type Transition,
   useMotionValue,
   useSpring,
-  AnimatePresence,
-  type Transition,
   type Variant,
 } from 'motion/react';
-import type { SpringOptions } from 'framer-motion';
+import type React from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
 
 type CursorProps = {

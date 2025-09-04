@@ -1,27 +1,26 @@
 import type { SchemaTypeDefinition } from 'sanity';
-
-import { blockContentType } from './blockContentType';
-import { categoryType } from './categoryType';
-import { postType } from './postType';
-import { authorType } from './authorType';
-import { jobCategoryType } from './jobCategoryType';
-import { featureType } from './featureType';
-import { faqType } from './faqType';
-import { ctaType } from './ctaType';
-import { eventType } from './eventType';
-import { heroComponentType } from './heroComponentType';
 import {
   aboutUsCtaType,
   aboutUsHeroType,
   aboutValuesType,
 } from './aboutUsHeroType';
-import { testimonialType } from './testimonialType';
-import { ourStoryType } from './ourStoryType';
-import { timelineType } from './timelineType';
-import { upcompingEventsHeaderType } from './eventsHeaderType';
+import { authorType } from './authorType';
 import { bannerHeaderType } from './bannerHeaderType';
+import { blockContentType } from './blockContentType';
+import { categoryType } from './categoryType';
 import { contactUsType } from './contactUsType';
+import { ctaType } from './ctaType';
+import { upcompingEventsHeaderType } from './eventsHeaderType';
+import { eventType } from './eventType';
+import { faqType } from './faqType';
+import { featureType } from './featureType';
+import { heroComponentType } from './heroComponentType';
+import { jobCategoryType } from './jobCategoryType';
+import { ourStoryType } from './ourStoryType';
 import { ourTeamType } from './ourTeamType';
+import { postType } from './postType';
+import { testimonialType } from './testimonialType';
+import { timelineType } from './timelineType';
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [

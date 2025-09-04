@@ -10,10 +10,10 @@ export const BLOG_POST_TAGS = [
   'Foundathon',
   'Ideathon',
   'OpenHouse',
-  'Other'
+  'Other',
 ] as const;
 
-export type BlogPostTag = typeof BLOG_POST_TAGS[number];
+export type BlogPostTag = (typeof BLOG_POST_TAGS)[number];
 
 // Utility function to generate slug from title
 export function generateSlug(title: string): string {

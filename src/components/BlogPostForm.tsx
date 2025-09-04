@@ -1,20 +1,19 @@
 'use client';
 
-import { useState, useTransition, useEffect, useCallback } from 'react';
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Eye, EyeOff, FileText, Save } from 'lucide-react';
+import { useCallback, useEffect, useState, useTransition } from 'react';
+import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+  createBlogPost,
+  publishBlogPost,
+  unpublishBlogPost,
+  updateBlogPost,
+} from '@/actions/blog-posts';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Form,
   FormControl,
@@ -24,44 +23,57 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import MarkdownEditor from './MarkdownEditor';
-import FileUploader from './FileUploader';
-import { 
-  createBlogPost, 
-  updateBlogPost, 
-  publishBlogPost,
-  unpublishBlogPost
-} from '@/actions/blog-posts';
-import { generateSlug, getBlogPostTags } from '@/lib/blog-constants';
-import { useToast } from '@/hooks/use-toast';
-import { Database } from '../../database.types';
-import { Save, Eye, EyeOff, FileText } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
 import { useFileUpload } from '@/hooks/use-file-upload';
+import { useToast } from '@/hooks/use-toast';
+import { generateSlug, getBlogPostTags } from '@/lib/blog-constants';
+import type { Database } from '../../database.types';
+import FileUploader from './FileUploader';
+import MarkdownEditor from './MarkdownEditor';
 
 type BlogPost = Database['public']['Tables']['posts']['Row'];
 
 const blogPostSchema = z.object({
-  title: z.string().min(1, 'Title is required').max(200, 'Title must be less than 200 characters'),
-  summary: z.string().min(1, 'Summary is required').max(500, 'Summary must be less than 500 characters'),
+  title: z
+    .string()
+    .min(1, 'Title is required')
+    .max(200, 'Title must be less than 200 characters'),
+  summary: z
+    .string()
+    .min(1, 'Summary is required')
+    .max(500, 'Summary must be less than 500 characters'),
   content: z.string().min(1, 'Content is required'),
   author: z.string().min(1, 'Author is required'),
-  author_image: z.string().url('Must be a valid URL').optional().or(z.literal('')),
+  author_image: z
+    .string()
+    .url('Must be a valid URL')
+    .optional()
+    .or(z.literal('')),
   image: z.string().optional(), // This will store the uploaded URL, optional since we handle file uploads separately
-  tag: z.enum([
-    'SuccessStories',
-    'StudentEntrepreneurs', 
-    'TechInnovation',
-    'StartupTips',
-    'Technical',
-    'Projects',
-    'Hackathons',
-    'Foundathon',
-    'Ideathon',
-    'OpenHouse',
-    'Other'
-  ]).optional(),
+  tag: z
+    .enum([
+      'SuccessStories',
+      'StudentEntrepreneurs',
+      'TechInnovation',
+      'StartupTips',
+      'Technical',
+      'Projects',
+      'Hackathons',
+      'Foundathon',
+      'Ideathon',
+      'OpenHouse',
+      'Other',
+    ])
+    .optional(),
   slug: z.string().min(1, 'Slug is required'),
 });
 
@@ -82,30 +94,32 @@ export default function BlogPostForm({ post, onSuccess }: BlogPostFormProps) {
   // Utility function to convert escaped line breaks to actual line breaks
   const normalizeContent = (rawContent: string): string => {
     return rawContent
-      .replace(/\\r\\n/g, '\n')  // Replace \r\n with actual line breaks
-      .replace(/\\n/g, '\n')     // Replace \n with actual line breaks
-      .replace(/\\r/g, '\n');    // Replace \r with actual line breaks
+      .replace(/\\r\\n/g, '\n') // Replace \r\n with actual line breaks
+      .replace(/\\n/g, '\n') // Replace \n with actual line breaks
+      .replace(/\\r/g, '\n'); // Replace \r with actual line breaks
   };
 
   // Initialize file uploader with existing image if editing
-  const initialFiles = post?.image ? [{
-    id: `existing-${post.id}`,
-    name: 'Current featured image',
-    size: 0,
-    type: 'image/jpeg',
-    url: post.image,
-  }] : [];
+  const initialFiles = post?.image
+    ? [
+        {
+          id: `existing-${post.id}`,
+          name: 'Current featured image',
+          size: 0,
+          type: 'image/jpeg',
+          url: post.image,
+        },
+      ]
+    : [];
 
-  const [
-    { files: uploadFiles, isUploading },
-    { uploadToSupabase }
-  ] = useFileUpload({
-    accept: 'image/*',
-    maxSize: 5 * 1024 * 1024, // 5MB
-    multiple: false,
-    maxFiles: 1,
-    initialFiles,
-  });
+  const [{ files: uploadFiles, isUploading }, { uploadToSupabase }] =
+    useFileUpload({
+      accept: 'image/*',
+      maxSize: 5 * 1024 * 1024, // 5MB
+      multiple: false,
+      maxFiles: 1,
+      initialFiles,
+    });
 
   const form = useForm<BlogPostFormData>({
     resolver: zodResolver(blogPostSchema),
@@ -172,7 +186,11 @@ export default function BlogPostForm({ post, onSuccess }: BlogPostFormProps) {
 
   const onSubmit = async (data: BlogPostFormData) => {
     // Validate that we have either an existing image or a new file
-    if (!data.image && selectedImageFiles.length === 0 && uploadFiles.length === 0) {
+    if (
+      !data.image &&
+      selectedImageFiles.length === 0 &&
+      uploadFiles.length === 0
+    ) {
       toast({
         title: 'Error',
         description: 'Please select a featured image',
@@ -186,10 +204,18 @@ export default function BlogPostForm({ post, onSuccess }: BlogPostFormProps) {
         let imageUrl = data.image || '';
 
         // If there's a new image file, upload it first
-        const newImageFile = selectedImageFiles[0] || (uploadFiles.length > 0 && uploadFiles[0].file.size > 0 ? uploadFiles[0].file : null);
+        const newImageFile =
+          selectedImageFiles[0] ||
+          (uploadFiles.length > 0 && uploadFiles[0].file.size > 0
+            ? uploadFiles[0].file
+            : null);
         if (newImageFile) {
           try {
-            imageUrl = await uploadToSupabase(newImageFile, !!post, post?.image);
+            imageUrl = await uploadToSupabase(
+              newImageFile,
+              !!post,
+              post?.image
+            );
           } catch {
             toast({
               title: 'Error',
@@ -291,13 +317,14 @@ export default function BlogPostForm({ post, onSuccess }: BlogPostFormProps) {
               </Badge>
               {post.published_at && (
                 <span className="text-sm text-muted-foreground">
-                  Published on {new Date(post.published_at).toLocaleDateString()}
+                  Published on{' '}
+                  {new Date(post.published_at).toLocaleDateString()}
                 </span>
               )}
             </div>
           )}
         </div>
-        
+
         {post && (
           <Button
             onClick={handlePublishToggle}
@@ -332,9 +359,9 @@ export default function BlogPostForm({ post, onSuccess }: BlogPostFormProps) {
                   <FormItem>
                     <FormLabel>Title</FormLabel>
                     <FormControl>
-                      <Input 
-                        placeholder="Enter blog post title..." 
-                        {...field} 
+                      <Input
+                        placeholder="Enter blog post title..."
+                        {...field}
                         className="text-lg"
                       />
                     </FormControl>
@@ -351,14 +378,15 @@ export default function BlogPostForm({ post, onSuccess }: BlogPostFormProps) {
                   <FormItem>
                     <FormLabel>Summary</FormLabel>
                     <FormControl>
-                      <Textarea 
+                      <Textarea
                         placeholder="Write a brief summary of your blog post..."
                         rows={3}
                         {...field}
                       />
                     </FormControl>
                     <FormDescription>
-                      This will be displayed in blog previews and meta descriptions.
+                      This will be displayed in blog previews and meta
+                      descriptions.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -411,9 +439,9 @@ export default function BlogPostForm({ post, onSuccess }: BlogPostFormProps) {
                       <FormItem>
                         <FormLabel>Author Image URL</FormLabel>
                         <FormControl>
-                          <Input 
-                            placeholder="https://example.com/author.jpg" 
-                            {...field} 
+                          <Input
+                            placeholder="https://example.com/author.jpg"
+                            {...field}
                           />
                         </FormControl>
                         <FormDescription>
@@ -435,9 +463,13 @@ export default function BlogPostForm({ post, onSuccess }: BlogPostFormProps) {
                       multiple={false}
                       initialFiles={initialFiles}
                     />
-                    {!form.watch('image') && selectedImageFiles.length === 0 && uploadFiles.length === 0 && (
-                      <p className="text-sm text-red-500">Featured image is required</p>
-                    )}
+                    {!form.watch('image') &&
+                      selectedImageFiles.length === 0 &&
+                      uploadFiles.length === 0 && (
+                        <p className="text-sm text-red-500">
+                          Featured image is required
+                        </p>
+                      )}
                   </div>
 
                   {/* Tag */}
@@ -447,8 +479,8 @@ export default function BlogPostForm({ post, onSuccess }: BlogPostFormProps) {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Category</FormLabel>
-                        <Select 
-                          onValueChange={field.onChange} 
+                        <Select
+                          onValueChange={field.onChange}
                           defaultValue={field.value}
                         >
                           <FormControl>
@@ -457,7 +489,7 @@ export default function BlogPostForm({ post, onSuccess }: BlogPostFormProps) {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            {availableTags.map((tag) => (
+                            {availableTags.map(tag => (
                               <SelectItem key={tag} value={tag}>
                                 {tag}
                               </SelectItem>
@@ -477,10 +509,7 @@ export default function BlogPostForm({ post, onSuccess }: BlogPostFormProps) {
                       <FormItem>
                         <FormLabel>URL Slug</FormLabel>
                         <FormControl>
-                          <Input 
-                            placeholder="blog-post-url-slug" 
-                            {...field} 
-                          />
+                          <Input placeholder="blog-post-url-slug" {...field} />
                         </FormControl>
                         <FormDescription>
                           Used in the URL. Auto-generated from title.
@@ -496,28 +525,29 @@ export default function BlogPostForm({ post, onSuccess }: BlogPostFormProps) {
               <Card>
                 <CardContent className="pt-6">
                   <div className="space-y-3">
-                    <Button 
-                      type="submit" 
+                    <Button
+                      type="submit"
                       disabled={isPending || isUploading}
                       className="w-full"
                     >
                       <Save className="w-4 h-4 mr-2" />
-                      {isUploading 
-                        ? 'Uploading Image...' 
-                        : isPending 
-                          ? 'Saving...' 
-                          : post 
-                            ? 'Update Post' 
-                            : 'Save Draft'
-                      }
+                      {isUploading
+                        ? 'Uploading Image...'
+                        : isPending
+                          ? 'Saving...'
+                          : post
+                            ? 'Update Post'
+                            : 'Save Draft'}
                     </Button>
-                    
+
                     {post && (
-                      <Button 
+                      <Button
                         type="button"
-                        variant="outline" 
+                        variant="outline"
                         className="w-full"
-                        onClick={() => window.open(`/blog/posts/${post.slug}`, '_blank')}
+                        onClick={() =>
+                          window.open(`/blog/posts/${post.slug}`, '_blank')
+                        }
                       >
                         <FileText className="w-4 h-4 mr-2" />
                         Preview

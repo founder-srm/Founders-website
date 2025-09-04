@@ -1,11 +1,11 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
 import { TicketPercent, X } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import type { BannerHeader } from '../../sanity.types';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { Button } from '@/components/ui/button';
+import type { BannerHeader } from '../../sanity.types';
 
 interface TimeLeft {
   days: number;
