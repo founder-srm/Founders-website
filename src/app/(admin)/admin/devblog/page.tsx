@@ -92,7 +92,7 @@ export default function DevBlogPage() {
           post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
           post.author.toLowerCase().includes(searchTerm.toLowerCase()) ||
           post.summary.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          (post.tag?.toLowerCase().includes(searchTerm.toLowerCase()))
+          post.tag?.toLowerCase().includes(searchTerm.toLowerCase())
       );
       setFilteredPosts(filtered);
     }

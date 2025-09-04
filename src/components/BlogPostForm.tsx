@@ -137,7 +137,7 @@ export default function BlogPostForm({ post, onSuccess }: BlogPostFormProps) {
 
   // Update form and content when post changes
   // biome-ignore lint/correctness/useExhaustiveDependencies: bruh
-    useEffect(() => {
+  useEffect(() => {
     if (post) {
       const normalizedContent = normalizeContent(post.content);
       form.reset({
