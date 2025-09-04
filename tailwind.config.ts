@@ -8,6 +8,7 @@ export default {
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+	"./node_modules/@ferrucc-io/emoji-picker/dist/**/*.{js,jsx,ts,tsx}"
   ],
   theme: {
   	extend: {
