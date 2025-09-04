@@ -38,7 +38,7 @@ export default function EditPostPage() {
             description: result.error,
             variant: 'destructive',
           });
-        } else {
+        } else if (result.data) {
           setPost(result.data);
         }
       } catch {

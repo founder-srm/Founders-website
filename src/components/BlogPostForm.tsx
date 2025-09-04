@@ -27,6 +27,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import MarkdownEditor from './MarkdownEditor';
+import FileUploader from './FileUploader';
 import { 
   createBlogPost, 
   updateBlogPost, 
@@ -37,6 +38,7 @@ import { generateSlug, getBlogPostTags } from '@/lib/blog-constants';
 import { useToast } from '@/hooks/use-toast';
 import { Database } from '../../database.types';
 import { Save, Eye, EyeOff, FileText } from 'lucide-react';
+import { useFileUpload } from '@/hooks/use-file-upload';
 
 type BlogPost = Database['public']['Tables']['posts']['Row'];
 
@@ -46,7 +48,7 @@ const blogPostSchema = z.object({
   content: z.string().min(1, 'Content is required'),
   author: z.string().min(1, 'Author is required'),
   author_image: z.string().url('Must be a valid URL').optional().or(z.literal('')),
-  image: z.string().url('Must be a valid URL'),
+  image: z.string().optional(), // This will store the uploaded URL, optional since we handle file uploads separately
   tag: z.enum([
     'SuccessStories',
     'StudentEntrepreneurs', 
@@ -73,6 +75,7 @@ interface BlogPostFormProps {
 export default function BlogPostForm({ post, onSuccess }: BlogPostFormProps) {
   const [isPending, startTransition] = useTransition();
   const [content, setContent] = useState('');
+  const [selectedImageFiles, setSelectedImageFiles] = useState<File[]>([]);
   const { toast } = useToast();
   const availableTags = getBlogPostTags();
 
@@ -83,6 +86,26 @@ export default function BlogPostForm({ post, onSuccess }: BlogPostFormProps) {
       .replace(/\\n/g, '\n')     // Replace \n with actual line breaks
       .replace(/\\r/g, '\n');    // Replace \r with actual line breaks
   };
+
+  // Initialize file uploader with existing image if editing
+  const initialFiles = post?.image ? [{
+    id: `existing-${post.id}`,
+    name: 'Current featured image',
+    size: 0,
+    type: 'image/jpeg',
+    url: post.image,
+  }] : [];
+
+  const [
+    { files: uploadFiles, isUploading },
+    { uploadToSupabase }
+  ] = useFileUpload({
+    accept: 'image/*',
+    maxSize: 5 * 1024 * 1024, // 5MB
+    multiple: false,
+    maxFiles: 1,
+    initialFiles,
+  });
 
   const form = useForm<BlogPostFormData>({
     resolver: zodResolver(blogPostSchema),
@@ -148,11 +171,39 @@ export default function BlogPostForm({ post, onSuccess }: BlogPostFormProps) {
   }, []);
 
   const onSubmit = async (data: BlogPostFormData) => {
+    // Validate that we have either an existing image or a new file
+    if (!data.image && selectedImageFiles.length === 0 && uploadFiles.length === 0) {
+      toast({
+        title: 'Error',
+        description: 'Please select a featured image',
+        variant: 'destructive',
+      });
+      return;
+    }
+
     startTransition(async () => {
       try {
+        let imageUrl = data.image || '';
+
+        // If there's a new image file, upload it first
+        const newImageFile = selectedImageFiles[0] || (uploadFiles.length > 0 && uploadFiles[0].file.size > 0 ? uploadFiles[0].file : null);
+        if (newImageFile) {
+          try {
+            imageUrl = await uploadToSupabase(newImageFile, !!post, post?.image);
+          } catch {
+            toast({
+              title: 'Error',
+              description: 'Failed to upload image. Please try again.',
+              variant: 'destructive',
+            });
+            return;
+          }
+        }
+
         const formData = {
           ...data,
           content,
+          image: imageUrl, // Use uploaded URL or existing URL
           author_image: data.author_image || '',
         };
 
@@ -374,25 +425,20 @@ export default function BlogPostForm({ post, onSuccess }: BlogPostFormProps) {
                   />
 
                   {/* Featured Image */}
-                  <FormField
-                    control={form.control}
-                    name="image"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Featured Image URL</FormLabel>
-                        <FormControl>
-                          <Input 
-                            placeholder="https://example.com/featured.jpg" 
-                            {...field} 
-                          />
-                        </FormControl>
-                        <FormDescription>
-                          Main image for the blog post.
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
+                  <div className="space-y-2">
+                    <Label>Featured Image</Label>
+                    <FileUploader
+                      onFileSelect={setSelectedImageFiles}
+                      maxSizeMB={5}
+                      maxFiles={1}
+                      accept="image/*"
+                      multiple={false}
+                      initialFiles={initialFiles}
+                    />
+                    {!form.watch('image') && selectedImageFiles.length === 0 && uploadFiles.length === 0 && (
+                      <p className="text-sm text-red-500">Featured image is required</p>
                     )}
-                  />
+                  </div>
 
                   {/* Tag */}
                   <FormField
@@ -452,11 +498,18 @@ export default function BlogPostForm({ post, onSuccess }: BlogPostFormProps) {
                   <div className="space-y-3">
                     <Button 
                       type="submit" 
-                      disabled={isPending}
+                      disabled={isPending || isUploading}
                       className="w-full"
                     >
                       <Save className="w-4 h-4 mr-2" />
-                      {post ? 'Update Post' : 'Save Draft'}
+                      {isUploading 
+                        ? 'Uploading Image...' 
+                        : isPending 
+                          ? 'Saving...' 
+                          : post 
+                            ? 'Update Post' 
+                            : 'Save Draft'
+                      }
                     </Button>
                     
                     {post && (
