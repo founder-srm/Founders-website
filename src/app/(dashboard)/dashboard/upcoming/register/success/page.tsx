@@ -2,9 +2,9 @@
 
 import { EmojiPicker } from '@ferrucc-io/emoji-picker';
 import confetti from 'canvas-confetti';
-import { Download, Mail, Share2, TriangleAlert, X } from 'lucide-react';
+import { Download, Mail, Share2, Smile, TriangleAlert, X } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import QRCode from 'react-qr-code';
 // Remove useToast import
 import RateLimitedButton from '@/components/RateLimitedButton';
@@ -19,6 +19,11 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
 import ScratchToReveal from '@/components/ui/scratch-to-reveal';
 import {
   Select,
@@ -34,6 +39,7 @@ import type { typeformInsertType } from '../../../../../../../schema.zod';
 export default function CustomizeTicketPage() {
   // Add new state for QR code size
   const [qrCodeSize, setQrCodeSize] = useState(200);
+  const qrCodeId = useId();
 
   const searchParams = useSearchParams();
   const Router = useRouter();
@@ -60,6 +66,7 @@ export default function CustomizeTicketPage() {
     type: 'success' as 'success' | 'error',
   });
   const [canvasSize, setCanvasSize] = useState({ width: 600, height: 400 });
+  const [emojiPickerOpen, setEmojiPickerOpen] = useState(false);
   // Remove toast related code
 
   useEffect(() => {
@@ -106,7 +113,7 @@ export default function CustomizeTicketPage() {
     if (!registration) return;
 
     // Convert SVG to Image
-    const svg = document.getElementById('QRCode');
+    const svg = document.getElementById(qrCodeId);
     if (svg) {
       const svgData = new XMLSerializer().serializeToString(svg);
       const img = new Image();
@@ -115,7 +122,7 @@ export default function CustomizeTicketPage() {
         setQrCodeImage(img);
       };
     }
-  }, [registration]);
+  }, [registration, qrCodeId]);
 
   // Update the resize effect to include QR code sizing
   useEffect(() => {
@@ -645,28 +652,47 @@ export default function CustomizeTicketPage() {
                 <div className="space-y-4 mt-4">
                   <div>
                     <Label>Pattern Content</Label>
-                    <Input
-                      value={patternContent}
-                      onChange={e => setPatternContent(e.target.value)}
-                      placeholder="Enter emoji or text"
-                    />
-                    <EmojiPicker
-                      className="border border-zinc-200 dark:border-zinc-800 rounded-lg"
-                      emojisPerRow={12}
-                      emojiSize={28}
-                      onEmojiSelect={(emoji) => setPatternContent(emoji)}
-                    >
-                      <EmojiPicker.Header className="p-2 pb-0">
-                        <EmojiPicker.Input
-                          placeholder="Search emoji"
-                          autoFocus={true}
-                          className="focus:ring-2 focus:ring-inset ring-1 ring-transparent"
-                        />
-                      </EmojiPicker.Header>
-                      <EmojiPicker.Group>
-                        <EmojiPicker.List hideStickyHeader={true} containerHeight={400} />
-                      </EmojiPicker.Group>
-                    </EmojiPicker>
+                    <div className="flex rounded-md shadow-xs">
+                      <Input
+                        value={patternContent}
+                        onChange={e => setPatternContent(e.target.value)}
+                        placeholder="Enter emoji or text"
+                        className="-me-px flex-1 rounded-e-none shadow-none focus-visible:z-10"
+                      />
+                      <Popover open={emojiPickerOpen} onOpenChange={setEmojiPickerOpen}>
+                        <PopoverTrigger asChild>
+                          <button
+                            className="border-input bg-background text-muted-foreground/80 hover:bg-accent hover:text-accent-foreground focus-visible:border-ring focus-visible:ring-ring/50 inline-flex w-9 items-center justify-center rounded-e-md border text-sm transition-[color,box-shadow] outline-none focus:z-10 focus-visible:ring-[3px] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
+                            aria-label="Select Emoji"
+                            type="button"
+                          >
+                            <Smile size={16} aria-hidden="true" />
+                          </button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-80 p-0" align="end">
+                          <EmojiPicker
+                            className="border-none rounded-lg"
+                            emojisPerRow={8}
+                            emojiSize={24}
+                            onEmojiSelect={(emoji) => {
+                              setPatternContent(emoji);
+                              setEmojiPickerOpen(false);
+                            }}
+                          >
+                            <EmojiPicker.Header className="p-3 pb-2">
+                              <EmojiPicker.Input
+                                placeholder="Search emoji"
+                                autoFocus={true}
+                                className="w-full px-3 py-2 text-sm border border-input rounded-md bg-background focus:ring-2 focus:ring-ring focus:border-transparent"
+                              />
+                            </EmojiPicker.Header>
+                            <EmojiPicker.Group>
+                              <EmojiPicker.List hideStickyHeader={true} containerHeight={300} />
+                            </EmojiPicker.Group>
+                          </EmojiPicker>
+                        </PopoverContent>
+                      </Popover>
+                    </div>
                   </div>
 
                   <div>
@@ -757,7 +783,7 @@ export default function CustomizeTicketPage() {
 
           <div className="hidden">
             <QRCode
-              id="QRCode"
+              id={qrCodeId}
               value={registration.id || ''}
               size={qrCodeSize}
               level="H"
