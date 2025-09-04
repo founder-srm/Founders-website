@@ -1,6 +1,6 @@
 'use client';
 
-import { Color } from '@tiptap/extension-color';
+import { Color } from '@tiptap/extension-color'
 import ListItem from '@tiptap/extension-list-item';
 import TextStyle from '@tiptap/extension-text-style';
 import { EditorProvider, useCurrentEditor } from '@tiptap/react';
@@ -131,7 +131,7 @@ const Tiptap = ({
               'prose prose-sm sm:prose-base lg:prose-lg m-5 focus:outline-none',
           },
           handleDOMEvents: {
-            focus: (view, event) => {
+            focus: (_view, event) => {
               // Prevent focus from being stolen
               event.preventDefault();
               return true;
