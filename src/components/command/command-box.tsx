@@ -12,7 +12,6 @@ import {
   CommandShortcut,
 } from '@/components/ui/command';
 import {
-  Calendar,
   FilePlus2,
   Home,
   Archive,
@@ -23,6 +22,7 @@ import {
   FileSearch,
   ArrowLeft,
   Loader2,
+  Rss,
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { DialogTitle } from '@/components/ui/dialog';
@@ -228,10 +228,10 @@ export function CommandBox({ open, setOpen }: CommandBoxProps) {
             <CommandSeparator />
             <CommandGroup heading="Tools">
               <CommandItem
-                onSelect={() => runCommand(() => console.log('Calendar'))}
+                onSelect={() => runCommand(() => router.push('/admin/devblog'))}
               >
-                <Calendar className="mr-2 h-4 w-4" />
-                <span>Calendar</span>
+                <Rss className="mr-2 h-4 w-4" />
+                <span>DevBlog</span>
               </CommandItem>
               <CommandItem
                 onSelect={() => runCommand(() => console.log('Settings'))}
