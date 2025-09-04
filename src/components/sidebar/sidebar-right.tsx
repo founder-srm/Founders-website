@@ -13,7 +13,6 @@ import {
 } from '@/components/ui/sidebar';
 import { useUser } from '@/stores/session';
 import { Calendars } from './calendars';
-import { DatePicker } from './date-picker';
 import { NavUser } from './nav-user';
 
 // This is sample data.
