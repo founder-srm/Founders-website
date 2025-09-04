@@ -1,22 +1,21 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.2.2/schema.json",
   "vcs": {
     "enabled": true,
     "clientKind": "git",
     "useIgnoreFile": true
   },
-  "organizeImports": {
-    "enabled": false
-  },
+  "assist": { "actions": { "source": { "organizeImports": "on" } } },
   "files": {
     "ignoreUnknown": true
   },
   "linter": {
-    "ignore": [
-      "tailwind.config.ts",
-      "once-ui",
-      "sanity.config.ts",
-      "sanity.types.ts"
+    "includes": [
+      "**",
+      "!**/tailwind.config.ts",
+      "!**/once-ui",
+      "!**/sanity.config.ts",
+      "!**/sanity.types.ts"
     ],
     "enabled": true,
     "rules": {
@@ -28,11 +27,12 @@
     }
   },
   "formatter": {
-    "ignore": [
-      "tailwind.config.ts",
-      "once-ui",
-      "sanity.config.ts",
-      "sanity.types.ts"
+    "includes": [
+      "**",
+      "!**/tailwind.config.ts",
+      "!**/once-ui",
+      "!**/sanity.config.ts",
+      "!**/sanity.types.ts"
     ],
     "enabled": true,
     "formatWithErrors": true,
