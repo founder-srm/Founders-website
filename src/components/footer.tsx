@@ -105,6 +105,7 @@ const Footer2 = () => {
   const pathname = usePathname();
   const excludedRoutes = [
     '/studio/*',
+    '/creatives',
     '/events/writeup/*',
     '/blog/posts/*',
     '/admin/*',

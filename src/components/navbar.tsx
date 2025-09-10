@@ -1,5 +1,5 @@
 'use client';
-import { Book, Menu, Sunset, Trees, UsersRound, Zap } from 'lucide-react';
+import { Book, Menu, Paintbrush, Sunset, Trees, UsersRound, Zap } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -123,6 +123,12 @@ const subMenuItemsOne = [
     route: '/blog',
   },
   {
+    title: 'Creative Works',
+    description: 'Showcasing our members creative works and projects',
+    icon: <Paintbrush className="size-5 shrink-0" />,
+    route: '/creatives',
+  },
+  {
     title: 'Our Team',
     description: 'Get to know the people behind the scenes at Founders Club',
     icon: <UsersRound className="size-5 shrink-0" />,
@@ -182,6 +188,7 @@ const Navbar1 = () => {
 
   const excludedRoutes = [
     '/studio/*',
+    '/creatives',
     '/events/writeup/*',
     '/blog/posts/*',
     '/auth/*',
