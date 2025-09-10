@@ -52,6 +52,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date().toISOString(),
     },
     {
+      url: `${baseUrl}/creatives`,
+      priority: 0.8,
+      lastModified: new Date().toISOString(),
+    },
+    {
       url: `${baseUrl}/recruitments`,
       priority: 0.8,
       lastModified: new Date().toISOString(),
