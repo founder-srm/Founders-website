@@ -20,83 +20,96 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(`https://${config.baseUrl}`),
-  title: 'Founders Club',
-  description: 'A community of founders building the future',
+  // Ensure base is a valid absolute URL (config already includes protocol in production)
+  metadataBase: new URL(config.baseUrl ?? 'https://www.thefoundersclub.in'),
+  title: {
+    default: 'Founders Club',
+    template: '%s | Founders Club',
+  },
+  description: 'A community of founders building the future through innovation, collaboration, and student entrepreneurship.',
+  applicationName: 'Founders Club',
+  authors: [
+    { name: 'Founders Club', url: config.baseUrl },
+    { name: 'Suvan GS', url: 'https://www.suvangs.tech' },
+    { name: 'Suvan Gowri Shanker', url: 'https://www.suvangs.tech' },
+  ],
+  creator: 'Founders Club',
+  publisher: 'Founders Club',
+  category: 'Business',
+  classification: 'Business / Entrepreneurship / Innovation',
+  keywords: [
+    'founders club',
+    'founders',
+    'startup club',
+    'student startups',
+    'student entrepreneurship',
+    'innovation hub',
+    'SRMIST',
+    'SRM University',
+    'Kattankulathur',
+    'hackathons',
+    'workshops',
+    'bootcamps',
+    'webinars',
+    'entrepreneurship community',
+    'founder network',
+    'university innovation',
+    'DEI',
+    'tech events',
+    'product building',
+    'venture building',
+    'India startups',
+    'youth innovation',
+  ],
+  alternates: {
+    canonical: config.baseUrl,
+  },
   openGraph: {
     title: 'Founders Club',
+    description: 'Connect with a vibrant ecosystem of student founders, builders, and innovators.',
+    url: config.baseUrl,
+    siteName: 'Founders Club',
+    locale: 'en_US',
+    type: 'website',
     images: [
       {
         url: `${config.baseUrl}/FC-logo2.jpeg`,
         width: 640,
         height: 640,
-        alt: 'Founders Club Logo',
+        alt: 'Founders Club Primary Logo',
+        type: 'image/jpeg',
       },
       {
         url: `${config.baseUrl}/FC-logo1.png`,
         width: 412,
         height: 255,
-        alt: 'Founders Club Logo',
+        alt: 'Founders Club Horizontal Logo',
+        type: 'image/png',
       },
     ],
-    description: 'A community of founders building the future',
-    url: config.baseUrl,
-    siteName: 'Founders Club',
-    locale: 'en_US',
-    type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Founders Club',
-    description: 'A community of founders building the future',
-    images: [
-      `${config.baseUrl}/FC-logo2.jpeg`,
-      `${config.baseUrl}/FC-logo1.png`,
-    ],
+    description: 'Student founders building the future.',
+    images: [`${config.baseUrl}/FC-logo2.jpeg`],
     creator: '@foundersclubsrm',
+    site: '@foundersclubsrm',
   },
-  creator: 'Founders Club',
-  applicationName: 'Founders Club',
-  authors: [
-    {
-      name: 'Founders Club',
-      url: config.baseUrl,
-    },
-    {
-      name: 'Suvan GS',
-      url: 'https://www.suvangs.tech',
-    },
-    {
-      name: 'Suvan Gowri Shanker',
-      url: 'https://www.suvangs.tech',
-    },
-  ],
-  category: 'Business',
-  classification: 'Business',
-  publisher: 'Founders Club',
-  keywords: [
-    'founders',
-    'club',
-    'community',
-    'startups',
-    'entrepreneurs',
-    'DEI',
-    'founders club',
-    'entrepreneurship',
-    'Directorate of Entrepreneurship and Innovation',
-    'SRM Institute of Science and Technology',
-    'SRMIST',
-    'SRM',
-    'SRM University',
-    'SRMIST Chennai',
-    'SRM Chennai',
-    'SRM Kattankulathur',
-    'SRMIST Kattankulathur',
-    'SRMIST Ramapuram',
-    'Student Entrepreneurship',
-    'Student Innovation',
-    'Student Startups',
-  ],
+  icons: {
+    icon: [
+      { url: '/favicon.ico' },
+      { url: '/icon.ico' },
+    ],
+    apple: [
+      { url: '/apple-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
+    shortcut: ['/favicon.ico'],
+  },
+  manifest: '/site.webmanifest',
+  verification: {
+    google: 'k3IhMiinZTFIeLqq_luo4BRqfQ4lchHmKsDWkpGGoTg',
+  },
   robots: {
     index: true,
     follow: true,
@@ -107,6 +120,18 @@ export const metadata: Metadata = {
       'max-image-preview': 'large',
       'max-snippet': -1,
     },
+  },
+  appleWebApp: {
+    capable: true,
+    title: 'Founders Club',
+    statusBarStyle: 'default',
+  },
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+    { media: '(prefers-color-scheme: dark)', color: '#000000' },
+  ],
+  other: {
+    'color-scheme': 'light dark',
   },
 };
 function Noise() {
@@ -139,6 +164,7 @@ export default function RootLayout({
           src="https://scripts.simpleanalyticscdn.com/latest.js"
         />
         <noscript>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="https://queue.simpleanalyticscdn.com/noscript.gif?collect-dnt=true"
             alt=""
