@@ -944,9 +944,6 @@ export type ABOUT_HERO_QUERYResult = {
     _key: string;
   } & AboutUsCta> | null;
 } | null;
-// Variable: UPCOMING_HEADER_QUERY
-// Query: *[_type == "upcomingEventsHeader"][0]{  _id,  _createdAt,  badge,  title,  description}
-export type UPCOMING_HEADER_QUERYResult = null;
 // Variable: CTA_QUERY
 // Query: *[_type == "cta"]{  _id,  _createdAt,  title,  description,  primaryButtonText,  primaryButtonLink,  secondaryButtonText,  secondaryButtonLink,  variant,  activateSecondaryButton,  showCTA}
 export type CTA_QUERYResult = Array<{
@@ -1661,7 +1658,6 @@ import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
     "*[_type == \"aboutUsHero\"][0]{\n  _id,\n  _createdAt,\n  title,\n  subTitle,\n  bannerImage,\n  ourMission,\n  secondaryHeading,\n  secondarySubHeading,\n  ourValues,\n  aboutUsCtaComponent\n}": ABOUT_HERO_QUERYResult;
-    "*[_type == \"upcomingEventsHeader\"][0]{\n  _id,\n  _createdAt,\n  badge,\n  title,\n  description\n}": UPCOMING_HEADER_QUERYResult;
     "*[_type == \"cta\"]{\n  _id,\n  _createdAt,\n  title,\n  description,\n  primaryButtonText,\n  primaryButtonLink,\n  secondaryButtonText,\n  secondaryButtonLink,\n  variant,\n  activateSecondaryButton,\n  showCTA\n}": CTA_QUERYResult;
     "*[_type == \"testimonial\"]{\n  _id,\n  _createdAt,\n  quote,\n  author->{\n    name,\n    title,\n    slug,\n    image,\n    bio\n  },\n  published\n}": TESTIMONIALS_QUERYResult;
     "*[_type == \"jobCategory\"]{\n  _id,\n  _createdAt,\n  category,\n  openings[]{\n    title,\n    location,\n    link\n  }\n}": JOBS_QUERYResult;

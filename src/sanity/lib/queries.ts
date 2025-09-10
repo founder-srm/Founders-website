@@ -13,15 +13,6 @@ export const ABOUT_HERO_QUERY = defineQuery(`*[_type == "aboutUsHero"][0]{
   aboutUsCtaComponent
 }`);
 
-export const UPCOMING_HEADER_QUERY =
-  defineQuery(`*[_type == "upcomingEventsHeader"][0]{
-  _id,
-  _createdAt,
-  badge,
-  title,
-  description
-}`);
-
 export const CTA_QUERY = defineQuery(`*[_type == "cta"]{
   _id,
   _createdAt,

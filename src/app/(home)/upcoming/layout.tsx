@@ -3,8 +3,6 @@ import { Suspense } from 'react';
 import { createClient } from '@/utils/supabase/server';
 import type { eventsInsertType } from '../../../../schema.zod';
 
-// import { EventsHeader } from '@/components/upcoming-header';
-// import { usePathname } from 'next/navigation';
 
 async function getEvents() {
   const supabase = await createClient();
@@ -83,7 +81,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <Suspense fallback={<div>Loading...</div>}>
       <main className="flex flex-col items-center w-full min-h-screen">
         <div className="container py-4 px-2">
-          {/* {isUpcomingRoute && <EventsHeader />} */}
           {children}
         </div>
       </main>
