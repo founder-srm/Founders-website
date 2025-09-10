@@ -10,7 +10,6 @@ import { blockContentType } from './blockContentType';
 import { categoryType } from './categoryType';
 import { contactUsType } from './contactUsType';
 import { ctaType } from './ctaType';
-import { upcompingEventsHeaderType } from './eventsHeaderType';
 import { eventType } from './eventType';
 import { faqType } from './faqType';
 import { featureType } from './featureType';
@@ -21,6 +20,7 @@ import { ourTeamType } from './ourTeamType';
 import { postType } from './postType';
 import { testimonialType } from './testimonialType';
 import { timelineType } from './timelineType';
+import { linkTreeType } from './linkTreeType';
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -39,10 +39,10 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     aboutValuesType,
     aboutUsCtaType,
     ourStoryType,
-    upcompingEventsHeaderType,
     timelineType,
     bannerHeaderType,
     contactUsType,
     ourTeamType,
+    linkTreeType,
   ],
 };
