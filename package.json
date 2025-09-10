@@ -8,6 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "typecheck": "tsc --noEmit",
     "fmt": "biome check --write",
     "shadcn": "shadcn@latest add [component]",
     "schema": "sanity@latest schema extract",
