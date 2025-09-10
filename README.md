@@ -1,4 +1,6 @@
 ![Simple Analytics](https://simpleanalyticsbadges.com/simpleanalytics.com?mode=dark&logo=teal&counter=false&radius=10)
+
+![Type Check](https://github.com/founder-srm/Founders-website/actions/workflows/typecheck.yml/badge.svg)
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
