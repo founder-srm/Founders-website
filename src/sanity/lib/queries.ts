@@ -226,3 +226,51 @@ export const TEAM_QUERY =
   advisorRole,
   order
 }`);
+
+export const LINKTREE_BY_SLUG_QUERY = defineQuery(`*[_type == "linktree" && slug.current == $slug][0]{
+  _id,
+  _createdAt,
+  title,
+  description,
+  themeColor,
+  pageBackground,
+  pageBackgroundImage,
+  slug,
+  avatar,
+  logo,
+  links[]{
+    _key,
+    label,
+    platform,
+    url,
+    iconOverride,
+    highlight,
+    pinned,
+    order,
+    active
+  }
+}`);
+
+export const FIRST_LINKTREE_QUERY = defineQuery(`*[_type == "linktree"] | order(_createdAt asc)[0]{
+  _id,
+  _createdAt,
+  title,
+  description,
+  themeColor,
+  pageBackground,
+  pageBackgroundImage,
+  slug,
+  avatar,
+  logo,
+  links[]{
+    _key,
+    label,
+    platform,
+    url,
+    iconOverride,
+    highlight,
+    pinned,
+    order,
+    active
+  }
+}`);

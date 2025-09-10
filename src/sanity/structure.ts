@@ -156,6 +156,14 @@ export const structure: StructureResolver = S =>
         ),
       S.divider(),
       S.listItem()
+        .title('Club Link Hub')
+        .child(
+          S.list()
+            .title('Link Tree')
+            .items([S.documentTypeListItem('linktree').title('Club Link Tree')])
+        ),
+      S.divider(),
+      S.listItem()
         .title('Authors')
         .child(
           S.list()

@@ -34,7 +34,32 @@ export type Linktree = {
     crop?: SanityImageCrop;
     _type: "image";
   };
+  logo?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
   themeColor?: string;
+  pageBackground?: string;
+  pageBackgroundImage?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
   links?: Array<{
     label?: string;
     platform?: "instagram" | "dribbble" | "deviantart" | "figma" | "beefree" | "custom";
@@ -1430,6 +1455,122 @@ export type TEAM_QUERYResult = Array<{
   advisorRole: string | null;
   order: number | null;
 }>;
+// Variable: LINKTREE_BY_SLUG_QUERY
+// Query: *[_type == "linktree" && slug.current == $slug][0]{  _id,  _createdAt,  title,  description,  themeColor,  pageBackground,  pageBackgroundImage,  slug,  avatar,  logo,  links[]{    _key,    label,    platform,    url,    iconOverride,    highlight,    pinned,    order,    active  }}
+export type LINKTREE_BY_SLUG_QUERYResult = {
+  _id: string;
+  _createdAt: string;
+  title: string | null;
+  description: string | null;
+  themeColor: string | null;
+  pageBackground: string | null;
+  pageBackgroundImage: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  } | null;
+  slug: Slug | null;
+  avatar: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  } | null;
+  logo: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  } | null;
+  links: Array<{
+    _key: string;
+    label: string | null;
+    platform: "beefree" | "custom" | "deviantart" | "dribbble" | "figma" | "instagram" | null;
+    url: string | null;
+    iconOverride: string | null;
+    highlight: boolean | null;
+    pinned: boolean | null;
+    order: number | null;
+    active: boolean | null;
+  }> | null;
+} | null;
+// Variable: FIRST_LINKTREE_QUERY
+// Query: *[_type == "linktree"] | order(_createdAt asc)[0]{  _id,  _createdAt,  title,  description,  themeColor,  pageBackground,  pageBackgroundImage,  slug,  avatar,  logo,  links[]{    _key,    label,    platform,    url,    iconOverride,    highlight,    pinned,    order,    active  }}
+export type FIRST_LINKTREE_QUERYResult = {
+  _id: string;
+  _createdAt: string;
+  title: string | null;
+  description: string | null;
+  themeColor: string | null;
+  pageBackground: string | null;
+  pageBackgroundImage: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  } | null;
+  slug: Slug | null;
+  avatar: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  } | null;
+  logo: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  } | null;
+  links: Array<{
+    _key: string;
+    label: string | null;
+    platform: "beefree" | "custom" | "deviantart" | "dribbble" | "figma" | "instagram" | null;
+    url: string | null;
+    iconOverride: string | null;
+    highlight: boolean | null;
+    pinned: boolean | null;
+    order: number | null;
+    active: boolean | null;
+  }> | null;
+} | null;
 
 // Source: ./src/sanity/lib/queries/ctaQuery.ts
 // Variable: ctaQuery
@@ -1534,6 +1675,8 @@ declare module "@sanity/client" {
     "*[_type == \"timeline\"][0]{\n  _id,\n  _createdAt,\n  title,\n  subtitle,\n  description,\n  buttonText,\n  buttonLink,\n  secondaryButtonText,\n  secondaryButtonLink,\n  showSecondaryButton,\n  items[]{\n    title,\n    description,\n    image\n  }\n}": TIMELINE_QUERYResult;
     "*[_type == \"contactUs\"][0]{\n  _id,\n  _createdAt,\n  title,\n  subtitle,\n  expectationsTitle,\n  expectations,\n  formTitle,\n  formSubtitle,\n  submitButtonText,\n  thankYouMessage,\n  teamMembers[]->{\n    _id,\n    name,\n    title,\n    image\n  }\n}": CONTACT_US_QUERYResult;
     "*[_type == \"ourTeam\"] | order(order asc) {\n  _id,\n  _createdAt,\n  name,\n  role,\n  description,\n  avatar,\n  github,\n  linkedin,\n  website,\n  domain,\n  isPresident,\n  isVicePresident,\n  isAdvisor,\n  advisorRole,\n  order\n}": TEAM_QUERYResult;
+    "*[_type == \"linktree\" && slug.current == $slug][0]{\n  _id,\n  _createdAt,\n  title,\n  description,\n  themeColor,\n  pageBackground,\n  pageBackgroundImage,\n  slug,\n  avatar,\n  logo,\n  links[]{\n    _key,\n    label,\n    platform,\n    url,\n    iconOverride,\n    highlight,\n    pinned,\n    order,\n    active\n  }\n}": LINKTREE_BY_SLUG_QUERYResult;
+    "*[_type == \"linktree\"] | order(_createdAt asc)[0]{\n  _id,\n  _createdAt,\n  title,\n  description,\n  themeColor,\n  pageBackground,\n  pageBackgroundImage,\n  slug,\n  avatar,\n  logo,\n  links[]{\n    _key,\n    label,\n    platform,\n    url,\n    iconOverride,\n    highlight,\n    pinned,\n    order,\n    active\n  }\n}": FIRST_LINKTREE_QUERYResult;
     "*[_type == \"cta\"]{\n    _id,\n    _createdAt,\n    title,\n    description,\n    primaryButtonText,\n    primaryButtonLink,\n    secondaryButtonText,\n    secondaryButtonLink,\n    variant,\n    activateSecondaryButton,\n    showCTA\n}": CtaQueryResult;
     "*[_type == \"event\"]{\n    _id,\n    _createdAt,\n    id,\n    title,\n    summary,\n    image,\n    label,\n    author,\n    published,\n    href\n}": EventsQueryResult;
     "*[_type == \"faq\"]{\n    _id,\n    _createdAt,\n    question,\n    answer\n}": FaqsQueryResult;
