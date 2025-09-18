@@ -41,10 +41,9 @@ export async function sendEventRegistration(eventData: typeformInsertType) {
   );
 
   if (error) {
+    console.error('Supabase RPC error:', error);
     return Error(error.message);
   }
-
-  console.log(data);
 
   // Preserve previous return shape (array of rows)
   return Array.isArray(data) ? data : [data];
