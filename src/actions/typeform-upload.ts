@@ -34,14 +34,18 @@ export async function createEvent(eventData: Event) {
 }
 
 export async function sendEventRegistration(eventData: typeformInsertType) {
-  const supabase = createClient();
-  const { data, error } = await supabase
-    .from('eventsregistrations')
-    .insert(eventData)
-    .select();
+  const supabase = createClient(); 
+  const { data, error } = await supabase.rpc(
+    'create_or_get_event_registration',
+    { eventdata: eventData }
+  );
+
   if (error) {
     return Error(error.message);
   }
+
   console.log(data);
-  return data;
+
+  // Preserve previous return shape (array of rows)
+  return Array.isArray(data) ? data : [data];
 }
