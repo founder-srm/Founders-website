@@ -180,8 +180,6 @@ export function TypeformMultiStep({
       return;
     }
 
-    console.log('Final submission:', data);
-
     try {
       const response = await sendEventRegistration({
         registration_email: user.email,
@@ -191,21 +189,31 @@ export function TypeformMultiStep({
         is_approved: eventData.always_approve ? 'ACCEPTED' : 'SUBMITTED',
         details: data as Json,
       });
-      if (!Array.isArray(response)) {
-        alert('Registration failed!');
+
+      if (!response?.ticket_id) {
+        toast({
+          title: 'Registration failed',
+          description: 'Please try again.',
+          variant: 'destructive',
+        });
         return;
       }
 
       toast({
-        title: 'Registration successful!',
-        description: 'You have successfully registered for the event.',
+        title: 'You are registered',
+        description: 'If you already registered, we reused your ticket.',
       });
+
       Router.push(
-        `/dashboard/upcoming/register/success?ticketid=${response[0].ticket_id}`
+        `/dashboard/upcoming/register/success?ticketid=${response.ticket_id}`
       );
     } catch (error) {
-      console.error('Error:', error);
-      alert('Registration failed!');
+      console.error(error);
+      toast({
+        title: 'Registration failed',
+        description: 'Please try again.',
+        variant: 'destructive',
+      });
     }
   }
 

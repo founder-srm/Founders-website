@@ -34,17 +34,38 @@ export async function createEvent(eventData: Event) {
 }
 
 export async function sendEventRegistration(eventData: typeformInsertType) {
-  const supabase = createClient(); 
-  const { data, error } = await supabase.rpc(
-    'create_or_get_event_registration',
-    { eventdata: eventData }
-  );
+  const supabase = createClient();
 
-  if (error) {
-    console.error('Supabase RPC error:', error);
-    return Error(error.message);
+  // Single write-first attempt. Only read if we hit a unique violation.
+  const { data, error } = await supabase
+    .from('eventsregistrations')
+    .insert(eventData)
+    .select()
+    .single();
+
+  if (data) return data;
+
+  // Unique violation (duplicate) → fetch existing once.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  if ((error as any)?.code === '23505') {
+    const query = eventData.application_id
+      ? supabase
+          .from('eventsregistrations')
+          .select('*')
+          .eq('event_id', eventData.event_id!)
+          .eq('application_id', eventData.application_id)
+          .maybeSingle()
+      : supabase
+          .from('eventsregistrations')
+          .select('*')
+          .eq('event_id', eventData.event_id!)
+          .eq('registration_email', eventData.registration_email)
+          .maybeSingle();
+
+    const { data: existing, error: fetchErr } = await query;
+    if (existing) return existing;
+    throw new Error(fetchErr?.message ?? 'Duplicate detected but existing row not found');
   }
 
-  // Preserve previous return shape (array of rows)
-  return Array.isArray(data) ? data : [data];
+  throw new Error(error?.message ?? 'Registration failed');
 }
