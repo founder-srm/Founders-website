@@ -300,6 +300,7 @@ export type Database = {
           event_id: string
           id: string
           registration_email: string
+          ticket_id: number
         }[]
       }
       extended_search_registrations: {
