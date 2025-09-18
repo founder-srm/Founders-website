@@ -126,10 +126,6 @@ export const metadata: Metadata = {
     title: 'Founders Club',
     statusBarStyle: 'default',
   },
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
-    { media: '(prefers-color-scheme: dark)', color: '#000000' },
-  ],
   other: {
     'color-scheme': 'light dark',
   },
