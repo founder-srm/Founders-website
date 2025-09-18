@@ -57,7 +57,8 @@ export const linkTreeType = defineType({
       title: 'Secondary Logo (Optional)',
       type: 'image',
       options: { hotspot: true },
-      description: 'Used in places where a simplified or smaller logo is preferred. Falls back to Primary Logo if unset.',
+      description:
+        'Used in places where a simplified or smaller logo is preferred. Falls back to Primary Logo if unset.',
       group: 'display',
     },
     {
@@ -72,7 +73,8 @@ export const linkTreeType = defineType({
       name: 'pageBackground',
       title: 'Page Background',
       type: 'string',
-      description: 'CSS background value (solid color or gradient). Example: #000000, hsl(var(--background)), linear-gradient(180deg,#000,#111).',
+      description:
+        'CSS background value (solid color or gradient). Example: #000000, hsl(var(--background)), linear-gradient(180deg,#000,#111).',
       group: 'display',
     },
     {
@@ -80,7 +82,8 @@ export const linkTreeType = defineType({
       title: 'Page Background Image',
       type: 'image',
       options: { hotspot: true },
-      description: 'Optional background image for the page (overrides Page Background color/gradient when set).',
+      description:
+        'Optional background image for the page (overrides Page Background color/gradient when set).',
       group: 'display',
     },
     {
@@ -128,7 +131,9 @@ export const linkTreeType = defineType({
               title: 'URL',
               type: 'url',
               validation: r =>
-                r.required().uri({ allowRelative: false, scheme: ['http', 'https'] }),
+                r
+                  .required()
+                  .uri({ allowRelative: false, scheme: ['http', 'https'] }),
             },
             {
               name: 'iconOverride',

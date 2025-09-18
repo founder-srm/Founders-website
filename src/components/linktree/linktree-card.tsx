@@ -1,5 +1,6 @@
 'use client';
 
+import { ExternalLink } from 'lucide-react';
 import Image from 'next/image';
 import type React from 'react';
 import { Button } from '@/components/ui/button';
@@ -12,7 +13,6 @@ import {
 import { cn } from '@/lib/utils';
 import { urlFor } from '@/sanity/lib/image';
 import { platformConfig, resolvePlatformIcon } from './platform-icons';
-import { ExternalLink } from 'lucide-react';
 
 interface LinkTreeCardProps {
   title: string;

@@ -64,7 +64,9 @@ export async function sendEventRegistration(eventData: typeformInsertType) {
 
     const { data: existing, error: fetchErr } = await query;
     if (existing) return existing;
-    throw new Error(fetchErr?.message ?? 'Duplicate detected but existing row not found');
+    throw new Error(
+      fetchErr?.message ?? 'Duplicate detected but existing row not found'
+    );
   }
 
   throw new Error(error?.message ?? 'Registration failed');

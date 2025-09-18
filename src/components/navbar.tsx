@@ -1,5 +1,13 @@
 'use client';
-import { Book, Menu, Paintbrush, Sunset, Trees, UsersRound, Zap } from 'lucide-react';
+import {
+  Book,
+  Menu,
+  Paintbrush,
+  Sunset,
+  Trees,
+  UsersRound,
+  Zap,
+} from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';

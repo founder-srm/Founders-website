@@ -218,7 +218,8 @@ export const TEAM_QUERY =
   order
 }`);
 
-export const LINKTREE_BY_SLUG_QUERY = defineQuery(`*[_type == "linktree" && slug.current == $slug][0]{
+export const LINKTREE_BY_SLUG_QUERY =
+  defineQuery(`*[_type == "linktree" && slug.current == $slug][0]{
   _id,
   _createdAt,
   title,
@@ -242,7 +243,8 @@ export const LINKTREE_BY_SLUG_QUERY = defineQuery(`*[_type == "linktree" && slug
   }
 }`);
 
-export const FIRST_LINKTREE_QUERY = defineQuery(`*[_type == "linktree"] | order(_createdAt asc)[0]{
+export const FIRST_LINKTREE_QUERY =
+  defineQuery(`*[_type == "linktree"] | order(_createdAt asc)[0]{
   _id,
   _createdAt,
   title,

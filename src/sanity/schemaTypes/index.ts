@@ -15,12 +15,12 @@ import { faqType } from './faqType';
 import { featureType } from './featureType';
 import { heroComponentType } from './heroComponentType';
 import { jobCategoryType } from './jobCategoryType';
+import { linkTreeType } from './linkTreeType';
 import { ourStoryType } from './ourStoryType';
 import { ourTeamType } from './ourTeamType';
 import { postType } from './postType';
 import { testimonialType } from './testimonialType';
 import { timelineType } from './timelineType';
-import { linkTreeType } from './linkTreeType';
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [

@@ -1,5 +1,12 @@
-import { Instagram, Dribbble, Figma, Link as LinkIcon, Globe2, Mail } from 'lucide-react';
-import React from 'react';
+import {
+  Dribbble,
+  Figma,
+  Globe2,
+  Instagram,
+  Link as LinkIcon,
+  Mail,
+} from 'lucide-react';
+import type React from 'react';
 
 const DeviantArtIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg viewBox="0 0 24 24" aria-hidden="true" {...props}>
@@ -29,9 +36,17 @@ export const platformConfig: Record<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   { label: string; icon: React.ComponentType<any>; className?: string }
 > = {
-  instagram: { label: 'Instagram', icon: Instagram, className: 'text-pink-500' },
+  instagram: {
+    label: 'Instagram',
+    icon: Instagram,
+    className: 'text-pink-500',
+  },
   dribbble: { label: 'Dribbble', icon: Dribbble, className: 'text-pink-400' },
-  deviantart: { label: 'DeviantArt', icon: DeviantArtIcon, className: 'text-green-500' },
+  deviantart: {
+    label: 'DeviantArt',
+    icon: DeviantArtIcon,
+    className: 'text-green-500',
+  },
   figma: { label: 'Figma', icon: Figma, className: 'text-violet-500' },
   beefree: { label: 'BeeFree', icon: BeeFreeIcon, className: 'text-amber-500' },
   custom: { label: 'Link', icon: LinkIcon },

@@ -26,7 +26,8 @@ export const metadata: Metadata = {
     default: 'Founders Club',
     template: '%s | Founders Club',
   },
-  description: 'A community of founders building the future through innovation, collaboration, and student entrepreneurship.',
+  description:
+    'A community of founders building the future through innovation, collaboration, and student entrepreneurship.',
   applicationName: 'Founders Club',
   authors: [
     { name: 'Founders Club', url: config.baseUrl },
@@ -66,7 +67,8 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'Founders Club',
-    description: 'Connect with a vibrant ecosystem of student founders, builders, and innovators.',
+    description:
+      'Connect with a vibrant ecosystem of student founders, builders, and innovators.',
     url: config.baseUrl,
     siteName: 'Founders Club',
     locale: 'en_US',
@@ -97,13 +99,8 @@ export const metadata: Metadata = {
     site: '@foundersclubsrm',
   },
   icons: {
-    icon: [
-      { url: '/favicon.ico' },
-      { url: '/icon.ico' },
-    ],
-    apple: [
-      { url: '/apple-icon.png', sizes: '180x180', type: 'image/png' },
-    ],
+    icon: [{ url: '/favicon.ico' }, { url: '/icon.ico' }],
+    apple: [{ url: '/apple-icon.png', sizes: '180x180', type: 'image/png' }],
     shortcut: ['/favicon.ico'],
   },
   manifest: '/site.webmanifest',

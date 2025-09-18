@@ -3,7 +3,6 @@ import { Suspense } from 'react';
 import { createClient } from '@/utils/supabase/server';
 import type { eventsInsertType } from '../../../../schema.zod';
 
-
 async function getEvents() {
   const supabase = await createClient();
 
@@ -80,9 +79,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <main className="flex flex-col items-center w-full min-h-screen">
-        <div className="container py-4 px-2">
-          {children}
-        </div>
+        <div className="container py-4 px-2">{children}</div>
       </main>
     </Suspense>
   );
