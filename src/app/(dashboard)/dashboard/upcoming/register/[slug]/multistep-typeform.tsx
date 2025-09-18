@@ -191,7 +191,6 @@ export function TypeformMultiStep({
         is_approved: eventData.always_approve ? 'ACCEPTED' : 'SUBMITTED',
         details: data as Json,
       });
-      console.log('Response:', response);
       if (!Array.isArray(response)) {
         alert('Registration failed!');
         return;
