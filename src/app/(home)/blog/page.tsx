@@ -1,13 +1,15 @@
 'use client';
 
 import { format } from 'date-fns';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Rss } from 'lucide-react';
+import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import BlurFade from '@/components/ui/blur-fade';
 import { Button } from '@/components/ui/button';
 import { type BlogPost, getAllPosts } from '@/lib/mdx';
+import config from '@/lib/config';
 
 // // Set revalidation time to 1 hour (3600 seconds)
 // export const revalidate = 3600;
@@ -23,26 +25,45 @@ export default function BlogPage() {
     fetchPosts();
   }, []);
 
+  const baseUrl = config.baseUrl || 'https://www.thefoundersclub.in';
+
   return (
-    <section className="py-32 w-full flex flex-col items-center ">
-      <div className="container flex flex-col items-center gap-16 lg:px-16 w-full">
-        <div className="text-center">
-          <p className="mb-6 text-xs font-medium uppercase tracking-wider">
-            By Founders Club
-          </p>
-          <h2 className="mb-3 text-pretty text-3xl font-semibold md:mb-4 md:text-4xl lg:mb-6 lg:max-w-3xl lg:text-5xl">
-            Our Posts
-          </h2>
-          <p className="mb-8 text-muted-foreground md:text-base lg:max-w-2xl lg:text-lg">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Elig
-            doloremque mollitia fugiat omnis! Porro facilis quo animi
-            consequatur. Explicabo.
-          </p>
-          <Button variant="link" className="w-full sm:w-auto">
-            SubScribe to our newsletter
-            <ArrowRight className="ml-2 size-4" />
-          </Button>
-        </div>
+    <>
+      <Head>
+        <link
+          rel="alternate"
+          type="application/rss+xml"
+          title="Founders Club - Blog RSS Feed"
+          href={`${baseUrl}/api/rss/blog.xml`}
+        />
+      </Head>
+      <section className="py-32 w-full flex flex-col items-center ">
+        <div className="container flex flex-col items-center gap-16 lg:px-16 w-full">
+          <div className="text-center">
+            <p className="mb-6 text-xs font-medium uppercase tracking-wider">
+              By Founders Club
+            </p>
+            <h2 className="mb-3 text-pretty text-3xl font-semibold md:mb-4 md:text-4xl lg:mb-6 lg:max-w-3xl lg:text-5xl">
+              Our Posts
+            </h2>
+            <p className="mb-8 text-muted-foreground md:text-base lg:max-w-2xl lg:text-lg">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Elig
+              doloremque mollitia fugiat omnis! Porro facilis quo animi
+              consequatur. Explicabo.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
+              <Button variant="link" className="w-full sm:w-auto">
+                SubScribe to our newsletter
+                <ArrowRight className="ml-2 size-4" />
+              </Button>
+              <Button variant="outline" asChild className="w-full sm:w-auto">
+                <Link href={`${baseUrl}/api/rss/blog.xml`} target="_blank">
+                  <Rss className="mr-2 size-4" />
+                  RSS Feed
+                </Link>
+              </Button>
+            </div>
+          </div>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
           {posts.map((post, index) => (
             <BlurFade key={post.id} delay={0.25 * (index + 1)} inView>
@@ -84,5 +105,6 @@ export default function BlogPage() {
         </div>
       </div>
     </section>
+    </>
   );
 }

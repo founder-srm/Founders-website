@@ -1,5 +1,6 @@
 import { format } from 'date-fns';
-import { ChevronLeft, ChevronRight, Mail } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Mail, Rss } from 'lucide-react';
+import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -7,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { urlFor } from '@/sanity/lib/image';
 import { SanityLive, sanityFetch } from '@/sanity/lib/live';
 import { ALL_EVENTS_QUERY } from '@/sanity/lib/queries';
+import config from '@/lib/config';
 
 const categories = [
   'Webinar',
@@ -28,16 +30,35 @@ export default async function EventsPage() {
   const events = allEvents.slice(offset, offset + eventsPerPage);
   const totalPages = Math.ceil(allEvents.length / eventsPerPage);
 
+  const baseUrl = config.baseUrl || 'https://www.thefoundersclub.in';
+
   return (
-    <section className="py-16 sm:py-24 md:py-32 w-full flex flex-col items-center">
-      <div className="container px-4 sm:px-6 lg:px-8">
-        <div className="mb-8 md:mb-14 lg:mb-16">
-          <p className="text-wider mb-2 sm:mb-4 text-sm font-medium text-muted-foreground">
-            Latest Insights
-          </p>
-          <h1 className="mb-3 sm:mb-4 w-full text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-medium">
-            Our Events
-          </h1>
+    <>
+      <Head>
+        <link
+          rel="alternate"
+          type="application/rss+xml"
+          title="Founders Club - Events RSS Feed"
+          href={`${baseUrl}/api/rss/events.xml`}
+        />
+      </Head>
+      <section className="py-16 sm:py-24 md:py-32 w-full flex flex-col items-center">
+        <div className="container px-4 sm:px-6 lg:px-8">
+          <div className="mb-8 md:mb-14 lg:mb-16">
+            <p className="text-wider mb-2 sm:mb-4 text-sm font-medium text-muted-foreground">
+              Latest Insights
+            </p>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-3 sm:mb-4">
+              <h1 className="w-full text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-medium">
+                Our Events
+              </h1>
+              <Button variant="outline" asChild className="w-full sm:w-auto">
+                <Link href={`${baseUrl}/api/rss/events.xml`} target="_blank">
+                  <Rss className="mr-2 size-4" />
+                  RSS Feed
+                </Link>
+              </Button>
+            </div>
           <p className="text-lg sm:text-xl text-muted-foreground">
             Exploring the cutting edge of entrepreneurship and tech
           </p>
@@ -246,5 +267,6 @@ export default async function EventsPage() {
       </div>
       <SanityLive />
     </section>
+    </>
   );
 }
