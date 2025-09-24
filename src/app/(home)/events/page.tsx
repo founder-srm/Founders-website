@@ -48,57 +48,64 @@ export default async function EventsPage() {
             <h2 className="mb-4 sm:mb-6 text-xl sm:text-2xl font-semibold">
               Featured Post
             </h2>
-            <div className="group relative overflow-hidden rounded-xl flex flex-col sm:block">
-              <Image
-                src={urlFor(events[0].image || '/placeholder.svg').url()}
-                alt={events[0].title || ''}
-                width={1200}
-                height={600}
-                className="aspect-[2/1] w-full object-cover transition duration-300 group-hover:opacity-50 group-hover:scale-105"
-              />
-              <div className="sm:absolute inset-0 bg-gradient-to-t from-black/60 to-transparent">
-                <div className="sm:absolute bottom-0 p-4 sm:p-6 text-black sm:text-white">
-                  <div className="mb-2 inline-flex items-center rounded-full bg-primary px-2 py-0.5 text-xs font-semibold text-primary-foreground">
-                    {events[0].type}
-                  </div>
-                  <h3 className="mb-2 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white">
-                    {events[0].title}
-                  </h3>
-                  <p className="mb-3 sm:mb-4 text-sm sm:text-base line-clamp-2 sm:line-clamp-3 text-muted-foreground">
-                    {events[0].summary}
-                  </p>
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <Image
-                      src={urlFor(
-                        events[0].author?.image || '/placeholder.svg'
-                      ).url()}
-                      alt={events[0].author?.name || ''}
-                      width={32}
-                      height={32}
-                      className="rounded-full"
-                    />
-                    <span className="text-xs sm:text-sm text-muted-foreground">
-                      {events[0].author?.name}
-                    </span>
-                    <span className="text-xs sm:text-sm text-white/30">•</span>
-                    <span className="text-xs sm:text-sm text-muted-foreground">
-                      {events[0].published
-                        ? format(new Date(events[0].published), 'MMMM d, yyyy')
-                        : 'No date'}
-                    </span>
+            <Link href={`/events/writeup/${events[0].slug}`} className="block">
+              <div className="group relative overflow-hidden rounded-xl flex flex-col sm:block">
+                <Image
+                  src={urlFor(events[0].image || '/placeholder.svg').url()}
+                  alt={events[0].title || ''}
+                  width={1200}
+                  height={600}
+                  className="aspect-[2/1] w-full object-cover transition duration-300 group-hover:opacity-50 group-hover:scale-105"
+                />
+                <div className="sm:absolute inset-0 bg-gradient-to-t from-black/60 to-transparent">
+                  <div className="sm:absolute bottom-0 p-4 sm:p-6 text-black sm:text-white">
+                    <div className="mb-2 inline-flex items-center rounded-full bg-primary px-2 py-0.5 text-xs font-semibold text-primary-foreground">
+                      {events[0].type}
+                    </div>
+                    <h3 className="mb-2 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white">
+                      {events[0].title}
+                    </h3>
+                    <p className="mb-3 sm:mb-4 text-sm sm:text-base line-clamp-2 sm:line-clamp-3 text-muted-foreground">
+                      {events[0].summary}
+                    </p>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <Image
+                        src={urlFor(
+                          events[0].author?.image || '/placeholder.svg'
+                        ).url()}
+                        alt={events[0].author?.name || ''}
+                        width={32}
+                        height={32}
+                        className="rounded-full"
+                      />
+                      <span className="text-xs sm:text-sm text-muted-foreground">
+                        {events[0].author?.name}
+                      </span>
+                      <span className="text-xs sm:text-sm text-white/30">
+                        •
+                      </span>
+                      <span className="text-xs sm:text-sm text-muted-foreground">
+                        {events[0].published
+                          ? format(
+                              new Date(events[0].published),
+                              'MMMM d, yyyy'
+                            )
+                          : 'No date'}
+                      </span>
+                    </div>
                   </div>
                 </div>
+                <div className="absolute inset-0 hidden group-hover:flex items-center justify-center text-white text-6xl font-semibold px-4 text-center">
+                  Click to view the full article
+                </div>
               </div>
-              <div className="absolute inset-0 hidden group-hover:flex items-center justify-center text-white text-6xl font-semibold px-4 text-center">
-                Click to view the full article
-              </div>
-              <Link
-                href={`/events/writeup/${events[0].slug}`}
-                className="mt-4 sm:hidden"
-              >
-                <Button className="w-full">Read Article</Button>
-              </Link>
-            </div>
+            </Link>
+            <Link
+              href={`/events/writeup/${events[0].slug}`}
+              className="mt-4 sm:hidden block"
+            >
+              <Button className="w-full">Read Article</Button>
+            </Link>
           </div>
         )}
 
