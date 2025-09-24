@@ -9,7 +9,7 @@ async function getEvents() {
   const { data: events, error } = await supabase
     .from('events')
     .select('*')
-    .order('created_at', { ascending: true })
+    .order('start_date', { ascending: false })
     .limit(10);
 
   if (error) {

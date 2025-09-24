@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
   Select,
   SelectContent,
@@ -28,21 +28,48 @@ export function TabNavigation({
   setFilteredEvents: (events: eventsInsertType[]) => void;
 }) {
   const [activeTab, setActiveTab] = useState('All');
+  const [sortOrder, setSortOrder] = useState('newest');
+
+  const applyFiltersAndSort = useCallback(() => {
+    let filtered = events;
+    
+    // Apply category filter
+    if (activeTab !== 'All') {
+      filtered = events.filter(event =>
+        event.tags.map(tag => tag.toLowerCase()).includes(activeTab.toLowerCase())
+      );
+    }
+
+    // Apply sorting
+    const sorted = [...filtered].sort((a, b) => {
+      switch (sortOrder) {
+        case 'newest':
+          return new Date(b.start_date).getTime() - new Date(a.start_date).getTime();
+        case 'oldest':
+          return new Date(a.start_date).getTime() - new Date(b.start_date).getTime();
+        case 'popular':
+          // For now, sort by featured events first, then by start_date
+          if (a.is_featured && !b.is_featured) return -1;
+          if (!a.is_featured && b.is_featured) return 1;
+          return new Date(b.start_date).getTime() - new Date(a.start_date).getTime();
+        default:
+          return 0;
+      }
+    });
+
+    setFilteredEvents(sorted);
+  }, [events, activeTab, sortOrder, setFilteredEvents]);
 
   useEffect(() => {
-    setFilteredEvents(events);
-  }, [events, setFilteredEvents]);
+    applyFiltersAndSort();
+  }, [applyFiltersAndSort]);
 
   const handleTabChange = (value: string) => {
     setActiveTab(value);
-    if (value === 'All') {
-      setFilteredEvents(events);
-    } else {
-      const filtered = events.filter(event =>
-        event.tags.map(tag => tag.toLowerCase()).includes(value.toLowerCase())
-      );
-      setFilteredEvents(filtered);
-    }
+  };
+
+  const handleSortChange = (value: string) => {
+    setSortOrder(value);
   };
 
   return (
@@ -59,7 +86,7 @@ export function TabNavigation({
         </Tabs>
       </div>
       <div className="shrink-0 md:w-52 lg:w-56">
-        <Select>
+        <Select value={sortOrder} onValueChange={handleSortChange}>
           <SelectTrigger>
             <SelectValue placeholder="Sort" />
           </SelectTrigger>
