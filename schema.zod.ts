@@ -59,3 +59,19 @@ export const typeformFieldSchema = z.object({
     )
     .optional(),
 });
+
+// Recruitment form field schema (reuses typeform field structure)
+export const recruitmentFieldSchema = typeformFieldSchema;
+
+// Recruitment application schema for contact entries
+export const recruitmentApplicationSchema = z.object({
+  job_category: z.string(),
+  job_title: z.string(),
+  details: z.record(z.string(), z.any()),
+  name: z.string().optional(),
+  email: z.string().email().optional(),
+  phone: z.number().optional(),
+});
+
+export type RecruitmentApplicationType = z.infer<typeof recruitmentApplicationSchema>;
+export type RecruitmentFormField = z.infer<typeof recruitmentFieldSchema>;

@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
-import CareersLarge from '@/components/careers-large';
+import CareersRecruitment from '@/components/careers-recruitment';
 import config from '@/lib/config';
+import { sanityFetch } from '@/sanity/lib/live';
+import { JOBS_QUERY } from '@/sanity/lib/queries';
 import { SanityLive } from '@/sanity/lib/live';
 
 type Params = Promise<{ slug: string }>;
@@ -41,9 +43,11 @@ export async function generateMetadata(
 }
 
 export default async function Recruitments() {
+  const { data: jobCategories } = await sanityFetch({ query: JOBS_QUERY });
+
   return (
     <main className="flex flex-col items-center w-full ">
-      <CareersLarge />
+      <CareersRecruitment jobCategories={jobCategories || []} />
       <SanityLive />
     </main>
   );
