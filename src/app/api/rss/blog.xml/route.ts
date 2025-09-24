@@ -6,14 +6,35 @@ import type { Database } from '../../../../../database.types';
 type BlogPost = Database['public']['Tables']['posts']['Row'];
 
 async function getAllPosts(): Promise<BlogPost[]> {
-  const supabase = await createClient();
-  const { data, error } = await supabase
-    .from('posts')
-    .select('*')
-    .order('published_at', { ascending: false });
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+      .from('posts')
+      .select('*')
+      .order('published_at', { ascending: false });
 
-  if (error) throw error;
-  return data as BlogPost[];
+    if (error) throw error;
+    return data as BlogPost[];
+  } catch (error) {
+    console.warn('Unable to fetch blog posts from database, using fallback data:', error);
+    // Return fallback data when database is not available
+    return [
+      {
+        id: 'sample-1',
+        title: 'Welcome to Founders Club Blog',
+        slug: 'welcome-to-founders-club',
+        summary: 'Discover the latest insights, tips, and stories from The Founders Club community.',
+        author: 'Founders Club Team',
+        published_at: new Date().toISOString(),
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        content: '',
+        image: '',
+        tags: null,
+        featured: false
+      }
+    ] as BlogPost[];
+  }
 }
 
 export async function GET() {
