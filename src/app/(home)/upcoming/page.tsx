@@ -26,7 +26,9 @@ export default function Upcoming() {
       return [];
     }
 
-    setEvents(events as eventsInsertType[]);
+      const sorted = (events as eventsInsertType[]).sort((a, b) => new Date(b.start_date).getTime() - new Date(a.start_date).getTime());
+      setEvents(sorted);
+
   }, []);
 
   useEffect(() => {
