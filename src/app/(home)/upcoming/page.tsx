@@ -25,10 +25,39 @@ export default function Upcoming() {
       console.error('Error fetching events:', error);
       return [];
     }
+    // getting event registrations to calculate popularity
+    const { data: registrationsData, error: regError } = await supabase
+      .from('eventsregistrations')
+      .select('event_id, attendance');
 
-      const sorted = (events as eventsInsertType[]).sort((a, b) => new Date(b.start_date).getTime() - new Date(a.start_date).getTime());
-      setEvents(sorted);
+    if (regError) {
+      console.error('Error fetching registrations:', regError);
+      return;
+    }
 
+    // calculating popularity counts
+    const popularityMap = (registrationsData || []).reduce<Record<string, number>>((acc, reg) => {
+      if (reg.attendance === 'Present') {
+        acc[reg.event_id] = (acc[reg.event_id] || 0) + 1;
+      }
+      return acc;
+    }, {});
+    
+    // adding popularity to each event
+    const eventsWithPopularity = (events as eventsInsertType[]).map(event => ({
+      ...event,
+      popularity: event.id ? popularityMap[event.id] || 0 : 0,
+    }));
+    
+    const sorted = eventsWithPopularity.sort((a, b) => new Date(b.start_date).getTime() - new Date(a.start_date).getTime());
+    setEvents(sorted);
+    console.log('Registrations data:', registrationsData);
+    console.log('Event popularity counts:', eventsWithPopularity.map(e => ({
+      id: e.id,
+      title: e.title,
+      popularity: e.popularity
+    })));
+    
   }, []);
 
   useEffect(() => {
