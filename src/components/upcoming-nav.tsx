@@ -1,6 +1,4 @@
 'use client';
-type EventWithPopularity = eventsInsertType & { popularity?: number };
-
 import { useEffect, useState } from 'react';
 import {
   Select,
@@ -11,6 +9,8 @@ import {
 } from '@/components/ui/select';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import type { eventsInsertType } from '../../schema.zod';
+
+type EventWithPopularity = eventsInsertType & { popularity?: number };
 
 const categories = [
   'All',
