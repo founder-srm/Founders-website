@@ -43,12 +43,17 @@ export default async function EventsPage() {
           </p>
         </div>
 
-        {events && (
+        {events && events.length > 0 && (
           <div className="mb-8 sm:mb-12 block">
             <h2 className="mb-4 sm:mb-6 text-xl sm:text-2xl font-semibold">
               Featured Post
             </h2>
-            <div className="group relative overflow-hidden rounded-xl flex flex-col sm:block">
+
+            <Link
+              href={`/events/writeup/${events[0].slug}`}
+              aria-label={`View details of ${events[0].title}`}
+              className="group relative overflow-hidden rounded-xl flex flex-col sm:block cursor-pointer"
+            >
               <Image
                 src={urlFor(events[0].image || '/placeholder.svg').url()}
                 alt={events[0].title || ''}
@@ -56,6 +61,7 @@ export default async function EventsPage() {
                 height={600}
                 className="aspect-[2/1] w-full object-cover transition duration-300 group-hover:opacity-50 group-hover:scale-105"
               />
+
               <div className="sm:absolute inset-0 bg-gradient-to-t from-black/60 to-transparent">
                 <div className="sm:absolute bottom-0 p-4 sm:p-6 text-black sm:text-white">
                   <div className="mb-2 inline-flex items-center rounded-full bg-primary px-2 py-0.5 text-xs font-semibold text-primary-foreground">
@@ -67,6 +73,7 @@ export default async function EventsPage() {
                   <p className="mb-3 sm:mb-4 text-sm sm:text-base line-clamp-2 sm:line-clamp-3 text-muted-foreground">
                     {events[0].summary}
                   </p>
+
                   <div className="flex items-center gap-2 flex-wrap">
                     <Image
                       src={urlFor(
@@ -89,16 +96,11 @@ export default async function EventsPage() {
                   </div>
                 </div>
               </div>
+
               <div className="absolute inset-0 hidden group-hover:flex items-center justify-center text-white text-6xl font-semibold px-4 text-center">
                 Click to view the full article
               </div>
-              <Link
-                href={`/events/writeup/${events[0].slug}`}
-                className="mt-4 sm:hidden"
-              >
-                <Button className="w-full">Read Article</Button>
-              </Link>
-            </div>
+            </Link>
           </div>
         )}
 
@@ -137,11 +139,13 @@ export default async function EventsPage() {
                   </div>
                 </div>
               </Link>
+
               <div>
                 <div className="inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-primary text-primary-foreground hover:bg-primary/80">
                   {event.type}
                 </div>
               </div>
+
               <Link href={`/events/writeup/${event.slug}`} className="block">
                 <div className="mb-2 line-clamp-2 sm:line-clamp-3 break-words pt-2 sm:pt-3 md:pt-4 text-base sm:text-lg md:text-xl lg:text-2xl font-medium">
                   {event.title}
@@ -150,6 +154,7 @@ export default async function EventsPage() {
                   {event.summary}
                 </div>
               </Link>
+
               <div className="flex items-center justify-between gap-2">
                 <div className="flex items-center gap-2">
                   <Image
@@ -172,6 +177,7 @@ export default async function EventsPage() {
                     </span>
                   </div>
                 </div>
+
                 <Link
                   href={`/events/writeup/${event.slug}`}
                   className="sm:hidden w-max"
