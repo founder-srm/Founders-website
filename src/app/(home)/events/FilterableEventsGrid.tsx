@@ -63,7 +63,7 @@ export function FilterableEventsGrid({ events, categories }: FilterableEventsGri
       {paginatedEvents.length === 0 && selectedCategory !== 'All' ? (
         <div className="text-center py-12">
           <p className="text-lg text-muted-foreground">
-            No events found for category  {selectedCategory}
+            No events found for category {selectedCategory}
           </p>
         </div>
       ) : (
