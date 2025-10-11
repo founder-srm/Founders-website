@@ -1,3 +1,4 @@
+// src/components/events/FilterableEventsGrid.tsx
 'use client';
 
 import { useState } from 'react';
@@ -8,8 +9,23 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { urlFor } from '@/sanity/lib/image';
 
+// updated interface to match Sanity query result types
+interface Event {
+  _id: string;
+  slug: string | null;  
+  title: string | null;  
+  summary: string | null;  
+  image: unknown;
+  type: string | null;  
+  published: string | null;  
+  author: {
+    name: string | null;  
+    image: unknown;
+  } | null;  // added null possibility
+}
+
 interface FilterableEventsGridProps {
-  events: any[];
+  events: Event[];
   categories: string[];
 }
 
@@ -18,7 +34,7 @@ export function FilterableEventsGrid({ events, categories }: FilterableEventsGri
   const [currentPage, setCurrentPage] = useState(1);
   const eventsPerPage = 9;
 
-  // filters event based on selected category (*imp* case-insensitive comparison)
+  // filter events basedd on selected category (case_insensitive comparison)
   const filteredEvents =
     selectedCategory === 'All'
       ? events
@@ -26,7 +42,7 @@ export function FilterableEventsGrid({ events, categories }: FilterableEventsGri
           event.type?.toLowerCase() === selectedCategory.toLowerCase()
         );
 
-  // pagination logic
+  // pagination_logic
   const offset = (currentPage - 1) * eventsPerPage;
   const paginatedEvents = filteredEvents.slice(offset, offset + eventsPerPage);
   const totalPages = Math.ceil(filteredEvents.length / eventsPerPage);
@@ -63,7 +79,7 @@ export function FilterableEventsGrid({ events, categories }: FilterableEventsGri
       {paginatedEvents.length === 0 && selectedCategory !== 'All' ? (
         <div className="text-center py-12">
           <p className="text-lg text-muted-foreground">
-            No events found for category {selectedCategory}
+            No events found for category &quot;{selectedCategory}&quot;
           </p>
         </div>
       ) : (
@@ -72,7 +88,7 @@ export function FilterableEventsGrid({ events, categories }: FilterableEventsGri
           <div className="grid gap-x-4 gap-y-[50px] sm:gap-y-8 sm:grid-cols-2 lg:gap-x-6 lg:gap-y-12 2xl:grid-cols-3">
             {paginatedEvents.map(event => (
               <div key={event._id} className="group flex flex-col">
-                <Link href={`/events/writeup/${event.slug}`} className="block">
+                <Link href={`/events/writeup/${event.slug || ''}`} className="block">
                   <div className="relative mb-3 sm:mb-4 md:mb-5 flex overflow-clip rounded-xl">
                     <Image
                       src={urlFor(event.image || '/placeholder.svg').url()}
@@ -89,16 +105,16 @@ export function FilterableEventsGrid({ events, categories }: FilterableEventsGri
 
                 <div>
                   <div className="inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-primary text-primary-foreground hover:bg-primary/80">
-                    {event.type}
+                    {event.type || 'Event'}
                   </div>
                 </div>
 
-                <Link href={`/events/writeup/${event.slug}`} className="block">
+                <Link href={`/events/writeup/${event.slug || ''}`} className="block">
                   <div className="mb-2 line-clamp-2 sm:line-clamp-3 break-words pt-2 sm:pt-3 md:pt-4 text-base sm:text-lg md:text-xl lg:text-2xl font-medium">
-                    {event.title}
+                    {event.title || 'Untitled Event'}
                   </div>
                   <div className="mb-3 sm:mb-4 line-clamp-2 text-sm text-muted-foreground">
-                    {event.summary}
+                    {event.summary || ''}
                   </div>
                 </Link>
 
@@ -115,7 +131,7 @@ export function FilterableEventsGrid({ events, categories }: FilterableEventsGri
                     />
                     <div className="flex flex-col">
                       <span className="text-xs sm:text-sm text-muted-foreground font-medium">
-                        {event.author?.name}
+                        {event.author?.name || 'Anonymous'}
                       </span>
                       <span className="text-xs text-muted-foreground">
                         {event.published
@@ -126,7 +142,7 @@ export function FilterableEventsGrid({ events, categories }: FilterableEventsGri
                   </div>
 
                   <Link
-                    href={`/events/writeup/${event.slug}`}
+                    href={`/events/writeup/${event.slug || ''}`}
                     className="sm:hidden w-max"
                   >
                     <Button size="sm">Read</Button>
