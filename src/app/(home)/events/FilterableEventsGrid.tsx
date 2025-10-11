@@ -42,7 +42,7 @@ export function FilterableEventsGrid({ events, categories }: FilterableEventsGri
           event.type?.toLowerCase() === selectedCategory.toLowerCase()
         );
 
-  // pagination_logic
+  // pagination logic
   const offset = (currentPage - 1) * eventsPerPage;
   const paginatedEvents = filteredEvents.slice(offset, offset + eventsPerPage);
   const totalPages = Math.ceil(filteredEvents.length / eventsPerPage);
