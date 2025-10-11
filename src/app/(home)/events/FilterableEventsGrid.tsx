@@ -34,7 +34,7 @@ export function FilterableEventsGrid({ events, categories }: FilterableEventsGri
   const [currentPage, setCurrentPage] = useState(1);
   const eventsPerPage = 9;
 
-  // filter events basedd on selected category (case_insensitive comparison)
+  // filter events based on selected category (case-insensitive comparison)
   const filteredEvents =
     selectedCategory === 'All'
       ? events
