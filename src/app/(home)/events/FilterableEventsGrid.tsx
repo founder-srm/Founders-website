@@ -1,4 +1,3 @@
-// src/app/(home)/events/FilterableEventsGrid.tsx
 'use client';
 
 import { useState } from 'react';
