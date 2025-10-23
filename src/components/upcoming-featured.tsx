@@ -1,14 +1,51 @@
 import { formatInTimeZone } from 'date-fns-tz';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight, CalendarX2 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import type { eventsInsertType } from '../../schema.zod';
 import { GetBlurImage } from './blur-image';
 
 export function FeaturedPost({ event }: { event: eventsInsertType }) {
-  if (!event) {
-    return null;
+  // If there's no event OR the event has ended, show a friendly empty state
+  const hasEnded = event?.end_date
+    ? new Date(event.end_date).getTime() < Date.now()
+    : false;
+
+  if (!event || hasEnded) {
+    return (
+      <div className="group relative mb-8 md:mb-14 lg:mb-16">
+        <Card className="border-dashed">
+          <CardHeader>
+            <div className="flex items-center gap-3">
+              <div className="rounded-md bg-muted p-2">
+                <CalendarX2 className="h-5 w-5 text-muted-foreground" />
+              </div>
+              <div>
+                <CardTitle>No featured event right now</CardTitle>
+                <CardDescription>
+                  We’re lining up something exciting. In the meantime, explore
+                  upcoming events below.
+                </CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <Link href="/events" className="inline-flex">
+              <Button>Browse events</Button>
+            </Link>
+          </CardContent>
+        </Card>
+      </div>
+    );
   }
   const tags = event.tags.map(tag => (
     <Badge key={tag} variant="default">
