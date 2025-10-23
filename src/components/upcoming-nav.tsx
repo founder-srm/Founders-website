@@ -50,14 +50,16 @@ export function TabNavigation({
 
     if (sortBy === 'newest') {
       sortedEvents.sort(
-        (a, b) => new Date(b.start_date).getTime() - new Date(a.start_date).getTime()
+        (a, b) =>
+          new Date(b.start_date).getTime() - new Date(a.start_date).getTime()
       );
     } else if (sortBy === 'oldest') {
       sortedEvents.sort(
-        (a, b) => new Date(a.start_date).getTime() - new Date(b.start_date).getTime()
+        (a, b) =>
+          new Date(a.start_date).getTime() - new Date(b.start_date).getTime()
       );
     } else if (sortBy === 'popular') {
-       sortedEvents.sort((a, b) => (b.popularity || 0) - (a.popularity || 0));
+      sortedEvents.sort((a, b) => (b.popularity || 0) - (a.popularity || 0));
     }
 
     setFilteredEvents(sortedEvents);

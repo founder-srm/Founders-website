@@ -1,26 +1,26 @@
 'use client';
 
-import { useState } from 'react';
 import { format } from 'date-fns';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { urlFor } from '@/sanity/lib/image';
 
 // updated interface to match Sanity query result types
 interface Event {
   _id: string;
-  slug: string | null;  
-  title: string | null;  
-  summary: string | null;  
+  slug: string | null;
+  title: string | null;
+  summary: string | null;
   image: unknown;
-  type: string | null;  
-  published: string | null;  
+  type: string | null;
+  published: string | null;
   author: {
-    name: string | null;  
+    name: string | null;
     image: unknown;
-  } | null;  // added null possibility
+  } | null; // added null possibility
 }
 
 interface FilterableEventsGridProps {
@@ -28,7 +28,10 @@ interface FilterableEventsGridProps {
   categories: string[];
 }
 
-export function FilterableEventsGrid({ events, categories }: FilterableEventsGridProps) {
+export function FilterableEventsGrid({
+  events,
+  categories,
+}: FilterableEventsGridProps) {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [currentPage, setCurrentPage] = useState(1);
   const eventsPerPage = 9;
@@ -37,8 +40,8 @@ export function FilterableEventsGrid({ events, categories }: FilterableEventsGri
   const filteredEvents =
     selectedCategory === 'All'
       ? events
-      : events.filter(event => 
-          event.type?.toLowerCase() === selectedCategory.toLowerCase()
+      : events.filter(
+          event => event.type?.toLowerCase() === selectedCategory.toLowerCase()
         );
 
   // pagination logic
@@ -87,7 +90,10 @@ export function FilterableEventsGrid({ events, categories }: FilterableEventsGri
           <div className="grid gap-x-4 gap-y-[50px] sm:gap-y-8 sm:grid-cols-2 lg:gap-x-6 lg:gap-y-12 2xl:grid-cols-3">
             {paginatedEvents.map(event => (
               <div key={event._id} className="group flex flex-col">
-                <Link href={`/events/writeup/${event.slug || ''}`} className="block">
+                <Link
+                  href={`/events/writeup/${event.slug || ''}`}
+                  className="block"
+                >
                   <div className="relative mb-3 sm:mb-4 md:mb-5 flex overflow-clip rounded-xl">
                     <Image
                       src={urlFor(event.image || '/placeholder.svg').url()}
@@ -108,7 +114,10 @@ export function FilterableEventsGrid({ events, categories }: FilterableEventsGri
                   </div>
                 </div>
 
-                <Link href={`/events/writeup/${event.slug || ''}`} className="block">
+                <Link
+                  href={`/events/writeup/${event.slug || ''}`}
+                  className="block"
+                >
                   <div className="mb-2 line-clamp-2 sm:line-clamp-3 break-words pt-2 sm:pt-3 md:pt-4 text-base sm:text-lg md:text-xl lg:text-2xl font-medium">
                     {event.title || 'Untitled Event'}
                   </div>
@@ -164,7 +173,9 @@ export function FilterableEventsGrid({ events, categories }: FilterableEventsGri
                       variant="ghost"
                       className="gap-1 pl-2.5"
                       disabled={currentPage === 1}
-                      onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                      onClick={() =>
+                        setCurrentPage(prev => Math.max(1, prev - 1))
+                      }
                     >
                       <ChevronLeft className="h-4 w-4" />
                       <span className="hidden sm:inline">Previous</span>

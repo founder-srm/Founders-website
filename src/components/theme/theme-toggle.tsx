@@ -53,7 +53,7 @@ export function ModeToggle() {
           Dark
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme('purple')}>
-          Purple 
+          Purple
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme('system')}>
           System

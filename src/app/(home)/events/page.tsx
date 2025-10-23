@@ -93,7 +93,10 @@ export default async function EventsPage() {
                     <span className="text-xs sm:text-sm text-white/30">•</span>
                     <span className="text-xs sm:text-sm text-muted-foreground">
                       {allEvents[0].published
-                        ? format(new Date(allEvents[0].published), 'MMMM d, yyyy')
+                        ? format(
+                            new Date(allEvents[0].published),
+                            'MMMM d, yyyy'
+                          )
                         : 'No date'}
                     </span>
                   </div>

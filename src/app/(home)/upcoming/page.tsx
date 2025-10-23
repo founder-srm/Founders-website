@@ -48,12 +48,15 @@ export default function Upcoming() {
 
   //  memoize popularity only when dependencies change
   const eventsWithPopularity = useMemo(() => {
-    const popularityMap = registrations.reduce<Record<string, number>>((acc, reg) => {
-      if (reg.attendance === 'Present') {
-        acc[reg.event_id] = (acc[reg.event_id] || 0) + 1;
-      }
-      return acc;
-    }, {});
+    const popularityMap = registrations.reduce<Record<string, number>>(
+      (acc, reg) => {
+        if (reg.attendance === 'Present') {
+          acc[reg.event_id] = (acc[reg.event_id] || 0) + 1;
+        }
+        return acc;
+      },
+      {}
+    );
 
     // attach popularity safely
     return events.map(event => ({
@@ -65,7 +68,8 @@ export default function Upcoming() {
   //  default sorting by latest date
   const sortedEvents = useMemo(() => {
     return [...eventsWithPopularity].sort(
-      (a, b) => new Date(b.start_date).getTime() - new Date(a.start_date).getTime()
+      (a, b) =>
+        new Date(b.start_date).getTime() - new Date(a.start_date).getTime()
     );
   }, [eventsWithPopularity]);
 
@@ -74,14 +78,19 @@ export default function Upcoming() {
   }, [sortedEvents]);
 
   const featuredEvent = useMemo(
-    () => eventsWithPopularity.find(event => event.is_featured) || eventsWithPopularity[0],
+    () =>
+      eventsWithPopularity.find(event => event.is_featured) ||
+      eventsWithPopularity[0],
     [eventsWithPopularity]
   );
 
   return (
     <>
       <FeaturedPost event={featuredEvent} />
-      <TabNavigation events={eventsWithPopularity} setFilteredEvents={setFilteredEvents} />
+      <TabNavigation
+        events={eventsWithPopularity}
+        setFilteredEvents={setFilteredEvents}
+      />
       <UpcomingGrid events={filteredEvents} />
       <Pagination />
     </>
