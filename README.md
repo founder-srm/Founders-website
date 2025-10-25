@@ -46,35 +46,12 @@ We organize events, hackathons, and incubator programs to empower the next gener
 
 ---
 
-## Demo & Visuals
-
-> Showcase what the project looks and feels like!
-
-<p align="center">
-  <img src="assets/demo-homepage.png" width="800" alt="Homepage Screenshot" />
-  <img src="assets/dashboard-preview.png" width="800" alt="Dashboard Screenshot" />
-</p>
-
-**Live Demo GIF:**  
-_Add a short GIF of navigating through the website UI._
-
-**Architecture Overview:**
-```bash
-Frontend (Next.js + Tailwind)
-   │
-   ├── Supabase (Auth, DB, Storage)
-   │
-   └── Sanity CMS (Content Management)
-```
-
----
-
 ## Installation & Setup
 
 ### 1. Prerequisites
 
-- Node.js (v18 or higher)
-- Yarn or npm
+- Node.js (v22 or higher)
+- Bun (recommended package manager) - [Installation Guide](https://bun.com/docs/installation)
 - Supabase Access (_ask @greeenboi_)
 - Doppler Access (_ask @greeenboi_)
 - Recommended VSCode Extensions installed
@@ -90,12 +67,10 @@ git clone https://github.com/founder-srm/Founders-website.git
 cd Founders-website
 
 # Install dependencies
-npm install
-# or
 bun install
 
 # Run the development server
-npm run dev
+run bun dev --watch
 # or
 bun dev
 
@@ -106,19 +81,7 @@ http://localhost:3000
 
 ### 3. Setup & Configuration
 
-1. Environment Variables
-
-Create a `.env.local` file in the project root and add your credentials:
-```bash
-NEXT_PUBLIC_SUPABASE_URL=<your_supabase_url>
-NEXT_PUBLIC_SUPABASE_ANON_KEY=<your_anon_key>
-SANITY_PROJECT_ID=<your_sanity_project_id>
-SANITY_DATASET=<your_sanity_dataset>
-NEXT_PUBLIC_SITE_URL=https://www.thefoundersclub.in
-```
-[ NOTE: Never commit your .env file — it contains sensitive information. ]
-
-2. Run the Application
+Run the Application
 
 After setting up environment variables, run:
 ```bash
@@ -170,6 +133,6 @@ git push origin feature/your-feature-name
 
 Join the Founders Club community to collaborate and innovate!
 - [Official Website](https://www.thefoundersclub.in/)
-- Contact us:
+- Contact us: 
 
 ---
