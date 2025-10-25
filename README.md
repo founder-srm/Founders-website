@@ -1,39 +1,137 @@
-![Simple Analytics](https://simpleanalyticsbadges.com/simpleanalytics.com?mode=dark&logo=teal&counter=false&radius=10)
+<p align="center">
+</p>
 
-![Type Check](https://github.com/founder-srm/Founders-website/actions/workflows/typecheck.yml/badge.svg)
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<h1 align="center">Founders Club Website</h1>
 
-## Getting Started
+<p align="center">
+  <em>Empowering innovation at SRM through community, collaboration, and creation.</em>
+</p>
 
-First, run the development server:
+<p align="center">
+  <a href="https://www.thefoundersclub.in/" target="_blank">
+    <img src="https://img.shields.io/badge/Visit%20Live%20Website-0078D7?style=for-the-badge&logo=google-chrome&logoColor=white" alt="Website" />
+  </a>
+</p>
+
+> **Empowering innovation at SRM through community, collaboration, and creation.**  
+> A modern web platform for the **Founders Club @ SRM** — showcasing projects, events, and opportunities for aspiring student entrepreneurs.
+
+---
+
+## About Founders Club SRM
+
+The Founders Club at SRM fosters a culture of innovation, entrepreneurship, and collaboration.
+We organize events, hackathons, and incubator programs to empower the next generation of student founders.
+
+---
+
+## Tech Stack
+
+- **Frontend:** Next.js, TailwindCSS, TypeScript  
+- **Backend:** Supabase (PostgreSQL + Auth + Storage)  
+- **DevOps:** Doppler (Secrets Management)  
+- **Design:** Figma  
+
+---
+
+## Badges
+
+<p align="center">
+  <img src="https://img.shields.io/github/actions/workflow/status/founder-srm/Founders-website/deploy.yml?label=Build&style=for-the-badge" alt="Build Status" />
+  <img src="https://img.shields.io/github/license/founder-srm/Founders-website?style=for-the-badge" alt="License" />
+  <img src="https://img.shields.io/github/contributors/founder-srm/Founders-website?style=for-the-badge" alt="Contributors" />
+  <img src="https://img.shields.io/github/issues/founder-srm/Founders-website?style=for-the-badge" alt="Issues" />
+  <img src="https://img.shields.io/github/stars/founder-srm/Founders-website?style=for-the-badge" alt="Stars" />
+</p>
+
+---
+
+## Installation & Setup
+
+### 1. Prerequisites
+
+- Node.js (v22 or higher)
+- Bun (recommended package manager) - [Installation Guide](https://bun.com/docs/installation)
+- Supabase Access (_ask @greeenboi_)
+- Doppler Access (_ask @greeenboi_)
+- Recommended VSCode Extensions installed
+
+
+### 2. Clone & Install
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+# Clone the repository
+git clone https://github.com/founder-srm/Founders-website.git
+
+# Move into the project directory
+cd Founders-website
+
+# Install dependencies
+bun install
+
+# Run the development server
+run bun dev --watch
 # or
 bun dev
+
+# Visit the app locally
+http://localhost:3000
+
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 3. Setup & Configuration
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Run the Application
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+After setting up environment variables, run:
+```bash
+bun run dev --watch
+```
+The site will be live on your local environment.
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## Contributing
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+We love open-source! Contributions are always welcome.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Please read the following before making a PR:
+- Contributing Guidelines
+- Code of Conduct
 
-## Deploy on Vercel
+Quick Start for Contributors:
+1. Fork this Repository.
+2. Create a new branch for your feature/fix:
+```bash
+git checkout -b feature/your-feature-name
+```
+3. Commit your changes with a clear message:
+```bash
+git commit -m "Added: new component for homepage banner"
+```
+4. Push to your fork:
+```bash
+git push origin feature/your-feature-name
+```
+5. Open a Pull Request describing what you’ve changed.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Troubleshooting
+
+| Issue                     | Possible Fix                             |
+| ------------------------- | ---------------------------------------- |
+| Supabase auth not working | Check `.env` variables                   |
+| Doppler not syncing       | Ensure Doppler CLI is logged in          |
+| App not building          | Clear `.next` and reinstall dependencies |
+| Static assets missing     | Run `npm run build` before deployment    |
+
+---
+
+## Community & Support
+
+Join the Founders Club community to collaborate and innovate!
+- [Official Website](https://www.thefoundersclub.in/)
+- Contact us: 
+
+---
