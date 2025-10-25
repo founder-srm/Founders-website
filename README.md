@@ -130,6 +130,16 @@ git push origin feature/your-feature-name
 
 Join the Founders Club community to collaborate and innovate!
 - [Official Website](https://www.thefoundersclub.in/)
-- Contact us: 
+- Contact us: fc.dei@srmist.edu.in
+
+---
+
+## Contributors
+
+Thanks to all these amazing people who have contributed to this repo :)
+
+<a href="https://github.com/founder-srm/Founders-website/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=founder-srm/Founders-website" />
+</a>
 
 ---
