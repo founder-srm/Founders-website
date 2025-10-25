@@ -85,7 +85,7 @@ Run the Application
 
 After setting up environment variables, run:
 ```bash
-npm run dev
+bun run dev --watch
 ```
 The site will be live on your local environment.
 
@@ -118,14 +118,13 @@ git push origin feature/your-feature-name
 ---
 
 ## Troubleshooting
-```bash
+
 | Issue                     | Possible Fix                             |
 | ------------------------- | ---------------------------------------- |
 | Supabase auth not working | Check `.env` variables                   |
 | Doppler not syncing       | Ensure Doppler CLI is logged in          |
 | App not building          | Clear `.next` and reinstall dependencies |
 | Static assets missing     | Run `npm run build` before deployment    |
-```
 
 ---
 
