@@ -8,9 +8,19 @@
 </p>
 
 <p align="center">
-  <a href="https://www.thefoundersclub.in/" target="_blank">
+  <a href="https://www.thefoundersclub.in/" >
     <img src="https://img.shields.io/badge/Visit%20Live%20Website-0078D7?style=for-the-badge&logo=google-chrome&logoColor=white" alt="Website" />
   </a>
+  <a href="https://dashboard.simpleanalytics.com/thefoundersclub.in">
+    <img src="https://simpleanalyticsbadges.com/simpleanalytics.com?mode=dark&logo=teal&counter=false&radius=10" height="20px" alt="Website" />
+  </a>
+  <img src="https://github.com/founder-srm/Founders-website/actions/workflows/typecheck.yml/badge.svg" alt="Website" />
+</p>
+<p align="center">
+  <img src="https://img.shields.io/github/license/founder-srm/Founders-website?style=for-the-badge" alt="License" />
+  <img src="https://img.shields.io/github/contributors/founder-srm/Founders-website?style=for-the-badge" alt="Contributors" />
+  <img src="https://img.shields.io/github/issues/founder-srm/Founders-website?style=for-the-badge" alt="Issues" />
+  <img src="https://img.shields.io/github/stars/founder-srm/Founders-website?style=for-the-badge" alt="Stars" />
 </p>
 
 > **Empowering innovation at SRM through community, collaboration, and creation.**  
@@ -31,18 +41,6 @@ We organize events, hackathons, and incubator programs to empower the next gener
 - **Backend:** Supabase (PostgreSQL + Auth + Storage)  
 - **DevOps:** Doppler (Secrets Management)  
 - **Design:** Figma  
-
----
-
-## Badges
-
-<p align="center">
-  <img src="https://img.shields.io/github/actions/workflow/status/founder-srm/Founders-website/deploy.yml?label=Build&style=for-the-badge" alt="Build Status" />
-  <img src="https://img.shields.io/github/license/founder-srm/Founders-website?style=for-the-badge" alt="License" />
-  <img src="https://img.shields.io/github/contributors/founder-srm/Founders-website?style=for-the-badge" alt="Contributors" />
-  <img src="https://img.shields.io/github/issues/founder-srm/Founders-website?style=for-the-badge" alt="Issues" />
-  <img src="https://img.shields.io/github/stars/founder-srm/Founders-website?style=for-the-badge" alt="Stars" />
-</p>
 
 ---
 
