@@ -1,13 +1,12 @@
 import type { MetadataRoute } from 'next';
 import config from '@/lib/config';
-import { getAllPosts } from '@/lib/mdx';
 import { sanityFetch } from '@/sanity/lib/live';
-import { ALL_EVENTS_QUERY } from '@/sanity/lib/queries';
+import { ALL_BLOG_POSTS_QUERY, ALL_EVENTS_QUERY } from '@/sanity/lib/queries';
 import { createClient } from '@/utils/supabase/server';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = config.baseUrl;
-  const posts = await getAllPosts();
+  const { data: posts } = await sanityFetch({ query: ALL_BLOG_POSTS_QUERY });
   const { data: events } = await sanityFetch({ query: ALL_EVENTS_QUERY });
 
   const supabase = await createClient();
@@ -64,7 +63,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...posts.map(post => ({
       url: `${baseUrl}/blog/posts/${post.slug}`,
       priority: 0.8,
-      lastModified: post.created_at,
+      lastModified: post.publishedAt || post._createdAt,
     })),
     ...events.map(event => ({
       url: `${baseUrl}/events/writeup/${event.slug}`,

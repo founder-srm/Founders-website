@@ -1,295 +1,90 @@
 'use client';
 
-import {
-  Calendar,
-  Edit,
-  Eye,
-  MoreHorizontal,
-  Plus,
-  Search,
-  Tag,
-  Trash2,
-  User,
-} from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { useCallback, useEffect, useState } from 'react';
-import { deleteBlogPost, getBlogPosts } from '@/actions/blog-posts';
-import { Badge } from '@/components/ui/badge';
+import { ArrowRight, BookOpen, ExternalLink, Sparkles } from 'lucide-react';
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Input } from '@/components/ui/input';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
-import { useToast } from '@/hooks/use-toast';
-import type { Database } from '../../../../../database.types';
-
-type BlogPost = Database['public']['Tables']['posts']['Row'];
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 
 export default function DevBlogPage() {
-  const [posts, setPosts] = useState<BlogPost[]>([]);
-  const [filteredPosts, setFilteredPosts] = useState<BlogPost[]>([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [loading, setLoading] = useState(true);
-  const { toast } = useToast();
-  const router = useRouter();
-
-  const loadPosts = useCallback(async () => {
-    try {
-      setLoading(true);
-      const result = await getBlogPosts();
-      if (result.error) {
-        toast({
-          title: 'Error',
-          description: result.error,
-          variant: 'destructive',
-        });
-      } else {
-        setPosts(result.data || []);
-      }
-    } catch {
-      toast({
-        title: 'Error',
-        description: 'Failed to load blog posts',
-        variant: 'destructive',
-      });
-    } finally {
-      setLoading(false);
-    }
-  }, [toast]);
-
-  useEffect(() => {
-    loadPosts();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loadPosts]);
-
-  // Refresh posts when returning to this page
-  useEffect(() => {
-    const handleFocus = () => {
-      loadPosts();
-    };
-
-    window.addEventListener('focus', handleFocus);
-    return () => window.removeEventListener('focus', handleFocus);
-  }, [loadPosts]);
-
-  useEffect(() => {
-    if (!searchTerm) {
-      setFilteredPosts(posts);
-    } else {
-      const filtered = posts.filter(
-        post =>
-          post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          post.author.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          post.summary.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          post.tag?.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-      setFilteredPosts(filtered);
-    }
-  }, [posts, searchTerm]);
-
-  const handleEdit = (post: BlogPost) => {
-    router.push(`/admin/devblog/${post.id}/edit`);
-  };
-
-  const handleCreate = () => {
-    router.push('/admin/devblog/new');
-  };
-
-  const handleDelete = async (post: BlogPost) => {
-    if (!confirm(`Are you sure you want to delete "${post.title}"?`)) {
-      return;
-    }
-
-    try {
-      const result = await deleteBlogPost(post.id);
-      if (result.error) {
-        toast({
-          title: 'Error',
-          description: result.error,
-          variant: 'destructive',
-        });
-      } else {
-        toast({
-          title: 'Success',
-          description: 'Blog post deleted successfully',
-        });
-        loadPosts();
-      }
-    } catch {
-      toast({
-        title: 'Error',
-        description: 'Failed to delete blog post',
-        variant: 'destructive',
-      });
-    }
-  };
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    });
-  };
-
   return (
-    <main className="space-y-6 mx-auto px-4 py-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">Dev Blog</h1>
-          <p className="text-muted-foreground">
-            Manage your blog posts and articles
+    <main className="min-h-[80vh] flex items-center justify-center px-4 py-12">
+      <Card className="max-w-2xl w-full border-2 shadow-lg">
+        <CardHeader className="text-center space-y-4 pb-8">
+          <div className="flex justify-center">
+            <div className="relative">
+              <div className="absolute inset-0 bg-primary/20 blur-xl rounded-full" />
+              <div className="relative bg-primary/10 p-4 rounded-full">
+                <Sparkles className="w-12 h-12 text-primary" />
+              </div>
+            </div>
+          </div>
+          <div className="space-y-2">
+            <CardTitle className="text-3xl font-bold">
+              Blog Management Has Moved! 🎉
+            </CardTitle>
+            <CardDescription className="text-base">
+              We&apos;ve upgraded to Sanity Studio for a better content management
+              experience
+            </CardDescription>
+          </div>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="space-y-4">
+            <div className="flex items-start gap-3 p-4 rounded-lg bg-muted/50">
+              <BookOpen className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+              <div>
+                <h3 className="font-semibold mb-1">Rich Content Editor</h3>
+                <p className="text-sm text-muted-foreground">
+                  Create beautiful blog posts with an intuitive editor, image
+                  management, and real-time preview
+                </p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3 p-4 rounded-lg bg-muted/50">
+              <ExternalLink className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+              <div>
+                <h3 className="font-semibold mb-1">Centralized Management</h3>
+                <p className="text-sm text-muted-foreground">
+                  Manage all your content (blog posts, events, team members) in
+                  one powerful platform
+                </p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3 p-4 rounded-lg bg-muted/50">
+              <Sparkles className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+              <div>
+                <h3 className="font-semibold mb-1">Better Performance</h3>
+                <p className="text-sm text-muted-foreground">
+                  Optimized content delivery, automatic image optimization, and
+                  live preview features
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="pt-4 space-y-3">
+            <Button asChild className="w-full h-12 text-base" size="lg">
+              <Link href="/studio" target="_blank">
+                Open Sanity Studio
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Link>
+            </Button>
+            <Button asChild variant="outline" className="w-full" size="lg">
+              <Link href="/blog">View Published Posts</Link>
+            </Button>
+          </div>
+
+          <p className="text-xs text-center text-muted-foreground pt-2">
+            Access the Studio to create, edit, and manage your blog content
           </p>
-        </div>
-        <Button onClick={handleCreate}>
-          <Plus className="w-4 h-4 mr-2" />
-          New Post
-        </Button>
-      </div>
-
-      {/* Search */}
-      <div className="flex items-center space-x-2">
-        <div className="relative flex-1 max-w-sm">
-          <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Search posts..."
-            value={searchTerm}
-            onChange={e => setSearchTerm(e.target.value)}
-            className="pl-8"
-          />
-        </div>
-      </div>
-
-      {/* Posts Table */}
-      <div className="border rounded-lg">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Title</TableHead>
-              <TableHead>Author</TableHead>
-              <TableHead>Category</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Created</TableHead>
-              <TableHead>Published</TableHead>
-              <TableHead className="w-[70px]">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {loading ? (
-              <TableRow>
-                <TableCell colSpan={7} className="text-center py-8">
-                  Loading posts...
-                </TableCell>
-              </TableRow>
-            ) : filteredPosts.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={7} className="text-center py-8">
-                  {searchTerm
-                    ? 'No posts found matching your search.'
-                    : 'No blog posts yet.'}
-                </TableCell>
-              </TableRow>
-            ) : (
-              filteredPosts.map(post => (
-                <TableRow key={post.id}>
-                  <TableCell className="font-medium">
-                    <div>
-                      <div className="font-semibold">{post.title}</div>
-                      <div className="text-sm text-muted-foreground line-clamp-1">
-                        {post.summary}
-                      </div>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center space-x-2">
-                      <User className="w-4 h-4 text-muted-foreground" />
-                      <span>{post.author}</span>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    {post.tag && (
-                      <Badge
-                        variant="outline"
-                        className="flex items-center space-x-1"
-                      >
-                        <Tag className="w-3 h-3" />
-                        <span>{post.tag}</span>
-                      </Badge>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    <Badge
-                      variant={post.published_at ? 'default' : 'secondary'}
-                    >
-                      {post.published_at ? 'Published' : 'Draft'}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-                      <Calendar className="w-4 h-4" />
-                      <span>{formatDate(post.created_at)}</span>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    {post.published_at ? (
-                      <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-                        <Calendar className="w-4 h-4" />
-                        <span>{formatDate(post.published_at)}</span>
-                      </div>
-                    ) : (
-                      <span className="text-sm text-muted-foreground">—</span>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0">
-                          <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={() => handleEdit(post)}>
-                          <Edit className="mr-2 h-4 w-4" />
-                          Edit
-                        </DropdownMenuItem>
-                        {post.published_at && (
-                          <DropdownMenuItem
-                            onClick={() =>
-                              window.open(`/blog/posts/${post.slug}`, '_blank')
-                            }
-                          >
-                            <Eye className="mr-2 h-4 w-4" />
-                            View
-                          </DropdownMenuItem>
-                        )}
-                        <DropdownMenuItem
-                          onClick={() => handleDelete(post)}
-                          className="text-destructive"
-                        >
-                          <Trash2 className="mr-2 h-4 w-4" />
-                          Delete
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
-      </div>
+        </CardContent>
+      </Card>
     </main>
   );
 }
