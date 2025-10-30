@@ -25,6 +25,7 @@ type BlogPostListItem = {
   } | null;
   author?: {
     name?: string | null;
+    image?: unknown;
   } | null;
   publishedAt?: string | null;
 };
@@ -71,7 +72,16 @@ export default async function BlogPage() {
                   <h3 className="mb-3 text-lg font-semibold md:mb-4 md:text-xl lg:mb-6">
                     {post.title}
                   </h3>
-                  <div className="flex items-center text-sm text-muted-foreground my-2">
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground my-2">
+                    {post.author?.image ? (
+                      <Image
+                        src={urlFor(post.author.image || '/placeholder.svg').url()}
+                        alt={post.author?.name || 'Author'}
+                        width={24}
+                        height={24}
+                        className="rounded-full"
+                      />
+                    ) : null}
                     <span>{post.author?.name}</span>
                     <span className="mx-2">•</span>
                     <time>

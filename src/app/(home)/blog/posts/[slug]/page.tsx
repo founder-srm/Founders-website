@@ -205,14 +205,25 @@ export default async function BlogPostPage({ params }: { params: Params }) {
         <p className="text-xl text-muted-foreground mb-6">{post.summary}</p>
       )}
 
-      <div className="flex items-center mb-8 text-muted-foreground">
-        <span className="font-medium">{post.author?.name}</span>
-        <span className="mx-2">•</span>
-        <time>
-          {post.publishedAt
-            ? format(new Date(post.publishedAt), 'MMMM d, yyyy')
-            : 'No date'}
-        </time>
+      <div className="flex items-center gap-3 mb-8 text-muted-foreground">
+        {post.author?.image && (
+          <Image
+            src={urlFor(post.author.image || '/placeholder.svg').url()}
+            alt={post.author?.name || 'Author'}
+            width={40}
+            height={40}
+            className="rounded-full"
+          />
+        )}
+        <div className="flex items-center gap-2">
+          <span className="font-medium">{post.author?.name}</span>
+          <span className="mx-2">•</span>
+          <time>
+            {post.publishedAt
+              ? format(new Date(post.publishedAt), 'MMMM d, yyyy')
+              : 'No date'}
+          </time>
+        </div>
       </div>
 
       <div className="prose prose-lg max-w-none">

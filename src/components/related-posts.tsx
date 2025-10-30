@@ -1,12 +1,34 @@
 import { ArrowUpRight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { type BlogPost, getPostsRange } from '@/lib/mdx';
+import { urlFor } from '@/sanity/lib/image';
+import { sanityFetch } from '@/sanity/lib/live';
+import { ALL_BLOG_POSTS_QUERY } from '@/sanity/lib/queries';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Button } from './ui/button';
 
+type BlogPost = {
+  _id: string;
+  slug: string | null;
+  title: string | null;
+  summary: string | null;
+  mainImage?: {
+    alt?: string;
+    asset?: {
+      _ref: string;
+      _type: string;
+    };
+  } | null;
+  author?: {
+    name?: string | null;
+    image?: unknown;
+  } | null;
+  publishedAt?: string | null;
+};
+
 export default async function RelatedPosts() {
-  const posts = await getPostsRange(0, 1);
+  const { data: allPosts } = await sanityFetch({ query: ALL_BLOG_POSTS_QUERY });
+  const posts = allPosts?.slice(0, 2) || [];
 
   return (
     <section className="py-32">
@@ -31,7 +53,7 @@ export default async function RelatedPosts() {
         {/* Posts Grid */}
         <div className="grid gap-x-4 gap-y-8 md:grid-cols-2 lg:gap-x-6 lg:gap-y-12">
           {posts.map(post => (
-            <BlogPostCard key={post.id} post={post} />
+            <BlogPostCard key={post._id} post={post} />
           ))}
         </div>
 
@@ -50,8 +72,8 @@ function BlogPostCard({ post }: { post: BlogPost }) {
       <div className="mb-4 flex overflow-clip rounded-xl md:mb-5">
         <div className="transition duration-300 group-hover:scale-105">
           <Image
-            src={post.image}
-            alt={post.title}
+            src={urlFor(post.mainImage || '/placeholder.svg').url()}
+            alt={post.mainImage?.alt || post.title || ''}
             width={600}
             height={400}
             className="aspect-[3/2] h-full w-full object-cover object-center"
@@ -74,16 +96,16 @@ function BlogPostCard({ post }: { post: BlogPost }) {
               width={48}
               height={48}
               className="aspect-square h-full w-full object-cover"
-              src={post.author_image}
-              alt={post.author}
+              src={post.author?.image ? urlFor(post.author.image || '/placeholder.svg').url() : '/placeholder.svg'}
+              alt={post.author?.name || 'Author'}
             />
-            <AvatarFallback>{post.author}</AvatarFallback>
+            <AvatarFallback>{post.author?.name?.charAt(0)}</AvatarFallback>
           </Avatar>
         </span>
         <div className="flex flex-col gap-px">
-          <span className="text-xs font-medium">{post.author}</span>
+          <span className="text-xs font-medium">{post.author?.name}</span>
           <span className="text-xs text-muted-foreground">
-            {new Date(post.published_at).toLocaleDateString()}
+            {post.publishedAt ? new Date(post.publishedAt).toLocaleDateString() : 'No date'}
           </span>
         </div>
       </div>
