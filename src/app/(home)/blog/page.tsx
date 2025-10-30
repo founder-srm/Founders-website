@@ -1,27 +1,36 @@
-'use client';
-
 import { format } from 'date-fns';
 import { ArrowRight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
 import BlurFade from '@/components/ui/blur-fade';
 import { Button } from '@/components/ui/button';
-import { type BlogPost, getAllPosts } from '@/lib/mdx';
+import { urlFor } from '@/sanity/lib/image';
+import { SanityLive, sanityFetch } from '@/sanity/lib/live';
+import { ALL_BLOG_POSTS_QUERY } from '@/sanity/lib/queries';
 
-// // Set revalidation time to 1 hour (3600 seconds)
-// export const revalidate = 3600;
+// Set revalidation time to 1 hour (3600 seconds)
+export const revalidate = 3600;
 
-export default function BlogPage() {
-  const [posts, setPosts] = useState<BlogPost[]>([]);
+type BlogPostListItem = {
+  _id: string;
+  slug: string | null;
+  title: string | null;
+  summary: string | null;
+  mainImage?: {
+    alt?: string;
+    asset?: {
+      _ref: string;
+      _type: string;
+    };
+  } | null;
+  author?: {
+    name?: string | null;
+  } | null;
+  publishedAt?: string | null;
+};
 
-  useEffect(() => {
-    async function fetchPosts() {
-      const posts = await getAllPosts();
-      setPosts(posts);
-    }
-    fetchPosts();
-  }, []);
+export default async function BlogPage() {
+  const { data: posts } = await sanityFetch({ query: ALL_BLOG_POSTS_QUERY });
 
   return (
     <section className="py-32 w-full flex flex-col items-center ">
@@ -33,10 +42,9 @@ export default function BlogPage() {
           <h2 className="mb-3 text-pretty text-3xl font-semibold md:mb-4 md:text-4xl lg:mb-6 lg:max-w-3xl lg:text-5xl">
             Our Posts
           </h2>
+          {/* place the sanity desc here. */}
           <p className="mb-8 text-muted-foreground md:text-base lg:max-w-2xl lg:text-lg">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Elig
-            doloremque mollitia fugiat omnis! Porro facilis quo animi
-            consequatur. Explicabo.
+            Stay updated with the latest insights, stories, and trends from our community.
           </p>
           <Button variant="link" className="w-full sm:w-auto">
             SubScribe to our newsletter
@@ -44,16 +52,16 @@ export default function BlogPage() {
           </Button>
         </div>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
-          {posts.map((post, index) => (
-            <BlurFade key={post.id} delay={0.25 * (index + 1)} inView>
+          {posts?.map((post: BlogPostListItem, index: number) => (
+            <BlurFade key={post._id} delay={0.25 * (index + 1)} inView>
               <Link
                 href={`/blog/posts/${post.slug}`}
                 className="flex flex-col overflow-clip rounded-xl border border-border"
               >
                 <div className="relative w-full h-fit">
                   <Image
-                    src={post.image}
-                    alt={post.title}
+                    src={urlFor(post.mainImage || '/placeholder.svg').url()}
+                    alt={post.mainImage?.alt || post.title || ''}
                     width={400}
                     height={400}
                     className="aspect-[16/9] h-full w-full object-cover object-center rounded-t-xl"
@@ -64,10 +72,12 @@ export default function BlogPage() {
                     {post.title}
                   </h3>
                   <div className="flex items-center text-sm text-muted-foreground my-2">
-                    <span>{post.author}</span>
+                    <span>{post.author?.name}</span>
                     <span className="mx-2">•</span>
                     <time>
-                      {format(new Date(post.published_at), 'MMMM d, yyyy')}
+                      {post.publishedAt
+                        ? format(new Date(post.publishedAt), 'MMMM d, yyyy')
+                        : 'No date'}
                     </time>
                   </div>
                   <p className="mb-3 text-muted-foreground md:mb-4 lg:mb-6">
@@ -83,6 +93,7 @@ export default function BlogPage() {
           ))}
         </div>
       </div>
+      <SanityLive />
     </section>
   );
 }

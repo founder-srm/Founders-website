@@ -8,6 +8,34 @@ export const structure: StructureResolver = S =>
     .items([
       S.divider(),
       S.listItem()
+        .title('Blog')
+        .child(
+          S.list()
+            .title('Blog Management')
+            .showIcons(false)
+            .items([
+              S.listItem()
+                .title('Blog Posts')
+                .child(
+                  S.list()
+                    .title('Blog Posts')
+                    .items([
+                      S.documentTypeListItem('blogPost').title('Blog Posts'),
+                    ])
+                ),
+              S.listItem()
+                .title('Categories')
+                .child(
+                  S.list()
+                    .title('Categories')
+                    .items([
+                      S.documentTypeListItem('category').title('Categories'),
+                    ])
+                ),
+            ])
+        ),
+      S.divider(),
+      S.listItem()
         .title('Home Page')
         .child(
           S.list()

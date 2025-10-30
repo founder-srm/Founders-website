@@ -7,6 +7,7 @@ import {
 import { authorType } from './authorType';
 import { bannerHeaderType } from './bannerHeaderType';
 import { blockContentType } from './blockContentType';
+import { blogPostType } from './blogPostType';
 import { categoryType } from './categoryType';
 import { contactUsType } from './contactUsType';
 import { ctaType } from './ctaType';
@@ -27,6 +28,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     blockContentType,
     categoryType,
     postType,
+    blogPostType,
     authorType,
     jobCategoryType,
     featureType,

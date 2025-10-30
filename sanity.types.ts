@@ -512,6 +512,75 @@ export type JobCategory = {
   }>;
 };
 
+export type BlogPost = {
+  _id: string;
+  _type: "blogPost";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  slug?: Slug;
+  summary?: string;
+  author?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "author";
+  };
+  mainImage?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+  };
+  categories?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "category";
+  }>;
+  publishedAt?: string;
+  body?: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "normal" | "h1" | "h2" | "h3" | "h4" | "blockquote";
+    listItem?: "bullet";
+    markDefs?: Array<{
+      href?: string;
+      _type: "link";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  } | {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+    _key: string;
+  }>;
+};
+
 export type Post = {
   _id: string;
   _type: "post";
@@ -912,7 +981,7 @@ export type SanityAssetSourceData = {
   url?: string;
 };
 
-export type AllSanitySchemaTypes = Linktree | OurTeam | ContactUs | BannerHeader | Timeline | OurStory | AboutUsCta | AboutValues | AboutUsHero | Testimonial | Event | HeroComponent | Cta | Faq | Feature | JobCategory | Post | Author | Category | BlockContent | MediaTag | SanityAssistInstructionTask | SanityAssistTaskStatus | SanityAssistSchemaTypeAnnotations | SanityAssistOutputType | SanityAssistOutputField | SanityAssistInstructionContext | AssistInstructionContext | SanityAssistInstructionUserInput | SanityAssistInstructionPrompt | SanityAssistInstructionFieldRef | SanityAssistInstruction | SanityAssistSchemaTypeField | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData;
+export type AllSanitySchemaTypes = Linktree | OurTeam | ContactUs | BannerHeader | Timeline | OurStory | AboutUsCta | AboutValues | AboutUsHero | Testimonial | Event | HeroComponent | Cta | Faq | Feature | JobCategory | BlogPost | Post | Author | Category | BlockContent | MediaTag | SanityAssistInstructionTask | SanityAssistTaskStatus | SanityAssistSchemaTypeAnnotations | SanityAssistOutputType | SanityAssistOutputField | SanityAssistInstructionContext | AssistInstructionContext | SanityAssistInstructionUserInput | SanityAssistInstructionPrompt | SanityAssistInstructionFieldRef | SanityAssistInstruction | SanityAssistSchemaTypeField | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData;
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ./src/sanity/lib/queries.ts
 // Variable: ABOUT_HERO_QUERY
@@ -1568,6 +1637,161 @@ export type FIRST_LINKTREE_QUERYResult = {
     active: boolean | null;
   }> | null;
 } | null;
+// Variable: ALL_BLOG_POSTS_QUERY
+// Query: *[_type == "blogPost"] | order(publishedAt desc) {  _id,  _createdAt,  title,  summary,  mainImage,  author->{    name,    title,    slug,    image,    bio  },  publishedAt,  categories[]->{    title,    slug  },  "slug": slug.current}
+export type ALL_BLOG_POSTS_QUERYResult = Array<{
+  _id: string;
+  _createdAt: string;
+  title: string | null;
+  summary: string | null;
+  mainImage: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+  } | null;
+  author: {
+    name: string | null;
+    title: string | null;
+    slug: Slug | null;
+    image: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: "image";
+    } | null;
+    bio: Array<{
+      children?: Array<{
+        marks?: Array<string>;
+        text?: string;
+        _type: "span";
+        _key: string;
+      }>;
+      style?: "normal";
+      listItem?: never;
+      markDefs?: Array<{
+        href?: string;
+        _type: "link";
+        _key: string;
+      }>;
+      level?: number;
+      _type: "block";
+      _key: string;
+    }> | null;
+  } | null;
+  publishedAt: string | null;
+  categories: Array<{
+    title: string | null;
+    slug: Slug | null;
+  }> | null;
+  slug: string | null;
+}>;
+// Variable: BLOG_POST_BY_SLUG_QUERY
+// Query: *[_type == "blogPost" && slug.current == $slug][0] {  _id,  _createdAt,  title,  summary,  body,  mainImage,  author->{    name,    title,    slug,    image,    bio  },  publishedAt,  categories[]->{    title,    slug  },  "slug": slug.current}
+export type BLOG_POST_BY_SLUG_QUERYResult = {
+  _id: string;
+  _createdAt: string;
+  title: string | null;
+  summary: string | null;
+  body: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+    listItem?: "bullet";
+    markDefs?: Array<{
+      href?: string;
+      _type: "link";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  } | {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+    _key: string;
+  }> | null;
+  mainImage: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+  } | null;
+  author: {
+    name: string | null;
+    title: string | null;
+    slug: Slug | null;
+    image: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: "image";
+    } | null;
+    bio: Array<{
+      children?: Array<{
+        marks?: Array<string>;
+        text?: string;
+        _type: "span";
+        _key: string;
+      }>;
+      style?: "normal";
+      listItem?: never;
+      markDefs?: Array<{
+        href?: string;
+        _type: "link";
+        _key: string;
+      }>;
+      level?: number;
+      _type: "block";
+      _key: string;
+    }> | null;
+  } | null;
+  publishedAt: string | null;
+  categories: Array<{
+    title: string | null;
+    slug: Slug | null;
+  }> | null;
+  slug: string | null;
+} | null;
 
 // Source: ./src/sanity/lib/queries/ctaQuery.ts
 // Variable: ctaQuery
@@ -1673,6 +1897,8 @@ declare module "@sanity/client" {
     "*[_type == \"ourTeam\"] | order(order asc) {\n  _id,\n  _createdAt,\n  name,\n  role,\n  description,\n  avatar,\n  github,\n  linkedin,\n  website,\n  domain,\n  isPresident,\n  isVicePresident,\n  isAdvisor,\n  advisorRole,\n  order\n}": TEAM_QUERYResult;
     "*[_type == \"linktree\" && slug.current == $slug][0]{\n  _id,\n  _createdAt,\n  title,\n  description,\n  themeColor,\n  pageBackground,\n  pageBackgroundImage,\n  slug,\n  avatar,\n  logo,\n  links[]{\n    _key,\n    label,\n    platform,\n    url,\n    iconOverride,\n    highlight,\n    pinned,\n    order,\n    active\n  }\n}": LINKTREE_BY_SLUG_QUERYResult;
     "*[_type == \"linktree\"] | order(_createdAt asc)[0]{\n  _id,\n  _createdAt,\n  title,\n  description,\n  themeColor,\n  pageBackground,\n  pageBackgroundImage,\n  slug,\n  avatar,\n  logo,\n  links[]{\n    _key,\n    label,\n    platform,\n    url,\n    iconOverride,\n    highlight,\n    pinned,\n    order,\n    active\n  }\n}": FIRST_LINKTREE_QUERYResult;
+    "*[_type == \"blogPost\"] | order(publishedAt desc) {\n  _id,\n  _createdAt,\n  title,\n  summary,\n  mainImage,\n  author->{\n    name,\n    title,\n    slug,\n    image,\n    bio\n  },\n  publishedAt,\n  categories[]->{\n    title,\n    slug\n  },\n  \"slug\": slug.current\n}": ALL_BLOG_POSTS_QUERYResult;
+    "*[_type == \"blogPost\" && slug.current == $slug][0] {\n  _id,\n  _createdAt,\n  title,\n  summary,\n  body,\n  mainImage,\n  author->{\n    name,\n    title,\n    slug,\n    image,\n    bio\n  },\n  publishedAt,\n  categories[]->{\n    title,\n    slug\n  },\n  \"slug\": slug.current\n}": BLOG_POST_BY_SLUG_QUERYResult;
     "*[_type == \"cta\"]{\n    _id,\n    _createdAt,\n    title,\n    description,\n    primaryButtonText,\n    primaryButtonLink,\n    secondaryButtonText,\n    secondaryButtonLink,\n    variant,\n    activateSecondaryButton,\n    showCTA\n}": CtaQueryResult;
     "*[_type == \"event\"]{\n    _id,\n    _createdAt,\n    id,\n    title,\n    summary,\n    image,\n    label,\n    author,\n    published,\n    href\n}": EventsQueryResult;
     "*[_type == \"faq\"]{\n    _id,\n    _createdAt,\n    question,\n    answer\n}": FaqsQueryResult;

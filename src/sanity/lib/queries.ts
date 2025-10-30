@@ -267,3 +267,47 @@ export const FIRST_LINKTREE_QUERY =
     active
   }
 }`);
+
+// Blog Post Queries
+export const ALL_BLOG_POSTS_QUERY = defineQuery(`*[_type == "blogPost"] | order(publishedAt desc) {
+  _id,
+  _createdAt,
+  title,
+  summary,
+  mainImage,
+  author->{
+    name,
+    title,
+    slug,
+    image,
+    bio
+  },
+  publishedAt,
+  categories[]->{
+    title,
+    slug
+  },
+  "slug": slug.current
+}`);
+
+export const BLOG_POST_BY_SLUG_QUERY = defineQuery(`*[_type == "blogPost" && slug.current == $slug][0] {
+  _id,
+  _createdAt,
+  title,
+  summary,
+  body,
+  mainImage,
+  author->{
+    name,
+    title,
+    slug,
+    image,
+    bio
+  },
+  publishedAt,
+  categories[]->{
+    title,
+    slug
+  },
+  "slug": slug.current
+}`);
