@@ -32,12 +32,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
     {
       url: `${baseUrl}/blog`,
-      priority: 0.8,
+      priority: 0.9,
       lastModified: new Date().toISOString(),
     },
     {
       url: `${baseUrl}/upcoming`,
-      priority: 0.8,
+      priority: 0.9,
       lastModified: new Date().toISOString(),
     },
     {
@@ -52,22 +52,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
     {
       url: `${baseUrl}/creatives`,
-      priority: 0.8,
+      priority: 0.9,
       lastModified: new Date().toISOString(),
     },
     {
       url: `${baseUrl}/recruitments`,
-      priority: 0.8,
+      priority: 0.9,
       lastModified: new Date().toISOString(),
     },
     ...posts.map(post => ({
       url: `${baseUrl}/blog/posts/${post.slug}`,
-      priority: 0.8,
+      priority: 0.9,
       lastModified: post.publishedAt || post._createdAt,
     })),
     ...events.map(event => ({
       url: `${baseUrl}/events/writeup/${event.slug}`,
-      priority: 0.8,
+      priority: 0.9,
       lastModified: event.published || new Date().toISOString(),
     })),
     ...(upcomingEvents?.map(event => ({
