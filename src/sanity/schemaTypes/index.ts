@@ -11,6 +11,7 @@ import { blogPostType } from './blogPostType';
 import { categoryType } from './categoryType';
 import { contactUsType } from './contactUsType';
 import { ctaType } from './ctaType';
+import { eventSettingsType } from './eventSettingsType';
 import { eventType } from './eventType';
 import { faqType } from './faqType';
 import { featureType } from './featureType';
@@ -36,6 +37,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     ctaType,
     heroComponentType,
     eventType,
+    eventSettingsType,
     testimonialType,
     aboutUsHeroType,
     aboutValuesType,

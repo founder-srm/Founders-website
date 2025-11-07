@@ -161,7 +161,25 @@ export const structure: StructureResolver = S =>
         .child(
           S.list()
             .title('Events Page')
-            .items([S.documentTypeListItem('event').title('Event Writeups')])
+            .items([
+              S.listItem()
+                .title('Event Writeups')
+                .child(
+                  S.list()
+                    .title('Event Writeups')
+                    .items([
+                      S.documentTypeListItem('event').title('Event Writeups'),
+                    ])
+                ),
+              S.listItem()
+                .title('Writeup Settings')
+                .child(
+                  S.document()
+                    .schemaType('eventSettings')
+                    .documentId('eventSettings')
+                    .title('Writeup Settings')
+                ),
+            ])
         ),
       S.listItem()
         .title('Contact Us Page')

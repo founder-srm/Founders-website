@@ -107,6 +107,29 @@ export const ALL_EVENTS_QUERY = defineQuery(`*[_type == "event"] {
   "slug": slug.current
 }`);
 
+export const EVENT_SETTINGS_QUERY = defineQuery(`*[_type == "eventSettings" && _id == "eventSettings"][0]{
+  _id,
+  featuredEvent->{
+    _id,
+    _createdAt,
+    title,
+    summary,
+    image,
+    type,
+    label,
+    author->{
+      name,
+      title,
+      slug,
+      image,
+      bio
+    },
+    published,
+    href,
+    "slug": slug.current
+  }
+}`);
+
 export const EVENT_BY_SLUG_QUERY =
   defineQuery(`*[_type == "event" && slug.current == $slug][0] {
   _id,
