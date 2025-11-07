@@ -7,6 +7,7 @@
 import {assist} from '@sanity/assist'
 import { visionTool } from '@sanity/vision';
 import { defineConfig } from 'sanity';
+import { presentationTool } from "sanity/presentation";
 import { structureTool } from 'sanity/structure';
 import {media, mediaAssetSource} from 'sanity-plugin-media'
 
@@ -46,6 +47,15 @@ export default defineConfig({
       },
       maximumUploadSize: 10000000
       // number - maximum file size (in bytes) that can be uploaded through the plugin interface
+    }),
+    presentationTool({
+      previewUrl: {
+        initial: process.env.SANITY_STUDIO_PREVIEW_ORIGIN,
+        preview: "/",
+        previewMode: {
+          enable: "/api/draft-mode/enable",
+        },
+      },
     }),
   ],
 });

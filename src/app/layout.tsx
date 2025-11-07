@@ -6,6 +6,8 @@ import type { Metadata } from 'next';
 
 import { Plus_Jakarta_Sans } from 'next/font/google';
 import './globals.css';
+import { draftMode } from 'next/headers';
+import { VisualEditing } from 'next-sanity';
 import Footer2 from '@/components/footer';
 import Navbar1 from '@/components/navbar';
 import BannerProvider from '@/components/providers/BannerProvider';
@@ -13,6 +15,7 @@ import { SessionProvider } from '@/components/providers/SessionProvider';
 import { ThemeProvider } from '@/components/theme/theme-provider';
 import { Toaster } from '@/components/ui/toaster';
 import config from '@/lib/config';
+import { SanityLive } from '@/sanity/lib/live';
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   variable: '--font-plus-jakarta-sans',
@@ -139,7 +142,7 @@ function Noise() {
   );
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -179,6 +182,8 @@ export default function RootLayout({
             <BannerProvider />
             <Navbar1 />
             {children}
+            <SanityLive />
+            {(await draftMode()).isEnabled && <VisualEditing />}
             <Footer2 />
             <Toaster />
             <Noise />
