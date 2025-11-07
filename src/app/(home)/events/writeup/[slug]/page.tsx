@@ -1,106 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import {
-  PortableText,
-  type PortableTextBlock,
-  type PortableTextComponentProps,
-} from '@portabletext/react';
-import { getImageDimensions } from '@sanity/asset-utils';
 import { format } from 'date-fns';
 import { AlignLeft, ArrowLeft, Calendar } from 'lucide-react';
 import type { Metadata, ResolvingMetadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
+import { PortableTextWrapper } from '@/components/mdx/PortableTextWrapper';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { urlFor } from '@/sanity/lib/image';
 import { SanityLive, sanityFetch } from '@/sanity/lib/live';
 import { EVENT_BY_SLUG_QUERY } from '@/sanity/lib/queries';
-
-const Header1 = ({
-  children,
-}: PortableTextComponentProps<PortableTextBlock>) => (
-  <h1 className="text-4xl font-bold text-muted-foreground mb-6">{children}</h1>
-);
-
-const Header2 = ({
-  children,
-}: PortableTextComponentProps<PortableTextBlock>) => (
-  <h2 className="text-3xl font-semibold text-muted-foreground mb-5">
-    {children}
-  </h2>
-);
-
-const Header3 = ({
-  children,
-}: PortableTextComponentProps<PortableTextBlock>) => (
-  <h3 className="text-2xl font-semibold text-muted-foreground mb-4">
-    {children}
-  </h3>
-);
-
-const Header4 = ({
-  children,
-}: PortableTextComponentProps<PortableTextBlock>) => (
-  <h4 className="text-xl font-medium text-muted-foreground mb-4">{children}</h4>
-);
-
-const Header5 = ({
-  children,
-}: PortableTextComponentProps<PortableTextBlock>) => (
-  <h5 className="text-lg font-medium text-muted-foreground mb-3">{children}</h5>
-);
-
-const Header6 = ({
-  children,
-}: PortableTextComponentProps<PortableTextBlock>) => (
-  <h6 className="text-base font-medium text-muted-foreground mb-3">
-    {children}
-  </h6>
-);
-
-const BlockQuote = ({
-  children,
-}: PortableTextComponentProps<PortableTextBlock>) => {
-  return (
-    <blockquote className="border-l-4 border-primary pl-4 my-6 italic text-gray-700 dark:text-gray-300">
-      {children}
-    </blockquote>
-  );
-};
-
-// Custom link component
-const CustomLink = ({
-  value,
-  children,
-}: {
-  value?: { href: string };
-  children: React.ReactNode;
-}) => {
-  if (!value?.href) return null;
-  return (
-    <Link href={value.href} className="text-blue-600 hover:underline">
-      {children}
-    </Link>
-  );
-};
-
-// Custom image component
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const CustomImage = ({ value }: { value: any }) => {
-  const { width, height } = getImageDimensions(value);
-  return (
-    <div className="my-6">
-      <Image
-        src={urlFor(value).url()}
-        alt={value.alt || ' '}
-        width={width}
-        height={height}
-        className="rounded-lg"
-      />
-    </div>
-  );
-};
 
 type Params = Promise<{ slug: string }>;
 
@@ -158,27 +68,6 @@ export default async function EventPage({ params }: { params: Params }) {
 
   if (!event) return <div>Event not found</div>;
 
-  const components = {
-    block: {
-      normal: ({ children }: PortableTextComponentProps<PortableTextBlock>) => (
-        <p className="text-muted-foreground/80">{children}</p>
-      ),
-      h1: Header1,
-      h2: Header2,
-      h3: Header3,
-      h4: Header4,
-      h5: Header5,
-      h6: Header6,
-      blockquote: BlockQuote,
-    },
-    marks: {
-      link: CustomLink,
-    },
-    types: {
-      image: CustomImage,
-    },
-  };
-
   return (
     <section className="py-12 w-full flex flex-col items-center">
       <div className="container">
@@ -211,7 +100,7 @@ export default async function EventPage({ params }: { params: Params }) {
 
             <div className="prose prose-lg max-w-none">
               {/* biome-ignore lint/style/noNonNullAssertion: Content always present */}
-              <PortableText value={event.content!} components={components} />
+              <PortableTextWrapper value={event.content!} />
             </div>
           </div>
 

@@ -9,7 +9,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   return (
-    <Suspense unstable_expectedLoadTime={10} fallback={<div>Loading...</div>}>
+    <Suspense unstable_expectedLoadTime={20} fallback={<div>Loading...</div>}>
       <main className="overflow-hidden w-full h-full relative">
         <div
           className="h-[95vh] overflow-y-auto px-8 pb-16 pt-16"
