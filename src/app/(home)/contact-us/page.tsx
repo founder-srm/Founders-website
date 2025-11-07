@@ -57,7 +57,7 @@ export default async function ContactUs() {
             </div>
           </div>
         </section>
-        <SanityLive />
+        
       </main>
     )
   );

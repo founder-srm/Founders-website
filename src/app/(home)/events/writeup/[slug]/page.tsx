@@ -165,7 +165,7 @@ export default async function EventPage({ params }: { params: Params }) {
           </div>
         </div>
       </div>
-      <SanityLive />
+      
     </section>
   );
 }

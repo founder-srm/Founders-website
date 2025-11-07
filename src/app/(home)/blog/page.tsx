@@ -103,7 +103,7 @@ export default async function BlogPage() {
           ))}
         </div>
       </div>
-      <SanityLive />
+      
     </section>
   );
 }

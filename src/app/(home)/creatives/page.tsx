@@ -81,7 +81,7 @@ export default async function CreativesPage() {
           links={normalizedLinks}
         />
       </div>
-      <SanityLive />
+      
     </main>
   );
 }

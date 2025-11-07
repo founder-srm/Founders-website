@@ -140,7 +140,7 @@ export default async function EventsPage() {
           </form>
         </div>
       </div>
-      <SanityLive />
+      
     </section>
   );
 }

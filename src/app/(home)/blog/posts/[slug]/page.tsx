@@ -120,7 +120,7 @@ export default async function BlogPostPage({ params }: { params: Params }) {
         {/* biome-ignore lint/style/noNonNullAssertion: Body is required for blog posts */}
         <PortableTextWrapper value={post.body!} />
       </div>
-      <SanityLive />
+      
     </article>
   );
 }
