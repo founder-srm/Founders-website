@@ -347,6 +347,20 @@ export type Testimonial = {
   published?: string;
 };
 
+export type EventSettings = {
+  _id: string;
+  _type: "eventSettings";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  featuredEvent?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "event";
+  };
+};
+
 export type Event = {
   _id: string;
   _type: "event";
@@ -981,7 +995,7 @@ export type SanityAssetSourceData = {
   url?: string;
 };
 
-export type AllSanitySchemaTypes = Linktree | OurTeam | ContactUs | BannerHeader | Timeline | OurStory | AboutUsCta | AboutValues | AboutUsHero | Testimonial | Event | HeroComponent | Cta | Faq | Feature | JobCategory | BlogPost | Post | Author | Category | BlockContent | MediaTag | SanityAssistInstructionTask | SanityAssistTaskStatus | SanityAssistSchemaTypeAnnotations | SanityAssistOutputType | SanityAssistOutputField | SanityAssistInstructionContext | AssistInstructionContext | SanityAssistInstructionUserInput | SanityAssistInstructionPrompt | SanityAssistInstructionFieldRef | SanityAssistInstruction | SanityAssistSchemaTypeField | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData;
+export type AllSanitySchemaTypes = Linktree | OurTeam | ContactUs | BannerHeader | Timeline | OurStory | AboutUsCta | AboutValues | AboutUsHero | Testimonial | EventSettings | Event | HeroComponent | Cta | Faq | Feature | JobCategory | BlogPost | Post | Author | Category | BlockContent | MediaTag | SanityAssistInstructionTask | SanityAssistTaskStatus | SanityAssistSchemaTypeAnnotations | SanityAssistOutputType | SanityAssistOutputField | SanityAssistInstructionContext | AssistInstructionContext | SanityAssistInstructionUserInput | SanityAssistInstructionPrompt | SanityAssistInstructionFieldRef | SanityAssistInstruction | SanityAssistSchemaTypeField | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData;
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ./src/sanity/lib/queries.ts
 // Variable: ABOUT_HERO_QUERY
@@ -1219,6 +1233,69 @@ export type ALL_EVENTS_QUERYResult = Array<{
   href: string | null;
   slug: string | null;
 }>;
+// Variable: EVENT_SETTINGS_QUERY
+// Query: *[_type == "eventSettings" && _id == "eventSettings"][0]{  _id,  featuredEvent->{    _id,    _createdAt,    title,    summary,    image,    type,    label,    author->{      name,      title,      slug,      image,      bio    },    published,    href,    "slug": slug.current  }}
+export type EVENT_SETTINGS_QUERYResult = {
+  _id: string;
+  featuredEvent: {
+    _id: string;
+    _createdAt: string;
+    title: string | null;
+    summary: string | null;
+    image: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: "image";
+    } | null;
+    type: "bootcamp" | "foundathon" | "openhouse" | "triumphtalk" | "webinar" | "workshop" | null;
+    label: string | null;
+    author: {
+      name: string | null;
+      title: string | null;
+      slug: Slug | null;
+      image: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        _type: "image";
+      } | null;
+      bio: Array<{
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?: "normal";
+        listItem?: never;
+        markDefs?: Array<{
+          href?: string;
+          _type: "link";
+          _key: string;
+        }>;
+        level?: number;
+        _type: "block";
+        _key: string;
+      }> | null;
+    } | null;
+    published: string | null;
+    href: string | null;
+    slug: string | null;
+  } | null;
+} | null;
 // Variable: EVENT_BY_SLUG_QUERY
 // Query: *[_type == "event" && slug.current == $slug][0] {  _id,  _createdAt,  title,  summary,  content,  image,  type,  label,  author->{    name,    title,    image  },  published,  href,  "slug": slug.current}
 export type EVENT_BY_SLUG_QUERYResult = {
@@ -1889,6 +1966,7 @@ declare module "@sanity/client" {
     "*[_type == \"faq\"]{\n  _id,\n  _createdAt,\n  question,\n  answer\n}": FAQS_QUERYResult;
     "*[_type == \"event\"] | order(published desc)[0...3]{\n  _id,\n  _createdAt,\n  title,\n  summary,\n  image,\n  label,\n  author->{\n    name,\n    title,\n    slug,\n    image,\n    bio\n  },\n  published,\n  href,\n  \"slug\": slug.current\n}": EVENTS_QUERYResult;
     "*[_type == \"event\"] {\n  _id,\n  _createdAt,\n  title,\n  summary,\n  image,\n  type,\n  label,\n  author->{\n    name,\n    title,\n    slug,\n    image,\n    bio\n  },\n  published,\n  href,\n  \"slug\": slug.current\n}": ALL_EVENTS_QUERYResult;
+    "*[_type == \"eventSettings\" && _id == \"eventSettings\"][0]{\n  _id,\n  featuredEvent->{\n    _id,\n    _createdAt,\n    title,\n    summary,\n    image,\n    type,\n    label,\n    author->{\n      name,\n      title,\n      slug,\n      image,\n      bio\n    },\n    published,\n    href,\n    \"slug\": slug.current\n  }\n}": EVENT_SETTINGS_QUERYResult;
     "*[_type == \"event\" && slug.current == $slug][0] {\n  _id,\n  _createdAt,\n  title,\n  summary,\n  content,\n  image,\n  type,\n  label,\n  author->{\n    name,\n    title,\n    image\n  },\n  published,\n  href,\n  \"slug\": slug.current\n}": EVENT_BY_SLUG_QUERYResult;
     "*[_type == \"heroComponent\"][0]{\n    _id,\n    _createdAt,\n    title,\n    subtitle,\n    buttonText,\n    buttonLink,\n    showButton,\n    image1,\n    image2,\n    image3,\n    image4\n}": HERO_QUERYResult;
     "*[_type == \"ourStory\"][0]{\n  _id,\n  _createdAt,\n  title,\n  mainContent,\n  secondaryContent,\n  workplaceTitle,\n  workplaceContent,\n  workplaceSecondaryContent,\n  images\n}": OUR_STORY_QUERYResult;
