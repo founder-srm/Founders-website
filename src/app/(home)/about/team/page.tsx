@@ -1,5 +1,5 @@
 import TeamSection from '@/components/team';
-import { SanityLive, sanityFetch } from '@/sanity/lib/live';
+import {  sanityFetch } from '@/sanity/lib/live';
 import { TEAM_QUERY } from '@/sanity/lib/queries';
 
 export default async function Team() {

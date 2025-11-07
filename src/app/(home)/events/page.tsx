@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { urlFor } from '@/sanity/lib/image';
-import { SanityLive, sanityFetch } from '@/sanity/lib/live';
+import {  sanityFetch } from '@/sanity/lib/live';
 import {
   ALL_EVENTS_QUERY,
   EVENT_SETTINGS_QUERY,

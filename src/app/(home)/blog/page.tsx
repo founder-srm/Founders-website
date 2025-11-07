@@ -5,7 +5,7 @@ import Link from 'next/link';
 import BlurFade from '@/components/ui/blur-fade';
 import { Button } from '@/components/ui/button';
 import { urlFor } from '@/sanity/lib/image';
-import { SanityLive, sanityFetch } from '@/sanity/lib/live';
+import {  sanityFetch } from '@/sanity/lib/live';
 import { ALL_BLOG_POSTS_QUERY } from '@/sanity/lib/queries';
 
 // Set revalidation time to 1 hour (3600 seconds)
