@@ -105,7 +105,7 @@ git checkout -b feature/your-feature-name
 ```
 3. Commit your changes with a clear message:
 ```bash
-git commit -m "Added: new component for homepage banner"
+git commit -m "Added: feature-description"
 ```
 4. Push to your fork:
 ```bash
@@ -122,7 +122,7 @@ git push origin feature/your-feature-name
 | Supabase auth not working | Check `.env` variables                   |
 | Doppler not syncing       | Ensure Doppler CLI is logged in          |
 | App not building          | Clear `.next` and reinstall dependencies |
-| Static assets missing     | Run `npm run build` before deployment    |
+| Static assets missing     | Run `run bun dev` before deployment      |
 
 ---
 
