@@ -187,8 +187,6 @@ export function BookDemoForm({
           phone: parsedPhone,
           email: data.email,
           description: data.message,
-          country: data.country,
-          company_size: data.companySize,
           referral: data.referral,
         },
       ]);
