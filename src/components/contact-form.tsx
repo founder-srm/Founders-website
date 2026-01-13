@@ -190,7 +190,7 @@ export function BookDemoForm({
             For more information about how we handle your personal information,
             please visit our{' '}
             <Link
-              href="./components/PrivacyPolicy/page.tsx"
+              href="/PrivacyPolicy"
               className="underline"
             >
               privacy policy
