@@ -3,10 +3,10 @@ import { ArrowRight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import BlurFade from '@/components/ui/blur-fade';
-import { Button } from '@/components/ui/button';
 import { urlFor } from '@/sanity/lib/image';
 import {  sanityFetch } from '@/sanity/lib/live';
 import { ALL_BLOG_POSTS_QUERY } from '@/sanity/lib/queries';
+import NewsLetterComingSoon from '@/components/NewsLetterComingSoon';
 
 // Set revalidation time to 1 hour (3600 seconds)
 export const revalidate = 3600;
@@ -47,10 +47,7 @@ export default async function BlogPage() {
           <p className="mb-8 text-muted-foreground md:text-base lg:max-w-2xl lg:text-lg">
             Stay updated with the latest insights, stories, and trends from our community.
           </p>
-          <Button variant="link" className="w-full sm:w-auto">
-            SubScribe to our newsletter
-            <ArrowRight className="ml-2 size-4" />
-          </Button>
+          <NewsLetterComingSoon />
         </div>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
           {posts?.map((post: BlogPostListItem, index: number) => (
