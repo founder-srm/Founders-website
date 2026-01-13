@@ -84,13 +84,23 @@ export function BookDemoForm({
   }, []);
 
   const onSubmit = async (data: FormValues) => {
+    const trimmedPhone = data.phone.trim();
+
+    // Basic numeric validation for phone field to avoid inserting NaN into the database
+    if (!trimmedPhone || !/^\d+$/.test(trimmedPhone)) {
+      alert("Please enter a valid numeric phone number.");
+      return;
+    }
+
+    const parsedPhone = Number.parseInt(trimmedPhone, 10);
+
     const { data: result, error } = await supabase
       .from("contactentries")
       .insert([
         {
           name: data.fullName,
           company: data.company,
-          phone: Number.parseInt(data.phone),
+          phone: parsedPhone,
           email: data.email,
           description: data.message,
           country: data.country,
