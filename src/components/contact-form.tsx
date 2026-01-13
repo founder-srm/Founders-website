@@ -205,19 +205,18 @@ export function BookDemoForm({
             )}
           />
 
-          <div className="flex w-full flex-col justify-end space-y-3 pt-2">
-            <Button type="submit">{submitButtonText}</Button>
-            <div className="text-xs text-muted-foreground">
-              For more information about how we handle your personal
-              information, please visit our{" "}
-              <Link
-                href="./components/PrivacyPolicy/page.tsx"
-                className="underline"
-              >
-                privacy policy
-              </Link>
-              .
-            </div>
+        <div className="flex w-full flex-col justify-end space-y-3 pt-2">
+          <Button type="submit">{submitButtonText}</Button>
+          <div className="text-xs text-muted-foreground">
+            For more information about how we handle your personal information,
+            please visit our{' '}
+            <Link
+              href="/PrivacyPolicy"
+              className="underline"
+            >
+              privacy policy
+            </Link>
+            .
           </div>
         </div>
       </form>
