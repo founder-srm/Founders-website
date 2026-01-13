@@ -10,7 +10,7 @@ const PrivacyPolicy = () => {
   }
 
   return (
-    <div className='p-5 max-w-6xl mx-auto'>
+    <div className='p-5 max-w-6xl mx-auto mt-10'>
       <h1 className={cn(privacyStyles.h1Style)}>Privacy Policy</h1>
       <p className='test-sm font-medium mt-2 text-muted-foreground'>
         This Privacy Policy outlines how we collect, use, and protect your
