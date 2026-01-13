@@ -92,7 +92,7 @@ export function BookDemoForm({
           company: data.company,
           phone: Number.parseInt(data.phone),
           email: data.email,
-          message: data.message,
+          description: data.message,
           country: data.country,
           company_size: data.companySize,
           referral: data.referral,
