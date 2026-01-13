@@ -63,6 +63,91 @@ export function BookDemoForm({
       companySize: "",
       referral: "",
     },
+    resolver: async (values) => {
+      const errors: Record<string, { type: string; message: string }> = {};
+
+      if (!values.fullName || !values.fullName.trim()) {
+        errors.fullName = {
+          type: "required",
+          message: "Full name is required.",
+        };
+      }
+
+      if (!values.email || !values.email.trim()) {
+        errors.email = {
+          type: "required",
+          message: "Email is required.",
+        };
+      } else {
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(values.email)) {
+          errors.email = {
+            type: "pattern",
+            message: "Please enter a valid email address.",
+          };
+        }
+      }
+
+      if (!values.phone || !values.phone.trim()) {
+        errors.phone = {
+          type: "required",
+          message: "Phone number is required.",
+        };
+      } else {
+        const phonePattern = /^\+?\d+$/;
+        if (!phonePattern.test(values.phone)) {
+          errors.phone = {
+            type: "pattern",
+            message: "Phone number should contain only digits and an optional leading +.",
+          };
+        }
+      }
+
+      if (!values.message || !values.message.trim()) {
+        errors.message = {
+          type: "required",
+          message: "Message is required.",
+        };
+      } else if (values.message.trim().length < 10) {
+        errors.message = {
+          type: "minLength",
+          message: "Message should be at least 10 characters long.",
+        };
+      }
+
+      if (!values.country || !values.country.trim()) {
+        errors.country = {
+          type: "required",
+          message: "Country is required.",
+        };
+      }
+
+      if (!values.companySize || !values.companySize.trim()) {
+        errors.companySize = {
+          type: "required",
+          message: "Company size is required.",
+        };
+      }
+
+      if (!values.referral || !values.referral.trim()) {
+        errors.referral = {
+          type: "required",
+          message: "Please let us know how you heard about us.",
+        };
+      }
+
+      if (Object.keys(errors).length > 0) {
+        return {
+          values: {},
+          errors,
+        };
+      }
+
+      return {
+        values,
+        errors: {},
+      };
+    },
   });
 
   const supabase = createClient();
