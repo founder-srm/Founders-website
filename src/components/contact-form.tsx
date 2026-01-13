@@ -287,7 +287,7 @@ export function BookDemoForm({
                     <SelectItem value="search">Web Search</SelectItem>
                     <SelectItem value="team">Founders Club Team</SelectItem>
                     <SelectItem value="socialmedia">Social Media</SelectItem>
-                    <SelectItem value="we cool">
+                    <SelectItem value="we-cool">
                       Someone told you we are cool!
                     </SelectItem>
                   </SelectContent>
