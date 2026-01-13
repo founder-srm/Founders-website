@@ -5,7 +5,7 @@ const PrivacyPolicy = () => {
 
   const privacyStyles = {
     h1Style: "text-5xl tracking-tighter font-semibold",
-    h2Style: "text-xl font-medium tracking-right",
+    h2Style: "text-xl font-medium tracking-tight",
     pStyle: "text-md text-muted-foreground mt-2",
   }
 
