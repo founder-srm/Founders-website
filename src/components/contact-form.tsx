@@ -74,7 +74,6 @@ export function BookDemoForm({
         const response = await fetch("https://restcountries.com/v3.1/all");
         const data = (await response.json()) as Country[];
         const countryNames = data.map((country) => country.name.common).sort();
-        console.log("Countries fetched:", countryNames.length);
       } catch (error) {
         console.error("Error fetching countries:", error);
       }
