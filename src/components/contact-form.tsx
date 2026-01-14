@@ -14,7 +14,6 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-// import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
@@ -31,16 +30,12 @@ import { Avatar, AvatarImage } from './ui/avatar';
 const formSchema = z.object({
   name: z
     .string()
-    .min(2, {
-      message: 'Name must be at least 2 characters.',
-    })
-    .max(20, { message: 'Name cannot be greater than 50 characters.' }),
+    .min(2, {message: 'Name must be at least 2 characters.',})
+    .max(20, { message: 'Name cannot be greater than 20 characters.' }),
   email: z.email(),
-  phone: z.string().length(10),
-  message: z
-    .string()
-    .min(10, { message: 'Message should be atleast 10 characters' }),
-  referral: z.string().min(2, { message: 'Incorrect referral' }),
+  phone: z.string().min(10).max(10),
+  message: z.string().min(10, { message: 'Message should be at least 10 characters' }),
+  referral: z.string().optional(),
 });
 
 export function BookDemoForm({
@@ -68,7 +63,7 @@ export function BookDemoForm({
   const { toast } = useToast();
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const { data, error } = await supabase.from('contactentries').insert([
+    const { error } = await supabase.from('contactentries').insert([
       {
         name: values.name,
         phone: Number.parseInt(values.phone, 10),
@@ -76,14 +71,13 @@ export function BookDemoForm({
         description: values.message,
         referral: values.referral,
       },
-    ]).select();
+    ]);
     if (error) {
       console.error('Error inserting data:', error);
       alert(
         `There was an error! Details: "${error.message || error} That's all we know!`
       );
     } else {
-      console.log('Data inserted successfully:', data);
       toast({
         title: 'Form submitted!',
         description: thankYouMessage,
@@ -155,8 +149,7 @@ export function BookDemoForm({
           <FormField
             control={form.control}
             name="referral"
-            render={({ field }) => {
-            return (
+            render={({ field }) => (
               <FormItem>
                 <FormLabel>How did you hear about us?
                   <span className="text-muted-foreground"> (Optional)</span>
@@ -180,8 +173,7 @@ export function BookDemoForm({
                 </Select>
                 <FormMessage />
               </FormItem>
-              );
-            }}
+              )}
           />
 
           <div className="flex w-full flex-col justify-end space-y-3 pt-2">
@@ -199,39 +191,6 @@ export function BookDemoForm({
     </Form>
   );
 }
-
-// function CustomFormSelect({
-//   label,
-//   name,
-//   value,
-//   onChange,
-//   placeholder,
-//   children,
-//   optional = false,
-// }: {
-//   label: string;
-//   name: string;
-//   value: string;
-//   onChange: (value: string) => void;
-//   placeholder: string;
-//   children: React.ReactNode;
-//   optional?: boolean;
-// }) {
-//   return (
-//     <div>
-//       <Label htmlFor={name} className="mb-2.5 text-sm font-medium">
-//         {label}
-//         {optional && <span className="text-muted-foreground"> (Optional)</span>}
-//       </Label>
-//       <Select value={value} onValueChange={onChange}>
-//         <SelectTrigger id={name}>
-//           <SelectValue placeholder={placeholder} />
-//         </SelectTrigger>
-//         <SelectContent>{children}</SelectContent>
-//       </Select>
-//     </div>
-//   );
-// }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function AvatarGroup({ teamMembers }: { teamMembers?: any[] | null }) {
