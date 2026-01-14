@@ -33,7 +33,10 @@ const formSchema = z.object({
     .min(2, {message: 'Name must be at least 2 characters.',})
     .max(20, { message: 'Name cannot be greater than 20 characters.' }),
   email: z.email(),
-  phone: z.string().min(10).max(10),
+  phone: z
+    .string()
+    .min(10, { message: 'Phone number must be at least 10 digits.' })
+    .max(10, { message: 'Phone number cannot be longer than 10 digits.' }),
   message: z.string().min(10, { message: 'Message should be at least 10 characters' }),
   referral: z.string().optional(),
 });
