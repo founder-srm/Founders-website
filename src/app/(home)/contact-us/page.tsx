@@ -1,6 +1,6 @@
 import type { Key } from 'react';
 import { AvatarGroup, BookDemoForm } from '@/components/contact-form';
-import {  sanityFetch } from '@/sanity/lib/live';
+import { sanityFetch } from '@/sanity/lib/live';
 import { CONTACT_US_QUERY } from '@/sanity/lib/queries';
 
 export const revalidate = 3600; // revalidate every hour
@@ -57,7 +57,6 @@ export default async function ContactUs() {
             </div>
           </div>
         </section>
-        
       </main>
     )
   );
