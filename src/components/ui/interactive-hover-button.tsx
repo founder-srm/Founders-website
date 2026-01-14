@@ -1,8 +1,6 @@
-import { ArrowRight } from 'lucide-react';
-import Link from 'next/link';
 import React from 'react';
+import Link from 'next/link';
 import { cn } from '@/lib/utils';
-import { Button } from './button';
 
 interface InteractiveHoverButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -11,30 +9,16 @@ interface InteractiveHoverButtonProps
 }
 
 const InteractiveHoverButton = React.forwardRef<
-  HTMLButtonElement,
+  HTMLAnchorElement,
   InteractiveHoverButtonProps
->(({ text = 'Button', link, className, ...props }, ref) => {
+>(({ text = 'Button', link, className }, ref) => {
   return (
-    <Button
-      ref={ref}
-      className={cn(
-        'group relative w-32 cursor-pointer overflow-hidden rounded-md border bg-background p-4 text-center font-semibold',
-        className
-      )}
-      {...props}
-      asChild
-    >
-      <Link href={link}>
-        <span className="inline-block translate-x-1 transition-all duration-300 group-hover:translate-x-12 text-secondary-foreground group-hover:opacity-0">
-          {text}
-        </span>
-        <div className="absolute top-0 z-10 flex h-full w-full translate-x-12 items-center justify-center gap-2 text-primary-foreground opacity-0 transition-all duration-300 group-hover:-translate-x-1 group-hover:opacity-100">
-          <span>{text}</span>
-          <ArrowRight />
-        </div>
-        <div className="absolute left-[10%] top-[40%] h-2 w-2 scale-[1] rounded-lg bg-secondary transition-all duration-300 group-hover:left-[0%] group-hover:top-[0%] group-hover:h-full group-hover:w-full group-hover:scale-[1.8] group-hover:bg-primary" />
-      </Link>
-    </Button>
+    <Link href={link} ref={ref} className={cn("flex justify-center gap-2 items-center mx-auto shadow-xl text-sm bg-background backdrop-blur-md lg:font-semibold isolation-auto border-border before:absolute before:w-full before:transition-all before:duration-500 before:hover:w-full before:-left-full before:hover:left-0 before:rounded-lg before:bg-secondary text-secondary-foreground before:-z-10 before:aspect-square before:hover:scale-150 before:hover:duration-500 relative z-10 pr-1 py-1 overflow-hidden border-2 rounded-lg group", className)}>
+      <span className="ml-4">{text}</span>
+      <svg className="w-8 h-8 justify-end group-hover:rotate-45 group-hover:bg-secondary-foreground group-hover:rounded-full text-foreground transition-all duration-300 rounded-sm p-2 rotate-90" viewBox="0 0 16 19" xmlns="http://www.w3.org/2000/svg" aria-label="arrow image" role="img">
+        <path d="M7 18C7 18.5523 7.44772 19 8 19C8.55228 19 9 18.5523 9 18H7ZM8.70711 0.292893C8.31658 -0.0976311 7.68342 -0.0976311 7.29289 0.292893L0.928932 6.65685C0.538408 7.04738 0.538408 7.68054 0.928932 8.07107C1.31946 8.46159 1.95262 8.46159 2.34315 8.07107L8 2.41421L13.6569 8.07107C14.0474 8.46159 14.6805 8.46159 15.0711 8.07107C15.4616 7.68054 15.4616 7.04738 15.0711 6.65685L8.70711 0.292893ZM9 18L9 1H7L7 18H9Z" className="fill-primary group-hover:fill-secondary" />
+      </svg>
+    </Link>
   );
 });
 
