@@ -26,7 +26,7 @@ export default async function Hero() {
               <p className="mb-12 max-w-[70%] text-xl font-normal text-muted-foreground">
                 {data.subtitle}
               </p>
-              <div className="flex w-full justify-start md:justify-start">
+              <div className="">
                 <InteractiveHoverButton
                   link={link}
                   text={data.buttonText || ''}

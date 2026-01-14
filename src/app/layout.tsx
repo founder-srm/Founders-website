@@ -102,9 +102,9 @@ export const metadata: Metadata = {
     site: '@foundersclubsrm',
   },
   icons: {
-    icon: [{ url: '/favicon.ico' }, { url: '/icon.ico' }],
-    apple: [{ url: '/apple-icon.png', sizes: '180x180', type: 'image/png' }],
-    shortcut: ['/favicon.ico'],
+    icon: '/favicon_1.svg',
+    apple: '/favicon_1.svg',
+    shortcut: '/favicon_1.svg',
   },
   manifest: '/site.webmanifest',
   verification: {

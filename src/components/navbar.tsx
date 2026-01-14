@@ -216,28 +216,30 @@ const Navbar1 = () => {
         <div className="flex items-center gap-6">
           <Link
             href={"/"}
-            className="flex items-center gap-2 backdrop-blur-sm flex-nowrap text-balance leading-none tracking-tighter"
+            className="flex items-center backdrop-blur-sm flex-nowrap text-balance leading-none tracking-tighter"
           >
             <Image
               src="/FC-logo-short.png"
               alt="logo"
               width={640}
               height={640}
-              className="w-8 h-auto"
+              className="w-11 h-auto -mr-1"
               priority
             />
-            <LineShadowText
-              className="italic text-2xl font-bold"
-              shadowColor={"gray"}
-            >
-              Founders
-            </LineShadowText>
-            <LineShadowText
-              className="italic text-2xl font-bold"
-              shadowColor={"gray"}
-            >
-              Club
-            </LineShadowText>
+            <div className="flex items-center gap-2">
+              <LineShadowText
+                className="italic text-2xl font-bold"
+                shadowColor={"gray"}
+              >
+                Founders
+              </LineShadowText>
+              <LineShadowText
+                className="italic text-2xl font-bold"
+                shadowColor={"gray"}
+              >
+                Club
+              </LineShadowText>
+            </div>
             {/* <span className="text-xl font-bold">Founders Club</span> */}
           </Link>
           <div className="flex items-center">
@@ -380,7 +382,7 @@ const Navbar1 = () => {
               alt="logo"
               width={640}
               height={640}
-              className="w-8 h-auto"
+              className="w-11 h-auto -mr-3"
               priority
             />
             <span className="text-xl font-bold">Founders Club</span>
