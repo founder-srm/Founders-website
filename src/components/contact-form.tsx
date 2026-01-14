@@ -1,26 +1,46 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import Link from "next/link";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { useToast } from '@/hooks/use-toast';
-import { urlFor } from '@/sanity/lib/image';
-import { createClient } from '@/utils/supabase/client';
-import { Avatar, AvatarImage } from './ui/avatar';
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { useToast } from "@/hooks/use-toast";
+import { urlFor } from "@/sanity/lib/image";
+import { createClient } from "@/utils/supabase/client";
+import { Avatar, AvatarImage } from "./ui/avatar";
 
 interface Country {
   name: {
     common: string;
   };
+}
+
+interface FormValues {
+  fullName: string;
+  company: string;
+  phone: string;
+  email: string;
+  message: string;
+  country: string;
+  companySize: string;
+  referral: string;
 }
 
 export function BookDemoForm({
@@ -32,157 +52,250 @@ export function BookDemoForm({
   submitButtonText: string | null;
   thankYouMessage: string | null;
 }) {
-  const [formData, setFormData] = useState({
-    fullName: '',
-    company: '',
-    phone: '',
-    email: '',
-    country: '',
-    companySize: '',
-    referral: '',
+  const form = useForm<FormValues>({
+    defaultValues: {
+      fullName: "",
+      company: "",
+      phone: "",
+      email: "",
+      message: "",
+      country: "",
+      companySize: "",
+      referral: "",
+    },
+    resolver: async (values) => {
+      const errors: Record<string, { type: string; message: string }> = {};
+
+      if (!values.fullName || !values.fullName.trim()) {
+        errors.fullName = {
+          type: "required",
+          message: "Full name is required.",
+        };
+      }
+
+      if (!values.email || !values.email.trim()) {
+        errors.email = {
+          type: "required",
+          message: "Email is required.",
+        };
+      } else {
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(values.email)) {
+          errors.email = {
+            type: "pattern",
+            message: "Please enter a valid email address.",
+          };
+        }
+      }
+
+      if (!values.phone || !values.phone.trim()) {
+        errors.phone = {
+          type: "required",
+          message: "Phone number is required.",
+        };
+      } else {
+        const phonePattern = /^\+?\d+$/;
+        if (!phonePattern.test(values.phone)) {
+          errors.phone = {
+            type: "pattern",
+            message: "Phone number should contain only digits and an optional leading +.",
+          };
+        }
+      }
+
+      if (!values.message || !values.message.trim()) {
+        errors.message = {
+          type: "required",
+          message: "Message is required.",
+        };
+      } else if (values.message.trim().length < 10) {
+        errors.message = {
+          type: "minLength",
+          message: "Message should be at least 10 characters long.",
+        };
+      }
+
+      if (!values.country || !values.country.trim()) {
+        errors.country = {
+          type: "required",
+          message: "Country is required.",
+        };
+      }
+
+      if (!values.companySize || !values.companySize.trim()) {
+        errors.companySize = {
+          type: "required",
+          message: "Company size is required.",
+        };
+      }
+
+      if (!values.referral || !values.referral.trim()) {
+        errors.referral = {
+          type: "required",
+          message: "Please let us know how you heard about us.",
+        };
+      }
+
+      if (Object.keys(errors).length > 0) {
+        return {
+          values: {},
+          errors,
+        };
+      }
+
+      return {
+        values,
+        errors: {},
+      };
+    },
   });
 
   const supabase = createClient();
-
-  const [countries, setCountries] = useState<string[]>([]);
   const { toast } = useToast();
 
   useEffect(() => {
     const fetchCountries = async () => {
       try {
-        const response = await fetch('https://restcountries.com/v3.1/all');
+        const response = await fetch("https://restcountries.com/v3.1/all");
         const data = (await response.json()) as Country[];
-        const countryNames = data.map(country => country.name.common).sort();
-        setCountries(countryNames);
+        const countryNames = data.map((country) => country.name.common).sort();
       } catch (error) {
-        console.error('Error fetching countries:', error);
+        console.error("Error fetching countries:", error);
       }
     };
 
     fetchCountries();
   }, []);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  const onSubmit = async (data: FormValues) => {
+    const trimmedPhone = data.phone.trim();
 
-  const handleSelectChange = (name: string) => (value: string) => {
-    setFormData({ ...formData, [name]: value });
-  };
+    // Basic numeric validation for phone field to avoid inserting NaN into the database
+    if (!trimmedPhone || !/^\d+$/.test(trimmedPhone)) {
+      alert("Please enter a valid numeric phone number.");
+      return;
+    }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const { data, error } = await supabase.from('contactentries').insert([
-      {
-        name: formData.fullName,
-        company: formData.company,
-        phone: Number.parseInt(formData.phone),
-        email: formData.email,
-        country: formData.country,
-        company_size: formData.companySize,
-        referral: formData.referral,
-      },
-    ]);
+    const parsedPhone = Number.parseInt(trimmedPhone, 10);
+
+    const { data: result, error } = await supabase
+      .from("contactentries")
+      .insert([
+        {
+          name: data.fullName,
+          company: data.company,
+          phone: parsedPhone,
+          email: data.email,
+          description: data.message,
+          referral: data.referral,
+        },
+      ]);
     if (error) {
-      console.error('Error inserting data:', error);
+      console.error("Error inserting data:", error);
       alert(
         `There was an error! Details: "${error.message || error} That's all we know!`
       );
     } else {
-      console.log('Data inserted successfully:', data);
+      console.log("Data inserted successfully:", result);
       toast({
-        title: 'Form submitted!',
+        title: "Form submitted!",
         description: thankYouMessage,
       });
     }
 
-    // After submition the data fields should be empty again :)
-    setFormData({
-      fullName: '',
-      company: '',
-      phone: '',
-      email: '',
-      country: '',
-      companySize: '',
-      referral: '',
-    });
+    form.reset();
   };
 
   return (
-    <form onSubmit={handleSubmit} className="z-10 space-y-6 w-full">
-      <div className="w-full space-y-6 rounded-xl border border-border bg-background px-6 py-10 shadow-sm">
-        <FormField
-          label="Full name"
-          name="fullName"
-          value={formData.fullName}
-          onChange={handleInputChange}
-          placeholder="Joe Average"
-        />
-        <FormField
-          label="Company"
-          name="company"
-          value={formData.company}
-          onChange={handleInputChange}
-          placeholder="Acme Corp"
-        />
-        <FormField
-          label="Phone number"
-          name="phone"
-          value={formData.phone}
-          onChange={handleInputChange}
-          placeholder="12 3456 7890"
-        />
-        <FormField
-          label="Email (business)"
-          name="email"
-          value={formData.email}
-          onChange={handleInputChange}
-          placeholder="name@company.com"
-        />
-
-        <FormSelect
-          label="Country"
-          name="country"
-          value={formData.country}
-          onChange={handleSelectChange('country')}
-          placeholder="Select country"
-        >
-          <div style={{ maxHeight: '200px', overflowY: 'auto' }}>
-            {countries.map(country => (
-              <SelectItem key={country} value={country}>
-                {country}
-              </SelectItem>
-            ))}
-          </div>
-        </FormSelect>
-
-        <FormSelect
-          label="Company size"
-          name="companySize"
-          value={formData.companySize}
-          onChange={handleSelectChange('companySize')}
-          placeholder="Select"
-        >
-          <SelectItem value="1-10">1-10</SelectItem>
-          <SelectItem value="11-50">11-50</SelectItem>
-          <SelectItem value="51-200">51-200</SelectItem>
-          <SelectItem value="200+">200+</SelectItem>
-        </FormSelect>
-
-        <FormSelect
-          label="How did you hear about us?"
-          name="referral"
-          value={formData.referral}
-          onChange={handleSelectChange('referral')}
-          placeholder="Select"
-          optional
-        >
-          <SelectItem value="search">Web Search</SelectItem>
-          <SelectItem value="team">Founders Club Team</SelectItem>
-          <SelectItem value="socialmedia">Social Media</SelectItem>
-          <SelectItem value="we cool">Someone told you we are cool!</SelectItem>
-          {/* Add more options as needed */}
-        </FormSelect>
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="z-10 space-y-6 w-full"
+      >
+        <div className="w-full space-y-6 rounded-xl border border-border bg-background px-6 py-10 shadow-sm">
+          <FormField
+            control={form.control}
+            name="fullName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Full Name</FormLabel>
+                <FormControl>
+                  <Input placeholder="John Doe" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="phone"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Phone Number</FormLabel>
+                <FormControl>
+                  <Input placeholder="12345 67890" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email Address</FormLabel>
+                <FormControl>
+                  <Input placeholder="someone@example.com" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="message"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Message</FormLabel>
+                <FormControl>
+                  <Textarea placeholder="Your message" rows={5} {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="referral"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  How did you hear about us?
+                  <span className="text-muted-foreground"> (Optional)</span>
+                </FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="search">Web Search</SelectItem>
+                    <SelectItem value="team">Founders Club Team</SelectItem>
+                    <SelectItem value="socialmedia">Social Media</SelectItem>
+                    <SelectItem value="we-cool">
+                      Someone told you we are cool!
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
         <div className="flex w-full flex-col justify-end space-y-3 pt-2">
           <Button type="submit">{submitButtonText}</Button>
@@ -198,70 +311,8 @@ export function BookDemoForm({
             .
           </div>
         </div>
-      </div>
-    </form>
-  );
-}
-
-function FormField({
-  label,
-  name,
-  value,
-  onChange,
-  placeholder,
-}: {
-  label: string;
-  name: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  placeholder: string;
-}) {
-  return (
-    <div>
-      <Label htmlFor={name} className="mb-2.5 text-sm font-medium">
-        {label}
-      </Label>
-      <Input
-        id={name}
-        name={name}
-        value={value}
-        onChange={onChange}
-        placeholder={placeholder}
-      />
-    </div>
-  );
-}
-
-function FormSelect({
-  label,
-  name,
-  value,
-  onChange,
-  placeholder,
-  children,
-  optional = false,
-}: {
-  label: string;
-  name: string;
-  value: string;
-  onChange: (value: string) => void;
-  placeholder: string;
-  children: React.ReactNode;
-  optional?: boolean;
-}) {
-  return (
-    <div>
-      <Label htmlFor={name} className="mb-2.5 text-sm font-medium">
-        {label}
-        {optional && <span className="text-muted-foreground"> (Optional)</span>}
-      </Label>
-      <Select value={value} onValueChange={onChange}>
-        <SelectTrigger id={name}>
-          <SelectValue placeholder={placeholder} />
-        </SelectTrigger>
-        <SelectContent>{children}</SelectContent>
-      </Select>
-    </div>
+      </form>
+    </Form>
   );
 }
 
@@ -299,17 +350,17 @@ export function AvatarGroup({ teamMembers }: { teamMembers?: any[] | null }) {
       {teamMembers.map((member, index) => (
         <Avatar
           key={member._id}
-          className={`size-11 ${index === 0 ? '-ml-0' : '-ml-4'}`}
+          className={`size-11 ${index === 0 ? "-ml-0" : "-ml-4"}`}
         >
           <AvatarImage
             src={
               member.image ? urlFor(member.image).width(100).url() : undefined
             }
-            alt={`${member.name || 'Team member'}`}
+            alt={`${member.name || "Team member"}`}
           />
           {!member.image && (
             <div className="bg-primary text-primary-foreground flex h-full w-full items-center justify-center">
-              {member.name?.charAt(0) || '?'}
+              {member.name?.charAt(0) || "?"}
             </div>
           )}
         </Avatar>

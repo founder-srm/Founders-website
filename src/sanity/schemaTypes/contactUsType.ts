@@ -49,6 +49,31 @@ export const contactUsType = defineType({
       validation: Rule => Rule.required(),
     }),
     defineField({
+      name: 'referralOptions',
+      title: 'Referral Options',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            defineField({
+              name: 'value',
+              type: 'string',
+              title: 'Value',
+              validation: Rule => Rule.required(),
+            }),
+            defineField({
+              name: 'label',
+              type: 'string',
+              title: 'Label',
+              validation: Rule => Rule.required(),
+            }),
+          ],
+        },
+      ],
+      description: 'Options for "How did you hear about us?" dropdown',
+    }),
+    defineField({
       name: 'teamMembers',
       title: 'Team Members for Avatar Group',
       type: 'array',
