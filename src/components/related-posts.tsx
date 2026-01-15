@@ -1,11 +1,11 @@
-import { ArrowUpRight } from 'lucide-react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { urlFor } from '@/sanity/lib/image';
-import { sanityFetch } from '@/sanity/lib/live';
-import { ALL_BLOG_POSTS_QUERY } from '@/sanity/lib/queries';
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
-import { Button } from './ui/button';
+import { ArrowUpRight } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { urlFor } from "@/sanity/lib/image";
+import { sanityFetch } from "@/sanity/lib/live";
+import { ALL_BLOG_POSTS_QUERY } from "@/sanity/lib/queries";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { Button } from "./ui/button";
 
 type BlogPost = {
   _id: string;
@@ -52,7 +52,7 @@ export default async function RelatedPosts() {
 
         {/* Posts Grid */}
         <div className="grid gap-x-4 gap-y-8 md:grid-cols-2 lg:gap-x-6 lg:gap-y-12">
-          {posts.map(post => (
+          {posts.map((post) => (
             <BlogPostCard key={post._id} post={post} />
           ))}
         </div>
@@ -68,52 +68,63 @@ export default async function RelatedPosts() {
 
 function BlogPostCard({ post }: { post: BlogPost }) {
   return (
-    <Link href={`/blog/posts/${post.slug}`} className="group flex flex-col">
-      <div className="mb-4 flex overflow-clip rounded-xl md:mb-5">
+    <Link
+      href={`/blog/posts/${post.slug}`}
+      className="group flex flex-col overflow-hidden rounded-xl border border-border bg-card transition-all duration-300 hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10 hover:-translate-y-1"
+    >
+      <div className="overflow-clip">
         <div className="transition duration-300 group-hover:scale-105">
           <Image
-            src={urlFor(post.mainImage || '/placeholder.svg').url()}
-            alt={post.mainImage?.alt || post.title || ''}
+            src={urlFor(post.mainImage || "/placeholder.svg").url()}
+            alt={post.mainImage?.alt || post.title || ""}
             width={600}
             height={400}
             className="aspect-[3/2] h-full w-full object-cover object-center"
           />
         </div>
       </div>
-      <div className="mb-2 flex items-start gap-4 pt-4 md:mb-3 md:pt-4 lg:pt-4">
-        <span className="line-clamp-3 flex-1 break-words text-lg font-medium md:text-2xl lg:text-2xl xl:text-3xl">
-          {post.title}
-        </span>
-        <ArrowUpRight className="size-6 shrink-0" />
-      </div>
-      <div className="mb-4 line-clamp-2 text-sm text-muted-foreground md:mb-5 md:text-base">
-        {post.summary}
-      </div>
-      <div className="flex items-center gap-2">
-        <span className="relative flex shrink-0 overflow-hidden rounded-full size-12">
-          <Avatar>
-            <AvatarImage
-              width={48}
-              height={48}
-              className="aspect-square h-full w-full object-cover"
-              src={post.author?.image ? urlFor(post.author.image || '/placeholder.svg').url() : '/placeholder.svg'}
-              alt={post.author?.name || 'Author'}
-            />
-            <AvatarFallback>{post.author?.name?.charAt(0)}</AvatarFallback>
-          </Avatar>
-        </span>
-        <div className="flex flex-col gap-px">
-          <span className="text-xs font-medium">{post.author?.name}</span>
-          <span className="text-xs text-muted-foreground">
-            {post.publishedAt ? new Date(post.publishedAt).toLocaleDateString() : 'No date'}
+      <div className="flex flex-1 flex-col p-5 md:p-6">
+        <div className="mb-2 flex items-start gap-4 md:mb-3">
+          <span className="line-clamp-3 flex-1 break-words text-lg font-medium md:text-2xl lg:text-2xl xl:text-3xl">
+            {post.title}
           </span>
+          <ArrowUpRight className="size-6 shrink-0 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
+        </div>
+        <div className="mb-4 line-clamp-2 text-sm text-muted-foreground md:mb-5 md:text-base">
+          {post.summary}
+        </div>
+        <div className="mt-auto flex items-center gap-2">
+          <span className="relative flex shrink-0 overflow-hidden rounded-full size-12">
+            <Avatar>
+              <AvatarImage
+                width={48}
+                height={48}
+                className="aspect-square h-full w-full object-cover"
+                src={
+                  post.author?.image
+                    ? urlFor(post.author.image || "/placeholder.svg").url()
+                    : "/placeholder.svg"
+                }
+                alt={post.author?.name || "Author"}
+              />
+              <AvatarFallback>{post.author?.name?.charAt(0)}</AvatarFallback>
+            </Avatar>
+          </span>
+          <div className="flex flex-col gap-px">
+            <span className="text-xs font-medium">{post.author?.name}</span>
+            <span className="text-xs text-muted-foreground">
+              {post.publishedAt
+                ? new Date(post.publishedAt).toLocaleDateString()
+                : "No date"}
+            </span>
+          </div>
         </div>
       </div>
     </Link>
   );
 }
 
-function ViewAllPostsButton({ className = '' }) {
+function ViewAllPostsButton({ className = "" }) {
   return (
     <Button className={className} asChild>
       <Link href="/blog">View all posts</Link>
