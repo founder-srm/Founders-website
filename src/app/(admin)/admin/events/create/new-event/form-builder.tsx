@@ -185,7 +185,7 @@ function CheckboxItemsEditor({
           onChange={e => setNewLabel(e.target.value)}
           className="flex-1"
         />
-        <Button onClick={addItem} disabled={!newId || !newLabel} size="sm">
+        <Button type="button" onClick={addItem} disabled={!newId || !newLabel} size="sm">
           Add
         </Button>
       </div>
@@ -237,7 +237,7 @@ function OptionsEditor({
           onChange={e => setNewOption(e.target.value)}
           onKeyDown={e => e.key === 'Enter' && (e.preventDefault(), addOption())}
         />
-        <Button onClick={addOption} disabled={!newOption} size="sm">
+        <Button type="button" onClick={addOption} disabled={!newOption} size="sm">
           Add
         </Button>
       </div>
@@ -723,6 +723,7 @@ export function FormBuilder({
                 </SelectContent>
               </Select>
               <Button
+                type="button"
                 onClick={() => selectedType && addField(selectedType)}
                 disabled={!selectedType}
               >

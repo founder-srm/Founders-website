@@ -32,11 +32,13 @@ export default function TypeformPage() {
       const supabase = createClient();
       
       // Check if user is a club member (has club account)
-      const { data: profileData } = await supabase
-        .from('profiles')
-        .select('is_club_member')
-        .eq('id', user.id)
-        .single();
+      const { data: clubMemberData } = await supabase
+        .from('clubuseraccount')
+        .select('id, is_verified')
+        .eq('user_id', user.id)
+        .maybeSingle();
+      
+      const isClubMember = clubMemberData?.is_verified === true;
       
       const { data: eventData, error: eventError } = await supabase
         .from('events')
@@ -50,8 +52,8 @@ export default function TypeformPage() {
         return;
       }
 
-      // Check if event is gated and user is not a club member
-      if (eventData.is_gated && !profileData?.is_club_member) {
+      // Check if event is gated and user is not a verified club member
+      if (eventData.is_gated && !isClubMember) {
         setError('gated');
         setLoading(false);
         return;
@@ -63,9 +65,8 @@ export default function TypeformPage() {
         .select('*')
         .eq('event_id', eventData.id)
         .eq('application_id', user.id)
-        .single();
+        .maybeSingle();
 
-      console.log('registrationData', registrationData);
       if (registrationData) {
         Router.push('/dashboard/account');
         return;

@@ -40,7 +40,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { useUser } from '@/stores/session';
 import { createClient } from '@/utils/supabase/client';
-import type { eventsInsertType, TypeFormField } from '../../../../../../../schema.zod';
+import type { eventsInsertType, TypeFormField, JsonObject } from '../../../../../../../schema.zod';
 
 function generateZodSchema(fields: TypeFormField[]) {
   const schemaObj: Record<string, any> = {};
@@ -316,9 +316,9 @@ export function TypeformMultiStep({
         event_title: eventData.title,
         application_id: userId,
         is_approved: (eventData as any).always_approve ? 'ACCEPTED' : 'SUBMITTED',
-        details: data as Record<string, unknown>,
+        details: data as JsonObject,
         // Mark as team entry for gated events
-        ...(isGatedEvent && { team_entry: true }),
+        ...(isGatedEvent && { is_team_entry: true }),
       });
 
       if (!response?.ticket_id) {

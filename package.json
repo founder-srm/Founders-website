@@ -85,6 +85,7 @@
     "framer": "2.4.1",
     "framer-motion": "11.15.0",
     "groq": "^3.68.3",
+    "groq-sdk": "^0.37.0",
     "input-otp": "^1.4.2",
     "lucide-react": "^0.562.0",
     "matter-js": "^0.20.0",

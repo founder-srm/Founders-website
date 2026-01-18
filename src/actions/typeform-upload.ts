@@ -2,7 +2,7 @@ import type { Event } from '@/types/events';
 import { createClient } from '@/utils/supabase/client';
 import { eventsInsertSchema, type typeformInsertType } from '../../schema.zod';
 
-export async function createEvent(eventData: Event & { is_gated?: boolean; always_approve?: boolean }) {
+export async function createEvent(eventData: Event & { is_gated?: boolean; always_approve?: boolean; more_info_text?: string | null }) {
   const supabase = createClient();
   const parseResult = eventsInsertSchema.safeParse(eventData);
   if (!parseResult.success) {
@@ -21,8 +21,10 @@ export async function createEvent(eventData: Event & { is_gated?: boolean; alway
       tags: parseResult.data.tags,
       event_type: parseResult.data.event_type,
       is_featured: parseResult.data.is_featured,
-      is_gated: parseResult.data.is_gated,
+      is_gated: parseResult.data.is_gated ?? false,
+      always_approve: parseResult.data.always_approve ?? false,
       more_info: parseResult.data.more_info,
+      more_info_text: parseResult.data.more_info_text,
       rules: parseResult.data.rules,
       slug: parseResult.data.slug,
       typeform_config: parseResult.data.typeform_config,
@@ -35,14 +37,26 @@ export async function createEvent(eventData: Event & { is_gated?: boolean; alway
 }
 
 export async function sendEventRegistration(
-  eventData: typeformInsertType & { team_entry?: boolean }
+  eventData: typeformInsertType
 ) {
   const supabase = createClient();
 
   // Single write-first attempt. Only read if we hit a unique violation.
   const { data, error } = await supabase
     .from('eventsregistrations')
-    .insert(eventData)
+    .insert({
+      application_id: eventData.application_id,
+      attendance: eventData.attendance,
+      created_at: eventData.created_at,
+      details: eventData.details,
+      event_id: eventData.event_id,
+      event_title: eventData.event_title,
+      id: eventData.id,
+      is_approved: eventData.is_approved,
+      is_team_entry: eventData.is_team_entry,
+      registration_email: eventData.registration_email,
+      ticket_id: eventData.ticket_id,
+    })
     .select()
     .single();
 
@@ -62,7 +76,7 @@ export async function sendEventRegistration(
           .from('eventsregistrations')
           .select('*')
           .eq('event_id', eventData.event_id!)
-          .eq('registration_email', eventData.registration_email)
+          .eq('registration_email', eventData.registration_email!)
           .maybeSingle();
 
     const { data: existing, error: fetchErr } = await query;
