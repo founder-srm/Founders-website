@@ -1,6 +1,6 @@
 'use client';
 import { formatInTimeZone } from 'date-fns-tz';
-import { Info, Radio } from 'lucide-react';
+import { Info, Lock, Radio } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { z } from 'zod';
@@ -21,7 +21,7 @@ export default function TypeformPage() {
   const params = useParams<{ slug: string }>();
   const Router = useRouter();
   const user = useUser();
-  const [event, setEvent] = useState<eventsInsertType | null>(null);
+  const [event, setEvent] = useState<(eventsInsertType & { is_gated?: boolean }) | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<null | string>(null);
 
@@ -30,6 +30,14 @@ export default function TypeformPage() {
       if (!user?.id) return;
 
       const supabase = createClient();
+      
+      // Check if user is a club member (has club account)
+      const { data: profileData } = await supabase
+        .from('profiles')
+        .select('is_club_member')
+        .eq('id', user.id)
+        .single();
+      
       const { data: eventData, error: eventError } = await supabase
         .from('events')
         .select('*')
@@ -38,6 +46,13 @@ export default function TypeformPage() {
 
       if (eventError) {
         setError(eventError.message);
+        setLoading(false);
+        return;
+      }
+
+      // Check if event is gated and user is not a club member
+      if (eventData.is_gated && !profileData?.is_club_member) {
+        setError('gated');
         setLoading(false);
         return;
       }
@@ -63,8 +78,45 @@ export default function TypeformPage() {
     fetchEvent();
   }, [params.slug, Router, user?.id]);
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+  if (loading) return <div className="h-screen w-full flex items-center justify-center">Loading...</div>;
+  
+  // Handle gated event access denied
+  if (error === 'gated') {
+    return (
+      <main className="h-screen w-full flex items-center justify-center">
+        <div className="z-[100] max-w-[400px] rounded-lg border border-border bg-accent p-4 shadow-lg shadow-black/5">
+          <div className="flex gap-2">
+            <div className="flex grow gap-3">
+              <Lock
+                className="mt-0.5 shrink-0 text-amber-500"
+                size={16}
+                strokeWidth={2}
+                aria-hidden="true"
+              />
+              <div className="flex grow flex-col gap-3">
+                <div className="space-y-1">
+                  <p className="text-sm font-medium">
+                    Club Members Only Event
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    This event is exclusively for club members. Please contact an admin
+                    if you believe you should have access.
+                  </p>
+                </div>
+                <div className="flex gap-2">
+                  <Button size="sm" onClick={() => Router.push('/upcoming')}>
+                    Browse Other Events
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    );
+  }
+  
+  if (error) return <div className="h-screen w-full flex items-center justify-center text-destructive">Error: {error}</div>;
 
   const parseResult = typeformSchema.safeParse(event?.typeform_config);
   if (!parseResult.success) {

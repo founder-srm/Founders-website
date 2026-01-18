@@ -2,7 +2,7 @@
 'use client';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
-import { CalendarIcon } from 'lucide-react';
+import { CalendarIcon, ExternalLink, Upload } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -39,35 +39,8 @@ import { Slider } from '@/components/ui/slider';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { useUser } from '@/stores/session';
-import type { Json } from '../../../../../../../database.types';
-import type { eventsInsertType } from '../../../../../../../schema.zod';
-
-type TypeFormField = {
-  fieldType:
-    | 'text'
-    | 'radio'
-    | 'select'
-    | 'slider'
-    | 'checkbox'
-    | 'date'
-    | 'textarea';
-  label: string;
-  name: string;
-  description?: string;
-  required?: boolean;
-  options?: string[];
-  min?: number;
-  max?: number;
-  validation?: {
-    min?: number;
-    max?: number;
-    minLength?: number;
-    maxLength?: number;
-    pattern?: string;
-  };
-  checkboxType?: 'single' | 'multiple';
-  items?: Array<{ id: string; label: string }>;
-};
+import { createClient } from '@/utils/supabase/client';
+import type { eventsInsertType, TypeFormField } from '../../../../../../../schema.zod';
 
 function generateZodSchema(fields: TypeFormField[]) {
   const schemaObj: Record<string, any> = {};
@@ -126,16 +99,156 @@ function generateZodSchema(fields: TypeFormField[]) {
           fieldSchema = z.union([z.string().length(0), fieldSchema]);
         }
         break;
+      case 'url':
+        fieldSchema = z.string().url('Please enter a valid URL');
+        if (!field.required) {
+          fieldSchema = z.union([z.string().length(0), fieldSchema]);
+        }
+        break;
+      case 'file':
+        // File uploads store the URL after upload
+        fieldSchema = z.string();
+        if (!field.required) {
+          fieldSchema = fieldSchema.optional();
+        }
+        break;
+      case 'redirect':
+        // Redirect fields don't collect data, skip validation
+        fieldSchema = z.string().optional();
+        break;
     }
 
-    if (field.required) {
+    if (field.required && field.fieldType !== 'redirect') {
       schemaObj[field.name] = fieldSchema;
     } else {
-      schemaObj[field.name] = fieldSchema.optional();
+      schemaObj[field.name] = fieldSchema?.optional?.() ?? fieldSchema;
     }
   });
 
   return z.object(schemaObj);
+}
+
+// File Upload Component for registration forms
+function FileUploadField({
+  eventSlug,
+  fieldName,
+  accept,
+  maxSizeMB,
+  value,
+  onChange,
+  required,
+}: {
+  eventSlug: string;
+  fieldName: string;
+  accept?: string;
+  maxSizeMB?: number;
+  value?: string;
+  onChange: (url: string) => void;
+  required?: boolean;
+}) {
+  const [isUploading, setIsUploading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const { toast } = useToast();
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file size
+    const maxSize = (maxSizeMB || 5) * 1024 * 1024;
+    if (file.size > maxSize) {
+      setError(`File size must be less than ${maxSizeMB || 5}MB`);
+      return;
+    }
+
+    setIsUploading(true);
+    setError(null);
+
+    try {
+      const supabase = createClient();
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+      const filePath = `${eventSlug}/registrations/${fieldName}/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('event-uploads')
+        .upload(filePath, file, {
+          contentType: file.type,
+          upsert: false,
+        });
+
+      if (uploadError) throw uploadError;
+
+      const { data: urlData } = supabase.storage
+        .from('event-uploads')
+        .getPublicUrl(filePath);
+
+      onChange(urlData.publicUrl);
+      toast({
+        title: 'File uploaded',
+        description: 'Your file has been uploaded successfully.',
+      });
+    } catch (err) {
+      console.error('Upload error:', err);
+      setError('Failed to upload file. Please try again.');
+      toast({
+        title: 'Upload failed',
+        description: 'Please try again.',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  return (
+    <div className="space-y-2">
+      <div className="relative border-2 border-dashed rounded-lg p-6 text-center">
+        {value ? (
+          <div className="space-y-2">
+            <p className="text-sm text-green-600">File uploaded successfully!</p>
+            <a
+              href={value}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm text-primary hover:underline"
+            >
+              View uploaded file
+            </a>
+            <div>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => onChange('')}
+              >
+                Remove & Upload New
+              </Button>
+            </div>
+          </div>
+        ) : (
+          <label className="cursor-pointer">
+            <Upload className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
+            <p className="text-sm text-muted-foreground mb-2">
+              {isUploading ? 'Uploading...' : 'Click to upload or drag and drop'}
+            </p>
+            <p className="text-xs text-muted-foreground">
+              Max {maxSizeMB || 5}MB • {accept || 'All files'}
+            </p>
+            <input
+              type="file"
+              accept={accept}
+              onChange={handleFileChange}
+              disabled={isUploading}
+              required={required && !value}
+              className="sr-only"
+            />
+          </label>
+        )}
+      </div>
+      {error && <p className="text-sm text-destructive">{error}</p>}
+    </div>
+  );
 }
 
 export function TypeformMultiStep({
@@ -171,7 +284,10 @@ export function TypeformMultiStep({
   }, [step]);
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
-    if (!user?.email) {
+    const userEmail = user?.email;
+    const userId = user?.id;
+    
+    if (!userEmail || !userId) {
       toast({
         title: 'Error',
         description: 'User email is required for registration',
@@ -181,13 +297,28 @@ export function TypeformMultiStep({
     }
 
     try {
+      // Check if this is a gated event (team entry)
+      const isGatedEvent = (eventData as any).is_gated === true;
+      const eventId = (eventData as any).id as string;
+      
+      if (!eventId) {
+        toast({
+          title: 'Event error',
+          description: 'Event ID not found.',
+          variant: 'destructive',
+        });
+        return;
+      }
+      
       const response = await sendEventRegistration({
-        registration_email: user.email,
-        event_id: eventData.id,
+        registration_email: userEmail,
+        event_id: eventId,
         event_title: eventData.title,
-        application_id: user?.id,
-        is_approved: eventData.always_approve ? 'ACCEPTED' : 'SUBMITTED',
-        details: data as Json,
+        application_id: userId,
+        is_approved: (eventData as any).always_approve ? 'ACCEPTED' : 'SUBMITTED',
+        details: data as Record<string, unknown>,
+        // Mark as team entry for gated events
+        ...(isGatedEvent && { team_entry: true }),
       });
 
       if (!response?.ticket_id) {
@@ -579,6 +710,85 @@ export function TypeformMultiStep({
                             </FormItem>
                           )}
                         />
+                      );
+                    case 'url':
+                      return (
+                        <FormField
+                          key={field.name}
+                          control={form.control}
+                          name={field.name}
+                          render={({ field: formField }) => (
+                            <FormItem>
+                              <FormLabel>{field.label}</FormLabel>
+                              <FormControl>
+                                <Input
+                                  data-current-field
+                                  type="url"
+                                  placeholder={field.urlPlaceholder || 'https://example.com'}
+                                  required={field.required}
+                                  value={(formField.value as string) ?? ''}
+                                  onChange={formField.onChange}
+                                />
+                              </FormControl>
+                              {touchedFields.has(step) && <FormMessage />}
+                              {field.description && (
+                                <FormDescription>
+                                  {field.description}
+                                </FormDescription>
+                              )}
+                            </FormItem>
+                          )}
+                        />
+                      );
+                    case 'file':
+                      return (
+                        <FormField
+                          key={field.name}
+                          control={form.control}
+                          name={field.name}
+                          render={({ field: formField }) => (
+                            <FormItem>
+                              <FormLabel>{field.label}</FormLabel>
+                              <FormControl>
+                                <FileUploadField
+                                  eventSlug={eventData.slug || 'unknown'}
+                                  fieldName={field.name}
+                                  accept={field.acceptedFileTypes}
+                                  maxSizeMB={field.maxFileSizeMB}
+                                  value={(formField.value as string) ?? ''}
+                                  onChange={formField.onChange}
+                                  required={field.required}
+                                />
+                              </FormControl>
+                              {touchedFields.has(step) && <FormMessage />}
+                              {field.description && (
+                                <FormDescription>
+                                  {field.description}
+                                </FormDescription>
+                              )}
+                            </FormItem>
+                          )}
+                        />
+                      );
+                    case 'redirect':
+                      return (
+                        <div key={field.name} className="space-y-4">
+                          <FormLabel>{field.label}</FormLabel>
+                          {field.description && (
+                            <p className="text-sm text-muted-foreground">
+                              {field.description}
+                            </p>
+                          )}
+                          <Button
+                            type="button"
+                            variant="outline"
+                            className="gap-2"
+                            onClick={() => window.open(field.redirectUrl, '_blank')}
+                          >
+                            <ExternalLink className="h-4 w-4" />
+                            {field.redirectLabel || 'Visit Link'}
+                          </Button>
+                        </div>
                       );
                   }
                 })()}

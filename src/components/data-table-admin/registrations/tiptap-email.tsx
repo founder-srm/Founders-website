@@ -109,6 +109,7 @@ const Tiptap = ({
         slotBefore={<MenuBar />}
         extensions={extensions}
         content={content}
+        immediatelyRender={false}
         onUpdate={({ editor }) => {
           const html = editor.getHTML();
           onUpdate?.(html);
