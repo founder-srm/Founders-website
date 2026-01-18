@@ -43,6 +43,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import useAdmin from "@/hooks/use-admin";
+import useClub from "@/hooks/use-club";
 import { usePresence } from "@/hooks/usePresence";
 import { cn } from "@/lib/utils";
 import { useUser } from "@/stores/session";
@@ -81,7 +82,7 @@ function AvatarButton({
           <span
             className={cn(
               "absolute -end-1 -top-1 size-3 rounded-full border-2 border-background",
-              isPresent ? "bg-emerald-500" : "bg-yellow-500"
+              isPresent ? "bg-emerald-500" : "bg-yellow-500",
             )}
           >
             <span className="sr-only">{isPresent ? "Online" : "Away"}</span>
@@ -103,7 +104,7 @@ function AvatarButton({
               <span
                 className={cn(
                   "mr-2 size-2 rounded-full",
-                  isPresent ? "bg-emerald-500" : "bg-yellow-500"
+                  isPresent ? "bg-emerald-500" : "bg-yellow-500",
                 )}
               />
               <span className="text-xs text-muted-foreground">
@@ -189,6 +190,7 @@ const Navbar1 = () => {
   const pathname = usePathname();
   const user = useUser();
   const isAdmin = useAdmin({ user });
+  const isClub = useClub({ user });
   const [isOpen, setIsOpen] = useState(false);
 
   // const theme = useTheme();
@@ -249,7 +251,7 @@ const Navbar1 = () => {
                 navigationMenuTriggerStyle,
                 buttonVariants({
                   variant: "ghost",
-                })
+                }),
               )}
               href="/"
             >
@@ -267,7 +269,7 @@ const Navbar1 = () => {
                         <li key={idx}>
                           <NavigationMenuLink
                             className={cn(
-                              "flex select-none gap-4 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                              "flex select-none gap-4 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
                             )}
                             href={item.route}
                           >
@@ -294,7 +296,7 @@ const Navbar1 = () => {
                         <li key={idx}>
                           <NavigationMenuLink
                             className={cn(
-                              "flex select-none gap-4 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                              "flex select-none gap-4 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
                             )}
                             href={item.route}
                           >
@@ -322,7 +324,7 @@ const Navbar1 = () => {
                 navigationMenuTriggerStyle,
                 buttonVariants({
                   variant: "ghost",
-                })
+                }),
               )}
               href="/upcoming"
             >
@@ -334,7 +336,7 @@ const Navbar1 = () => {
                 navigationMenuTriggerStyle,
                 buttonVariants({
                   variant: "ghost",
-                })
+                }),
               )}
               href="/contact-us"
             >
@@ -349,6 +351,11 @@ const Navbar1 = () => {
               <Link href="/admin">
                 <AdminUserIcon />
               </Link>
+            </Button>
+          )}
+          {isClub && (
+            <Button variant="outline" size="default" className="" asChild>
+              <Link href="/club-dashboard">Club Dashboard</Link>
             </Button>
           )}
           {user ? (
@@ -431,7 +438,7 @@ const Navbar1 = () => {
                           key={idx}
                           onClick={() => setIsOpen(false)}
                           className={cn(
-                            "flex select-none gap-4 rounded-md p-3 leading-none outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                            "flex select-none gap-4 rounded-md p-3 leading-none outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
                           )}
                           href={item.route}
                         >
@@ -458,7 +465,7 @@ const Navbar1 = () => {
                           key={idx}
                           onClick={() => setIsOpen(false)}
                           className={cn(
-                            "flex select-none gap-4 rounded-md p-3 leading-none outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                            "flex select-none gap-4 rounded-md p-3 leading-none outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
                           )}
                           href={item.route}
                         >
@@ -499,6 +506,16 @@ const Navbar1 = () => {
                       <Link href="/admin">
                         <AdminUserIcon />
                       </Link>
+                    </Button>
+                  )}
+                  {isClub && (
+                    <Button
+                      variant="outline"
+                      size="default"
+                      className=""
+                      asChild
+                    >
+                      <Link href="/club-dashboard">Club Dashboard</Link>
                     </Button>
                   )}
                   {user ? (
