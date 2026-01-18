@@ -19,15 +19,17 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
+  // FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+// import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
+import type { ClubSignupFormData } from "../actions";
+import { clubsignup } from "../actions";
 
 // ============================================================================
 // ANIMATION VARIANTS
@@ -62,44 +64,54 @@ const contentVariants: Variants = {
 const STEPS = [
   { id: 1, name: "Personal Info", description: "Basic details", icon: User },
   { id: 2, name: "Club Info", description: "Club Details", icon: Boxes },
-  {
-    id: 3,
-    name: "Verification",
-    description: "Verify Club Email",
-    icon: ShieldCheck,
-  },
-  { id: 4, name: "Review", description: "Final check", icon: FileCheck },
+  // {
+  //   id: 3,
+  //   name: "Verification",
+  //   description: "Verify Club Email",
+  //   icon: ShieldCheck,
+  // },
+  { id: 3, name: "Review", description: "Final check", icon: FileCheck },
 ];
 
 // ============================================================================
 // ZOD SCHEMAS
 // ============================================================================
 
-const profileSchema = z.object({
-  firstName: z
-    .string()
-    .min(2, { message: "First Name should be atleast 2 letters long" })
-    .max(50, { message: "First Name can be only 50 letters long" }),
-  lastName: z
-    .string()
-    .min(2, { message: "Last Name should be atleast 2 letters long" })
-    .max(50, { message: "Last Name can be only 50 letters long" }),
-  repMail: z.email({ message: "Please enter a valid email address" }),
-  repPhone: z
-    .string()
-    .min(10, { message: "Please enter a valid phone number" })
-    .max(50, { message: "Please enter a valid phone number" }),
-});
+const profileSchema = z
+  .object({
+    firstName: z
+      .string()
+      .min(2, { message: "First Name should be atleast 2 letters long" })
+      .max(50, { message: "First Name can be only 50 letters long" }),
+    lastName: z
+      .string()
+      .min(2, { message: "Last Name should be atleast 2 letters long" })
+      .max(50, { message: "Last Name can be only 50 letters long" }),
+    repMail: z.email({ message: "Please enter a valid email address" }),
+    repPhone: z
+      .string()
+      .min(10, { message: "Please enter a valid phone number" })
+      .max(50, { message: "Please enter a valid phone number" }),
+    repPassword: z
+      .string()
+      .min(8, { message: "Password must be at least 8 characters" })
+      .regex(/[A-Z]/, {
+        message: "Password must contain at least one uppercase letter",
+      })
+      .regex(/[0-9]/, { message: "Password must contain at least one number" }),
+    repConfirmPassword: z.string(),
+  })
+  .refine((data) => data.repPassword === data.repConfirmPassword, {
+    message: "Passwords don't match",
+    path: ["repConfirmPassword"],
+  });
 
 const clubSchema = z.object({
   clubName: z
     .string()
     .min(2, { message: "Club Name should be atleast 2 letters long" }),
   clubMail: z.email({ message: "Please enter a valid email address" }),
-  clubWebsite: z.url({
-    protocol: /^https$/,
-    message: "Please enter a valid URL (must have a secure certification)",
-  }),
+  clubWebsite: z.url().optional(),
 });
 
 // ============================================================================
@@ -139,7 +151,7 @@ function SidebarStep({
             ? "border-primary bg-primary text-primary-foreground"
             : isCurrent
               ? "border-primary bg-background text-primary shadow-[0_0_0_4px_rgba(var(--primary),0.1)]"
-              : "border-border/50 bg-background/50 text-muted-foreground"
+              : "border-border/50 bg-background/50 text-muted-foreground",
         )}
         whileHover={{ scale: 1.05 }}
       >
@@ -157,7 +169,7 @@ function SidebarStep({
             "text-sm font-semibold transition-colors duration-300",
             isCurrent || isCompleted
               ? "text-foreground"
-              : "text-muted-foreground"
+              : "text-muted-foreground",
           )}
         >
           {step.name}
@@ -212,23 +224,37 @@ function ReviewItem({ label, value }: { label: string; value: string }) {
 
 export function WizardForm() {
   const [currentStep, setCurrentStep] = useState(1);
-  const [fn, setFn] = useState('');
+  const [profileFormData, setProfileFormData] = useState({
+    firstName: "",
+    lastName: "",
+    repMail: "",
+    repPhone: "",
+    repPassword: "",
+    repConfirmPassword: "",
+  });
+  const [clubFormData, setClubFormData] = useState({
+    clubName: "",
+    clubMail: "",
+    clubWebsite: "" as string | undefined,
+  });
 
   const profileForm = useForm<z.infer<typeof profileSchema>>({
     resolver: zodResolver(profileSchema),
+    mode: "onChange",
   });
   const clubForm = useForm<z.infer<typeof clubSchema>>({
     resolver: zodResolver(clubSchema),
+    mode: "onChange",
   });
 
   function onProfileSubmit(values: z.infer<typeof profileSchema>) {
-    // Do something with the form values.
+    setProfileFormData(values);
     // ✅ This will be type-safe and validated.
     console.log(values);
     setCurrentStep(currentStep + 1);
   }
   function onClubSubmit(values: z.infer<typeof clubSchema>) {
-    // Do something with the form values.
+    setClubFormData(values);
     // ✅ This will be type-safe and validated.
     console.log(values);
     setCurrentStep(currentStep + 1);
@@ -243,8 +269,22 @@ export function WizardForm() {
       profileForm.handleSubmit(onProfileSubmit)();
     } else if (currentStep === 2) {
       clubForm.handleSubmit(onClubSubmit)();
-    } else if (currentStep < STEPS.length) {
-      setCurrentStep(currentStep + 1);
+    } else if (currentStep === STEPS.length) {
+      // Final submission logic - pass all collected data
+      const submitData: ClubSignupFormData = {
+        email: profileFormData.repMail,
+        password: profileFormData.repPassword,
+        confirmPassword: profileFormData.repConfirmPassword,
+        firstName: profileFormData.firstName,
+        lastName: profileFormData.lastName,
+        phone: profileFormData.repPhone,
+        clubName: clubFormData.clubName,
+        clubEmail: clubFormData.clubMail,
+        clubWebsite: clubFormData.clubWebsite,
+        terms: true,
+      };
+
+      clubsignup(submitData);
     }
   };
 
@@ -331,11 +371,7 @@ export function WizardForm() {
                                 <FormItem>
                                   <FormLabel>First Name</FormLabel>
                                   <FormControl>
-                                    <Input
-                                      placeholder="John"
-                                      {...field}
-                                      // onChange={(e) => setFn(e.target.value)}
-                                    />
+                                    <Input placeholder="John" {...field} />
                                   </FormControl>
                                   <FormMessage />
                                 </FormItem>
@@ -393,6 +429,42 @@ export function WizardForm() {
                               )}
                             />
                           </div>
+                          <FormField
+                            control={profileForm.control}
+                            name="repPassword"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Set Password</FormLabel>
+                                <FormControl>
+                                  <Input
+                                    // placeholder="name@example.com"
+                                    {...field}
+                                    type={"password"}
+                                    // onChange={handleRepInputChange}
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={profileForm.control}
+                            name="repConfirmPassword"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Confirm Password</FormLabel>
+                                <FormControl>
+                                  <Input
+                                    // placeholder="name@example.com"
+                                    {...field}
+                                    type={"password"}
+                                    // onChange={handleRepInputChange}
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
                         </form>
                       </Form>
                     )}
@@ -436,7 +508,12 @@ export function WizardForm() {
                             name="clubWebsite"
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel>Club Website</FormLabel>
+                                <FormLabel>
+                                  Club Website{" "}
+                                  <span className="text-xs text-muted-foreground">
+                                    (Optional)
+                                  </span>
+                                </FormLabel>
                                 <FormControl>
                                   <Input
                                     placeholder="https://www.example.com"
@@ -451,7 +528,7 @@ export function WizardForm() {
                       </Form>
                     )}
 
-                    {currentStep === 3 && (
+                    {/* {currentStep === 3 && (
                       <h1>Verification Flow</h1>
                       // <div className="space-y-8">
                       //   <div className="space-y-4">
@@ -498,23 +575,26 @@ export function WizardForm() {
                       //     </div>
                       //   </div>
                       // </div>
-                    )}
+                    )} */}
 
-                    {currentStep === 4 && (
+                    {currentStep === 3 && (
                       <div className="space-y-6">
                         <div className="rounded-xl border border-border/40 bg-background/20 p-6">
                           <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
                             Personal Information
                           </h3>
                           <div className="grid gap-3">
-                            <ReviewItem label="Full Name" value="John Doe" />
+                            <ReviewItem
+                              label="Full Name"
+                              value={`${profileFormData.firstName} ${profileFormData.lastName}`}
+                            />
                             <ReviewItem
                               label="Email Address"
-                              value="john@example.com"
+                              value={profileFormData.repMail}
                             />
                             <ReviewItem
                               label="Phone Number"
-                              value="+1 (555) 000-0000"
+                              value={profileFormData.repPhone}
                             />
                           </div>
                         </div>
@@ -524,14 +604,19 @@ export function WizardForm() {
                             Club Information
                           </h3>
                           <div className="grid gap-3">
-                            <ReviewItem label="Club Name" value="HEHE Club" />
+                            <ReviewItem
+                              label="Club Name"
+                              value={clubFormData.clubName}
+                            />
                             <ReviewItem
                               label="Club Email"
-                              value="club@example.com"
+                              value={clubFormData.clubMail}
                             />
                             <ReviewItem
                               label="Club Website"
-                              value="https://www.example.com"
+                              value={
+                                clubFormData.clubWebsite || "Not Provided!"
+                              }
                             />
                           </div>
                         </div>

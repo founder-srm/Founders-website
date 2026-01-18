@@ -182,11 +182,19 @@ export default function SignupPage(props: {
                     </form>
                   </Form>
                 </div>
-                <div className="mx-auto mt-3 flex justify-center gap-1 text-sm text-muted-foreground">
-                  <p>Already have an account?</p>
-                  <Link href="/auth/login" className="font-medium text-primary">
-                    Sign in
-                  </Link>
+                <div className="flex flex-col gap-1">
+                  <div className="mx-auto mt-3 flex justify-center gap-1 text-sm text-muted-foreground">
+                    <p>Already have an account?</p>
+                    <Link href="/auth/login" className="font-medium text-primary">
+                      Sign in
+                    </Link>
+                  </div>
+                  <div className="mx-auto mt-3 flex justify-center gap-1 text-sm text-muted-foreground">
+                    <p>Are you a Club?</p>
+                    <Link href="/auth/club-signup" className="font-medium text-primary">
+                      Sign Up
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>
