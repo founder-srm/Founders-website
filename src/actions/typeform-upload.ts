@@ -2,7 +2,7 @@ import type { Event } from '@/types/events';
 import { createClient } from '@/utils/supabase/client';
 import { eventsInsertSchema, type typeformInsertType } from '../../schema.zod';
 
-export async function createEvent(eventData: Event) {
+export async function createEvent(eventData: Event & { is_gated?: boolean; always_approve?: boolean }) {
   const supabase = createClient();
   const parseResult = eventsInsertSchema.safeParse(eventData);
   if (!parseResult.success) {
@@ -21,6 +21,7 @@ export async function createEvent(eventData: Event) {
       tags: parseResult.data.tags,
       event_type: parseResult.data.event_type,
       is_featured: parseResult.data.is_featured,
+      is_gated: parseResult.data.is_gated,
       more_info: parseResult.data.more_info,
       rules: parseResult.data.rules,
       slug: parseResult.data.slug,
@@ -33,7 +34,9 @@ export async function createEvent(eventData: Event) {
   return data;
 }
 
-export async function sendEventRegistration(eventData: typeformInsertType) {
+export async function sendEventRegistration(
+  eventData: typeformInsertType & { team_entry?: boolean }
+) {
   const supabase = createClient();
 
   // Single write-first attempt. Only read if we hit a unique violation.

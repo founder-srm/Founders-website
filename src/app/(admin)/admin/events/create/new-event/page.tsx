@@ -2,17 +2,64 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useState } from 'react';
+import { parseDate } from 'chrono-node';
+import {
+  CalendarIcon,
+  ChevronRightIcon,
+  Eye,
+  Link2,
+  Loader2,
+  Lock,
+  Upload,
+  Users,
+  X,
+} from 'lucide-react';
+import Image from 'next/image';
+import * as React from 'react';
+import { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
+import { Calendar } from '@/components/ui/calendar';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
 import { Textarea } from '@/components/ui/textarea';
-import type { Event } from '@/types/events';
-// import { useToast } from '@/hooks/use-toast'
+import { Switch } from '@/components/ui/switch';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { createEvent } from '@/actions/typeform-upload';
+import { useToast } from '@/hooks/use-toast';
+import { useFileUpload } from '@/hooks/use-file-upload';
+import { createClient } from '@/utils/supabase/elevatedClient';
 import { FormBuilder } from './form-builder';
-// import { createEvent } from '@/actions/typeform-upload'
+import Tiptap from '@/components/data-table-admin/registrations/tiptap-email';
 
 import {
   Form,
@@ -23,290 +70,1123 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import type { TypeFormField } from '../../../../../../../schema.zod';
 
-type TypeFormField = {
-  fieldType:
-    | 'text'
-    | 'radio'
-    | 'select'
-    | 'slider'
-    | 'checkbox'
-    | 'date'
-    | 'textarea';
-  label: string;
-  name: string;
-  description?: string;
-  required?: boolean;
-  options?: string[];
-  min?: number;
-  max?: number;
-  validation?: {
-    min?: number;
-    max?: number;
-    minLength?: number;
-    maxLength?: number;
-    pattern?: string;
-  };
-  checkboxType?: 'single' | 'multiple';
-  items?: Array<{ id: string; label: string }>;
-};
-
-function generateZodSchema(fields: TypeFormField[]) {
-  const schemaObj: Record<string, any> = {};
-  // biome-ignore lint/complexity/noForEach: for each is preferred for readability
-  fields.forEach(field => {
-    let fieldSchema: any;
-    switch (field.fieldType) {
-      case 'text':
-        fieldSchema = z.string();
-        if (field.validation?.minLength)
-          fieldSchema = fieldSchema.min(field.validation.minLength);
-        if (field.validation?.maxLength)
-          fieldSchema = fieldSchema.max(field.validation.maxLength);
-        if (field.validation?.pattern)
-          fieldSchema = fieldSchema.regex(new RegExp(field.validation.pattern));
-        break;
-      case 'textarea':
-        fieldSchema = z.string();
-        if (field.validation?.minLength)
-          fieldSchema = fieldSchema.min(field.validation.minLength);
-        if (field.validation?.maxLength)
-          fieldSchema = fieldSchema.max(field.validation.maxLength);
-        if (field.validation?.pattern)
-          fieldSchema = fieldSchema.regex(new RegExp(field.validation.pattern));
-        break;
-      case 'date':
-        fieldSchema = z.date();
-        break;
-      case 'checkbox':
-        if (field.checkboxType === 'multiple') {
-          fieldSchema = z
-            .array(z.string())
-            .default([])
-            .refine(value => value.some(item => item), {
-              message: 'You have to select at least one item.',
-            });
-        } else {
-          fieldSchema = z.boolean().default(false);
-        }
-        break;
-      case 'radio':
-      case 'select':
-        fieldSchema = z.enum(field.options as [string, ...string[]]);
-        break;
-      case 'slider':
-        fieldSchema = z
-          .number()
-          .min(field.min ?? 0)
-          .max(field.max ?? 100);
-        break;
-      default:
-        fieldSchema = z.any();
-    }
-    schemaObj[field.name] = field.required
-      ? fieldSchema
-      : fieldSchema.optional();
+// Helper function to format date for display
+function formatDateDisplay(date: Date | undefined) {
+  if (!date) return '';
+  return date.toLocaleDateString('en-US', {
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric',
   });
-  return z.object(schemaObj);
 }
 
-export default function EventFormBuilderPage() {
-  const [formFields, setFormFields] = useState<TypeFormField[]>([]);
+// Helper function to format time
+function formatTimeDisplay(date: Date | undefined) {
+  if (!date) return '';
+  return date.toLocaleTimeString('en-US', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  });
+}
 
-  const handleFieldsChange = (fields: TypeFormField[]) => {
-    setFormFields(fields);
-    // Reset form values when fields change
-    form.reset({});
+// Helper to combine date and time into ISO string
+function combineDateTimeToISO(date: Date | undefined, time: string): string {
+  if (!date) return '';
+  const [hours, minutes] = time.split(':').map(Number);
+  const combined = new Date(date);
+  combined.setHours(hours || 0, minutes || 0, 0, 0);
+  return combined.toISOString();
+}
+
+// DateTime Picker Component with natural language support
+function DateTimePicker({
+  value,
+  onChange,
+  placeholder = 'Select date...',
+}: {
+  value: string;
+  onChange: (value: string) => void;
+  placeholder?: string;
+}) {
+  const [open, setOpen] = React.useState(false);
+  const [inputValue, setInputValue] = React.useState('');
+  const [date, setDate] = React.useState<Date | undefined>(
+    value ? new Date(value) : undefined
+  );
+  const [time, setTime] = React.useState(
+    value ? formatTimeDisplay(new Date(value)) : '10:00'
+  );
+  const [month, setMonth] = React.useState<Date | undefined>(date);
+
+  React.useEffect(() => {
+    if (value) {
+      const d = new Date(value);
+      setDate(d);
+      setTime(formatTimeDisplay(d));
+      setInputValue(formatDateDisplay(d));
+      setMonth(d);
+    }
+  }, [value]);
+
+  const handleDateSelect = (selectedDate: Date | undefined) => {
+    setDate(selectedDate);
+    setInputValue(formatDateDisplay(selectedDate));
+    if (selectedDate) {
+      onChange(combineDateTimeToISO(selectedDate, time));
+    }
+    setOpen(false);
   };
 
-  const dynamicSchema = generateZodSchema(formFields);
-  const form = useForm<any>({
-    resolver: zodResolver(dynamicSchema),
-  });
+  const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTime(e.target.value);
+    if (date) {
+      onChange(combineDateTimeToISO(date, e.target.value));
+    }
+  };
 
-  const onSubmit = (data: Event) => {
-    console.log('Form data:', data);
-    console.log('Form fields:', formFields);
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setInputValue(val);
+    const parsed = parseDate(val);
+    if (parsed) {
+      setDate(parsed);
+      setMonth(parsed);
+      onChange(combineDateTimeToISO(parsed, time));
+    }
   };
 
   return (
-    <div className="container mx-auto py-10">
-      <Card className="p-6">
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)}>
-            <div className="space-y-6">
-              {/* Basic Event Details */}
-              <FormField
-                control={form.control}
-                name="title"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Event Title</FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder="Enter event title" />
-                    </FormControl>
-                    <FormDescription>
-                      The title of the event, like Foundathon24 etc..
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+    <div className="flex gap-2">
+      <div className="flex-1 relative">
+        <Input
+          value={inputValue}
+          placeholder={placeholder}
+          className="pr-10"
+          onChange={handleInputChange}
+          onKeyDown={(e) => {
+            if (e.key === 'ArrowDown') {
+              e.preventDefault();
+              setOpen(true);
+            }
+          }}
+        />
+        <Popover open={open} onOpenChange={setOpen}>
+          <PopoverTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="absolute top-1/2 right-1 size-7 -translate-y-1/2"
+              type="button"
+            >
+              <CalendarIcon className="size-4" />
+              <span className="sr-only">Select date</span>
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto overflow-hidden p-0" align="end">
+            <Calendar
+              mode="single"
+              selected={date}
+              captionLayout="dropdown"
+              month={month}
+              onMonthChange={setMonth}
+              onSelect={handleDateSelect}
+            />
+          </PopoverContent>
+        </Popover>
+      </div>
+      <Input
+        type="time"
+        value={time}
+        onChange={handleTimeChange}
+        className="w-24 appearance-none [&::-webkit-calendar-picker-indicator]:hidden"
+      />
+    </div>
+  );
+}
 
-              <FormField
-                control={form.control}
-                name="venue"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Venue</FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder="Enter venue" />
-                    </FormControl>
-                    <FormDescription>
-                      The location where the event is happening, If online,
-                      mention the format (gmeet, zoom etc..)
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+// Banner Image Uploader Component with Dropzone
+function BannerImageUploader({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (url: string) => void;
+}) {
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [hasError, setHasError] = useState(false);
+  const [isImageLoading, setIsImageLoading] = useState(true);
+  const [currentFilePath, setCurrentFilePath] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const { toast } = useToast();
 
-              <FormField
-                control={form.control}
-                name="start_date"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Start Date & Time</FormLabel>
-                    <FormControl>
-                      <Input type="datetime-local" {...field} />
-                    </FormControl>
-                    <FormDescription>When the event starts?</FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+  const [{ isDragging, errors }, { handleDragEnter, handleDragLeave, handleDragOver, handleDrop: hookHandleDrop }] = useFileUpload({
+    accept: 'image/*',
+    maxSize: 10 * 1024 * 1024, // 10MB
+    multiple: false,
+    maxFiles: 1,
+  });
 
-              <FormField
-                control={form.control}
-                name="end_date"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>End Date & Time</FormLabel>
-                    <FormControl>
-                      <Input type="datetime-local" {...field} />
-                    </FormControl>
-                    <FormDescription>When the event ends?</FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+  React.useEffect(() => {
+    setHasError(false);
+    setIsImageLoading(true);
+  }, [value]);
 
-              <FormField
-                control={form.control}
-                name="publish_date"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Publish Date</FormLabel>
-                    <FormControl>
-                      <Input type="datetime-local" {...field} />
-                    </FormControl>
-                    <FormDescription>
-                      When should this event be visible to users on the website?
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+  // Extract file path from Supabase URL
+  const extractFilePath = (url: string): string | null => {
+    if (!url) return null;
+    const match = url.match(/event-banners\/(.+?)(?:\?|$)/);
+    return match ? match[1] : null;
+  };
 
-              <FormField
-                control={form.control}
-                name="banner_image"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Banner Image</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="url"
-                        {...field}
-                        placeholder="Enter image URL"
-                      />
-                    </FormControl>
-                    <FormDescription>
-                      Provide a URL for the event banner image
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+  React.useEffect(() => {
+    if (value) {
+      const path = extractFilePath(value);
+      setCurrentFilePath(path);
+    }
+  }, [value]);
 
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Description</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        {...field}
-                        placeholder="Enter event description"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+  const uploadToSupabase = async (file: File): Promise<string> => {
+    const supabase = createClient();
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+    const filePath = `event-banners/${fileName}`;
 
-              <FormField
-                control={form.control}
-                name="rules"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Rules</FormLabel>
-                    <FormControl>
-                      <Textarea {...field} placeholder="Enter event rules" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+    // If there's an existing file, delete it first
+    if (currentFilePath) {
+      await supabase.storage
+        .from('post-images')
+        .remove([`event-banners/${currentFilePath}`]);
+    }
 
-              <FormField
-                control={form.control}
-                name="more_info"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Additional Information</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        {...field}
-                        placeholder="Enter additional information"
-                      />
-                    </FormControl>
-                    <FormDescription>
-                      Add any additional information about the event here
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+    const { error } = await supabase.storage
+      .from('post-images')
+      .upload(filePath, file, {
+        cacheControl: '3600',
+        upsert: false,
+      });
 
-              {/* Dynamic Form Builder */}
-              <FormBuilder
-                fields={formFields}
-                onChange={setFormFields}
-                onFieldsChange={handleFieldsChange}
-              />
+    if (error) throw error;
 
-              <div className="flex justify-end space-x-4">
-                <Button type="reset" variant="outline">
-                  Cancel
-                </Button>
-                <Button type="submit">Create Event</Button>
+    const { data: urlData } = supabase.storage
+      .from('post-images')
+      .getPublicUrl(filePath);
+
+    return urlData.publicUrl;
+  };
+
+  const handleFileUpload = async (file: File) => {
+    setIsUploading(true);
+    setUploadProgress(0);
+
+    try {
+      // Simulate progress
+      const progressInterval = setInterval(() => {
+        setUploadProgress((prev) => Math.min(prev + 10, 90));
+      }, 100);
+
+      const publicUrl = await uploadToSupabase(file);
+
+      clearInterval(progressInterval);
+      setUploadProgress(100);
+      onChange(publicUrl);
+
+      toast({
+        title: 'Image uploaded',
+        description: 'Banner image uploaded successfully.',
+      });
+    } catch (error) {
+      console.error('Upload error:', error);
+      toast({
+        title: 'Upload failed',
+        description: 'Failed to upload image. Please try again.',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsUploading(false);
+      setUploadProgress(0);
+    }
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    hookHandleDrop(e);
+
+    const files = Array.from(e.dataTransfer.files);
+    if (files.length > 0 && files[0].type.startsWith('image/')) {
+      handleFileUpload(files[0]);
+    }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      handleFileUpload(files[0]);
+    }
+    e.target.value = '';
+  };
+
+  const handleRemove = async () => {
+    if (currentFilePath) {
+      try {
+        const supabase = createClient();
+        await supabase.storage
+          .from('post-images')
+          .remove([`event-banners/${currentFilePath}`]);
+      } catch (error) {
+        console.error('Failed to delete image:', error);
+      }
+    }
+    onChange('');
+    setCurrentFilePath(null);
+  };
+
+  // Show errors from the hook
+  React.useEffect(() => {
+    if (errors.length > 0) {
+      toast({
+        title: 'Invalid file',
+        description: errors[0],
+        variant: 'destructive',
+      });
+    }
+  }, [errors, toast]);
+
+  // Dropzone when no image
+  if (!value) {
+    return (
+      <div
+        className={`relative border-2 border-dashed rounded-lg transition-colors ${
+          isDragging
+            ? 'border-primary bg-primary/5'
+            : 'border-muted-foreground/25 hover:border-muted-foreground/50'
+        }`}
+        onDragEnter={handleDragEnter}
+        onDragLeave={handleDragLeave}
+        onDragOver={handleDragOver}
+        onDrop={handleDrop}
+      >
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          onChange={handleInputChange}
+          className="hidden"
+        />
+        <div className="flex flex-col items-center justify-center py-10 px-6">
+          {isUploading ? (
+            <>
+              <Loader2 className="h-10 w-10 text-primary animate-spin mb-4" />
+              <p className="text-sm font-medium">Uploading...</p>
+              <div className="w-48 h-2 bg-muted rounded-full mt-3 overflow-hidden">
+                <div
+                  className="h-full bg-primary transition-all duration-300"
+                  style={{ width: `${uploadProgress}%` }}
+                />
+              </div>
+              <p className="text-xs text-muted-foreground mt-2">{uploadProgress}%</p>
+            </>
+          ) : (
+            <>
+              <div className="p-4 bg-muted rounded-full mb-4">
+                <Upload className="h-8 w-8 text-muted-foreground" />
+              </div>
+              <p className="text-sm font-medium mb-1">Drop your banner image here</p>
+              <p className="text-xs text-muted-foreground mb-4">or click to browse</p>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => fileInputRef.current?.click()}
+              >
+                Choose File
+              </Button>
+              <p className="text-xs text-muted-foreground mt-4">
+                Supports: JPG, PNG, GIF, WebP • Max 10MB
+              </p>
+            </>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  // Preview when image exists
+  if (hasError) {
+    return (
+      <div className="relative">
+        <div className="flex items-center justify-center h-48 bg-destructive/10 rounded-lg border border-destructive/30">
+          <div className="text-center text-destructive">
+            <X className="h-10 w-10 mx-auto mb-2" />
+            <p className="text-sm">Failed to load image</p>
+            <p className="text-xs mt-1 opacity-70">The image URL may be invalid</p>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="mt-3"
+              onClick={handleRemove}
+            >
+              Remove & Try Again
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative group">
+      <div className="relative aspect-video max-h-64 rounded-lg overflow-hidden border bg-muted">
+        {isImageLoading && (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+          </div>
+        )}
+        <Image
+          src={value}
+          alt="Banner preview"
+          fill
+          className="object-cover"
+          onError={() => setHasError(true)}
+          onLoad={() => setIsImageLoading(false)}
+          unoptimized
+        />
+      </div>
+      <div className="absolute top-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+        <Button
+          type="button"
+          variant="secondary"
+          size="sm"
+          className="h-8 gap-1"
+          onClick={() => fileInputRef.current?.click()}
+        >
+          <Upload className="h-3 w-3" />
+          Replace
+        </Button>
+        <Button
+          type="button"
+          variant="destructive"
+          size="icon"
+          className="h-8 w-8"
+          onClick={handleRemove}
+        >
+          <X className="h-4 w-4" />
+        </Button>
+      </div>
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        onChange={handleInputChange}
+        className="hidden"
+      />
+    </div>
+  );
+}
+
+// Full Form Preview Dialog
+function FullFormPreview({
+  eventData,
+  formFields,
+}: {
+  eventData: any;
+  formFields: TypeFormField[];
+}) {
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button variant="outline" className="gap-2">
+          <Eye className="h-4 w-4" />
+          Preview Event
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>Event Page Preview</DialogTitle>
+        </DialogHeader>
+        <div className="space-y-6 pt-4">
+          {/* Banner Preview */}
+          {eventData.banner_image && (
+            <div className="relative h-64 rounded-lg overflow-hidden">
+              <Image
+                src={eventData.banner_image}
+                alt="Event banner"
+                fill
+                className="object-cover"
+                unoptimized
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+              <div className="absolute bottom-4 left-4 text-white">
+                <h2 className="text-2xl font-bold">
+                  {eventData.title || 'Event Title'}
+                </h2>
+                <p className="text-sm opacity-90">{eventData.venue || 'Venue'}</p>
               </div>
             </div>
-          </form>
-        </Form>
-      </Card>
+          )}
+
+          {/* Event Details */}
+          <div className="grid gap-4 md:grid-cols-2">
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm">Date & Time</CardTitle>
+              </CardHeader>
+              <CardContent className="text-sm text-muted-foreground">
+                {eventData.start_date
+                  ? new Date(eventData.start_date).toLocaleString()
+                  : 'Not set'}
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm">Event Type</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Badge variant="outline" className="capitalize">
+                  {eventData.event_type || 'offline'}
+                </Badge>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Description */}
+          {eventData.description && (
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm">Description</CardTitle>
+              </CardHeader>
+              <CardContent className="text-sm text-muted-foreground whitespace-pre-wrap">
+                {eventData.description}
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Registration Form Preview */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-sm">Registration Form</CardTitle>
+              <CardDescription>
+                {formFields.length} field{formFields.length !== 1 ? 's' : ''}
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {formFields.length === 0 ? (
+                <p className="text-sm text-muted-foreground">No form fields added yet</p>
+              ) : (
+                formFields.map((field, idx) => (
+                  <div key={field.name} className="space-y-1">
+                    <Label className="text-sm">
+                      {idx + 1}. {field.label || 'Untitled'}
+                      {field.required && (
+                        <span className="text-destructive ml-1">*</span>
+                      )}
+                    </Label>
+                    {field.description && (
+                      <p className="text-xs text-muted-foreground">
+                        {field.description}
+                      </p>
+                    )}
+                    <Input disabled placeholder={`Enter ${field.label}...`} />
+                  </div>
+                ))
+              )}
+            </CardContent>
+          </Card>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+// Event creation schema
+const eventFormSchema = z.object({
+  title: z.string().min(1, 'Title is required'),
+  venue: z.string().min(1, 'Venue is required'),
+  start_date: z.string().min(1, 'Start date is required'),
+  end_date: z.string().min(1, 'End date is required'),
+  publish_date: z.string().min(1, 'Publish date is required'),
+  banner_image: z.string().url('Must be a valid URL'),
+  description: z.string().min(10, 'Description must be at least 10 characters'),
+  rules: z.string().optional(),
+  more_info: z.string().url('Must be a valid URL').optional().or(z.literal('')),
+  event_type: z.enum(['online', 'offline', 'hybrid']),
+  is_featured: z.boolean(),
+  is_gated: z.boolean(),
+  always_approve: z.boolean(),
+  tags: z.array(z.string()),
+});
+
+type EventFormValues = z.infer<typeof eventFormSchema>;
+
+export default function EventFormBuilderPage() {
+  const [formFields, setFormFields] = useState<TypeFormField[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [activeTab, setActiveTab] = useState<'details' | 'form'>('details');
+  const { toast } = useToast();
+
+  const form = useForm<EventFormValues>({
+    resolver: zodResolver(eventFormSchema),
+    defaultValues: {
+      title: '',
+      venue: '',
+      start_date: '',
+      end_date: '',
+      publish_date: '',
+      banner_image: '',
+      description: '',
+      rules: '',
+      more_info: '',
+      event_type: 'offline',
+      is_featured: false,
+      is_gated: false,
+      always_approve: false,
+      tags: [],
+    },
+  });
+
+  const handleFieldsChange = (fields: TypeFormField[]) => {
+    setFormFields(fields);
+  };
+
+  const isGated = form.watch('is_gated');
+  const watchedValues = form.watch();
+
+  const onSubmit = async (data: EventFormValues) => {
+    if (formFields.length === 0) {
+      toast({
+        title: 'No form fields',
+        description: 'Please add at least one form field for registrations.',
+        variant: 'destructive',
+      });
+      setActiveTab('form');
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const slug = data.title
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/(^-|-$)/g, '');
+
+      const eventData = {
+        ...data,
+        slug,
+        typeform_config: formFields,
+      };
+
+      await createEvent(eventData as any);
+
+      toast({
+        title: 'Event created!',
+        description: `${data.title} has been created successfully.`,
+      });
+
+      form.reset();
+      setFormFields([]);
+    } catch (error) {
+      console.error('Error creating event:', error);
+      toast({
+        title: 'Error creating event',
+        description:
+          error instanceof Error ? error.message : 'Please try again.',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="container mx-auto py-6 px-4 sm:px-6 lg:px-8 space-y-6">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold">Create New Event</h1>
+          <p className="text-muted-foreground mt-1">
+            Set up event details and build a custom registration form
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <FullFormPreview eventData={watchedValues} formFields={formFields} />
+        </div>
+      </div>
+
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <Tabs
+            value={activeTab}
+            onValueChange={(v) => setActiveTab(v as 'details' | 'form')}
+          >
+            <TabsList className="grid w-full grid-cols-2 max-w-md">
+              <TabsTrigger value="details" className="gap-2">
+                Event Details
+                {form.formState.errors.title ||
+                form.formState.errors.venue ||
+                form.formState.errors.start_date ? (
+                  <span className="h-2 w-2 bg-destructive rounded-full" />
+                ) : null}
+              </TabsTrigger>
+              <TabsTrigger value="form" className="gap-2">
+                Form Preview
+                {formFields.length > 0 && (
+                  <Badge variant="secondary" className="ml-1">
+                    {formFields.length}
+                  </Badge>
+                )}
+              </TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="details" className="space-y-6 mt-6">
+              {/* Basic Event Details */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Basic Information</CardTitle>
+                  <CardDescription>
+                    Essential details about your event
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <div className="grid gap-6 md:grid-cols-2">
+                    <FormField
+                      control={form.control}
+                      name="title"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Event Title</FormLabel>
+                          <FormControl>
+                            <Input
+                              {...field}
+                              placeholder="e.g., Foundathon 2026"
+                            />
+                          </FormControl>
+                          <FormDescription>
+                            A catchy name for your event
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="venue"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Venue / Platform</FormLabel>
+                          <FormControl>
+                            <Input
+                              {...field}
+                              placeholder="e.g., Main Auditorium or Google Meet"
+                            />
+                          </FormControl>
+                          <FormDescription>
+                            Physical location or online platform
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  <Separator />
+
+                  {/* Date & Time Section */}
+                  <div className="space-y-4">
+                    <h4 className="text-sm font-medium flex items-center gap-2">
+                      <CalendarIcon className="h-4 w-4" />
+                      Schedule
+                    </h4>
+                    <p className="text-xs text-muted-foreground -mt-2">
+                      Type natural language like &quot;tomorrow at 2pm&quot; or &quot;next Friday&quot;
+                    </p>
+                    <div className="grid gap-6 lg:grid-cols-3">
+                      <FormField
+                        control={form.control}
+                        name="start_date"
+                        render={({ field }) => (
+                          <FormItem className="flex flex-col">
+                            <FormLabel>Start Date & Time</FormLabel>
+                            <FormControl>
+                              <DateTimePicker
+                                value={field.value}
+                                onChange={field.onChange}
+                                placeholder="Tomorrow at 2pm"
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="end_date"
+                        render={({ field }) => (
+                          <FormItem className="flex flex-col">
+                            <FormLabel>End Date & Time</FormLabel>
+                            <FormControl>
+                              <DateTimePicker
+                                value={field.value}
+                                onChange={field.onChange}
+                                placeholder="Next Friday"
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="publish_date"
+                        render={({ field }) => (
+                          <FormItem className="flex flex-col">
+                            <FormLabel>Publish Date</FormLabel>
+                            <FormControl>
+                              <DateTimePicker
+                                value={field.value}
+                                onChange={field.onChange}
+                                placeholder="Now"
+                              />
+                            </FormControl>
+                            <FormDescription className="text-xs">
+                              When event becomes visible
+                            </FormDescription>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Banner Image */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Banner Image</CardTitle>
+                  <CardDescription>
+                    Upload a visual banner for your event (drag & drop supported)
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <FormField
+                    control={form.control}
+                    name="banner_image"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <BannerImageUploader
+                            value={field.value}
+                            onChange={field.onChange}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </CardContent>
+              </Card>
+
+              {/* Description & Details */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Description & Details</CardTitle>
+                  <CardDescription>
+                    Tell attendees about your event
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <FormField
+                    control={form.control}
+                    name="description"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Short Description</FormLabel>
+                        <FormControl>
+                          <Textarea
+                            {...field}
+                            placeholder="A brief description of your event..."
+                            className="min-h-[80px] max-h-[120px] resize-none"
+                          />
+                        </FormControl>
+                        <FormDescription>
+                          {field.value?.length || 0} characters (min 10)
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="rules"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Event Rules & Guidelines (Markdown)</FormLabel>
+                        <FormControl>
+                          <Tiptap
+                            content={field.value || ''}
+                            onUpdate={(html) => field.onChange(html)}
+                          />
+                        </FormControl>
+                        <FormDescription>
+                          Use the toolbar to format rules. Supports bold, italic, lists, and quotes.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="more_info"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Additional Info Link (optional)</FormLabel>
+                        <FormControl>
+                          <div className="relative">
+                            <Link2 className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                            <Input
+                              {...field}
+                              type="url"
+                              placeholder="https://example.com/event-details"
+                              className="pl-10"
+                            />
+                          </div>
+                        </FormControl>
+                        <FormDescription>
+                          Link to external page with more information
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </CardContent>
+              </Card>
+
+              {/* Event Settings */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Event Settings</CardTitle>
+                  <CardDescription>
+                    Configure event type and access
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <FormField
+                    control={form.control}
+                    name="event_type"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Event Type</FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          value={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger className="w-full max-w-xs">
+                              <SelectValue placeholder="Select event type" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="offline">
+                              Offline (In-person)
+                            </SelectItem>
+                            <SelectItem value="online">
+                              Online (Virtual)
+                            </SelectItem>
+                            <SelectItem value="hybrid">
+                              Hybrid (Both)
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <Separator />
+
+                  <div className="space-y-4">
+                    <FormField
+                      control={form.control}
+                      name="is_featured"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                          <div className="space-y-0.5">
+                            <FormLabel className="text-base">
+                              Featured Event
+                            </FormLabel>
+                            <FormDescription>
+                              Show prominently on homepage
+                            </FormDescription>
+                          </div>
+                          <FormControl>
+                            <Switch
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                            />
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="always_approve"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                          <div className="space-y-0.5">
+                            <FormLabel className="text-base">
+                              Auto-Approve Registrations
+                            </FormLabel>
+                            <FormDescription>
+                              Instantly approve all submissions
+                            </FormDescription>
+                          </div>
+                          <FormControl>
+                            <Switch
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                            />
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="is_gated"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4 bg-muted/50">
+                          <div className="space-y-0.5">
+                            <div className="flex items-center gap-2">
+                              <Lock className="h-4 w-4" />
+                              <FormLabel className="text-base">
+                                Gated Event (Club Members Only)
+                              </FormLabel>
+                              <Badge variant="secondary">Team Entry</Badge>
+                            </div>
+                            <FormDescription>
+                              Only club account users can register. Treated as
+                              team entry.
+                            </FormDescription>
+                          </div>
+                          <FormControl>
+                            <Switch
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                            />
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    />
+
+                    {isGated && (
+                      <div className="rounded-lg border border-amber-500/50 bg-amber-500/10 p-4">
+                        <div className="flex items-start gap-3">
+                          <Users className="h-5 w-5 text-amber-600 mt-0.5" />
+                          <div className="space-y-1">
+                            <p className="text-sm font-medium text-amber-600">
+                              Gated Event Configuration
+                            </p>
+                            <p className="text-sm text-muted-foreground">
+                              This event will only be visible to users with club
+                              accounts. Registrations will be marked as team
+                              entries.
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+
+              <div className="flex justify-end">
+                <Button
+                  type="button"
+                  onClick={() => setActiveTab('form')}
+                  className="gap-2"
+                >
+                  Continue to Form Builder
+                  <ChevronRightIcon className="h-4 w-4" />
+                </Button>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="form" className="space-y-6 mt-6">
+              {/* Form Builder Section */}
+              <Card>
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <CardTitle>Registration Form Builder</CardTitle>
+                      <CardDescription>
+                        Build a custom registration form. Drag and drop to
+                        reorder fields.
+                      </CardDescription>
+                    </div>
+                    <Badge variant="outline" className="text-sm">
+                      {formFields.length} field
+                      {formFields.length !== 1 ? 's' : ''}
+                    </Badge>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <FormBuilder
+                    fields={formFields}
+                    onChange={setFormFields}
+                    onFieldsChange={handleFieldsChange}
+                  />
+                </CardContent>
+              </Card>
+
+              {/* Submit Section */}
+              <Card>
+                <CardContent className="pt-6">
+                  <div className="flex flex-col sm:flex-row gap-4 justify-between items-center">
+                    <div className="text-sm text-muted-foreground">
+                      {formFields.length === 0 ? (
+                        <span className="text-amber-600">
+                          Add at least one form field to continue
+                        </span>
+                      ) : (
+                        <span className="text-green-600">
+                          ✓ Ready to create event with {formFields.length}{' '}
+                          field{formFields.length !== 1 ? 's' : ''}
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex gap-3">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => {
+                          form.reset();
+                          setFormFields([]);
+                        }}
+                      >
+                        Reset All
+                      </Button>
+                      <Button type="submit" disabled={isSubmitting}>
+                        {isSubmitting ? 'Creating Event...' : 'Create Event'}
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </Tabs>
+        </form>
+      </Form>
     </div>
   );
 }
