@@ -1,5 +1,5 @@
 import type { Event } from '@/types/events';
-import { createClient } from '@/utils/supabase/client';
+import { createClient } from '@/utils/supabase/elevatedClient';
 import { eventsInsertSchema, type typeformInsertType } from '../../schema.zod';
 
 export async function createEvent(eventData: Event & { is_gated?: boolean; always_approve?: boolean; more_info_text?: string | null }) {

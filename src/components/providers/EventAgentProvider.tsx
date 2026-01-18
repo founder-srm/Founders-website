@@ -13,30 +13,85 @@ export interface ChatMessage {
   timestamp: Date;
 }
 
-// Types for agent response
+// Types for agent response (matches the API schema)
 export interface EventData {
-  title?: string;
-  description?: string;
-  venue?: string;
-  event_type?: 'online' | 'offline' | 'hybrid';
-  tags?: string[];
-  rules?: string;
-  suggested_dates?: {
+  title: string;
+  description: string;
+  venue: string;
+  event_type: 'online' | 'offline' | 'hybrid';
+  tags: string[];
+  rules: string;
+  suggested_dates: {
     start_date: string;
     end_date: string;
     publish_date: string;
   };
-  is_gated?: boolean;
-  always_approve?: boolean;
+  is_gated: boolean;
+  always_approve: boolean;
+}
+
+// Agent field format (flat structure from API)
+interface AgentFormField {
+  fieldType: 'text' | 'textarea' | 'radio' | 'select' | 'checkbox' | 'date' | 'slider' | 'url' | 'file';
+  label: string;
+  name: string;
+  description: string;
+  required: boolean;
+  options: string[];
+  checkboxType: 'single' | 'multiple';
+  items: Array<{ id: string; label: string }>;
+  min: number;
+  max: number;
+  minLength: number;
+  maxLength: number;
 }
 
 export interface AgentResponse {
   message: string;
   action: 'none' | 'generate_event' | 'generate_fields' | 'update_event' | 'update_fields';
-  event_data?: EventData;
-  form_fields?: {
-    fields: TypeFormField[];
+  event_data: EventData;
+  form_fields: {
+    fields: AgentFormField[];
   };
+}
+
+// Transform agent field to TypeFormField
+function transformToTypeFormField(field: AgentFormField): TypeFormField {
+  const base: TypeFormField = {
+    fieldType: field.fieldType as TypeFormField['fieldType'],
+    label: field.label,
+    name: field.name,
+    description: field.description || undefined,
+    required: field.required,
+  };
+
+  // Add type-specific properties
+  if (field.fieldType === 'radio' || field.fieldType === 'select') {
+    base.options = field.options.length > 0 ? field.options : undefined;
+  }
+
+  if (field.fieldType === 'checkbox') {
+    base.checkboxType = field.checkboxType;
+    if (field.checkboxType === 'multiple' && field.items.length > 0) {
+      base.items = field.items;
+    }
+  }
+
+  if (field.fieldType === 'slider') {
+    base.min = field.min;
+    base.max = field.max;
+  }
+
+  if (field.fieldType === 'text' || field.fieldType === 'textarea') {
+    if (field.minLength > 0 || field.maxLength !== 500) {
+      base.validation = {
+        minLength: field.minLength,
+        maxLength: field.maxLength,
+      };
+    }
+  }
+
+  return base;
 }
 
 // Context type
@@ -51,8 +106,8 @@ interface EventAgentContextType {
   clearChat: () => void;
   
   // Form autofill callbacks (to be set by the form page)
-  onEventDataGenerated: React.MutableRefObject<((data: EventData) => void) | null>;
-  onFormFieldsGenerated: React.MutableRefObject<((fields: TypeFormField[]) => void) | null>;
+  onEventDataGenerated: React.RefObject<((data: EventData) => void) | null>;
+  onFormFieldsGenerated: React.RefObject<((fields: TypeFormField[]) => void) | null>;
   
   // Active state
   isAgentActive: boolean;
@@ -112,23 +167,22 @@ export function EventAgentProvider({ children }: { children: React.ReactNode }) 
       };
       setMessages(prev => [...prev, assistantMessage]);
 
-      // Handle actions
+      // Handle actions - only trigger callbacks when action is not 'none'
       if (data.action === 'generate_event' || data.action === 'update_event') {
         if (data.event_data && onEventDataGenerated.current) {
           onEventDataGenerated.current(data.event_data);
         }
-      }
-
-      if (data.action === 'generate_fields' || data.action === 'update_fields') {
-        if (data.form_fields?.fields && onFormFieldsGenerated.current) {
-          onFormFieldsGenerated.current(data.form_fields.fields);
+        // Also generate form fields if present
+        if (data.form_fields?.fields && data.form_fields.fields.length > 0 && onFormFieldsGenerated.current) {
+          const transformedFields = data.form_fields.fields.map(transformToTypeFormField);
+          onFormFieldsGenerated.current(transformedFields);
         }
       }
 
-      // Handle combined generation
-      if (data.action === 'generate_event' && data.form_fields?.fields) {
-        if (onFormFieldsGenerated.current) {
-          onFormFieldsGenerated.current(data.form_fields.fields);
+      if (data.action === 'generate_fields' || data.action === 'update_fields') {
+        if (data.form_fields?.fields && data.form_fields.fields.length > 0 && onFormFieldsGenerated.current) {
+          const transformedFields = data.form_fields.fields.map(transformToTypeFormField);
+          onFormFieldsGenerated.current(transformedFields);
         }
       }
 

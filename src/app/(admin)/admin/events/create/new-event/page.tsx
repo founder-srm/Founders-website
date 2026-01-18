@@ -58,7 +58,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useFileUpload } from '@/hooks/use-file-upload';
 import { createClient } from '@/utils/supabase/elevatedClient';
 import { FormBuilder } from './form-builder';
-import Tiptap from '@/components/data-table-admin/registrations/tiptap-email';
+import TiptapMarkdown from '@/components/data-table-admin/registrations/tiptap-markdown';
 
 import {
   Form,
@@ -575,14 +575,14 @@ function FullFormPreview({
               </Card>
             )}
 
-            {/* Rules - Rendered as HTML since it's from TipTap */}
+            {/* Rules - Preview as formatted text (full MDX render on public page) */}
             {eventData.rules && (
               <Card>
                 <CardHeader className="pb-2">
                   <CardTitle className="text-sm">Rules & Guidelines</CardTitle>
                 </CardHeader>
-                <CardContent className="prose prose-sm max-w-none">
-                  <div dangerouslySetInnerHTML={{ __html: eventData.rules }} />
+                <CardContent className="prose prose-sm dark:prose-invert max-w-none whitespace-pre-wrap">
+                  {eventData.rules}
                 </CardContent>
               </Card>
             )}
@@ -601,7 +601,7 @@ function FullFormPreview({
                     className="text-sm text-primary hover:underline flex items-center gap-1"
                   >
                     <Link2 className="h-3 w-3" />
-                    {eventData.more_info}
+                    {eventData.more_info_text || eventData.more_info}
                   </a>
                 </CardContent>
               </Card>
@@ -805,6 +805,7 @@ const eventFormSchema = z.object({
   description: z.string().min(10, 'Description must be at least 10 characters'),
   rules: z.string().optional(),
   more_info: z.string().url('Must be a valid URL').optional().or(z.literal('')),
+  more_info_text: z.string().optional(),
   event_type: z.enum(['online', 'offline', 'hybrid']),
   is_featured: z.boolean(),
   is_gated: z.boolean(),
@@ -835,6 +836,7 @@ export default function EventFormBuilderPage() {
       description: '',
       rules: '',
       more_info: '',
+      more_info_text: '',
       event_type: 'offline',
       is_featured: false,
       is_gated: false,
@@ -1174,15 +1176,16 @@ export default function EventFormBuilderPage() {
                     name="rules"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Event Rules & Guidelines (Markdown)</FormLabel>
+                        <FormLabel>Event Rules & Guidelines</FormLabel>
                         <FormControl>
-                          <Tiptap
+                          <TiptapMarkdown
                             content={field.value || ''}
-                            onUpdate={(html) => field.onChange(html)}
+                            onUpdate={(markdown) => field.onChange(markdown)}
+                            placeholder="Enter event rules and guidelines..."
                           />
                         </FormControl>
                         <FormDescription>
-                          Use the toolbar to format rules. Supports bold, italic, lists, and quotes.
+                          Use the rich text editor to format rules. Content is saved as Markdown.
                         </FormDescription>
                         <FormMessage />
                       </FormItem>
@@ -1208,6 +1211,26 @@ export default function EventFormBuilderPage() {
                         </FormControl>
                         <FormDescription>
                           Link to external page with more information
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="more_info_text"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Button Text (optional)</FormLabel>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            placeholder="Learn More"
+                          />
+                        </FormControl>
+                        <FormDescription>
+                          Text to display on the button linking to additional info. Defaults to the URL if empty.
                         </FormDescription>
                         <FormMessage />
                       </FormItem>
