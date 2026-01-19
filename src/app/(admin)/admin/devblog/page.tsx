@@ -29,8 +29,8 @@ export default function DevBlogPage() {
               Blog Management Has Moved! 🎉
             </CardTitle>
             <CardDescription className="text-base">
-              We&apos;ve upgraded to Sanity Studio for a better content management
-              experience
+              We&apos;ve upgraded to Sanity Studio for a better content
+              management experience
             </CardDescription>
           </div>
         </CardHeader>

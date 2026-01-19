@@ -1,24 +1,25 @@
-import { cn } from '@/lib/utils';
 import React from 'react';
+import { cn } from '@/lib/utils';
 
 const PrivacyPolicy = () => {
-
   const privacyStyles = {
-    h1Style: "text-5xl tracking-tighter font-semibold",
-    h2Style: "text-xl font-medium tracking-tight",
-    pStyle: "text-md text-muted-foreground mt-2",
-  }
+    h1Style: 'text-5xl tracking-tighter font-semibold',
+    h2Style: 'text-xl font-medium tracking-tight',
+    pStyle: 'text-md text-muted-foreground mt-2',
+  };
 
   return (
-    <div className='p-5 max-w-6xl mx-auto mt-10'>
+    <div className="p-5 max-w-6xl mx-auto mt-10">
       <h1 className={cn(privacyStyles.h1Style)}>Privacy Policy</h1>
-      <p className='text-sm font-medium mt-2 text-muted-foreground'>
+      <p className="text-sm font-medium mt-2 text-muted-foreground">
         This Privacy Policy outlines how we collect, use, and protect your
         personal information when you use our website.
       </p>
       <div className="space-y-5">
         <section className="mt-7">
-          <h2 className={cn(privacyStyles.h2Style)}>1. Information We Collect</h2>
+          <h2 className={cn(privacyStyles.h2Style)}>
+            1. Information We Collect
+          </h2>
           <p className={cn(privacyStyles.pStyle)}>
             We collect information that you provide to us, such as your name,
             email, company, phone number, etc., when you fill out forms or
@@ -26,11 +27,13 @@ const PrivacyPolicy = () => {
           </p>
         </section>
 
-        <section >
-          <h2 className={cn(privacyStyles.h2Style)}>2. How We Use Your Information</h2>
+        <section>
+          <h2 className={cn(privacyStyles.h2Style)}>
+            2. How We Use Your Information
+          </h2>
           <p className={cn(privacyStyles.pStyle)}>
             The information we collect is used to:
-            <ul >
+            <ul>
               <li>Provide you with requested services</li>
               <li>Communicate with you regarding your inquiries</li>
               <li>Improve our services and website functionality</li>
@@ -40,16 +43,18 @@ const PrivacyPolicy = () => {
         </section>
 
         <section>
-          <h2 className={cn(privacyStyles.h2Style)}>3. Sharing Your Information</h2>
+          <h2 className={cn(privacyStyles.h2Style)}>
+            3. Sharing Your Information
+          </h2>
           <p className={cn(privacyStyles.pStyle)}>
             We do not sell, trade, or rent your personal information to third
-            parties. We may share it with trusted service providers who assist us
-            in operating our website and conducting our business, as long as they
-            agree to keep this information confidential.
+            parties. We may share it with trusted service providers who assist
+            us in operating our website and conducting our business, as long as
+            they agree to keep this information confidential.
           </p>
         </section>
 
-        <section >
+        <section>
           <h2 className={cn(privacyStyles.h2Style)}>4. Data Security</h2>
           <p className={cn(privacyStyles.pStyle)}>
             We take reasonable precautions to protect your information from
@@ -57,15 +62,15 @@ const PrivacyPolicy = () => {
           </p>
         </section>
 
-        <section >
+        <section>
           <h2 className={cn(privacyStyles.h2Style)}>5. Cookies</h2>
           <p className={cn(privacyStyles.pStyle)}>
-            Our website uses cookies to improve your experience. You can choose to
-            disable cookies through your browser settings.
+            Our website uses cookies to improve your experience. You can choose
+            to disable cookies through your browser settings.
           </p>
         </section>
 
-        <section >
+        <section>
           <h2 className={cn(privacyStyles.h2Style)}>6. Your Rights</h2>
           <p className={cn(privacyStyles.pStyle)}>
             You have the right to:
@@ -78,7 +83,9 @@ const PrivacyPolicy = () => {
         </section>
 
         <section>
-          <h2 className={cn(privacyStyles.h2Style)}>7. Changes to this Privacy Policy</h2>
+          <h2 className={cn(privacyStyles.h2Style)}>
+            7. Changes to this Privacy Policy
+          </h2>
           <p className={cn(privacyStyles.pStyle)}>
             We may update this Privacy Policy from time to time. We will notify
             you of any significant changes by posting the updated policy on this
@@ -87,7 +94,7 @@ const PrivacyPolicy = () => {
         </section>
       </div>
 
-      <footer className='mt-6 text-xs text-muted-foreground'>
+      <footer className="mt-6 text-xs text-muted-foreground">
         <p>Last updated: January 2026</p>
       </footer>
     </div>

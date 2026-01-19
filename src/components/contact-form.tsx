@@ -30,14 +30,16 @@ import { Avatar, AvatarImage } from './ui/avatar';
 const formSchema = z.object({
   name: z
     .string()
-    .min(2, {message: 'Name must be at least 2 characters.',})
+    .min(2, { message: 'Name must be at least 2 characters.' })
     .max(20, { message: 'Name cannot be greater than 20 characters.' }),
   email: z.email(),
   phone: z
     .string()
     .min(10, { message: 'Phone number must be at least 10 digits.' })
     .max(10, { message: 'Phone number cannot be longer than 10 digits.' }),
-  message: z.string().min(10, { message: 'Message should be at least 10 characters' }),
+  message: z
+    .string()
+    .min(10, { message: 'Message should be at least 10 characters' }),
   referral: z.string().optional(),
 });
 
@@ -91,7 +93,10 @@ export function BookDemoForm({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="z-10 space-y-6 w-full">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="z-10 space-y-6 w-full"
+      >
         <div className="w-full space-y-6 rounded-xl border border-border bg-background px-6 py-10 shadow-sm">
           <FormField
             control={form.control}
@@ -139,11 +144,7 @@ export function BookDemoForm({
               <FormItem>
                 <FormLabel>Message</FormLabel>
                 <FormControl>
-                  <Textarea
-                    rows={4}
-                    placeholder="Your message..."
-                    {...field}
-                  />
+                  <Textarea rows={4} placeholder="Your message..." {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -154,12 +155,14 @@ export function BookDemoForm({
             name="referral"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>How did you hear about us?
+                <FormLabel>
+                  How did you hear about us?
                   <span className="text-muted-foreground"> (Optional)</span>
                 </FormLabel>
                 <Select
                   onValueChange={field.onChange}
-                  defaultValue={field.value}>
+                  defaultValue={field.value}
+                >
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Select" />
@@ -176,7 +179,7 @@ export function BookDemoForm({
                 </Select>
                 <FormMessage />
               </FormItem>
-              )}
+            )}
           />
 
           <div className="flex w-full flex-col justify-end space-y-3 pt-2">

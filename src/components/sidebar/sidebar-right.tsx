@@ -1,48 +1,30 @@
-import { Plus } from 'lucide-react';
+'use client';
+
+import { usePathname } from 'next/navigation';
 import type * as React from 'react';
 
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarSeparator,
 } from '@/components/ui/sidebar';
 import { useUser } from '@/stores/session';
-import { Calendars } from './calendars';
+import { DashboardAIInsights } from '../charts-admin/dashboard-ai-insights';
+import { AgentChat } from './agent-chat';
 import { NavUser } from './nav-user';
-
-// This is sample data.
-const data = {
-  // user: {
-  //   name: 'shadcn',
-  //   email: 'm@example.com',
-  //   avatar: '/avatars/shadcn.jpg',
-  // },
-  calendars: [
-    {
-      name: 'My Calendars',
-      items: ['Personal', 'Work', 'Family'],
-    },
-    {
-      name: 'Favorites',
-      items: ['Holidays', 'Birthdays'],
-    },
-    {
-      name: 'Other',
-      items: ['Travel', 'Reminders', 'Deadlines'],
-    },
-  ],
-};
 
 export function SidebarRight({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
   const user = useUser();
+  const pathname = usePathname();
+
+  // Check if we're on the new event page
+  const isNewEventPage = pathname?.includes('/admin/events/create/new-event');
+  const isAdminPage = pathname === '/admin';
+
   if (!user) return null;
+
   return (
     <Sidebar
       collapsible="none"
@@ -52,21 +34,17 @@ export function SidebarRight({
       <SidebarHeader className="h-16 border-b border-sidebar-border">
         <NavUser {...user} />
       </SidebarHeader>
-      <SidebarContent>
-        {/* <DatePicker /> */}
-        <SidebarSeparator className="mx-0" />
-        <Calendars calendars={data.calendars} />
+      <SidebarContent className="flex flex-col">
+        {isNewEventPage ? (
+          <AgentChat />
+        ) : isAdminPage ? (
+          <DashboardAIInsights />
+        ) : (
+          <div className="flex-1 flex items-center justify-center p-4 text-center text-muted-foreground">
+            <p className="text-sm">Select a page to see contextual actions</p>
+          </div>
+        )}
       </SidebarContent>
-      <SidebarFooter>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton>
-              <Plus />
-              <span>New Calendar</span>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarFooter>
     </Sidebar>
   );
 }

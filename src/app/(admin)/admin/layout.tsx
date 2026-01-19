@@ -1,4 +1,6 @@
 'use client';
+import { DashboardDataProvider } from '@/components/providers/DashboardDataProvider';
+import { EventAgentProvider } from '@/components/providers/EventAgentProvider';
 import { ReactQueryClientProvider } from '@/components/providers/QueryClientProvider';
 import { SidebarLeft } from '@/components/sidebar/sidebar-left';
 import { SidebarRight } from '@/components/sidebar/sidebar-right';
@@ -44,41 +46,45 @@ export default function AdminLayout({
 
   return (
     <ReactQueryClientProvider>
-      <TooltipProvider>
-        <SidebarProvider className="">
-          <SidebarLeft />
-          <SidebarInset className="overflow-x-hidden">
-            <header className="sticky top-0 z-[60] w-full flex h-14 shrink-0 items-center gap-2 border-b bg-background">
-              <div className="flex flex-1 items-center gap-2 px-3">
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <div>
-                      <SidebarTrigger />
-                    </div>
-                  </TooltipTrigger>
-                  <TooltipContent side="right">
-                    Toggle Sidebar (Ctrl+B)
-                  </TooltipContent>
-                </Tooltip>
-                <Separator orientation="vertical" className="mr-2 h-4" />
-                <Breadcrumb>
-                  <BreadcrumbList>
-                    <BreadcrumbItem>
-                      <BreadcrumbPage className="line-clamp-1">
-                        {getRouteDisplayName(pathname)}
-                      </BreadcrumbPage>
-                    </BreadcrumbItem>
-                  </BreadcrumbList>
-                </Breadcrumb>
-                <Separator orientation="vertical" className="ml-2 h-4" />
-                <ModeToggle />
-              </div>
-            </header>
-            <div className="flex-1 overflow-x-hidden">{children}</div>
-          </SidebarInset>
-          <SidebarRight />
-        </SidebarProvider>
-      </TooltipProvider>
+      <EventAgentProvider>
+        <TooltipProvider>
+          <DashboardDataProvider>
+            <SidebarProvider className="">
+              <SidebarLeft />
+              <SidebarInset className="overflow-x-hidden">
+                <header className="sticky top-0 z-[60] w-full flex h-14 shrink-0 items-center gap-2 border-b bg-background">
+                  <div className="flex flex-1 items-center gap-2 px-3">
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <div>
+                          <SidebarTrigger />
+                        </div>
+                      </TooltipTrigger>
+                      <TooltipContent side="right">
+                        Toggle Sidebar (Ctrl+B)
+                      </TooltipContent>
+                    </Tooltip>
+                    <Separator orientation="vertical" className="mr-2 h-4" />
+                    <Breadcrumb>
+                      <BreadcrumbList>
+                        <BreadcrumbItem>
+                          <BreadcrumbPage className="line-clamp-1">
+                            {getRouteDisplayName(pathname)}
+                          </BreadcrumbPage>
+                        </BreadcrumbItem>
+                      </BreadcrumbList>
+                    </Breadcrumb>
+                    <Separator orientation="vertical" className="ml-2 h-4" />
+                    <ModeToggle />
+                  </div>
+                </header>
+                <div className="flex-1 overflow-x-hidden">{children}</div>
+              </SidebarInset>
+              <SidebarRight />
+            </SidebarProvider>
+          </DashboardDataProvider>
+        </TooltipProvider>
+      </EventAgentProvider>
     </ReactQueryClientProvider>
   );
 }

@@ -1,9 +1,9 @@
-import { ArrowRight } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import { urlFor } from "@/sanity/lib/image";
-import { sanityFetch } from "@/sanity/lib/live";
-import { EVENTS_QUERY } from "@/sanity/lib/queries";
+import { ArrowRight } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { urlFor } from '@/sanity/lib/image';
+import { sanityFetch } from '@/sanity/lib/live';
+import { EVENTS_QUERY } from '@/sanity/lib/queries';
 
 export const revalidate = 3600; // revalidate every hour
 
@@ -17,7 +17,7 @@ const EventWriteUp = async () => {
           Recent Events
         </h2>
         <div className="grid gap-y-10 sm:grid-cols-12 sm:gap-y-12 md:gap-y-16 lg:gap-y-20">
-          {writeUp?.map((event) => (
+          {writeUp?.map(event => (
             <Link
               key={event.slug}
               href={`/events/writeup/${event.slug}`}
@@ -31,14 +31,14 @@ const EventWriteUp = async () => {
                     <span>
                       {event.published
                         ? new Date(event.published).toLocaleDateString(
-                            "en-US",
+                            'en-US',
                             {
-                              month: "long",
-                              day: "numeric",
-                              year: "numeric",
+                              month: 'long',
+                              day: 'numeric',
+                              year: 'numeric',
                             }
                           )
-                        : ""}
+                        : ''}
                     </span>
                   </div>
                 </div>
@@ -55,8 +55,8 @@ const EventWriteUp = async () => {
               <div className="order-first sm:order-last sm:col-span-5 [perspective:1000px]">
                 <div className="relative aspect-[16/9] overflow-hidden rounded-xl shadow-lg shadow-black/20 transition-all duration-500 group-hover:shadow-xl group-hover:shadow-black/40 group-hover:[transform:rotateY(-5deg)_rotateX(2deg)]">
                   <Image
-                    src={event.image ? urlFor(event.image).url() : ""}
-                    alt={event.title || ""}
+                    src={event.image ? urlFor(event.image).url() : ''}
+                    alt={event.title || ''}
                     width={500}
                     height={281}
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"

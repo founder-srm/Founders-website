@@ -112,7 +112,9 @@ const defaultComponents: PortableTextComponents = {
   marks: {
     link: CustomLink,
     strong: ({ children }: { children: React.ReactNode }) => (
-      <strong className="font-semibold text-muted-foreground">{children}</strong>
+      <strong className="font-semibold text-muted-foreground">
+        {children}
+      </strong>
     ),
   },
   types: {

@@ -21,7 +21,7 @@ import {
   Users,
 } from 'lucide-react';
 import { redirect, useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   getUserIdentities,
   linkIdentity,
@@ -70,7 +70,7 @@ export default function AccountPage() {
   const [newPassword, setNewPassword] = useState('');
   const [identities, setIdentities] = useState<UserIdentity[]>([]);
   const Router = useRouter();
-  const supabase = createClient();
+  const supabaseRef = useRef(createClient());
   const searchParams = useSearchParams();
   const currentTab = searchParams.get('tab') || 'profile'; // Default to 'profile' if no query parameter
 
@@ -92,14 +92,15 @@ export default function AccountPage() {
     async function fetchRegistrations() {
       if (!user?.id) return;
 
-      const { data, error } = await supabase
+      const { data, error } = await supabaseRef.current
         .from('eventsregistrations')
         .select('*')
         .eq('application_id', user.id)
         .order('created_at', { ascending: false });
 
       if (!error && data) {
-        setRegistrations(data);
+        // Type assertion to handle Json -> JsonObject compatibility
+        setRegistrations(data as unknown as typeformInsertType[]);
 
         // Unlock event participant achievement if they have registrations
         if (data.length > 0) {
@@ -109,7 +110,8 @@ export default function AccountPage() {
     }
 
     fetchRegistrations();
-  }, [user?.id, supabase, trackEventRegistration]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id]);
 
   useEffect(() => {
     async function fetchIdentities() {

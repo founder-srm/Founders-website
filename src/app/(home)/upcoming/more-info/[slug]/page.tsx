@@ -115,7 +115,7 @@ export default async function EventRegistrationSection({
               variant="outline"
               className="w-full sm:w-auto"
             >
-              <Link href={event.more_info || '#'}>{event.more_info_text}</Link>
+              <Link href={event.more_info || '#'}>{event.more_info}</Link>
             </Button>
           </div>
         </div>
@@ -199,7 +199,11 @@ export default async function EventRegistrationSection({
           <CardHeader>
             <CardTitle className="text-xl md:text-2xl">Event Rules</CardTitle>
           </CardHeader>
-          <CardContent className="ml-2" suppressHydrationWarning>
+          <CardContent
+            className="ml-2 prose prose-sm dark:prose-invert max-w-none"
+            suppressHydrationWarning
+          >
+            {/* TipTap outputs Markdown, render with MDX */}
             <CustomMDX source={event.rules || ''} />
           </CardContent>
           <CardFooter>
@@ -215,9 +219,7 @@ export default async function EventRegistrationSection({
                 variant="outline"
                 className="w-full sm:w-auto"
               >
-                <Link href={event.more_info || '#'}>
-                  {event.more_info_text}
-                </Link>
+                <Link href={event.more_info || '#'}>{event.more_info}</Link>
               </Button>
             </div>
           </CardFooter>

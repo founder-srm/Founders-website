@@ -1,44 +1,53 @@
 'use client';
 
-import { useQuery } from '@supabase-cache-helpers/postgrest-react-query';
-import { useMemo } from 'react';
-import { getAllEvents } from '@/actions/admin/events';
-import { getAllRegistrations } from '@/actions/admin/registrations';
-import { Component as AreaChartInteractive } from '@/components/charts-admin/area-chart-interactive';
-import { BarChartComponent } from '@/components/charts-admin/bar-chart';
-import { Component as BarChartHorizontal } from '@/components/charts-admin/bar-chart-horizontal';
-import PieChartComponent from '@/components/charts-admin/pie-chart';
+import { RefreshCw } from 'lucide-react';
+import { ApprovalWorkflowChart } from '@/components/charts-admin/approval-speed-chart';
+import { AttendanceChart } from '@/components/charts-admin/attendance-chart';
+import { EventPerformanceChart } from '@/components/charts-admin/event-performance-chart';
+import { EventTypeChart } from '@/components/charts-admin/event-type-chart';
+import { FeaturedPerformanceChart } from '@/components/charts-admin/featured-performance-chart';
+import { GatedEventsChart } from '@/components/charts-admin/gated-events-chart';
+import { MonthlyOverviewChart } from '@/components/charts-admin/monthly-overview-chart';
+import { RegistrationStatusChart } from '@/components/charts-admin/registration-status-chart';
+import { RegistrationTimelineChart } from '@/components/charts-admin/registration-timeline-chart';
+import { RegistrationTrendsChart } from '@/components/charts-admin/registration-trends-chart';
+import { StatsCards } from '@/components/charts-admin/stats-cards';
+import { TagsChart } from '@/components/charts-admin/tags-chart';
+import { TeamVsIndividualChart } from '@/components/charts-admin/team-vs-individual-chart';
+import { VenueChart } from '@/components/charts-admin/venue-chart';
+import { useDashboardData } from '@/components/providers/DashboardDataProvider';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
-import type { Event } from '@/types/events';
-import type { Registration } from '@/types/registrations';
-import { createClient } from '@/utils/supabase/client';
 
-export default function AdminDashboard() {
-  const supabase = createClient();
-
+function DashboardContent() {
   const {
-    data: events,
-    isLoading: eventsLoading,
-    isError: eventsError,
-  } = useQuery<Event[]>(getAllEvents(supabase));
-  const {
-    data: registrations,
-    isLoading: registrationsLoading,
-    isError: registrationsError,
-  } = useQuery<Registration[]>(getAllRegistrations(supabase));
+    isLoading,
+    isError,
+    refetch,
+    stats,
+    registrationTrends,
+    eventTypeDistribution,
+    registrationStatusData,
+    eventPerformance,
+    monthlyData,
+    // New data
+    attendanceData,
+    teamVsIndividualData,
+    venueData,
+    tagsData,
+    gatedEventsData,
+    featuredComparisonData,
+    featuredAvgRegs,
+    regularAvgRegs,
+    registrationTimelineData,
+    peakRegistrationDay,
+    approvalWorkflowData,
+    autoApproveRate,
+  } = useDashboardData();
 
-  const registrationStats = useMemo(() => {
-    if (!registrations) return [];
-    return registrations.map(r => ({
-      ...r,
-      event_type: r.is_approved === 'SUBMITTED' ? 'Checked' : 'Pending',
-      registrations_count: 1,
-    }));
-  }, [registrations]);
-
-  if (eventsError || registrationsError) {
+  if (isError) {
     return (
       <Alert variant="destructive">
         <AlertDescription>
@@ -48,96 +57,117 @@ export default function AdminDashboard() {
     );
   }
 
-  if (eventsLoading || registrationsLoading) {
+  if (isLoading) {
     return (
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        <Card className="col-span-full">
-          <CardHeader>
-            <Skeleton className="h-4 w-[250px]" />
-          </CardHeader>
-          <CardContent>
-            <Skeleton className="h-[300px] w-full" />
-          </CardContent>
-        </Card>
-        <Card className="col-span-full md:col-span-2">
-          <CardHeader>
-            <Skeleton className="h-4 w-[250px]" />
-          </CardHeader>
-          <CardContent>
-            <Skeleton className="h-[300px] w-full" />
-          </CardContent>
-        </Card>
+      <div className="space-y-4">
+        {/* Stats skeleton */}
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          {[1, 2, 3, 4].map(i => (
+            <Card key={i}>
+              <CardHeader className="pb-2">
+                <Skeleton className="h-4 w-[100px]" />
+              </CardHeader>
+              <CardContent>
+                <Skeleton className="h-8 w-[60px]" />
+                <Skeleton className="h-3 w-[80px] mt-2" />
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+        {/* Charts skeleton */}
+        <Skeleton className="h-[300px] w-full" />
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <Skeleton className="h-[300px]" />
+          <Skeleton className="h-[300px]" />
+          <Skeleton className="h-[300px]" />
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 py-2">
-      <Card className="col-span-1 flex flex-col justify-between">
-        <CardHeader>
-          <CardTitle>Event Registrations</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <BarChartHorizontal
-            events={events ?? []}
-            registrations={registrations ?? []}
+    <main className="container mx-auto py-4 px-4 sm:px-6 lg:px-8">
+      {/* Header with refresh */}
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h2 className="text-2xl font-bold tracking-tight">
+            Dashboard Overview
+          </h2>
+          <p className="text-muted-foreground">
+            Analytics and insights for your events
+          </p>
+        </div>
+        <Button variant="outline" size="sm" onClick={refetch}>
+          <RefreshCw className="h-4 w-4 mr-2" />
+          Refresh
+        </Button>
+      </div>
+
+      {/* Main Layout: AI Sidebar + Charts */}
+      <div className="flex flex-col lg:flex-row gap-6">
+        {/* Main Charts Area */}
+        <div className="flex-1 space-y-6 min-w-0">
+          {/* Stats Cards */}
+          <StatsCards stats={stats} />
+
+          {/* Registration Trends - Full Width */}
+          <RegistrationTrendsChart
+            data={registrationTrends}
+            trend={stats.recentTrend}
+            trendPercentage={stats.trendPercentage}
           />
-        </CardContent>
-      </Card>
-      <Card className="col-span-1 flex flex-col justify-between">
-        <CardHeader>
-          <CardTitle>Registrations Overview</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <PieChartComponent data={registrationStats} />
-        </CardContent>
-      </Card>
-      <Card className="col-span-1 flex flex-col justify-between">
-        <CardHeader>
-          <CardTitle>Events Distribution</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <BarChartComponent data={events} />
-        </CardContent>
-      </Card>
 
-      <Card className="col-span-full">
-        <CardContent className="py-2">
-          <AreaChartInteractive
-            events={events ?? []}
-            registrations={registrations ?? []}
-          />
-        </CardContent>
-      </Card>
+          {/* Row 1: Status Distribution Charts */}
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-2">
+            <RegistrationStatusChart
+              data={registrationStatusData}
+              acceptanceRate={stats.acceptanceRate}
+            />
+            <AttendanceChart
+              data={attendanceData}
+              attendanceRate={stats.attendanceRate}
+            />
+            <TeamVsIndividualChart data={teamVsIndividualData} />
+            <GatedEventsChart data={gatedEventsData} />
+          </div>
 
-      <Card className="col-span-full">
-        <CardHeader>
-          <CardTitle>All Events</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {events?.map(event => (
-            <div key={event.id}>
-              <h1>{event.title}</h1>
-              <p>{event.description}</p>
-            </div>
-          ))}
-        </CardContent>
-      </Card>
+          {/* Row 2: Event Analytics */}
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <EventTypeChart data={eventTypeDistribution} />
+            <MonthlyOverviewChart data={monthlyData} />
+            <FeaturedPerformanceChart
+              data={featuredComparisonData}
+              featuredAvg={featuredAvgRegs}
+              regularAvg={regularAvgRegs}
+            />
+          </div>
 
-      <Card className="col-span-full">
-        <CardHeader>
-          <CardTitle>All Registrations</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {registrations?.map(r => (
-            <div key={r.id}>
-              <h2>{r.event_title}</h2>
-              <p>ID: {r.id}</p>
-              <p>Approved: {String(r.is_approved)}</p>
-            </div>
-          ))}
-        </CardContent>
-      </Card>
-    </div>
+          {/* Row 3: Timeline & Workflow */}
+          <div className="grid gap-4 lg:grid-cols-3">
+            <RegistrationTimelineChart
+              data={registrationTimelineData}
+              peakDay={peakRegistrationDay}
+            />
+            <ApprovalWorkflowChart
+              data={approvalWorkflowData}
+              autoApproveRate={autoApproveRate}
+            />
+          </div>
+
+          {/* Row 4: Detailed Breakdowns */}
+          <div className="grid gap-4 md:grid-cols-2">
+            <VenueChart data={venueData} />
+            <TagsChart data={tagsData} />
+          </div>
+
+          {/* Row 5: Event Performance */}
+          <EventPerformanceChart data={eventPerformance} />
+        </div>
+      </div>
+    </main>
   );
+}
+
+export default function AdminDashboard() {
+  return <DashboardContent />;
 }

@@ -21,7 +21,9 @@ export default function TypeformPage() {
   const params = useParams<{ slug: string }>();
   const Router = useRouter();
   const user = useUser();
-  const [event, setEvent] = useState<(eventsInsertType & { is_gated?: boolean }) | null>(null);
+  const [event, setEvent] = useState<
+    (eventsInsertType & { is_gated?: boolean }) | null
+  >(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<null | string>(null);
 
@@ -30,14 +32,16 @@ export default function TypeformPage() {
       if (!user?.id) return;
 
       const supabase = createClient();
-      
+
       // Check if user is a club member (has club account)
-      const { data: profileData } = await supabase
-        .from('profiles')
-        .select('is_club_member')
-        .eq('id', user.id)
-        .single();
-      
+      const { data: clubMemberData } = await supabase
+        .from('clubuseraccount')
+        .select('id, is_verified')
+        .eq('user_id', user.id)
+        .maybeSingle();
+
+      const isClubMember = clubMemberData?.is_verified === true;
+
       const { data: eventData, error: eventError } = await supabase
         .from('events')
         .select('*')
@@ -50,8 +54,8 @@ export default function TypeformPage() {
         return;
       }
 
-      // Check if event is gated and user is not a club member
-      if (eventData.is_gated && !profileData?.is_club_member) {
+      // Check if event is gated and user is not a verified club member
+      if (eventData.is_gated && !isClubMember) {
         setError('gated');
         setLoading(false);
         return;
@@ -63,9 +67,8 @@ export default function TypeformPage() {
         .select('*')
         .eq('event_id', eventData.id)
         .eq('application_id', user.id)
-        .single();
+        .maybeSingle();
 
-      console.log('registrationData', registrationData);
       if (registrationData) {
         Router.push('/dashboard/account');
         return;
@@ -78,8 +81,13 @@ export default function TypeformPage() {
     fetchEvent();
   }, [params.slug, Router, user?.id]);
 
-  if (loading) return <div className="h-screen w-full flex items-center justify-center">Loading...</div>;
-  
+  if (loading)
+    return (
+      <div className="h-screen w-full flex items-center justify-center">
+        Loading...
+      </div>
+    );
+
   // Handle gated event access denied
   if (error === 'gated') {
     return (
@@ -95,12 +103,10 @@ export default function TypeformPage() {
               />
               <div className="flex grow flex-col gap-3">
                 <div className="space-y-1">
-                  <p className="text-sm font-medium">
-                    Club Members Only Event
-                  </p>
+                  <p className="text-sm font-medium">Club Members Only Event</p>
                   <p className="text-sm text-muted-foreground">
-                    This event is exclusively for club members. Please contact an admin
-                    if you believe you should have access.
+                    This event is exclusively for club members. Please contact
+                    an admin if you believe you should have access.
                   </p>
                 </div>
                 <div className="flex gap-2">
@@ -115,8 +121,13 @@ export default function TypeformPage() {
       </main>
     );
   }
-  
-  if (error) return <div className="h-screen w-full flex items-center justify-center text-destructive">Error: {error}</div>;
+
+  if (error)
+    return (
+      <div className="h-screen w-full flex items-center justify-center text-destructive">
+        Error: {error}
+      </div>
+    );
 
   const parseResult = typeformSchema.safeParse(event?.typeform_config);
   if (!parseResult.success) {
@@ -217,7 +228,7 @@ export default function TypeformPage() {
   }
 
   return (
-    <main className="h-screen w-full flex items-center justify-center bg-accent">
+    <main className="h-screen w-full flex items-center justify-center bg-background">
       <TypeformMultiStep eventData={event} fields={parseResult.data} />
     </main>
   );

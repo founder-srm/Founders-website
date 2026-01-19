@@ -107,7 +107,8 @@ export const ALL_EVENTS_QUERY = defineQuery(`*[_type == "event"] {
   "slug": slug.current
 }`);
 
-export const EVENT_SETTINGS_QUERY = defineQuery(`*[_type == "eventSettings" && _id == "eventSettings"][0]{
+export const EVENT_SETTINGS_QUERY =
+  defineQuery(`*[_type == "eventSettings" && _id == "eventSettings"][0]{
   _id,
   featuredEvent->{
     _id,
@@ -292,7 +293,8 @@ export const FIRST_LINKTREE_QUERY =
 }`);
 
 // Blog Post Queries
-export const ALL_BLOG_POSTS_QUERY = defineQuery(`*[_type == "blogPost"] | order(publishedAt desc) {
+export const ALL_BLOG_POSTS_QUERY =
+  defineQuery(`*[_type == "blogPost"] | order(publishedAt desc) {
   _id,
   _createdAt,
   title,
@@ -313,7 +315,8 @@ export const ALL_BLOG_POSTS_QUERY = defineQuery(`*[_type == "blogPost"] | order(
   "slug": slug.current
 }`);
 
-export const BLOG_POST_BY_SLUG_QUERY = defineQuery(`*[_type == "blogPost" && slug.current == $slug][0] {
+export const BLOG_POST_BY_SLUG_QUERY =
+  defineQuery(`*[_type == "blogPost" && slug.current == $slug][0] {
   _id,
   _createdAt,
   title,

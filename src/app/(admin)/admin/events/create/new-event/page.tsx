@@ -19,6 +19,13 @@ import * as React from 'react';
 import { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { createEvent } from '@/actions/typeform-upload';
+import TiptapMarkdown from '@/components/data-table-admin/registrations/tiptap-markdown';
+import {
+  type EventData,
+  useEventAgent,
+} from '@/components/providers/EventAgentProvider';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import {
@@ -28,24 +35,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
-import { Textarea } from '@/components/ui/textarea';
-import { Switch } from '@/components/ui/switch';
-import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import {
   Dialog,
   DialogContent,
@@ -53,14 +42,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { createEvent } from '@/actions/typeform-upload';
-import { useToast } from '@/hooks/use-toast';
-import { useFileUpload } from '@/hooks/use-file-upload';
-import { createClient } from '@/utils/supabase/elevatedClient';
-import { FormBuilder } from './form-builder';
-import Tiptap from '@/components/data-table-admin/registrations/tiptap-email';
-
 import {
   Form,
   FormControl,
@@ -70,7 +51,28 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Separator } from '@/components/ui/separator';
+import { Switch } from '@/components/ui/switch';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Textarea } from '@/components/ui/textarea';
+import { useFileUpload } from '@/hooks/use-file-upload';
+import { useToast } from '@/hooks/use-toast';
+import { createClient } from '@/utils/supabase/elevatedClient';
 import type { TypeFormField } from '../../../../../../../schema.zod';
+import { FormBuilder } from './form-builder';
 
 // Helper function to format date for display
 function formatDateDisplay(date: Date | undefined) {
@@ -166,7 +168,7 @@ function DateTimePicker({
           placeholder={placeholder}
           className="pr-10"
           onChange={handleInputChange}
-          onKeyDown={(e) => {
+          onKeyDown={e => {
             if (e.key === 'ArrowDown') {
               e.preventDefault();
               setOpen(true);
@@ -223,7 +225,15 @@ function BannerImageUploader({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
-  const [{ isDragging, errors }, { handleDragEnter, handleDragLeave, handleDragOver, handleDrop: hookHandleDrop }] = useFileUpload({
+  const [
+    { isDragging, errors },
+    {
+      handleDragEnter,
+      handleDragLeave,
+      handleDragOver,
+      handleDrop: hookHandleDrop,
+    },
+  ] = useFileUpload({
     accept: 'image/*',
     maxSize: 10 * 1024 * 1024, // 10MB
     multiple: false,
@@ -285,7 +295,7 @@ function BannerImageUploader({
     try {
       // Simulate progress
       const progressInterval = setInterval(() => {
-        setUploadProgress((prev) => Math.min(prev + 10, 90));
+        setUploadProgress(prev => Math.min(prev + 10, 90));
       }, 100);
 
       const publicUrl = await uploadToSupabase(file);
@@ -388,15 +398,21 @@ function BannerImageUploader({
                   style={{ width: `${uploadProgress}%` }}
                 />
               </div>
-              <p className="text-xs text-muted-foreground mt-2">{uploadProgress}%</p>
+              <p className="text-xs text-muted-foreground mt-2">
+                {uploadProgress}%
+              </p>
             </>
           ) : (
             <>
               <div className="p-4 bg-muted rounded-full mb-4">
                 <Upload className="h-8 w-8 text-muted-foreground" />
               </div>
-              <p className="text-sm font-medium mb-1">Drop your banner image here</p>
-              <p className="text-xs text-muted-foreground mb-4">or click to browse</p>
+              <p className="text-sm font-medium mb-1">
+                Drop your banner image here
+              </p>
+              <p className="text-xs text-muted-foreground mb-4">
+                or click to browse
+              </p>
               <Button
                 type="button"
                 variant="outline"
@@ -423,7 +439,9 @@ function BannerImageUploader({
           <div className="text-center text-destructive">
             <X className="h-10 w-10 mx-auto mb-2" />
             <p className="text-sm">Failed to load image</p>
-            <p className="text-xs mt-1 opacity-70">The image URL may be invalid</p>
+            <p className="text-xs mt-1 opacity-70">
+              The image URL may be invalid
+            </p>
             <Button
               type="button"
               variant="outline"
@@ -497,6 +515,8 @@ function FullFormPreview({
   eventData: any;
   formFields: TypeFormField[];
 }) {
+  const [previewTab, setPreviewTab] = React.useState<'event' | 'form'>('event');
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -505,101 +525,323 @@ function FullFormPreview({
           Preview Event
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Event Page Preview</DialogTitle>
+          <DialogTitle>Preview</DialogTitle>
         </DialogHeader>
-        <div className="space-y-6 pt-4">
-          {/* Banner Preview */}
-          {eventData.banner_image && (
-            <div className="relative h-64 rounded-lg overflow-hidden">
-              <Image
-                src={eventData.banner_image}
-                alt="Event banner"
-                fill
-                className="object-cover"
-                unoptimized
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-              <div className="absolute bottom-4 left-4 text-white">
-                <h2 className="text-2xl font-bold">
-                  {eventData.title || 'Event Title'}
-                </h2>
-                <p className="text-sm opacity-90">{eventData.venue || 'Venue'}</p>
+
+        <Tabs
+          value={previewTab}
+          onValueChange={v => setPreviewTab(v as 'event' | 'form')}
+        >
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="event">Event Page</TabsTrigger>
+            <TabsTrigger value="form">Registration Form</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="event" className="space-y-6 pt-4">
+            {/* Banner Preview */}
+            {eventData.banner_image && (
+              <div className="relative h-64 rounded-lg overflow-hidden">
+                <Image
+                  src={eventData.banner_image}
+                  alt="Event banner"
+                  fill
+                  className="object-cover"
+                  unoptimized
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                <div className="absolute bottom-4 left-4 text-white">
+                  <h2 className="text-2xl font-bold">
+                    {eventData.title || 'Event Title'}
+                  </h2>
+                  <p className="text-sm opacity-90">
+                    {eventData.venue || 'Venue'}
+                  </p>
+                </div>
               </div>
+            )}
+
+            {/* Event Details */}
+            <div className="grid gap-4 md:grid-cols-2">
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm">Date & Time</CardTitle>
+                </CardHeader>
+                <CardContent className="text-sm text-muted-foreground">
+                  {eventData.start_date
+                    ? new Date(eventData.start_date).toLocaleString()
+                    : 'Not set'}
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm">Event Type</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <Badge variant="outline" className="capitalize">
+                    {eventData.event_type || 'offline'}
+                  </Badge>
+                </CardContent>
+              </Card>
             </div>
-          )}
 
-          {/* Event Details */}
-          <div className="grid gap-4 md:grid-cols-2">
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm">Date & Time</CardTitle>
-              </CardHeader>
-              <CardContent className="text-sm text-muted-foreground">
-                {eventData.start_date
-                  ? new Date(eventData.start_date).toLocaleString()
-                  : 'Not set'}
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm">Event Type</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <Badge variant="outline" className="capitalize">
-                  {eventData.event_type || 'offline'}
-                </Badge>
-              </CardContent>
-            </Card>
-          </div>
+            {/* Description */}
+            {eventData.description && (
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm">Description</CardTitle>
+                </CardHeader>
+                <CardContent className="text-sm text-muted-foreground whitespace-pre-wrap">
+                  {eventData.description}
+                </CardContent>
+              </Card>
+            )}
 
-          {/* Description */}
-          {eventData.description && (
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm">Description</CardTitle>
-              </CardHeader>
-              <CardContent className="text-sm text-muted-foreground whitespace-pre-wrap">
-                {eventData.description}
-              </CardContent>
-            </Card>
-          )}
+            {/* Rules - Preview as formatted text (full MDX render on public page) */}
+            {eventData.rules && (
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm">Rules & Guidelines</CardTitle>
+                </CardHeader>
+                <CardContent className="prose prose-sm dark:prose-invert max-w-none whitespace-pre-wrap">
+                  {eventData.rules}
+                </CardContent>
+              </Card>
+            )}
 
-          {/* Registration Form Preview */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-sm">Registration Form</CardTitle>
-              <CardDescription>
-                {formFields.length} field{formFields.length !== 1 ? 's' : ''}
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {formFields.length === 0 ? (
-                <p className="text-sm text-muted-foreground">No form fields added yet</p>
-              ) : (
-                formFields.map((field, idx) => (
-                  <div key={field.name} className="space-y-1">
-                    <Label className="text-sm">
-                      {idx + 1}. {field.label || 'Untitled'}
-                      {field.required && (
-                        <span className="text-destructive ml-1">*</span>
-                      )}
-                    </Label>
-                    {field.description && (
-                      <p className="text-xs text-muted-foreground">
-                        {field.description}
-                      </p>
-                    )}
-                    <Input disabled placeholder={`Enter ${field.label}...`} />
-                  </div>
-                ))
-              )}
-            </CardContent>
-          </Card>
-        </div>
+            {/* More Info Link */}
+            {eventData.more_info && (
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm">
+                    Additional Information
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <a
+                    href={eventData.more_info}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm text-primary hover:underline flex items-center gap-1"
+                  >
+                    <Link2 className="h-3 w-3" />
+                    {eventData.more_info_text || eventData.more_info}
+                  </a>
+                </CardContent>
+              </Card>
+            )}
+          </TabsContent>
+
+          <TabsContent value="form" className="pt-4">
+            <FormPreviewMultistep fields={formFields} />
+          </TabsContent>
+        </Tabs>
       </DialogContent>
     </Dialog>
+  );
+}
+
+// Multistep Form Preview Component (read-only preview mode)
+function FormPreviewMultistep({ fields }: { fields: TypeFormField[] }) {
+  const [step, setStep] = React.useState(0);
+
+  if (fields.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-64 text-muted-foreground">
+        <div className="text-center">
+          <p className="mb-2">No form fields added yet</p>
+          <p className="text-sm">
+            Add fields in the Form Builder to see the preview
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  const currentField = fields[step];
+  const progress = ((step + 1) / fields.length) * 100;
+
+  return (
+    <div className="space-y-6">
+      {/* Progress Bar */}
+      <div className="space-y-2">
+        <div className="flex justify-between text-sm text-muted-foreground">
+          <span>
+            Question {step + 1} of {fields.length}
+          </span>
+          <span>{Math.round(progress)}% complete</span>
+        </div>
+        <div className="h-2 bg-muted rounded-full overflow-hidden">
+          <div
+            className="h-full bg-primary transition-all duration-300"
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+      </div>
+
+      {/* Current Field */}
+      <Card className="border-2">
+        <CardContent className="pt-6 space-y-4">
+          <div className="flex items-center gap-2">
+            <h3 className="text-lg font-semibold">
+              {currentField.label || 'Untitled Field'}
+            </h3>
+            {currentField.required && (
+              <Badge variant="destructive" className="text-xs">
+                Required
+              </Badge>
+            )}
+          </div>
+
+          {currentField.description && (
+            <p className="text-sm text-muted-foreground">
+              {currentField.description}
+            </p>
+          )}
+
+          {/* Field Type Preview */}
+          <div className="pt-2">
+            {currentField.fieldType === 'text' && (
+              <Input disabled placeholder="Short text answer..." />
+            )}
+            {currentField.fieldType === 'textarea' && (
+              <Textarea
+                disabled
+                placeholder="Long text answer..."
+                className="min-h-[100px]"
+              />
+            )}
+            {currentField.fieldType === 'select' && (
+              <Select disabled>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select an option..." />
+                </SelectTrigger>
+                <SelectContent>
+                  {currentField.options?.map(opt => (
+                    <SelectItem key={opt} value={opt}>
+                      {opt}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
+            {currentField.fieldType === 'radio' && (
+              <div className="space-y-2">
+                {currentField.options?.map(opt => (
+                  <div key={opt} className="flex items-center gap-2">
+                    <div className="h-4 w-4 rounded-full border-2 border-muted-foreground" />
+                    <span className="text-sm">{opt}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+            {currentField.fieldType === 'checkbox' &&
+              currentField.checkboxType === 'single' && (
+                <div className="flex items-center gap-2">
+                  <div className="h-4 w-4 rounded border-2 border-muted-foreground" />
+                  <span className="text-sm">I agree</span>
+                </div>
+              )}
+            {currentField.fieldType === 'checkbox' &&
+              currentField.checkboxType === 'multiple' && (
+                <div className="space-y-2">
+                  {currentField.items?.map(item => (
+                    <div key={item.id} className="flex items-center gap-2">
+                      <div className="h-4 w-4 rounded border-2 border-muted-foreground" />
+                      <span className="text-sm">{item.label}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            {currentField.fieldType === 'date' && (
+              <Button
+                variant="outline"
+                disabled
+                className="w-full justify-start"
+              >
+                <CalendarIcon className="mr-2 h-4 w-4" />
+                Pick a date
+              </Button>
+            )}
+            {currentField.fieldType === 'slider' && (
+              <div className="space-y-2">
+                <div className="flex justify-between text-sm text-muted-foreground">
+                  <span>{currentField.min || 0}</span>
+                  <span>{currentField.max || 100}</span>
+                </div>
+                <div className="h-2 bg-muted rounded-full" />
+              </div>
+            )}
+            {currentField.fieldType === 'url' && (
+              <Input
+                disabled
+                type="url"
+                placeholder={currentField.urlPlaceholder || 'https://...'}
+              />
+            )}
+            {currentField.fieldType === 'file' && (
+              <div className="border-2 border-dashed rounded-lg p-6 text-center">
+                <Upload className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
+                <p className="text-sm text-muted-foreground">
+                  Drop files here or click to upload
+                </p>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Max {currentField.maxFileSizeMB || 5}MB •{' '}
+                  {currentField.acceptedFileTypes || 'All files'}
+                </p>
+              </div>
+            )}
+            {currentField.fieldType === 'redirect' && (
+              <Button variant="outline" disabled className="gap-2">
+                <Link2 className="h-4 w-4" />
+                {currentField.redirectLabel || 'Visit Link'}
+              </Button>
+            )}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Navigation */}
+      <div className="flex justify-between">
+        <Button
+          type="button"
+          variant="outline"
+          onClick={() => setStep(Math.max(0, step - 1))}
+          disabled={step === 0}
+        >
+          Previous
+        </Button>
+        {step < fields.length - 1 ? (
+          <Button type="button" onClick={() => setStep(step + 1)}>
+            Next
+          </Button>
+        ) : (
+          <Button type="button" disabled>
+            Submit (Preview)
+          </Button>
+        )}
+      </div>
+
+      {/* Field List */}
+      <div className="border-t pt-4">
+        <p className="text-xs text-muted-foreground mb-2">All fields:</p>
+        <div className="flex flex-wrap gap-1">
+          {fields.map((field, idx) => (
+            <Button
+              key={field.name}
+              type="button"
+              variant={idx === step ? 'default' : 'outline'}
+              size="sm"
+              className="h-7 text-xs"
+              onClick={() => setStep(idx)}
+            >
+              {idx + 1}. {field.label || 'Untitled'}
+            </Button>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -614,6 +856,7 @@ const eventFormSchema = z.object({
   description: z.string().min(10, 'Description must be at least 10 characters'),
   rules: z.string().optional(),
   more_info: z.string().url('Must be a valid URL').optional().or(z.literal('')),
+  more_info_text: z.string().optional(),
   event_type: z.enum(['online', 'offline', 'hybrid']),
   is_featured: z.boolean(),
   is_gated: z.boolean(),
@@ -629,6 +872,9 @@ export default function EventFormBuilderPage() {
   const [activeTab, setActiveTab] = useState<'details' | 'form'>('details');
   const { toast } = useToast();
 
+  // Agent integration
+  const { onEventDataGenerated, onFormFieldsGenerated } = useEventAgent();
+
   const form = useForm<EventFormValues>({
     resolver: zodResolver(eventFormSchema),
     defaultValues: {
@@ -641,6 +887,7 @@ export default function EventFormBuilderPage() {
       description: '',
       rules: '',
       more_info: '',
+      more_info_text: '',
       event_type: 'offline',
       is_featured: false,
       is_gated: false,
@@ -648,6 +895,59 @@ export default function EventFormBuilderPage() {
       tags: [],
     },
   });
+
+  // Register agent callbacks for autofilling form
+  React.useEffect(() => {
+    onEventDataGenerated.current = (data: EventData) => {
+      if (data.title) form.setValue('title', data.title);
+      if (data.description) form.setValue('description', data.description);
+      if (data.venue) form.setValue('venue', data.venue);
+      if (data.event_type) form.setValue('event_type', data.event_type);
+      if (data.tags) form.setValue('tags', data.tags);
+      if (data.rules) form.setValue('rules', data.rules);
+      if (data.is_gated !== undefined) form.setValue('is_gated', data.is_gated);
+      if (data.always_approve !== undefined)
+        form.setValue('always_approve', data.always_approve);
+
+      // Handle dates
+      if (data.suggested_dates) {
+        if (data.suggested_dates.start_date) {
+          form.setValue('start_date', data.suggested_dates.start_date);
+        }
+        if (data.suggested_dates.end_date) {
+          form.setValue('end_date', data.suggested_dates.end_date);
+        }
+        if (data.suggested_dates.publish_date) {
+          form.setValue('publish_date', data.suggested_dates.publish_date);
+        }
+      }
+
+      toast({
+        title: 'Event details updated',
+        description:
+          'The AI has filled in the event details. Review and adjust as needed.',
+      });
+
+      // Switch to details tab if not there
+      setActiveTab('details');
+    };
+
+    onFormFieldsGenerated.current = (fields: TypeFormField[]) => {
+      setFormFields(fields);
+      toast({
+        title: 'Form fields generated',
+        description: `The AI has created ${fields.length} form fields. Review them in the Form Builder tab.`,
+      });
+
+      // Switch to form tab to show the generated fields
+      setActiveTab('form');
+    };
+
+    return () => {
+      onEventDataGenerated.current = null;
+      onFormFieldsGenerated.current = null;
+    };
+  }, [form, toast, onEventDataGenerated, onFormFieldsGenerated]);
 
   const handleFieldsChange = (fields: TypeFormField[]) => {
     setFormFields(fields);
@@ -721,7 +1021,7 @@ export default function EventFormBuilderPage() {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <Tabs
             value={activeTab}
-            onValueChange={(v) => setActiveTab(v as 'details' | 'form')}
+            onValueChange={v => setActiveTab(v as 'details' | 'form')}
           >
             <TabsList className="grid w-full grid-cols-2 max-w-md">
               <TabsTrigger value="details" className="gap-2">
@@ -803,7 +1103,8 @@ export default function EventFormBuilderPage() {
                       Schedule
                     </h4>
                     <p className="text-xs text-muted-foreground -mt-2">
-                      Type natural language like &quot;tomorrow at 2pm&quot; or &quot;next Friday&quot;
+                      Type natural language like &quot;tomorrow at 2pm&quot; or
+                      &quot;next Friday&quot;
                     </p>
                     <div className="grid gap-6 lg:grid-cols-3">
                       <FormField
@@ -872,7 +1173,8 @@ export default function EventFormBuilderPage() {
                 <CardHeader>
                   <CardTitle>Banner Image</CardTitle>
                   <CardDescription>
-                    Upload a visual banner for your event (drag & drop supported)
+                    Upload a visual banner for your event (drag & drop
+                    supported)
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -929,15 +1231,17 @@ export default function EventFormBuilderPage() {
                     name="rules"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Event Rules & Guidelines (Markdown)</FormLabel>
+                        <FormLabel>Event Rules & Guidelines</FormLabel>
                         <FormControl>
-                          <Tiptap
+                          <TiptapMarkdown
                             content={field.value || ''}
-                            onUpdate={(html) => field.onChange(html)}
+                            onUpdate={markdown => field.onChange(markdown)}
+                            placeholder="Enter event rules and guidelines..."
                           />
                         </FormControl>
                         <FormDescription>
-                          Use the toolbar to format rules. Supports bold, italic, lists, and quotes.
+                          Use the rich text editor to format rules. Content is
+                          saved as Markdown.
                         </FormDescription>
                         <FormMessage />
                       </FormItem>
@@ -963,6 +1267,24 @@ export default function EventFormBuilderPage() {
                         </FormControl>
                         <FormDescription>
                           Link to external page with more information
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="more_info_text"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Button Text (optional)</FormLabel>
+                        <FormControl>
+                          <Input {...field} placeholder="Learn More" />
+                        </FormControl>
+                        <FormDescription>
+                          Text to display on the button linking to additional
+                          info. Defaults to the URL if empty.
                         </FormDescription>
                         <FormMessage />
                       </FormItem>
@@ -1160,8 +1482,8 @@ export default function EventFormBuilderPage() {
                         </span>
                       ) : (
                         <span className="text-green-600">
-                          ✓ Ready to create event with {formFields.length}{' '}
-                          field{formFields.length !== 1 ? 's' : ''}
+                          ✓ Ready to create event with {formFields.length} field
+                          {formFields.length !== 1 ? 's' : ''}
                         </span>
                       )}
                     </div>

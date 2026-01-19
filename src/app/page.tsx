@@ -7,7 +7,6 @@ import EventWriteUp from '@/components/recent-events';
 import RelatedPosts from '@/components/related-posts';
 import Testimonial10 from '@/components/testimonials';
 
-
 export default function Home() {
   return (
     <main className="flex flex-col px-2 md:px-0 items-center justify-center w-full h-full relative overflow-x-hidden">
@@ -25,7 +24,6 @@ export default function Home() {
         <Faq1 />
         <CTA11 />
       </section>
-      
     </main>
   );
 }

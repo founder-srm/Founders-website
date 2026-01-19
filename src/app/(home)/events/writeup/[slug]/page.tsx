@@ -9,7 +9,7 @@ import { PortableTextWrapper } from '@/components/mdx/PortableTextWrapper';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { urlFor } from '@/sanity/lib/image';
-import {  sanityFetch } from '@/sanity/lib/live';
+import { sanityFetch } from '@/sanity/lib/live';
 import { EVENT_BY_SLUG_QUERY } from '@/sanity/lib/queries';
 
 type Params = Promise<{ slug: string }>;
@@ -165,7 +165,6 @@ export default async function EventPage({ params }: { params: Params }) {
           </div>
         </div>
       </div>
-      
     </section>
   );
 }

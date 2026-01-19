@@ -8,6 +8,10 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { sendEventRegistration } from '@/actions/typeform-upload';
+import {
+  MemberSearchSelect,
+  type SelectedMember,
+} from '@/components/member-search-select';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -21,6 +25,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Popover,
   PopoverContent,
@@ -37,10 +42,15 @@ import {
 } from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
 import { Textarea } from '@/components/ui/textarea';
+import useClub from '@/hooks/use-club';
 import { useToast } from '@/hooks/use-toast';
 import { useUser } from '@/stores/session';
 import { createClient } from '@/utils/supabase/client';
-import type { eventsInsertType, TypeFormField } from '../../../../../../../schema.zod';
+import type {
+  eventsInsertType,
+  JsonObject,
+  TypeFormField,
+} from '../../../../../../../schema.zod';
 
 function generateZodSchema(fields: TypeFormField[]) {
   const schemaObj: Record<string, any> = {};
@@ -116,6 +126,10 @@ function generateZodSchema(fields: TypeFormField[]) {
         // Redirect fields don't collect data, skip validation
         fieldSchema = z.string().optional();
         break;
+      case 'member_select':
+        // Member select is handled separately via memberSelections state
+        // Skip from form schema since it's not a regular form field
+        return;
     }
 
     if (field.required && field.fieldType !== 'redirect') {
@@ -206,7 +220,9 @@ function FileUploadField({
       <div className="relative border-2 border-dashed rounded-lg p-6 text-center">
         {value ? (
           <div className="space-y-2">
-            <p className="text-sm text-green-600">File uploaded successfully!</p>
+            <p className="text-sm text-green-600">
+              File uploaded successfully!
+            </p>
             <a
               href={value}
               target="_blank"
@@ -230,7 +246,9 @@ function FileUploadField({
           <label className="cursor-pointer">
             <Upload className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
             <p className="text-sm text-muted-foreground mb-2">
-              {isUploading ? 'Uploading...' : 'Click to upload or drag and drop'}
+              {isUploading
+                ? 'Uploading...'
+                : 'Click to upload or drag and drop'}
             </p>
             <p className="text-xs text-muted-foreground">
               Max {maxSizeMB || 5}MB • {accept || 'All files'}
@@ -253,18 +271,47 @@ function FileUploadField({
 
 export function TypeformMultiStep({
   eventData,
-  fields,
+  fields: originalFields,
 }: {
   eventData: eventsInsertType;
   fields: TypeFormField[];
 }) {
   const [step, setStep] = useState(0);
   const [touchedFields, setTouchedFields] = useState<Set<number>>(new Set());
+  // Store selected members keyed by field name for member_select fields
+  const [memberSelections, setMemberSelections] = useState<
+    Record<string, SelectedMember[]>
+  >({});
+
+  // If event is gated, it's a team entry - prepend team member select field
+  const isTeamEntry = (eventData as any).is_gated === true;
+
+  // Filter out any manually added member_select fields if event is gated
+  // (gated events automatically get a team_members field prepended)
+  const filteredOriginalFields = isTeamEntry
+    ? originalFields.filter(f => f.fieldType !== 'member_select')
+    : originalFields;
+
+  const fields: TypeFormField[] = isTeamEntry
+    ? [
+        {
+          name: 'team_members',
+          label: 'Select Your Team Members',
+          fieldType: 'member_select',
+          required: true,
+          minMembers: 2,
+          maxMembers: 5,
+        } as TypeFormField,
+        ...filteredOriginalFields,
+      ]
+    : filteredOriginalFields;
+
   const formSchema = generateZodSchema(fields);
 
   const Router = useRouter();
 
   const user = useUser();
+  const { isClub, club, userRole, loading: clubLoading } = useClub({ user });
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -283,10 +330,57 @@ export function TypeformMultiStep({
     }
   }, [step]);
 
+  // Check if user is a club representative - render after all hooks
+  if (clubLoading) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-center min-h-[400px]">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
+        </div>
+      </div>
+    );
+  }
+
+  if (!isClub || userRole !== 'club_rep') {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex flex-col items-center justify-center min-h-[400px] text-center space-y-4">
+          <div className="w-16 h-16 rounded-full bg-destructive/10 flex items-center justify-center">
+            <svg
+              className="w-8 h-8 text-destructive"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+              />
+            </svg>
+          </div>
+          <h2 className="text-2xl font-bold">Access Restricted</h2>
+          <p className="text-muted-foreground max-w-md">
+            This registration form is only available to club representatives.
+            Please contact your club administrator if you believe you should
+            have access.
+          </p>
+          <Button
+            onClick={() => Router.push('/dashboard/upcoming')}
+            variant="outline"
+          >
+            Back to Events
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
   async function onSubmit(data: z.infer<typeof formSchema>) {
     const userEmail = user?.email;
     const userId = user?.id;
-    
+
     if (!userEmail || !userId) {
       toast({
         title: 'Error',
@@ -297,10 +391,8 @@ export function TypeformMultiStep({
     }
 
     try {
-      // Check if this is a gated event (team entry)
-      const isGatedEvent = (eventData as any).is_gated === true;
       const eventId = (eventData as any).id as string;
-      
+
       if (!eventId) {
         toast({
           title: 'Event error',
@@ -309,16 +401,24 @@ export function TypeformMultiStep({
         });
         return;
       }
-      
+
+      // Include member selections in the submission data
+      const submissionData = {
+        ...data,
+        ...memberSelections,
+      };
+
       const response = await sendEventRegistration({
         registration_email: userEmail,
         event_id: eventId,
         event_title: eventData.title,
         application_id: userId,
-        is_approved: (eventData as any).always_approve ? 'ACCEPTED' : 'SUBMITTED',
-        details: data as Record<string, unknown>,
-        // Mark as team entry for gated events
-        ...(isGatedEvent && { team_entry: true }),
+        is_approved: (eventData as any).always_approve
+          ? 'ACCEPTED'
+          : 'SUBMITTED',
+        details: submissionData as JsonObject,
+        // Gated events are team entries
+        ...(isTeamEntry && { is_team_entry: true }),
       });
 
       if (!response?.ticket_id) {
@@ -349,8 +449,37 @@ export function TypeformMultiStep({
   }
 
   const handleNext = async () => {
-    // Get the current field
     const currentField = fields[step];
+    if (!currentField) return;
+
+    // Handle member_select field validation
+    if (currentField.fieldType === 'member_select') {
+      const selectedMembers = memberSelections[currentField.name] || [];
+      const minMembers = currentField.minMembers || 1;
+      const maxMembers = currentField.maxMembers;
+
+      if (selectedMembers.length < minMembers) {
+        toast({
+          title: 'Selection required',
+          description: `Please select at least ${minMembers} team member${minMembers > 1 ? 's' : ''} to continue.`,
+          variant: 'destructive',
+        });
+        return;
+      }
+
+      if (maxMembers && selectedMembers.length > maxMembers) {
+        toast({
+          title: 'Too many members',
+          description: `Please select at most ${maxMembers} team member${maxMembers > 1 ? 's' : ''}.`,
+          variant: 'destructive',
+        });
+        return;
+      }
+
+      setStep(step + 1);
+      return;
+    }
+
     setTouchedFields(prev => new Set(prev).add(step));
 
     // For optional fields, allow progression if the field is empty
@@ -377,8 +506,10 @@ export function TypeformMultiStep({
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          {/* Form Fields */}
           {fields.map((field, index) => {
             if (index !== step) return null;
+
             return (
               <div key={field.name}>
                 <div className="flex items-center gap-2 mb-2">
@@ -394,6 +525,29 @@ export function TypeformMultiStep({
                 {/* Existing switch statement for form fields */}
                 {(() => {
                   switch (field.fieldType) {
+                    case 'member_select':
+                      return (
+                        <div className="space-y-4">
+                          <Label>{field.label}</Label>
+                          {field.description && (
+                            <p className="text-sm text-muted-foreground">
+                              {field.description}
+                            </p>
+                          )}
+                          <MemberSearchSelect
+                            clubId={club?.id || ''}
+                            value={memberSelections[field.name] || []}
+                            onChange={members =>
+                              setMemberSelections(prev => ({
+                                ...prev,
+                                [field.name]: members,
+                              }))
+                            }
+                            minMembers={field.minMembers || 1}
+                            maxMembers={field.maxMembers}
+                          />
+                        </div>
+                      );
                     case 'text':
                       return (
                         <FormField
@@ -724,7 +878,10 @@ export function TypeformMultiStep({
                                 <Input
                                   data-current-field
                                   type="url"
-                                  placeholder={field.urlPlaceholder || 'https://example.com'}
+                                  placeholder={
+                                    field.urlPlaceholder ||
+                                    'https://example.com'
+                                  }
                                   required={field.required}
                                   value={(formField.value as string) ?? ''}
                                   onChange={formField.onChange}
@@ -783,7 +940,9 @@ export function TypeformMultiStep({
                             type="button"
                             variant="outline"
                             className="gap-2"
-                            onClick={() => window.open(field.redirectUrl, '_blank')}
+                            onClick={() =>
+                              window.open(field.redirectUrl, '_blank')
+                            }
                           >
                             <ExternalLink className="h-4 w-4" />
                             {field.redirectLabel || 'Visit Link'}
@@ -796,22 +955,34 @@ export function TypeformMultiStep({
             );
           })}
           <div className="flex justify-end mt-8 space-x-4">
-            {step < fields.length - 1 ? (
+            {step === fields.length - 1 ? (
               <>
-                <Button
-                  type="button"
-                  variant="outline"
-                  disabled={step === 0}
-                  onClick={() => setStep(step - 1)}
-                >
-                  Previous
-                </Button>
+                {step > 0 && (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => setStep(step - 1)}
+                  >
+                    Previous
+                  </Button>
+                )}
+                <Button type="submit">Submit</Button>
+              </>
+            ) : (
+              <>
+                {step > 0 && (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => setStep(step - 1)}
+                  >
+                    Previous
+                  </Button>
+                )}
                 <Button type="button" onClick={handleNext}>
                   Next
                 </Button>
               </>
-            ) : (
-              <Button type="submit">Submit</Button>
             )}
           </div>
         </form>

@@ -1,11 +1,11 @@
-import { ArrowUpRight } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import { urlFor } from "@/sanity/lib/image";
-import { sanityFetch } from "@/sanity/lib/live";
-import { ALL_BLOG_POSTS_QUERY } from "@/sanity/lib/queries";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { Button } from "./ui/button";
+import { ArrowUpRight } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { urlFor } from '@/sanity/lib/image';
+import { sanityFetch } from '@/sanity/lib/live';
+import { ALL_BLOG_POSTS_QUERY } from '@/sanity/lib/queries';
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
+import { Button } from './ui/button';
 
 type BlogPost = {
   _id: string;
@@ -52,7 +52,7 @@ export default async function RelatedPosts() {
 
         {/* Posts Grid */}
         <div className="grid gap-x-4 gap-y-8 md:grid-cols-2 lg:gap-x-6 lg:gap-y-12">
-          {posts.map((post) => (
+          {posts.map(post => (
             <BlogPostCard key={post._id} post={post} />
           ))}
         </div>
@@ -75,8 +75,8 @@ function BlogPostCard({ post }: { post: BlogPost }) {
       <div className="overflow-clip">
         <div className="transition duration-300 group-hover:scale-105">
           <Image
-            src={urlFor(post.mainImage || "/placeholder.svg").url()}
-            alt={post.mainImage?.alt || post.title || ""}
+            src={urlFor(post.mainImage || '/placeholder.svg').url()}
+            alt={post.mainImage?.alt || post.title || ''}
             width={600}
             height={400}
             className="aspect-[3/2] h-full w-full object-cover object-center"
@@ -102,10 +102,10 @@ function BlogPostCard({ post }: { post: BlogPost }) {
                 className="aspect-square h-full w-full object-cover"
                 src={
                   post.author?.image
-                    ? urlFor(post.author.image || "/placeholder.svg").url()
-                    : "/placeholder.svg"
+                    ? urlFor(post.author.image || '/placeholder.svg').url()
+                    : '/placeholder.svg'
                 }
-                alt={post.author?.name || "Author"}
+                alt={post.author?.name || 'Author'}
               />
               <AvatarFallback>{post.author?.name?.charAt(0)}</AvatarFallback>
             </Avatar>
@@ -115,7 +115,7 @@ function BlogPostCard({ post }: { post: BlogPost }) {
             <span className="text-xs text-muted-foreground">
               {post.publishedAt
                 ? new Date(post.publishedAt).toLocaleDateString()
-                : "No date"}
+                : 'No date'}
             </span>
           </div>
         </div>
@@ -124,7 +124,7 @@ function BlogPostCard({ post }: { post: BlogPost }) {
   );
 }
 
-function ViewAllPostsButton({ className = "" }) {
+function ViewAllPostsButton({ className = '' }) {
   return (
     <Button className={className} asChild>
       <Link href="/blog">View all posts</Link>

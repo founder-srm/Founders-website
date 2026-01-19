@@ -5,6 +5,8 @@ import {
   type ColumnFiltersState,
   flexRender,
   getCoreRowModel,
+  getFacetedRowModel,
+  getFacetedUniqueValues,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
@@ -13,7 +15,7 @@ import {
   useReactTable,
   type VisibilityState,
 } from '@tanstack/react-table';
-import { ChevronDown, Search } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
@@ -22,7 +24,6 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Input } from '@/components/ui/input';
 import {
   Table,
   TableBody,
@@ -32,19 +33,27 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import type { Registration } from '@/types/registrations';
+import { DataTablePagination } from './data-table-pagination';
+import { DataTableToolbar } from './data-table-toolbar';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   onRowSelectionChange?: (rowSelection: RowSelectionState) => void;
+  onRefresh?: () => void;
+  activeTab?: 'all' | 'pending' | 'accepted' | 'team';
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
   onRowSelectionChange,
+  onRefresh,
+  activeTab = 'all',
 }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = useState<SortingState>([]);
+  const [sorting, setSorting] = useState<SortingState>([
+    { id: 'created_at', desc: true }, // Default sort by newest
+  ]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
@@ -59,19 +68,17 @@ export function DataTable<TData, TValue>({
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    getFacetedRowModel: getFacetedRowModel(),
+    getFacetedUniqueValues: getFacetedUniqueValues(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: updater => {
-      // Handle the updater function or direct value
       let newRowSelection: RowSelectionState;
-
       if (typeof updater === 'function') {
         newRowSelection = updater(rowSelection);
       } else {
         newRowSelection = updater;
       }
-
       setRowSelection(newRowSelection);
-
       if (onRowSelectionChange) {
         onRowSelectionChange(newRowSelection);
       }
@@ -80,8 +87,8 @@ export function DataTable<TData, TValue>({
       const registration = row.original as Registration;
       const searchValue = filterValue.toLowerCase();
       return (
-        registration.event_title.toLowerCase().includes(searchValue) ||
-        registration.registration_email.toLowerCase().includes(searchValue) ||
+        registration.event_title?.toLowerCase().includes(searchValue) ||
+        registration.registration_email?.toLowerCase().includes(searchValue) ||
         (registration.ticket_id?.toString().includes(searchValue) ?? false)
       );
     },
@@ -93,62 +100,76 @@ export function DataTable<TData, TValue>({
       globalFilter,
     },
     enableRowSelection: true,
+    initialState: {
+      pagination: {
+        pageSize: 20,
+      },
+    },
   });
 
   return (
-    <div className="w-full">
-      <div className="flex items-center justify-between py-4">
-        <div className="flex items-center">
-          <Search className="mr-2 h-4 w-4 text-gray-400" />
-          <Input
-            placeholder="Search registrations..."
-            value={globalFilter}
-            onChange={event => setGlobalFilter(event.target.value)}
-            className="max-w-sm"
-          />
-        </div>
+    <div className="w-full space-y-4">
+      {/* Toolbar */}
+      <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
+        <DataTableToolbar
+          table={table}
+          globalFilter={globalFilter}
+          setGlobalFilter={setGlobalFilter}
+          onRefresh={onRefresh}
+          activeTab={activeTab}
+        />
+
+        {/* Column Visibility */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
+            <Button variant="outline" size="sm" className="h-10">
               Columns <ChevronDown className="ml-2 h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
+          <DropdownMenuContent align="end" className="w-[180px]">
             {table
               .getAllColumns()
               .filter(column => column.getCanHide())
               .map(column => {
+                const columnNames: Record<string, string> = {
+                  ticket_id: 'Ticket #',
+                  event_title: 'Event',
+                  registration_email: 'Email',
+                  is_team_entry: 'Entry Type',
+                  created_at: 'Registered',
+                  attendance: 'Attendance',
+                  is_approved: 'Status',
+                };
                 return (
                   <DropdownMenuCheckboxItem
                     key={column.id}
-                    className="capitalize"
                     checked={column.getIsVisible()}
                     onCheckedChange={value => column.toggleVisibility(!!value)}
                   >
-                    {column.id}
+                    {columnNames[column.id] || column.id}
                   </DropdownMenuCheckboxItem>
                 );
               })}
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <div className="rounded-md border">
+
+      {/* Table */}
+      <div className="rounded-lg border bg-card">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map(headerGroup => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map(header => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  );
-                })}
+              <TableRow key={headerGroup.id} className="hover:bg-transparent">
+                {headerGroup.headers.map(header => (
+                  <TableHead key={header.id} className="h-12">
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </TableHead>
+                ))}
               </TableRow>
             ))}
           </TableHeader>
@@ -158,9 +179,10 @@ export function DataTable<TData, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && 'selected'}
+                  className="hover:bg-muted/50"
                 >
                   {row.getVisibleCells().map(cell => (
-                    <TableCell key={cell.id}>
+                    <TableCell key={cell.id} className="py-3">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
@@ -173,39 +195,21 @@ export function DataTable<TData, TValue>({
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className="h-24 text-center"
+                  className="h-32 text-center"
                 >
-                  No results.
+                  <div className="flex flex-col items-center gap-2 text-muted-foreground">
+                    <span className="text-lg">No registrations found</span>
+                    <span className="text-sm">Try adjusting your filters</span>
+                  </div>
                 </TableCell>
               </TableRow>
             )}
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-between space-x-2 py-4">
-        <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} of{' '}
-          {table.getFilteredRowModel().rows.length} row(s) selected.
-        </div>
-        <div className="space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            Previous
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            Next
-          </Button>
-        </div>
-      </div>
+
+      {/* Pagination */}
+      <DataTablePagination table={table} />
     </div>
   );
 }
