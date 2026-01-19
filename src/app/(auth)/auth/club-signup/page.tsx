@@ -184,33 +184,6 @@ function SidebarStep({
   );
 }
 
-// function InputField({
-//   label,
-//   placeholder,
-//   type = "text",
-// }: {
-//   label: string;
-//   placeholder: string;
-//   type?: string;
-// }) {
-//   return (
-//     <div className="space-y-2">
-//       <Label
-//         htmlFor={label.toLowerCase().replace(/\s/g, "-")}
-//         className="text-sm font-medium"
-//       >
-//         {label} <span className="text-destructive">*</span>
-//       </Label>
-//       <Input
-//         id={label.toLowerCase().replace(/\s/g, "-")}
-//         type={type}
-//         placeholder={placeholder}
-//         className="rounded-lg border-border/40 bg-background/40 backdrop-blur transition-all focus:border-primary/50 focus:bg-background/60"
-//       />
-//     </div>
-//   );
-// }
-
 function ReviewItem({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-center justify-between rounded-lg border border-border/20 bg-background/40 p-3 backdrop-blur transition-colors hover:bg-background/60">
@@ -224,7 +197,7 @@ function ReviewItem({ label, value }: { label: string; value: string }) {
 // MAIN COMPONENT
 // ============================================================================
 
-export function WizardForm() {
+export default function ClubSignUp() {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -712,5 +685,3 @@ export function WizardForm() {
     </div>
   );
 }
-
-export default WizardForm;
