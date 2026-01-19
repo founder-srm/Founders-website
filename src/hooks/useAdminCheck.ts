@@ -10,12 +10,12 @@ export const useAdminCheck = () => {
     adminLoading,
     adminFetchedForUserId,
     setAdminState,
-    setAdminLoading,
   } = useUserRolesStore();
 
   const supabaseRef = useRef(createClient());
   const hasChecked = useRef(false);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: unnecessary
   useEffect(() => {
     // If we've already checked and have a result, use it
     if (adminFetchedForUserId !== null && !adminLoading) {
