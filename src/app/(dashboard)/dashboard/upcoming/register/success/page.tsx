@@ -34,7 +34,7 @@ import {
 } from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
 import { createClient } from '@/utils/supabase/client';
-import type { typeformInsertType } from '../../../../../../../schema.zod';
+import type { typeformInsertType, JsonObject } from '../../../../../../../schema.zod';
 
 export default function CustomizeTicketPage() {
   // Add new state for QR code size
@@ -87,21 +87,34 @@ export default function CustomizeTicketPage() {
         .single();
 
       if (!error && data) {
-        // Type-safe way to merge details
-        const updatedDetails = {
-          ...(typeof data.details === 'object' ? data.details : {}),
-          email: user?.email,
+        // Safely parse details as JsonObject
+        let existingDetails: JsonObject = {};
+        if (data.details !== null && typeof data.details === 'object' && !Array.isArray(data.details)) {
+          existingDetails = data.details as JsonObject;
+        }
+
+        // Create updated details with email
+        const updatedDetails: JsonObject = Object.assign({}, existingDetails, {
+          email: user?.email ?? null,
+        });
+
+        const registrationData: typeformInsertType = {
+          id: data.id,
+          created_at: data.created_at ?? undefined,
+          event_id: data.event_id ?? undefined,
+          is_team_entry: data.is_team_entry ?? false,
+          registration_email: data.registration_email ?? '',
+          is_approved: (data.is_approved as typeformInsertType['is_approved']) ?? 'SUBMITTED',
+          event_title: data.event_title ?? '',
+          application_id: data.application_id ?? undefined,
+          details: updatedDetails,
+          ticket_id: data.ticket_id ?? undefined,
+          attendance: (data.attendance as typeformInsertType['attendance']) ?? undefined,
         };
 
-        setRegistration({
-          ...data,
-          details: updatedDetails,
-        });
+        setRegistration(registrationData);
 
-        console.log('Registration data with email:', {
-          ...data,
-          details: updatedDetails,
-        });
+        console.log('Registration data with email:', registrationData);
       }
       setLoading(false);
     }
