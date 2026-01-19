@@ -32,6 +32,7 @@ import {
   Text,
   TextCursorInput,
   Trash2,
+  Users,
   X,
 } from 'lucide-react';
 import { useState } from 'react';
@@ -70,6 +71,7 @@ const FIELD_TYPES = [
   { value: 'url', label: 'URL / Link', icon: Link2 },
   { value: 'file', label: 'File Upload', icon: FileUp },
   { value: 'redirect', label: 'Redirect Link', icon: ExternalLink },
+  { value: 'member_select', label: 'Team Member Select', icon: Users },
 ] as const;
 
 type FieldType = (typeof FIELD_TYPES)[number]['value'];
@@ -116,6 +118,14 @@ const createCleanField = (type: FieldType): TypeFormField => {
         redirectUrl: '',
         redirectLabel: 'Visit Link',
         required: false,
+      };
+    case 'member_select':
+      return {
+        ...baseField,
+        label: 'Select Team Members',
+        minMembers: 1,
+        maxMembers: undefined,
+        required: true,
       };
     default:
       return baseField;
@@ -498,6 +508,37 @@ function SortableFieldCard({
           </div>
         )}
 
+        {field.fieldType === 'member_select' && (
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="space-y-2">
+              <Label>Minimum Members</Label>
+              <Input
+                type="number"
+                min={1}
+                value={field.minMembers || 1}
+                onChange={e => onUpdate({ minMembers: Number(e.target.value) })}
+                placeholder="1"
+              />
+              <p className="text-xs text-muted-foreground">
+                Minimum number of team members required
+              </p>
+            </div>
+            <div className="space-y-2">
+              <Label>Maximum Members (optional)</Label>
+              <Input
+                type="number"
+                min={1}
+                value={field.maxMembers || ''}
+                onChange={e => onUpdate({ maxMembers: e.target.value ? Number(e.target.value) : undefined })}
+                placeholder="No limit"
+              />
+              <p className="text-xs text-muted-foreground">
+                Leave empty for no maximum limit
+              </p>
+            </div>
+          </div>
+        )}
+
         <div className="flex items-center gap-2 pt-2">
           <Switch
             id={`required-${field.name}`}
@@ -621,6 +662,16 @@ function FormPreview({ fields }: { fields: TypeFormField[] }) {
                 <ExternalLink className="h-4 w-4" />
                 {field.redirectLabel || 'Visit Link'}
               </Button>
+            )}
+            {field.fieldType === 'member_select' && (
+              <div className="border-2 border-dashed rounded-lg p-4 text-center text-muted-foreground">
+                <Users className="h-8 w-8 mx-auto mb-2" />
+                <p className="text-sm">Team member selection dropdown</p>
+                <p className="text-xs">
+                  Min: {field.minMembers || 1} member(s)
+                  {field.maxMembers ? ` • Max: ${field.maxMembers} member(s)` : ' • No max limit'}
+                </p>
+              </div>
             )}
           </div>
         );

@@ -11,6 +11,7 @@ import {
 import { useUser } from '@/stores/session';
 import { AgentChat } from './agent-chat';
 import { NavUser } from './nav-user';
+import { DashboardAIInsights } from '../charts-admin/dashboard-ai-insights';
 
 export function SidebarRight({
   ...props
@@ -20,6 +21,7 @@ export function SidebarRight({
   
   // Check if we're on the new event page
   const isNewEventPage = pathname?.includes('/admin/events/create/new-event');
+  const isAdminPage = pathname === '/admin';
 
   if (!user) return null;
   
@@ -35,6 +37,8 @@ export function SidebarRight({
       <SidebarContent className="flex flex-col">
         {isNewEventPage ? (
           <AgentChat />
+        ) : isAdminPage ? (
+          <DashboardAIInsights />
         ) : (
           <div className="flex-1 flex items-center justify-center p-4 text-center text-muted-foreground">
             <p className="text-sm">Select a page to see contextual actions</p>

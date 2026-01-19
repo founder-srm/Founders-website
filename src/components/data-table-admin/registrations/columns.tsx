@@ -16,6 +16,8 @@ import {
   UserCheck,
   UserRoundCog,
   UserX,
+  Users,
+  User,
 } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -49,11 +51,41 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import type { Registration } from '@/types/registrations';
 import type { Database } from '../../../../database.types';
 import Tiptap from './tiptap-email';
+
+// Helper function for sortable header
+const SortableHeader = ({
+  column,
+  title,
+}: {
+  column: { toggleSorting: (asc: boolean) => void; getIsSorted: () => string | false };
+  title: string;
+}) => (
+  <Button
+    variant="ghost"
+    onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+    className="h-8 px-2 lg:px-3"
+  >
+    {title}
+    {column.getIsSorted() === 'asc' ? (
+      <ArrowUp className="ml-2 h-4 w-4" />
+    ) : column.getIsSorted() === 'desc' ? (
+      <ArrowDown className="ml-2 h-4 w-4" />
+    ) : (
+      <ArrowUpDown className="ml-2 h-4 w-4 text-muted-foreground" />
+    )}
+  </Button>
+);
 
 export const RegistrationColumns: ColumnDef<Registration>[] = [
   {
@@ -66,6 +98,7 @@ export const RegistrationColumns: ColumnDef<Registration>[] = [
         }
         onCheckedChange={value => table.toggleAllPageRowsSelected(!!value)}
         aria-label="Select all"
+        className="translate-y-[2px]"
       />
     ),
     cell: ({ row }) => (
@@ -73,152 +106,174 @@ export const RegistrationColumns: ColumnDef<Registration>[] = [
         checked={row.getIsSelected()}
         onCheckedChange={value => row.toggleSelected(!!value)}
         aria-label="Select row"
+        className="translate-y-[2px]"
       />
     ),
     enableSorting: false,
     enableHiding: false,
   },
   {
-    accessorKey: 'event_title',
-    header: ({ column }) => {
+    accessorKey: 'ticket_id',
+    header: ({ column }) => <SortableHeader column={column} title="Ticket #" />,
+    cell: ({ row }) => {
+      const ticketId = row.getValue('ticket_id') as number;
       return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
-          Event Title
-          {column.getIsSorted() === 'asc' ? (
-            <ArrowUp className="ml-2 h-4 w-4" />
-          ) : column.getIsSorted() === 'desc' ? (
-            <ArrowDown className="ml-2 h-4 w-4" />
-          ) : (
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          )}
-        </Button>
+        <div className="font-mono text-sm font-medium">
+          #{ticketId?.toString().padStart(5, '0') || 'N/A'}
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: 'event_title',
+    header: ({ column }) => <SortableHeader column={column} title="Event" />,
+    cell: ({ row }) => {
+      const title = row.getValue('event_title') as string;
+      return (
+        <div className="max-w-[200px]">
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <span className="font-medium truncate block">{title}</span>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{title}</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
       );
     },
   },
   {
     accessorKey: 'registration_email',
-    header: ({ column }) => {
+    header: ({ column }) => <SortableHeader column={column} title="Email" />,
+    cell: ({ row }) => {
+      const email = row.getValue('registration_email') as string;
       return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
-          Email
-          {column.getIsSorted() === 'asc' ? (
-            <ArrowUp className="ml-2 h-4 w-4" />
-          ) : column.getIsSorted() === 'desc' ? (
-            <ArrowDown className="ml-2 h-4 w-4" />
-          ) : (
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          )}
-        </Button>
+        <div className="max-w-[200px]">
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <span className="text-sm truncate block text-muted-foreground">{email}</span>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{email}</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
       );
+    },
+  },
+  {
+    accessorKey: 'is_team_entry',
+    header: ({ column }) => <SortableHeader column={column} title="Type" />,
+    cell: ({ row }) => {
+      const isTeam = row.getValue('is_team_entry') as boolean;
+      return (
+        <Badge
+          variant={isTeam ? 'default' : 'secondary'}
+          className={cn(
+            'gap-1',
+            isTeam ? 'bg-violet-600 hover:bg-violet-700' : ''
+          )}
+        >
+          {isTeam ? (
+            <>
+              <Users className="h-3 w-3" />
+              Team
+            </>
+          ) : (
+            <>
+              <User className="h-3 w-3" />
+              Solo
+            </>
+          )}
+        </Badge>
+      );
+    },
+    filterFn: (row, id, value) => {
+      return row.getValue(id) === value;
     },
   },
   {
     accessorKey: 'created_at',
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
-          Registration Date
-          {column.getIsSorted() === 'asc' ? (
-            <ArrowUp className="ml-2 h-4 w-4" />
-          ) : column.getIsSorted() === 'desc' ? (
-            <ArrowDown className="ml-2 h-4 w-4" />
-          ) : (
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          )}
-        </Button>
-      );
-    },
+    header: ({ column }) => <SortableHeader column={column} title="Registered" />,
     cell: ({ row }) => {
-      return row.getValue('created_at')
-        ? new Date(row.getValue('created_at') as string).toLocaleDateString()
-        : 'N/A';
+      const date = row.getValue('created_at') as string;
+      if (!date) return <span className="text-muted-foreground">N/A</span>;
+      
+      const d = new Date(date);
+      const formattedDate = d.toLocaleDateString('en-IN', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+      });
+      const formattedTime = d.toLocaleTimeString('en-IN', {
+        hour: '2-digit',
+        minute: '2-digit',
+      });
+      
+      return (
+        <div className="text-sm">
+          <div className="font-medium">{formattedDate}</div>
+          <div className="text-muted-foreground text-xs">{formattedTime}</div>
+        </div>
+      );
     },
   },
   {
     accessorKey: 'attendance',
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
-          Attendance
-          {column.getIsSorted() === 'asc' ? (
-            <ArrowUp className="ml-2 h-4 w-4" />
-          ) : column.getIsSorted() === 'desc' ? (
-            <ArrowDown className="ml-2 h-4 w-4" />
-          ) : (
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          )}
-        </Button>
-      );
-    },
+    header: ({ column }) => <SortableHeader column={column} title="Attendance" />,
     cell: ({ row }) => {
       const attendance = row.getValue('attendance') as string;
       return attendance ? (
         <Badge
-          variant="secondary"
+          variant="outline"
           className={cn(
-            attendance === 'Present' ? 'bg-emerald-900' : 'bg-rose-900'
+            'font-medium',
+            attendance === 'Present' 
+              ? 'border-emerald-500 bg-emerald-500/10 text-emerald-600' 
+              : 'border-rose-500 bg-rose-500/10 text-rose-600'
           )}
         >
           {attendance}
         </Badge>
       ) : (
-        'N/A'
+        <span className="text-muted-foreground text-sm">—</span>
       );
+    },
+    filterFn: (row, id, value) => {
+      return row.getValue(id) === value;
     },
   },
   {
     accessorKey: 'is_approved',
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
-          Approval Status
-          {column.getIsSorted() === 'asc' ? (
-            <ArrowUp className="ml-2 h-4 w-4" />
-          ) : column.getIsSorted() === 'desc' ? (
-            <ArrowDown className="ml-2 h-4 w-4" />
-          ) : (
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          )}
-        </Button>
-      );
-    },
+    header: ({ column }) => <SortableHeader column={column} title="Status" />,
     cell: ({ row }) => {
-      const isApproved = row.getValue(
+      const status = row.getValue(
         'is_approved'
       ) as Database['public']['Enums']['registration-status'];
+      
+      const statusConfig = {
+        ACCEPTED: { variant: 'default' as const, className: 'bg-emerald-600 hover:bg-emerald-700' },
+        SUBMITTED: { variant: 'secondary' as const, className: 'bg-amber-500/20 text-amber-600 border-amber-500' },
+        REJECTED: { variant: 'destructive' as const, className: '' },
+        INVALID: { variant: 'outline' as const, className: 'border-gray-500 text-gray-500' },
+      };
+      
+      const config = statusConfig[status] || statusConfig.SUBMITTED;
+      
       return (
-        <Badge
-          variant={
-            isApproved === 'ACCEPTED'
-              ? 'default'
-              : isApproved === 'INVALID'
-                ? 'destructive'
-                : 'outline'
-          }
-        >
-          {isApproved}
+        <Badge variant={config.variant} className={config.className}>
+          {status === 'SUBMITTED' ? 'Pending' : status}
         </Badge>
       );
     },
-  },
-  {
-    accessorKey: 'ticket_id',
-    header: 'Ticket',
+    filterFn: (row, id, value) => {
+      return row.getValue(id) === value;
+    },
   },
   {
     id: 'actions',

@@ -218,7 +218,7 @@ export default function TypeformPage() {
   }
 
   return (
-    <main className="h-screen w-full flex items-center justify-center bg-accent">
+    <main className="h-screen w-full flex items-center justify-center bg-background">
       <TypeformMultiStep eventData={event} fields={parseResult.data} />
     </main>
   );
