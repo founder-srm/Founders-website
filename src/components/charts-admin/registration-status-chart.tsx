@@ -1,7 +1,8 @@
 'use client';
 
 import * as React from 'react';
-import { Label, Pie, PieChart, Cell } from 'recharts';
+import { Cell, Label, Pie, PieChart } from 'recharts';
+import type { RegistrationStatusData } from '@/components/providers/DashboardDataProvider';
 import {
   Card,
   CardContent,
@@ -17,7 +18,6 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
-import type { RegistrationStatusData } from '@/components/providers/DashboardDataProvider';
 
 const chartConfig = {
   count: {
@@ -48,7 +48,10 @@ interface RegistrationStatusChartProps {
   acceptanceRate: number;
 }
 
-export function RegistrationStatusChart({ data, acceptanceRate }: RegistrationStatusChartProps) {
+export function RegistrationStatusChart({
+  data,
+  acceptanceRate,
+}: RegistrationStatusChartProps) {
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
@@ -73,10 +76,10 @@ export function RegistrationStatusChart({ data, acceptanceRate }: RegistrationSt
               outerRadius={80}
               strokeWidth={5}
             >
-              {data.map((entry) => (
-                <Cell 
-                  key={entry.status} 
-                  fill={COLORS[entry.status as keyof typeof COLORS]} 
+              {data.map(entry => (
+                <Cell
+                  key={entry.status}
+                  fill={COLORS[entry.status as keyof typeof COLORS]}
                 />
               ))}
               <Label

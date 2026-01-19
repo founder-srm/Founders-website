@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { PortableTextWrapper } from '@/components/mdx/PortableTextWrapper';
 import { urlFor } from '@/sanity/lib/image';
-import {  sanityFetch } from '@/sanity/lib/live';
+import { sanityFetch } from '@/sanity/lib/live';
 import { BLOG_POST_BY_SLUG_QUERY } from '@/sanity/lib/queries';
 
 export const revalidate = 3600;
@@ -26,7 +26,9 @@ export async function generateMetadata(
 
   const previousImages = (await parent).openGraph?.images || [];
 
-  const image = post?.mainImage ? urlFor(post.mainImage).url() : previousImages[0];
+  const image = post?.mainImage
+    ? urlFor(post.mainImage).url()
+    : previousImages[0];
   return {
     title: post?.title,
     description: post?.summary,
@@ -120,7 +122,6 @@ export default async function BlogPostPage({ params }: { params: Params }) {
         {/* biome-ignore lint/style/noNonNullAssertion: Body is required for blog posts */}
         <PortableTextWrapper value={post.body!} />
       </div>
-      
     </article>
   );
 }

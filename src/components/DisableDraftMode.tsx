@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-import { useTransition } from "react";
-import { useRouter } from "next/navigation";
-import { disableDraftMode } from "@/app/actions";
-import {useDraftModeEnvironment} from "next-sanity/hooks";
+import { useRouter } from 'next/navigation';
+import { useDraftModeEnvironment } from 'next-sanity/hooks';
+import { useTransition } from 'react';
+import { disableDraftMode } from '@/app/actions';
 
 export function DisableDraftMode() {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const environment = useDraftModeEnvironment();
-  
-// Only show the disable draft mode button when outside of Presentation Tool
-  if (environment !== "live" && environment !== "unknown") {
+
+  // Only show the disable draft mode button when outside of Presentation Tool
+  if (environment !== 'live' && environment !== 'unknown') {
     return null;
   }
 
@@ -24,7 +24,7 @@ export function DisableDraftMode() {
   return (
     <div>
       {pending ? (
-        "Disabling draft mode..."
+        'Disabling draft mode...'
       ) : (
         <button type="button" onClick={disable}>
           Disable draft mode

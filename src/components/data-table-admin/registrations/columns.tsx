@@ -13,11 +13,11 @@ import {
   TicketCheck,
   TicketSlash,
   TicketX,
+  User,
   UserCheck,
   UserRoundCog,
-  UserX,
   Users,
-  User,
+  UserX,
 } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -68,7 +68,10 @@ const SortableHeader = ({
   column,
   title,
 }: {
-  column: { toggleSorting: (asc: boolean) => void; getIsSorted: () => string | false };
+  column: {
+    toggleSorting: (asc: boolean) => void;
+    getIsSorted: () => string | false;
+  };
   title: string;
 }) => (
   <Button
@@ -155,7 +158,9 @@ export const RegistrationColumns: ColumnDef<Registration>[] = [
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <span className="text-sm truncate block text-muted-foreground">{email}</span>
+                <span className="text-sm truncate block text-muted-foreground">
+                  {email}
+                </span>
               </TooltipTrigger>
               <TooltipContent>
                 <p>{email}</p>
@@ -199,11 +204,13 @@ export const RegistrationColumns: ColumnDef<Registration>[] = [
   },
   {
     accessorKey: 'created_at',
-    header: ({ column }) => <SortableHeader column={column} title="Registered" />,
+    header: ({ column }) => (
+      <SortableHeader column={column} title="Registered" />
+    ),
     cell: ({ row }) => {
       const date = row.getValue('created_at') as string;
       if (!date) return <span className="text-muted-foreground">N/A</span>;
-      
+
       const d = new Date(date);
       const formattedDate = d.toLocaleDateString('en-IN', {
         day: '2-digit',
@@ -214,7 +221,7 @@ export const RegistrationColumns: ColumnDef<Registration>[] = [
         hour: '2-digit',
         minute: '2-digit',
       });
-      
+
       return (
         <div className="text-sm">
           <div className="font-medium">{formattedDate}</div>
@@ -225,7 +232,9 @@ export const RegistrationColumns: ColumnDef<Registration>[] = [
   },
   {
     accessorKey: 'attendance',
-    header: ({ column }) => <SortableHeader column={column} title="Attendance" />,
+    header: ({ column }) => (
+      <SortableHeader column={column} title="Attendance" />
+    ),
     cell: ({ row }) => {
       const attendance = row.getValue('attendance') as string;
       return attendance ? (
@@ -233,8 +242,8 @@ export const RegistrationColumns: ColumnDef<Registration>[] = [
           variant="outline"
           className={cn(
             'font-medium',
-            attendance === 'Present' 
-              ? 'border-emerald-500 bg-emerald-500/10 text-emerald-600' 
+            attendance === 'Present'
+              ? 'border-emerald-500 bg-emerald-500/10 text-emerald-600'
               : 'border-rose-500 bg-rose-500/10 text-rose-600'
           )}
         >
@@ -255,16 +264,25 @@ export const RegistrationColumns: ColumnDef<Registration>[] = [
       const status = row.getValue(
         'is_approved'
       ) as Database['public']['Enums']['registration-status'];
-      
+
       const statusConfig = {
-        ACCEPTED: { variant: 'default' as const, className: 'bg-emerald-600 hover:bg-emerald-700' },
-        SUBMITTED: { variant: 'secondary' as const, className: 'bg-amber-500/20 text-amber-600 border-amber-500' },
+        ACCEPTED: {
+          variant: 'default' as const,
+          className: 'bg-emerald-600 hover:bg-emerald-700',
+        },
+        SUBMITTED: {
+          variant: 'secondary' as const,
+          className: 'bg-amber-500/20 text-amber-600 border-amber-500',
+        },
         REJECTED: { variant: 'destructive' as const, className: '' },
-        INVALID: { variant: 'outline' as const, className: 'border-gray-500 text-gray-500' },
+        INVALID: {
+          variant: 'outline' as const,
+          className: 'border-gray-500 text-gray-500',
+        },
       };
-      
+
       const config = statusConfig[status] || statusConfig.SUBMITTED;
-      
+
       return (
         <Badge variant={config.variant} className={config.className}>
           {status === 'SUBMITTED' ? 'Pending' : status}

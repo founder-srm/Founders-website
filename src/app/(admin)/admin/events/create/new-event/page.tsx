@@ -19,6 +19,13 @@ import * as React from 'react';
 import { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { createEvent } from '@/actions/typeform-upload';
+import TiptapMarkdown from '@/components/data-table-admin/registrations/tiptap-markdown';
+import {
+  type EventData,
+  useEventAgent,
+} from '@/components/providers/EventAgentProvider';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import {
@@ -28,23 +35,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
-import { Textarea } from '@/components/ui/textarea';
-import { Switch } from '@/components/ui/switch';
-import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import {
   Dialog,
   DialogContent,
@@ -52,14 +42,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { createEvent } from '@/actions/typeform-upload';
-import { useToast } from '@/hooks/use-toast';
-import { useFileUpload } from '@/hooks/use-file-upload';
-import { createClient } from '@/utils/supabase/elevatedClient';
-import { FormBuilder } from './form-builder';
-import TiptapMarkdown from '@/components/data-table-admin/registrations/tiptap-markdown';
-
 import {
   Form,
   FormControl,
@@ -69,8 +51,28 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { useEventAgent, type EventData } from '@/components/providers/EventAgentProvider';
+import { Input } from '@/components/ui/input';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Separator } from '@/components/ui/separator';
+import { Switch } from '@/components/ui/switch';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Textarea } from '@/components/ui/textarea';
+import { useFileUpload } from '@/hooks/use-file-upload';
+import { useToast } from '@/hooks/use-toast';
+import { createClient } from '@/utils/supabase/elevatedClient';
 import type { TypeFormField } from '../../../../../../../schema.zod';
+import { FormBuilder } from './form-builder';
 
 // Helper function to format date for display
 function formatDateDisplay(date: Date | undefined) {
@@ -166,7 +168,7 @@ function DateTimePicker({
           placeholder={placeholder}
           className="pr-10"
           onChange={handleInputChange}
-          onKeyDown={(e) => {
+          onKeyDown={e => {
             if (e.key === 'ArrowDown') {
               e.preventDefault();
               setOpen(true);
@@ -223,7 +225,15 @@ function BannerImageUploader({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
-  const [{ isDragging, errors }, { handleDragEnter, handleDragLeave, handleDragOver, handleDrop: hookHandleDrop }] = useFileUpload({
+  const [
+    { isDragging, errors },
+    {
+      handleDragEnter,
+      handleDragLeave,
+      handleDragOver,
+      handleDrop: hookHandleDrop,
+    },
+  ] = useFileUpload({
     accept: 'image/*',
     maxSize: 10 * 1024 * 1024, // 10MB
     multiple: false,
@@ -285,7 +295,7 @@ function BannerImageUploader({
     try {
       // Simulate progress
       const progressInterval = setInterval(() => {
-        setUploadProgress((prev) => Math.min(prev + 10, 90));
+        setUploadProgress(prev => Math.min(prev + 10, 90));
       }, 100);
 
       const publicUrl = await uploadToSupabase(file);
@@ -388,15 +398,21 @@ function BannerImageUploader({
                   style={{ width: `${uploadProgress}%` }}
                 />
               </div>
-              <p className="text-xs text-muted-foreground mt-2">{uploadProgress}%</p>
+              <p className="text-xs text-muted-foreground mt-2">
+                {uploadProgress}%
+              </p>
             </>
           ) : (
             <>
               <div className="p-4 bg-muted rounded-full mb-4">
                 <Upload className="h-8 w-8 text-muted-foreground" />
               </div>
-              <p className="text-sm font-medium mb-1">Drop your banner image here</p>
-              <p className="text-xs text-muted-foreground mb-4">or click to browse</p>
+              <p className="text-sm font-medium mb-1">
+                Drop your banner image here
+              </p>
+              <p className="text-xs text-muted-foreground mb-4">
+                or click to browse
+              </p>
               <Button
                 type="button"
                 variant="outline"
@@ -423,7 +439,9 @@ function BannerImageUploader({
           <div className="text-center text-destructive">
             <X className="h-10 w-10 mx-auto mb-2" />
             <p className="text-sm">Failed to load image</p>
-            <p className="text-xs mt-1 opacity-70">The image URL may be invalid</p>
+            <p className="text-xs mt-1 opacity-70">
+              The image URL may be invalid
+            </p>
             <Button
               type="button"
               variant="outline"
@@ -511,13 +529,16 @@ function FullFormPreview({
         <DialogHeader>
           <DialogTitle>Preview</DialogTitle>
         </DialogHeader>
-        
-        <Tabs value={previewTab} onValueChange={(v) => setPreviewTab(v as 'event' | 'form')}>
+
+        <Tabs
+          value={previewTab}
+          onValueChange={v => setPreviewTab(v as 'event' | 'form')}
+        >
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="event">Event Page</TabsTrigger>
             <TabsTrigger value="form">Registration Form</TabsTrigger>
           </TabsList>
-          
+
           <TabsContent value="event" className="space-y-6 pt-4">
             {/* Banner Preview */}
             {eventData.banner_image && (
@@ -534,7 +555,9 @@ function FullFormPreview({
                   <h2 className="text-2xl font-bold">
                     {eventData.title || 'Event Title'}
                   </h2>
-                  <p className="text-sm opacity-90">{eventData.venue || 'Venue'}</p>
+                  <p className="text-sm opacity-90">
+                    {eventData.venue || 'Venue'}
+                  </p>
                 </div>
               </div>
             )}
@@ -591,12 +614,14 @@ function FullFormPreview({
             {eventData.more_info && (
               <Card>
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm">Additional Information</CardTitle>
+                  <CardTitle className="text-sm">
+                    Additional Information
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <a 
-                    href={eventData.more_info} 
-                    target="_blank" 
+                  <a
+                    href={eventData.more_info}
+                    target="_blank"
                     rel="noopener noreferrer"
                     className="text-sm text-primary hover:underline flex items-center gap-1"
                   >
@@ -626,7 +651,9 @@ function FormPreviewMultistep({ fields }: { fields: TypeFormField[] }) {
       <div className="flex items-center justify-center h-64 text-muted-foreground">
         <div className="text-center">
           <p className="mb-2">No form fields added yet</p>
-          <p className="text-sm">Add fields in the Form Builder to see the preview</p>
+          <p className="text-sm">
+            Add fields in the Form Builder to see the preview
+          </p>
         </div>
       </div>
     );
@@ -640,11 +667,13 @@ function FormPreviewMultistep({ fields }: { fields: TypeFormField[] }) {
       {/* Progress Bar */}
       <div className="space-y-2">
         <div className="flex justify-between text-sm text-muted-foreground">
-          <span>Question {step + 1} of {fields.length}</span>
+          <span>
+            Question {step + 1} of {fields.length}
+          </span>
           <span>{Math.round(progress)}% complete</span>
         </div>
         <div className="h-2 bg-muted rounded-full overflow-hidden">
-          <div 
+          <div
             className="h-full bg-primary transition-all duration-300"
             style={{ width: `${progress}%` }}
           />
@@ -655,14 +684,20 @@ function FormPreviewMultistep({ fields }: { fields: TypeFormField[] }) {
       <Card className="border-2">
         <CardContent className="pt-6 space-y-4">
           <div className="flex items-center gap-2">
-            <h3 className="text-lg font-semibold">{currentField.label || 'Untitled Field'}</h3>
+            <h3 className="text-lg font-semibold">
+              {currentField.label || 'Untitled Field'}
+            </h3>
             {currentField.required && (
-              <Badge variant="destructive" className="text-xs">Required</Badge>
+              <Badge variant="destructive" className="text-xs">
+                Required
+              </Badge>
             )}
           </div>
-          
+
           {currentField.description && (
-            <p className="text-sm text-muted-foreground">{currentField.description}</p>
+            <p className="text-sm text-muted-foreground">
+              {currentField.description}
+            </p>
           )}
 
           {/* Field Type Preview */}
@@ -671,7 +706,11 @@ function FormPreviewMultistep({ fields }: { fields: TypeFormField[] }) {
               <Input disabled placeholder="Short text answer..." />
             )}
             {currentField.fieldType === 'textarea' && (
-              <Textarea disabled placeholder="Long text answer..." className="min-h-[100px]" />
+              <Textarea
+                disabled
+                placeholder="Long text answer..."
+                className="min-h-[100px]"
+              />
             )}
             {currentField.fieldType === 'select' && (
               <Select disabled>
@@ -680,7 +719,9 @@ function FormPreviewMultistep({ fields }: { fields: TypeFormField[] }) {
                 </SelectTrigger>
                 <SelectContent>
                   {currentField.options?.map(opt => (
-                    <SelectItem key={opt} value={opt}>{opt}</SelectItem>
+                    <SelectItem key={opt} value={opt}>
+                      {opt}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -695,24 +736,30 @@ function FormPreviewMultistep({ fields }: { fields: TypeFormField[] }) {
                 ))}
               </div>
             )}
-            {currentField.fieldType === 'checkbox' && currentField.checkboxType === 'single' && (
-              <div className="flex items-center gap-2">
-                <div className="h-4 w-4 rounded border-2 border-muted-foreground" />
-                <span className="text-sm">I agree</span>
-              </div>
-            )}
-            {currentField.fieldType === 'checkbox' && currentField.checkboxType === 'multiple' && (
-              <div className="space-y-2">
-                {currentField.items?.map(item => (
-                  <div key={item.id} className="flex items-center gap-2">
-                    <div className="h-4 w-4 rounded border-2 border-muted-foreground" />
-                    <span className="text-sm">{item.label}</span>
-                  </div>
-                ))}
-              </div>
-            )}
+            {currentField.fieldType === 'checkbox' &&
+              currentField.checkboxType === 'single' && (
+                <div className="flex items-center gap-2">
+                  <div className="h-4 w-4 rounded border-2 border-muted-foreground" />
+                  <span className="text-sm">I agree</span>
+                </div>
+              )}
+            {currentField.fieldType === 'checkbox' &&
+              currentField.checkboxType === 'multiple' && (
+                <div className="space-y-2">
+                  {currentField.items?.map(item => (
+                    <div key={item.id} className="flex items-center gap-2">
+                      <div className="h-4 w-4 rounded border-2 border-muted-foreground" />
+                      <span className="text-sm">{item.label}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
             {currentField.fieldType === 'date' && (
-              <Button variant="outline" disabled className="w-full justify-start">
+              <Button
+                variant="outline"
+                disabled
+                className="w-full justify-start"
+              >
                 <CalendarIcon className="mr-2 h-4 w-4" />
                 Pick a date
               </Button>
@@ -727,14 +774,21 @@ function FormPreviewMultistep({ fields }: { fields: TypeFormField[] }) {
               </div>
             )}
             {currentField.fieldType === 'url' && (
-              <Input disabled type="url" placeholder={currentField.urlPlaceholder || 'https://...'} />
+              <Input
+                disabled
+                type="url"
+                placeholder={currentField.urlPlaceholder || 'https://...'}
+              />
             )}
             {currentField.fieldType === 'file' && (
               <div className="border-2 border-dashed rounded-lg p-6 text-center">
                 <Upload className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
-                <p className="text-sm text-muted-foreground">Drop files here or click to upload</p>
+                <p className="text-sm text-muted-foreground">
+                  Drop files here or click to upload
+                </p>
                 <p className="text-xs text-muted-foreground mt-1">
-                  Max {currentField.maxFileSizeMB || 5}MB • {currentField.acceptedFileTypes || 'All files'}
+                  Max {currentField.maxFileSizeMB || 5}MB •{' '}
+                  {currentField.acceptedFileTypes || 'All files'}
                 </p>
               </div>
             )}
@@ -750,19 +804,16 @@ function FormPreviewMultistep({ fields }: { fields: TypeFormField[] }) {
 
       {/* Navigation */}
       <div className="flex justify-between">
-        <Button 
+        <Button
           type="button"
-          variant="outline" 
+          variant="outline"
           onClick={() => setStep(Math.max(0, step - 1))}
           disabled={step === 0}
         >
           Previous
         </Button>
         {step < fields.length - 1 ? (
-          <Button 
-            type="button"
-            onClick={() => setStep(step + 1)}
-          >
+          <Button type="button" onClick={() => setStep(step + 1)}>
             Next
           </Button>
         ) : (
@@ -820,7 +871,7 @@ export default function EventFormBuilderPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [activeTab, setActiveTab] = useState<'details' | 'form'>('details');
   const { toast } = useToast();
-  
+
   // Agent integration
   const { onEventDataGenerated, onFormFieldsGenerated } = useEventAgent();
 
@@ -855,8 +906,9 @@ export default function EventFormBuilderPage() {
       if (data.tags) form.setValue('tags', data.tags);
       if (data.rules) form.setValue('rules', data.rules);
       if (data.is_gated !== undefined) form.setValue('is_gated', data.is_gated);
-      if (data.always_approve !== undefined) form.setValue('always_approve', data.always_approve);
-      
+      if (data.always_approve !== undefined)
+        form.setValue('always_approve', data.always_approve);
+
       // Handle dates
       if (data.suggested_dates) {
         if (data.suggested_dates.start_date) {
@@ -872,9 +924,10 @@ export default function EventFormBuilderPage() {
 
       toast({
         title: 'Event details updated',
-        description: 'The AI has filled in the event details. Review and adjust as needed.',
+        description:
+          'The AI has filled in the event details. Review and adjust as needed.',
       });
-      
+
       // Switch to details tab if not there
       setActiveTab('details');
     };
@@ -885,7 +938,7 @@ export default function EventFormBuilderPage() {
         title: 'Form fields generated',
         description: `The AI has created ${fields.length} form fields. Review them in the Form Builder tab.`,
       });
-      
+
       // Switch to form tab to show the generated fields
       setActiveTab('form');
     };
@@ -968,7 +1021,7 @@ export default function EventFormBuilderPage() {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <Tabs
             value={activeTab}
-            onValueChange={(v) => setActiveTab(v as 'details' | 'form')}
+            onValueChange={v => setActiveTab(v as 'details' | 'form')}
           >
             <TabsList className="grid w-full grid-cols-2 max-w-md">
               <TabsTrigger value="details" className="gap-2">
@@ -1050,7 +1103,8 @@ export default function EventFormBuilderPage() {
                       Schedule
                     </h4>
                     <p className="text-xs text-muted-foreground -mt-2">
-                      Type natural language like &quot;tomorrow at 2pm&quot; or &quot;next Friday&quot;
+                      Type natural language like &quot;tomorrow at 2pm&quot; or
+                      &quot;next Friday&quot;
                     </p>
                     <div className="grid gap-6 lg:grid-cols-3">
                       <FormField
@@ -1119,7 +1173,8 @@ export default function EventFormBuilderPage() {
                 <CardHeader>
                   <CardTitle>Banner Image</CardTitle>
                   <CardDescription>
-                    Upload a visual banner for your event (drag & drop supported)
+                    Upload a visual banner for your event (drag & drop
+                    supported)
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -1180,12 +1235,13 @@ export default function EventFormBuilderPage() {
                         <FormControl>
                           <TiptapMarkdown
                             content={field.value || ''}
-                            onUpdate={(markdown) => field.onChange(markdown)}
+                            onUpdate={markdown => field.onChange(markdown)}
                             placeholder="Enter event rules and guidelines..."
                           />
                         </FormControl>
                         <FormDescription>
-                          Use the rich text editor to format rules. Content is saved as Markdown.
+                          Use the rich text editor to format rules. Content is
+                          saved as Markdown.
                         </FormDescription>
                         <FormMessage />
                       </FormItem>
@@ -1224,13 +1280,11 @@ export default function EventFormBuilderPage() {
                       <FormItem>
                         <FormLabel>Button Text (optional)</FormLabel>
                         <FormControl>
-                          <Input
-                            {...field}
-                            placeholder="Learn More"
-                          />
+                          <Input {...field} placeholder="Learn More" />
                         </FormControl>
                         <FormDescription>
-                          Text to display on the button linking to additional info. Defaults to the URL if empty.
+                          Text to display on the button linking to additional
+                          info. Defaults to the URL if empty.
                         </FormDescription>
                         <FormMessage />
                       </FormItem>
@@ -1428,8 +1482,8 @@ export default function EventFormBuilderPage() {
                         </span>
                       ) : (
                         <span className="text-green-600">
-                          ✓ Ready to create event with {formFields.length}{' '}
-                          field{formFields.length !== 1 ? 's' : ''}
+                          ✓ Ready to create event with {formFields.length} field
+                          {formFields.length !== 1 ? 's' : ''}
                         </span>
                       )}
                     </div>

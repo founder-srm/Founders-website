@@ -1,6 +1,6 @@
 'use client';
 
-import { Bar, BarChart, XAxis, YAxis, Cell } from 'recharts';
+import { Bar, BarChart, Cell, XAxis, YAxis } from 'recharts';
 import {
   Card,
   CardContent,
@@ -34,7 +34,8 @@ interface VenueChartProps {
 export function VenueChart({ data }: VenueChartProps) {
   const chartData = data.slice(0, 6).map(item => ({
     ...item,
-    shortVenue: item.venue.length > 15 ? item.venue.substring(0, 15) + '...' : item.venue,
+    shortVenue:
+      item.venue.length > 15 ? item.venue.substring(0, 15) + '...' : item.venue,
   }));
 
   return (

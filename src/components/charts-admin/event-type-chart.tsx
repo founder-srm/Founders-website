@@ -1,7 +1,8 @@
 'use client';
 
 import * as React from 'react';
-import { Pie, PieChart, Cell } from 'recharts';
+import { Cell, Pie, PieChart } from 'recharts';
+import type { EventTypeDistribution } from '@/components/providers/DashboardDataProvider';
 import {
   Card,
   CardContent,
@@ -17,7 +18,6 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
-import type { EventTypeDistribution } from '@/components/providers/DashboardDataProvider';
 
 const COLORS = [
   'hsl(var(--chart-1))',
@@ -76,7 +76,10 @@ export function EventTypeChart({ data }: EventTypeChartProps) {
               strokeWidth={2}
             >
               {chartData.map((entry, index) => (
-                <Cell key={`cell-${entry.type}`} fill={COLORS[index % COLORS.length]} />
+                <Cell
+                  key={`cell-${entry.type}`}
+                  fill={COLORS[index % COLORS.length]}
+                />
               ))}
             </Pie>
             <ChartLegend

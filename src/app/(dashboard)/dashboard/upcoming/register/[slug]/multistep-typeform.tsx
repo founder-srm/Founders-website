@@ -8,6 +8,10 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { sendEventRegistration } from '@/actions/typeform-upload';
+import {
+  MemberSearchSelect,
+  type SelectedMember,
+} from '@/components/member-search-select';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -21,6 +25,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Popover,
   PopoverContent,
@@ -37,13 +42,15 @@ import {
 } from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
 import { Textarea } from '@/components/ui/textarea';
-import { useToast } from '@/hooks/use-toast';
 import useClub from '@/hooks/use-club';
+import { useToast } from '@/hooks/use-toast';
 import { useUser } from '@/stores/session';
 import { createClient } from '@/utils/supabase/client';
-import { MemberSearchSelect, type SelectedMember } from '@/components/member-search-select';
-import type { eventsInsertType, TypeFormField, JsonObject } from '../../../../../../../schema.zod';
-import { Label } from '@/components/ui/label';
+import type {
+  eventsInsertType,
+  JsonObject,
+  TypeFormField,
+} from '../../../../../../../schema.zod';
 
 function generateZodSchema(fields: TypeFormField[]) {
   const schemaObj: Record<string, any> = {};
@@ -213,7 +220,9 @@ function FileUploadField({
       <div className="relative border-2 border-dashed rounded-lg p-6 text-center">
         {value ? (
           <div className="space-y-2">
-            <p className="text-sm text-green-600">File uploaded successfully!</p>
+            <p className="text-sm text-green-600">
+              File uploaded successfully!
+            </p>
             <a
               href={value}
               target="_blank"
@@ -237,7 +246,9 @@ function FileUploadField({
           <label className="cursor-pointer">
             <Upload className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
             <p className="text-sm text-muted-foreground mb-2">
-              {isUploading ? 'Uploading...' : 'Click to upload or drag and drop'}
+              {isUploading
+                ? 'Uploading...'
+                : 'Click to upload or drag and drop'}
             </p>
             <p className="text-xs text-muted-foreground">
               Max {maxSizeMB || 5}MB • {accept || 'All files'}
@@ -268,17 +279,19 @@ export function TypeformMultiStep({
   const [step, setStep] = useState(0);
   const [touchedFields, setTouchedFields] = useState<Set<number>>(new Set());
   // Store selected members keyed by field name for member_select fields
-  const [memberSelections, setMemberSelections] = useState<Record<string, SelectedMember[]>>({});
-  
+  const [memberSelections, setMemberSelections] = useState<
+    Record<string, SelectedMember[]>
+  >({});
+
   // If event is gated, it's a team entry - prepend team member select field
   const isTeamEntry = (eventData as any).is_gated === true;
-  
+
   // Filter out any manually added member_select fields if event is gated
   // (gated events automatically get a team_members field prepended)
   const filteredOriginalFields = isTeamEntry
     ? originalFields.filter(f => f.fieldType !== 'member_select')
     : originalFields;
-  
+
   const fields: TypeFormField[] = isTeamEntry
     ? [
         {
@@ -292,7 +305,7 @@ export function TypeformMultiStep({
         ...filteredOriginalFields,
       ]
     : filteredOriginalFields;
-  
+
   const formSchema = generateZodSchema(fields);
 
   const Router = useRouter();
@@ -350,9 +363,13 @@ export function TypeformMultiStep({
           <h2 className="text-2xl font-bold">Access Restricted</h2>
           <p className="text-muted-foreground max-w-md">
             This registration form is only available to club representatives.
-            Please contact your club administrator if you believe you should have access.
+            Please contact your club administrator if you believe you should
+            have access.
           </p>
-          <Button onClick={() => Router.push('/dashboard/upcoming')} variant="outline">
+          <Button
+            onClick={() => Router.push('/dashboard/upcoming')}
+            variant="outline"
+          >
             Back to Events
           </Button>
         </div>
@@ -363,7 +380,7 @@ export function TypeformMultiStep({
   async function onSubmit(data: z.infer<typeof formSchema>) {
     const userEmail = user?.email;
     const userId = user?.id;
-    
+
     if (!userEmail || !userId) {
       toast({
         title: 'Error',
@@ -375,7 +392,7 @@ export function TypeformMultiStep({
 
     try {
       const eventId = (eventData as any).id as string;
-      
+
       if (!eventId) {
         toast({
           title: 'Event error',
@@ -390,13 +407,15 @@ export function TypeformMultiStep({
         ...data,
         ...memberSelections,
       };
-      
+
       const response = await sendEventRegistration({
         registration_email: userEmail,
         event_id: eventId,
         event_title: eventData.title,
         application_id: userId,
-        is_approved: (eventData as any).always_approve ? 'ACCEPTED' : 'SUBMITTED',
+        is_approved: (eventData as any).always_approve
+          ? 'ACCEPTED'
+          : 'SUBMITTED',
         details: submissionData as JsonObject,
         // Gated events are team entries
         ...(isTeamEntry && { is_team_entry: true }),
@@ -460,7 +479,7 @@ export function TypeformMultiStep({
       setStep(step + 1);
       return;
     }
-    
+
     setTouchedFields(prev => new Set(prev).add(step));
 
     // For optional fields, allow progression if the field is empty
@@ -490,7 +509,7 @@ export function TypeformMultiStep({
           {/* Form Fields */}
           {fields.map((field, index) => {
             if (index !== step) return null;
-            
+
             return (
               <div key={field.name}>
                 <div className="flex items-center gap-2 mb-2">
@@ -518,10 +537,12 @@ export function TypeformMultiStep({
                           <MemberSearchSelect
                             clubId={club?.id || ''}
                             value={memberSelections[field.name] || []}
-                            onChange={(members) => setMemberSelections(prev => ({
-                              ...prev,
-                              [field.name]: members,
-                            }))}
+                            onChange={members =>
+                              setMemberSelections(prev => ({
+                                ...prev,
+                                [field.name]: members,
+                              }))
+                            }
                             minMembers={field.minMembers || 1}
                             maxMembers={field.maxMembers}
                           />
@@ -857,7 +878,10 @@ export function TypeformMultiStep({
                                 <Input
                                   data-current-field
                                   type="url"
-                                  placeholder={field.urlPlaceholder || 'https://example.com'}
+                                  placeholder={
+                                    field.urlPlaceholder ||
+                                    'https://example.com'
+                                  }
                                   required={field.required}
                                   value={(formField.value as string) ?? ''}
                                   onChange={formField.onChange}
@@ -916,7 +940,9 @@ export function TypeformMultiStep({
                             type="button"
                             variant="outline"
                             className="gap-2"
-                            onClick={() => window.open(field.redirectUrl, '_blank')}
+                            onClick={() =>
+                              window.open(field.redirectUrl, '_blank')
+                            }
                           >
                             <ExternalLink className="h-4 w-4" />
                             {field.redirectLabel || 'Visit Link'}
@@ -929,7 +955,7 @@ export function TypeformMultiStep({
             );
           })}
           <div className="flex justify-end mt-8 space-x-4">
-            {step === fields.length -1 ? (
+            {step === fields.length - 1 ? (
               <>
                 {step > 0 && (
                   <Button

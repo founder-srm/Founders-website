@@ -1,5 +1,5 @@
 import Groq from 'groq-sdk';
-import { NextRequest, NextResponse } from 'next/server';
+import { type NextRequest, NextResponse } from 'next/server';
 
 const groq = new Groq({ apiKey: process.env.NEXT_PUBLIC_GROQ_API_KEY });
 
@@ -8,25 +8,61 @@ const eventDetailsSchema = {
   type: 'object',
   properties: {
     title: { type: 'string', description: 'Event title' },
-    description: { type: 'string', description: 'Short event description (2-3 sentences)' },
+    description: {
+      type: 'string',
+      description: 'Short event description (2-3 sentences)',
+    },
     venue: { type: 'string', description: 'Event venue/location' },
     event_type: { type: 'string', enum: ['online', 'offline', 'hybrid'] },
-    tags: { type: 'array', items: { type: 'string' }, description: 'Relevant tags for the event' },
-    rules: { type: 'string', description: 'Event rules in HTML format (can be empty string)' },
+    tags: {
+      type: 'array',
+      items: { type: 'string' },
+      description: 'Relevant tags for the event',
+    },
+    rules: {
+      type: 'string',
+      description: 'Event rules in HTML format (can be empty string)',
+    },
     suggested_dates: {
       type: 'object',
       properties: {
-        start_date: { type: 'string', description: 'Suggested start date in ISO format' },
-        end_date: { type: 'string', description: 'Suggested end date in ISO format' },
-        publish_date: { type: 'string', description: 'Suggested publish date in ISO format' },
+        start_date: {
+          type: 'string',
+          description: 'Suggested start date in ISO format',
+        },
+        end_date: {
+          type: 'string',
+          description: 'Suggested end date in ISO format',
+        },
+        publish_date: {
+          type: 'string',
+          description: 'Suggested publish date in ISO format',
+        },
       },
       required: ['start_date', 'end_date', 'publish_date'],
       additionalProperties: false,
     },
-    is_gated: { type: 'boolean', description: 'Whether event should be for club members only (default false)' },
-    always_approve: { type: 'boolean', description: 'Whether to auto-approve registrations (default false)' },
+    is_gated: {
+      type: 'boolean',
+      description:
+        'Whether event should be for club members only (default false)',
+    },
+    always_approve: {
+      type: 'boolean',
+      description: 'Whether to auto-approve registrations (default false)',
+    },
   },
-  required: ['title', 'description', 'venue', 'event_type', 'tags', 'rules', 'suggested_dates', 'is_gated', 'always_approve'],
+  required: [
+    'title',
+    'description',
+    'venue',
+    'event_type',
+    'tags',
+    'rules',
+    'suggested_dates',
+    'is_gated',
+    'always_approve',
+  ],
   additionalProperties: false,
 };
 
@@ -36,14 +72,39 @@ const formFieldSchema = {
   properties: {
     fieldType: {
       type: 'string',
-      enum: ['text', 'textarea', 'radio', 'select', 'checkbox', 'date', 'slider', 'url', 'file'],
+      enum: [
+        'text',
+        'textarea',
+        'radio',
+        'select',
+        'checkbox',
+        'date',
+        'slider',
+        'url',
+        'file',
+      ],
     },
     label: { type: 'string' },
-    name: { type: 'string', description: 'Unique field identifier (snake_case)' },
-    description: { type: 'string', description: 'Field description or help text' },
+    name: {
+      type: 'string',
+      description: 'Unique field identifier (snake_case)',
+    },
+    description: {
+      type: 'string',
+      description: 'Field description or help text',
+    },
     required: { type: 'boolean' },
-    options: { type: 'array', items: { type: 'string' }, description: 'Options for radio/select fields (empty array if not applicable)' },
-    checkboxType: { type: 'string', enum: ['single', 'multiple'], description: 'Type for checkbox fields (use single as default)' },
+    options: {
+      type: 'array',
+      items: { type: 'string' },
+      description:
+        'Options for radio/select fields (empty array if not applicable)',
+    },
+    checkboxType: {
+      type: 'string',
+      enum: ['single', 'multiple'],
+      description: 'Type for checkbox fields (use single as default)',
+    },
     items: {
       type: 'array',
       items: {
@@ -55,14 +116,40 @@ const formFieldSchema = {
         required: ['id', 'label'],
         additionalProperties: false,
       },
-      description: 'Items for multiple checkbox fields (empty array if not applicable)',
+      description:
+        'Items for multiple checkbox fields (empty array if not applicable)',
     },
-    min: { type: 'number', description: 'Minimum value for slider (use 0 as default)' },
-    max: { type: 'number', description: 'Maximum value for slider (use 100 as default)' },
-    minLength: { type: 'number', description: 'Minimum length for text validation (use 0 as default)' },
-    maxLength: { type: 'number', description: 'Maximum length for text validation (use 500 as default)' },
+    min: {
+      type: 'number',
+      description: 'Minimum value for slider (use 0 as default)',
+    },
+    max: {
+      type: 'number',
+      description: 'Maximum value for slider (use 100 as default)',
+    },
+    minLength: {
+      type: 'number',
+      description: 'Minimum length for text validation (use 0 as default)',
+    },
+    maxLength: {
+      type: 'number',
+      description: 'Maximum length for text validation (use 500 as default)',
+    },
   },
-  required: ['fieldType', 'label', 'name', 'description', 'required', 'options', 'checkboxType', 'items', 'min', 'max', 'minLength', 'maxLength'],
+  required: [
+    'fieldType',
+    'label',
+    'name',
+    'description',
+    'required',
+    'options',
+    'checkboxType',
+    'items',
+    'min',
+    'max',
+    'minLength',
+    'maxLength',
+  ],
   additionalProperties: false,
 };
 
@@ -82,10 +169,19 @@ const formFieldsSchema = {
 const agentResponseSchema = {
   type: 'object',
   properties: {
-    message: { type: 'string', description: 'Assistant response message to the user' },
+    message: {
+      type: 'string',
+      description: 'Assistant response message to the user',
+    },
     action: {
       type: 'string',
-      enum: ['none', 'generate_event', 'generate_fields', 'update_event', 'update_fields'],
+      enum: [
+        'none',
+        'generate_event',
+        'generate_fields',
+        'update_event',
+        'update_fields',
+      ],
       description: 'What action to take based on user request',
     },
     event_data: eventDetailsSchema,
@@ -165,15 +261,15 @@ export async function POST(request: NextRequest) {
     const { messages, generateSchema = true } = body;
 
     if (!messages || !Array.isArray(messages)) {
-      return NextResponse.json({ error: 'Messages array is required' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'Messages array is required' },
+        { status: 400 }
+      );
     }
 
     const response = await groq.chat.completions.create({
       model: 'openai/gpt-oss-20b',
-      messages: [
-        { role: 'system', content: SYSTEM_PROMPT },
-        ...messages,
-      ],
+      messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...messages],
       temperature: 0.7,
       max_completion_tokens: 2048,
       ...(generateSchema && {
@@ -189,9 +285,12 @@ export async function POST(request: NextRequest) {
     });
 
     const content = response.choices[0]?.message?.content;
-    
+
     if (!content) {
-      return NextResponse.json({ error: 'No response from AI' }, { status: 500 });
+      return NextResponse.json(
+        { error: 'No response from AI' },
+        { status: 500 }
+      );
     }
 
     try {
@@ -207,7 +306,10 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Agent chat error:', error);
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Failed to process request' },
+      {
+        error:
+          error instanceof Error ? error.message : 'Failed to process request',
+      },
       { status: 500 }
     );
   }

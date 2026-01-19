@@ -2,11 +2,11 @@ import { format } from 'date-fns';
 import { ArrowRight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import NewsLetterComingSoon from '@/components/NewsLetterComingSoon';
 import BlurFade from '@/components/ui/blur-fade';
 import { urlFor } from '@/sanity/lib/image';
-import {  sanityFetch } from '@/sanity/lib/live';
+import { sanityFetch } from '@/sanity/lib/live';
 import { ALL_BLOG_POSTS_QUERY } from '@/sanity/lib/queries';
-import NewsLetterComingSoon from '@/components/NewsLetterComingSoon';
 
 // Set revalidation time to 1 hour (3600 seconds)
 export const revalidate = 3600;
@@ -45,7 +45,8 @@ export default async function BlogPage() {
           </h2>
           {/* place the sanity desc here. */}
           <p className="mb-8 text-muted-foreground md:text-base lg:max-w-2xl lg:text-lg">
-            Stay updated with the latest insights, stories, and trends from our community.
+            Stay updated with the latest insights, stories, and trends from our
+            community.
           </p>
           <NewsLetterComingSoon />
         </div>
@@ -72,7 +73,9 @@ export default async function BlogPage() {
                   <div className="flex items-center gap-2 text-sm text-muted-foreground my-2">
                     {post.author?.image ? (
                       <Image
-                        src={urlFor(post.author.image || '/placeholder.svg').url()}
+                        src={urlFor(
+                          post.author.image || '/placeholder.svg'
+                        ).url()}
                         alt={post.author?.name || 'Author'}
                         width={24}
                         height={24}
@@ -100,7 +103,6 @@ export default async function BlogPage() {
           ))}
         </div>
       </div>
-      
     </section>
   );
 }

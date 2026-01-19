@@ -2,6 +2,7 @@
 
 import { TrendingDown, TrendingUp } from 'lucide-react';
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts';
+import type { RegistrationTrend } from '@/components/providers/DashboardDataProvider';
 import {
   Card,
   CardContent,
@@ -18,7 +19,6 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
-import type { RegistrationTrend } from '@/components/providers/DashboardDataProvider';
 
 const chartConfig = {
   registrations: {
@@ -41,13 +41,17 @@ interface RegistrationTrendsChartProps {
   trendPercentage: number;
 }
 
-export function RegistrationTrendsChart({ data, trend, trendPercentage }: RegistrationTrendsChartProps) {
+export function RegistrationTrendsChart({
+  data,
+  trend,
+  trendPercentage,
+}: RegistrationTrendsChartProps) {
   // Format date for display
   const formattedData = data.map(item => ({
     ...item,
-    displayDate: new Date(item.date).toLocaleDateString('en-US', { 
-      month: 'short', 
-      day: 'numeric' 
+    displayDate: new Date(item.date).toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
     }),
   }));
 
@@ -86,13 +90,35 @@ export function RegistrationTrendsChart({ data, trend, trendPercentage }: Regist
               content={<ChartTooltipContent indicator="dot" />}
             />
             <defs>
-              <linearGradient id="fillRegistrations" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="var(--color-registrations)" stopOpacity={0.8} />
-                <stop offset="95%" stopColor="var(--color-registrations)" stopOpacity={0.1} />
+              <linearGradient
+                id="fillRegistrations"
+                x1="0"
+                y1="0"
+                x2="0"
+                y2="1"
+              >
+                <stop
+                  offset="5%"
+                  stopColor="var(--color-registrations)"
+                  stopOpacity={0.8}
+                />
+                <stop
+                  offset="95%"
+                  stopColor="var(--color-registrations)"
+                  stopOpacity={0.1}
+                />
               </linearGradient>
               <linearGradient id="fillAccepted" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="var(--color-accepted)" stopOpacity={0.8} />
-                <stop offset="95%" stopColor="var(--color-accepted)" stopOpacity={0.1} />
+                <stop
+                  offset="5%"
+                  stopColor="var(--color-accepted)"
+                  stopOpacity={0.8}
+                />
+                <stop
+                  offset="95%"
+                  stopColor="var(--color-accepted)"
+                  stopOpacity={0.1}
+                />
               </linearGradient>
             </defs>
             <Area

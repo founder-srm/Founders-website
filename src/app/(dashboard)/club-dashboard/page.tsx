@@ -1,5 +1,4 @@
-"use client";
-import { useCallback, useEffect, useRef, useState } from "react";
+'use client';
 import {
   Building2,
   Calendar,
@@ -10,12 +9,16 @@ import {
   UserCheck,
   UserPlus,
   Users,
-} from "lucide-react";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import AddMemberButton from "@/components/AddMemberButton";
-import { EditClubProfileModal } from "@/components/EditClubProfileModal";
-import { Badge } from "@/components/ui/badge";
+} from 'lucide-react';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { type ClubMember, fetchClubMembers } from '@/actions/club/action';
+import AddMemberButton from '@/components/AddMemberButton';
+import { columns } from '@/components/data-table-club/columns';
+import { MembersDataTable } from '@/components/data-table-club/members-table';
+import { EditClubProfileModal } from '@/components/EditClubProfileModal';
+import { Badge } from '@/components/ui/badge';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -23,19 +26,16 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
+} from '@/components/ui/breadcrumb';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { MembersDataTable } from "@/components/data-table-club/members-table";
-import { columns } from "@/components/data-table-club/columns";
-import useClub from "@/hooks/use-club";
-import { useUser } from "@/stores/session";
-import { fetchClubMembers, type ClubMember } from "@/actions/club/action";
+} from '@/components/ui/card';
+import useClub from '@/hooks/use-club';
+import { useUser } from '@/stores/session';
 
 const ClubDashboardPage = () => {
   const user = useUser();
@@ -47,30 +47,33 @@ const ClubDashboardPage = () => {
 
   const fetchedClubId = useRef<string | null>(null);
 
-  const fetchMembers = useCallback(async (clubId: string, isRefresh = false) => {
-    if (isRefresh) {
-      setIsRefreshing(true);
-    }
+  const fetchMembers = useCallback(
+    async (clubId: string, isRefresh = false) => {
+      if (isRefresh) {
+        setIsRefreshing(true);
+      }
 
-    const { data, error } = await fetchClubMembers(clubId);
+      const { data, error } = await fetchClubMembers(clubId);
 
-    if (error || !data) {
-      console.error("Error fetching members:", error);
+      if (error || !data) {
+        console.error('Error fetching members:', error);
+        if (isRefresh) {
+          setIsRefreshing(false);
+        } else {
+          setIsLoadingMembers(false);
+        }
+        return;
+      }
+
+      setMembers(data);
       if (isRefresh) {
         setIsRefreshing(false);
       } else {
         setIsLoadingMembers(false);
       }
-      return;
-    }
-
-    setMembers(data);
-    if (isRefresh) {
-      setIsRefreshing(false);
-    } else {
-      setIsLoadingMembers(false);
-    }
-  }, []);
+    },
+    []
+  );
 
   useEffect(() => {
     if (!club?.id || fetchedClubId.current === club.id) {
@@ -86,7 +89,7 @@ const ClubDashboardPage = () => {
 
   useEffect(() => {
     if (!clubLoading && !isClub) {
-      router.push("/dashboard/account");
+      router.push('/dashboard/account');
     }
   }, [clubLoading, isClub, router]);
 
@@ -108,41 +111,41 @@ const ClubDashboardPage = () => {
     return null;
   }
 
-  const verifiedCount = members.filter((m) => m.is_verified).length;
-  const repsCount = members.filter((m) => m.user_role === "club_rep").length;
+  const verifiedCount = members.filter(m => m.is_verified).length;
+  const repsCount = members.filter(m => m.user_role === 'club_rep').length;
 
   const statsCards = [
     {
-      title: "Total Members",
+      title: 'Total Members',
       value: members.length,
-      description: "Active club members",
+      description: 'Active club members',
       icon: Users,
-      color: "text-blue-500",
-      bgColor: "bg-blue-500/10",
+      color: 'text-blue-500',
+      bgColor: 'bg-blue-500/10',
     },
     {
-      title: "Representatives",
+      title: 'Representatives',
       value: repsCount,
-      description: "Club administrators",
+      description: 'Club administrators',
       icon: Shield,
-      color: "text-purple-500",
-      bgColor: "bg-purple-500/10",
+      color: 'text-purple-500',
+      bgColor: 'bg-purple-500/10',
     },
     {
-      title: "Verified Members",
+      title: 'Verified Members',
       value: verifiedCount,
       description: `${members.length > 0 ? Math.round((verifiedCount / members.length) * 100) : 0}% verification rate`,
       icon: UserCheck,
-      color: "text-green-500",
-      bgColor: "bg-green-500/10",
+      color: 'text-green-500',
+      bgColor: 'bg-green-500/10',
     },
     {
-      title: "Pending",
+      title: 'Pending',
       value: members.length - verifiedCount,
-      description: "Awaiting verification",
+      description: 'Awaiting verification',
       icon: UserPlus,
-      color: "text-amber-500",
-      bgColor: "bg-amber-500/10",
+      color: 'text-amber-500',
+      bgColor: 'bg-amber-500/10',
     },
   ];
 
@@ -154,7 +157,9 @@ const ClubDashboardPage = () => {
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <BreadcrumbLink href="/dashboard/account">Dashboard</BreadcrumbLink>
+                <BreadcrumbLink href="/dashboard/account">
+                  Dashboard
+                </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
@@ -186,7 +191,7 @@ const ClubDashboardPage = () => {
                     <Building2 className="w-10 h-10 text-primary-foreground" />
                   </div>
                 )}
-                {userRole === "club_rep" ? (
+                {userRole === 'club_rep' ? (
                   <EditClubProfileModal
                     clubId={club.id}
                     clubName={club.name}
@@ -212,13 +217,13 @@ const ClubDashboardPage = () => {
                   <Badge
                     variant="secondary"
                     className={
-                      userRole === "club_rep"
-                        ? "bg-purple-500/15 text-purple-600 dark:text-purple-400 border-purple-500/20"
-                        : "bg-blue-500/15 text-blue-600 dark:text-blue-400 border-blue-500/20"
+                      userRole === 'club_rep'
+                        ? 'bg-purple-500/15 text-purple-600 dark:text-purple-400 border-purple-500/20'
+                        : 'bg-blue-500/15 text-blue-600 dark:text-blue-400 border-blue-500/20'
                     }
                   >
                     <Shield className="w-3 h-3 mr-1" />
-                    {userRole === "club_rep" ? "Representative" : "Member"}
+                    {userRole === 'club_rep' ? 'Representative' : 'Member'}
                   </Badge>
                 </div>
                 <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
@@ -239,7 +244,11 @@ const ClubDashboardPage = () => {
                   )}
                   <span className="flex items-center gap-1.5">
                     <Calendar className="w-4 h-4" />
-                    Joined {new Date(club.created_at).toLocaleDateString("en-US", { month: "short", year: "numeric" })}
+                    Joined{' '}
+                    {new Date(club.created_at).toLocaleDateString('en-US', {
+                      month: 'short',
+                      year: 'numeric',
+                    })}
                   </span>
                 </div>
               </div>
@@ -254,8 +263,11 @@ const ClubDashboardPage = () => {
 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {statsCards.map((stat) => (
-            <Card key={stat.title} className="hover:shadow-md transition-shadow">
+          {statsCards.map(stat => (
+            <Card
+              key={stat.title}
+              className="hover:shadow-md transition-shadow"
+            >
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div className="space-y-1">

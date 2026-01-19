@@ -3,13 +3,13 @@
 import {
   closestCenter,
   DndContext,
+  type DragEndEvent,
   DragOverlay,
+  type DragStartEvent,
   KeyboardSensor,
   PointerSensor,
   useSensor,
   useSensors,
-  type DragEndEvent,
-  type DragStartEvent,
 } from '@dnd-kit/core';
 import {
   arrayMove,
@@ -195,7 +195,12 @@ function CheckboxItemsEditor({
           onChange={e => setNewLabel(e.target.value)}
           className="flex-1"
         />
-        <Button type="button" onClick={addItem} disabled={!newId || !newLabel} size="sm">
+        <Button
+          type="button"
+          onClick={addItem}
+          disabled={!newId || !newLabel}
+          size="sm"
+        >
           Add
         </Button>
       </div>
@@ -245,9 +250,16 @@ function OptionsEditor({
           placeholder="Add option..."
           value={newOption}
           onChange={e => setNewOption(e.target.value)}
-          onKeyDown={e => e.key === 'Enter' && (e.preventDefault(), addOption())}
+          onKeyDown={e =>
+            e.key === 'Enter' && (e.preventDefault(), addOption())
+          }
         />
-        <Button type="button" onClick={addOption} disabled={!newOption} size="sm">
+        <Button
+          type="button"
+          onClick={addOption}
+          disabled={!newOption}
+          size="sm"
+        >
           Add
         </Button>
       </div>
@@ -481,7 +493,9 @@ function SortableFieldCard({
               <Input
                 type="number"
                 value={field.maxFileSizeMB || 5}
-                onChange={e => onUpdate({ maxFileSizeMB: Number(e.target.value) })}
+                onChange={e =>
+                  onUpdate({ maxFileSizeMB: Number(e.target.value) })
+                }
               />
             </div>
           </div>
@@ -529,7 +543,13 @@ function SortableFieldCard({
                 type="number"
                 min={1}
                 value={field.maxMembers || ''}
-                onChange={e => onUpdate({ maxMembers: e.target.value ? Number(e.target.value) : undefined })}
+                onChange={e =>
+                  onUpdate({
+                    maxMembers: e.target.value
+                      ? Number(e.target.value)
+                      : undefined,
+                  })
+                }
                 placeholder="No limit"
               />
               <p className="text-xs text-muted-foreground">
@@ -575,9 +595,7 @@ function FormPreview({ fields }: { fields: TypeFormField[] }) {
               <Label className="flex items-center gap-2">
                 <Icon className="h-3 w-3" />
                 {field.label || 'Untitled Field'}
-                {field.required && (
-                  <span className="text-destructive">*</span>
-                )}
+                {field.required && <span className="text-destructive">*</span>}
               </Label>
             </div>
             {field.description && (
@@ -631,9 +649,7 @@ function FormPreview({ fields }: { fields: TypeFormField[] }) {
                   ))}
                 </div>
               )}
-            {field.fieldType === 'date' && (
-              <Input disabled type="date" />
-            )}
+            {field.fieldType === 'date' && <Input disabled type="date" />}
             {field.fieldType === 'slider' && (
               <div className="flex items-center gap-4">
                 <span className="text-sm">{field.min || 0}</span>
@@ -669,7 +685,9 @@ function FormPreview({ fields }: { fields: TypeFormField[] }) {
                 <p className="text-sm">Team member selection dropdown</p>
                 <p className="text-xs">
                   Min: {field.minMembers || 1} member(s)
-                  {field.maxMembers ? ` • Max: ${field.maxMembers} member(s)` : ' • No max limit'}
+                  {field.maxMembers
+                    ? ` • Max: ${field.maxMembers} member(s)`
+                    : ' • No max limit'}
                 </p>
               </div>
             )}
@@ -740,9 +758,7 @@ export function FormBuilder({
     }
   };
 
-  const activeField = activeId
-    ? fields.find(f => f.name === activeId)
-    : null;
+  const activeField = activeId ? fields.find(f => f.name === activeId) : null;
 
   return (
     <div className="space-y-6">
@@ -786,7 +802,10 @@ export function FormBuilder({
       </Card>
 
       {/* Tabs for Edit/Preview */}
-      <Tabs value={activeTab} onValueChange={v => setActiveTab(v as 'edit' | 'preview')}>
+      <Tabs
+        value={activeTab}
+        onValueChange={v => setActiveTab(v as 'edit' | 'preview')}
+      >
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="edit">Edit Fields</TabsTrigger>
           <TabsTrigger value="preview">Live Preview</TabsTrigger>
@@ -809,8 +828,8 @@ export function FormBuilder({
                     <div className="text-center text-muted-foreground">
                       <p className="mb-2">No fields added yet</p>
                       <p className="text-sm">
-                        Select a field type above and click &quot;Add Field&quot; to get
-                        started
+                        Select a field type above and click &quot;Add
+                        Field&quot; to get started
                       </p>
                     </div>
                   </Card>

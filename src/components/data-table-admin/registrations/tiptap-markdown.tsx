@@ -1,9 +1,9 @@
 'use client';
 
+import { Highlight } from '@tiptap/extension-highlight';
 import { Markdown } from '@tiptap/markdown';
 import { EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-import { Highlight } from '@tiptap/extension-highlight';
 import {
   Bold,
   Code,
@@ -19,8 +19,8 @@ import {
   Strikethrough,
   Undo2,
 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { useCallback } from 'react';
+import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
 interface TiptapMarkdownProps {

@@ -9,8 +9,8 @@ import {
   Download,
   FileSpreadsheet,
   TrendingUp,
-  Users,
   UserCheck,
+  Users,
   XCircle,
 } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
@@ -33,7 +33,7 @@ import { createClient } from '@/utils/supabase/elevatedClient';
 const TableSkeleton = () => (
   <div className="space-y-4">
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-      {[1, 2, 3, 4].map((i) => (
+      {[1, 2, 3, 4].map(i => (
         <Skeleton key={i} className="h-[120px]" />
       ))}
     </div>
@@ -78,7 +78,9 @@ export default function RegistrationsPage() {
   const supabase = createClient();
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
-  const [activeTab, setActiveTab] = useState<'all' | 'pending' | 'accepted' | 'team'>('all');
+  const [activeTab, setActiveTab] = useState<
+    'all' | 'pending' | 'accepted' | 'team'
+  >('all');
 
   const {
     data: events,
@@ -104,19 +106,26 @@ export default function RegistrationsPage() {
 
   // Calculate stats
   const stats = useMemo(() => {
-    if (!registrations) return {
-      total: 0,
-      accepted: 0,
-      pending: 0,
-      rejected: 0,
-      teams: 0,
-      acceptanceRate: 0,
-    };
+    if (!registrations)
+      return {
+        total: 0,
+        accepted: 0,
+        pending: 0,
+        rejected: 0,
+        teams: 0,
+        acceptanceRate: 0,
+      };
 
     const total = registrations.length;
-    const accepted = registrations.filter(r => r.is_approved === 'ACCEPTED').length;
-    const pending = registrations.filter(r => r.is_approved === 'SUBMITTED').length;
-    const rejected = registrations.filter(r => r.is_approved === 'REJECTED' || r.is_approved === 'INVALID').length;
+    const accepted = registrations.filter(
+      r => r.is_approved === 'ACCEPTED'
+    ).length;
+    const pending = registrations.filter(
+      r => r.is_approved === 'SUBMITTED'
+    ).length;
+    const rejected = registrations.filter(
+      r => r.is_approved === 'REJECTED' || r.is_approved === 'INVALID'
+    ).length;
     const teams = registrations.filter(r => r.is_team_entry === true).length;
 
     return {
@@ -132,12 +141,14 @@ export default function RegistrationsPage() {
   // Filter registrations by selected event and tab
   const filteredRegistrations = useMemo(() => {
     if (!registrations) return [];
-    
+
     let filtered = registrations;
 
     // Filter by event
     if (selectedEventId) {
-      filtered = filtered.filter(reg => reg.event_id && reg.event_id === selectedEventId);
+      filtered = filtered.filter(
+        reg => reg.event_id && reg.event_id === selectedEventId
+      );
     }
 
     // Filter by tab
@@ -208,10 +219,13 @@ export default function RegistrationsPage() {
 
   // Calculate registration counts per event for display
   const eventCounts = useMemo(() => {
-    return events?.map(event => {
-      const count = registrations?.filter(reg => reg.event_id === event.id).length || 0;
-      return { id: event.id, name: event.title, count };
-    }) || [];
+    return (
+      events?.map(event => {
+        const count =
+          registrations?.filter(reg => reg.event_id === event.id).length || 0;
+        return { id: event.id, name: event.title, count };
+      }) || []
+    );
   }, [events, registrations]);
 
   if (registrationsLoading || eventsLoading) {
@@ -336,26 +350,47 @@ export default function RegistrationsPage() {
               <div>
                 <CardTitle className="text-lg">Registration Records</CardTitle>
                 <p className="text-sm text-muted-foreground mt-1">
-                  {filteredRegistrations.length} registration{filteredRegistrations.length !== 1 ? 's' : ''} found
+                  {filteredRegistrations.length} registration
+                  {filteredRegistrations.length !== 1 ? 's' : ''} found
                 </p>
               </div>
-              <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as typeof activeTab)}>
+              <Tabs
+                value={activeTab}
+                onValueChange={v => setActiveTab(v as typeof activeTab)}
+              >
                 <TabsList>
                   <TabsTrigger value="all" className="gap-2">
                     All
-                    <Badge variant="secondary" className="ml-1">{registrations?.length || 0}</Badge>
+                    <Badge variant="secondary" className="ml-1">
+                      {registrations?.length || 0}
+                    </Badge>
                   </TabsTrigger>
                   <TabsTrigger value="pending" className="gap-2">
                     Pending
-                    <Badge variant="secondary" className="ml-1 bg-amber-500/20 text-amber-600">{stats.pending}</Badge>
+                    <Badge
+                      variant="secondary"
+                      className="ml-1 bg-amber-500/20 text-amber-600"
+                    >
+                      {stats.pending}
+                    </Badge>
                   </TabsTrigger>
                   <TabsTrigger value="accepted" className="gap-2">
                     Accepted
-                    <Badge variant="secondary" className="ml-1 bg-emerald-500/20 text-emerald-600">{stats.accepted}</Badge>
+                    <Badge
+                      variant="secondary"
+                      className="ml-1 bg-emerald-500/20 text-emerald-600"
+                    >
+                      {stats.accepted}
+                    </Badge>
                   </TabsTrigger>
                   <TabsTrigger value="team" className="gap-2">
                     Teams
-                    <Badge variant="secondary" className="ml-1 bg-violet-500/20 text-violet-600">{stats.teams}</Badge>
+                    <Badge
+                      variant="secondary"
+                      className="ml-1 bg-violet-500/20 text-violet-600"
+                    >
+                      {stats.teams}
+                    </Badge>
                   </TabsTrigger>
                 </TabsList>
               </Tabs>

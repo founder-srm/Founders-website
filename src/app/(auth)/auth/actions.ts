@@ -116,7 +116,15 @@ export async function signup(data: SignupFormData) {
 
 export async function clubsignup(data: ClubSignupFormData) {
   // Validate required fields
-  if (!data.email || !data.password || !data.firstName || !data.lastName || !data.phone || !data.clubName || !data.clubEmail) {
+  if (
+    !data.email ||
+    !data.password ||
+    !data.firstName ||
+    !data.lastName ||
+    !data.phone ||
+    !data.clubName ||
+    !data.clubEmail
+  ) {
     return {
       success: false,
       error: 'Missing required fields',
@@ -220,7 +228,7 @@ export async function clubsignup(data: ClubSignupFormData) {
   }
 
   revalidatePath('/auth/club-signup', 'layout');
-  
+
   // Return success - let the client handle the redirect
   return {
     success: true,
@@ -229,10 +237,12 @@ export async function clubsignup(data: ClubSignupFormData) {
 }
 
 export async function getuserbyid(uuid: string) {
-  "use server";
-  
+  'use server';
+
   // Use the elevated client for admin operations
-  const { createClient: createElevatedClient } = await import('@/utils/supabase/elevatedClient');
+  const { createClient: createElevatedClient } = await import(
+    '@/utils/supabase/elevatedClient'
+  );
   const supabase = createElevatedClient();
 
   const { data, error } = await supabase.auth.admin.getUserById(uuid);

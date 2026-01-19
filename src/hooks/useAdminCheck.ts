@@ -1,18 +1,18 @@
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef } from 'react';
-import { createClient } from '@/utils/supabase/client';
 import { useUserRolesStore } from '@/stores/user-roles';
+import { createClient } from '@/utils/supabase/client';
 
 export const useAdminCheck = () => {
   const router = useRouter();
-  const { 
+  const {
     isAdmin,
-    adminLoading, 
-    adminFetchedForUserId, 
-    setAdminState, 
-    setAdminLoading 
+    adminLoading,
+    adminFetchedForUserId,
+    setAdminState,
+    setAdminLoading,
   } = useUserRolesStore();
-  
+
   const supabaseRef = useRef(createClient());
   const hasChecked = useRef(false);
 
@@ -32,7 +32,7 @@ export const useAdminCheck = () => {
 
     async function checkAdminStatus() {
       hasChecked.current = true;
-      
+
       try {
         const {
           data: { user },

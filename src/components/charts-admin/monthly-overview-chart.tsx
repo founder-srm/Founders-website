@@ -35,7 +35,10 @@ interface MonthlyOverviewChartProps {
 }
 
 export function MonthlyOverviewChart({ data }: MonthlyOverviewChartProps) {
-  const totalRegistrations = data.reduce((sum, item) => sum + item.registrations, 0);
+  const totalRegistrations = data.reduce(
+    (sum, item) => sum + item.registrations,
+    0
+  );
   const totalEvents = data.reduce((sum, item) => sum + item.events, 0);
 
   return (
@@ -59,7 +62,11 @@ export function MonthlyOverviewChart({ data }: MonthlyOverviewChartProps) {
               cursor={false}
               content={<ChartTooltipContent indicator="dashed" />}
             />
-            <Bar dataKey="registrations" fill="var(--color-registrations)" radius={4} />
+            <Bar
+              dataKey="registrations"
+              fill="var(--color-registrations)"
+              radius={4}
+            />
             <Bar dataKey="events" fill="var(--color-events)" radius={4} />
             <ChartLegend content={<ChartLegendContent />} />
           </BarChart>
@@ -70,9 +77,7 @@ export function MonthlyOverviewChart({ data }: MonthlyOverviewChartProps) {
           {totalRegistrations} registrations across {totalEvents} events
           <TrendingUp className="h-4 w-4" />
         </div>
-        <div className="leading-none text-muted-foreground">
-          Last 6 months
-        </div>
+        <div className="leading-none text-muted-foreground">Last 6 months</div>
       </CardFooter>
     </Card>
   );

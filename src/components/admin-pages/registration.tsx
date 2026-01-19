@@ -5,6 +5,7 @@ import { formatInTimeZone } from 'date-fns-tz';
 import {
   AlertTriangle,
   ArrowLeft,
+  AtSign,
   Calendar,
   CheckCircle,
   Clock,
@@ -14,7 +15,6 @@ import {
   Ticket,
   Users,
   XCircle,
-  AtSign,
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -51,6 +51,7 @@ import type { Registration } from '@/types/registrations';
 import { createClient } from '@/utils/supabase/client';
 import type { Database } from '../../../database.types';
 import Tiptap from '../data-table-admin/registrations/tiptap-email';
+import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
 import {
   Dialog,
   DialogContent,
@@ -62,7 +63,6 @@ import {
 } from '../ui/dialog';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
-import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
 
 const isValidDate = (value: string) => {
   const date = new Date(value);
@@ -357,7 +357,9 @@ export default function RegistrationDetails({ slug }: { slug: string }) {
                 </AvatarFallback>
               </Avatar>
               <div>
-                <CardTitle className="text-2xl">{registration.event_title}</CardTitle>
+                <CardTitle className="text-2xl">
+                  {registration.event_title}
+                </CardTitle>
                 <CardDescription className="flex items-center gap-2 mt-1">
                   <AtSign className="h-4 w-4" />
                   {registration.registration_email}
@@ -366,12 +368,18 @@ export default function RegistrationDetails({ slug }: { slug: string }) {
             </div>
             <div className="flex items-center gap-2">
               {registration.is_team_entry && (
-                <Badge variant="secondary" className="gap-1 bg-violet-500/20 text-violet-600">
+                <Badge
+                  variant="secondary"
+                  className="gap-1 bg-violet-500/20 text-violet-600"
+                >
                   <Users className="h-3 w-3" />
                   Team Entry
                 </Badge>
               )}
-              <Dialog open={isEmailDialogOpen} onOpenChange={setIsEmailDialogOpen}>
+              <Dialog
+                open={isEmailDialogOpen}
+                onOpenChange={setIsEmailDialogOpen}
+              >
                 <DialogTrigger asChild>
                   <Button variant="outline" size="sm" className="gap-2">
                     <Mail className="h-4 w-4" />
@@ -385,12 +393,18 @@ export default function RegistrationDetails({ slug }: { slug: string }) {
                 >
                   <DialogHeader>
                     <DialogTitle>Send Email</DialogTitle>
-                    <DialogDescription>Send an email to the registrant.</DialogDescription>
+                    <DialogDescription>
+                      Send an email to the registrant.
+                    </DialogDescription>
                   </DialogHeader>
                   <div className="grid gap-4 py-4">
                     <div className="flex flex-col gap-2">
                       <Label htmlFor="email">To</Label>
-                      <Input id="email" value={registration.registration_email} disabled />
+                      <Input
+                        id="email"
+                        value={registration.registration_email}
+                        disabled
+                      />
                     </div>
                     <div className="flex items-center gap-2">
                       <Label>Template</Label>
@@ -442,29 +456,45 @@ export default function RegistrationDetails({ slug }: { slug: string }) {
 
       {/* Status Banner */}
       <div className="grid gap-4 md:grid-cols-3">
-        <Card className={cn(
-          "border-l-4",
-          isApproved === 'ACCEPTED' ? 'border-l-emerald-500' :
-          isApproved === 'SUBMITTED' ? 'border-l-amber-500' :
-          'border-l-rose-500'
-        )}>
+        <Card
+          className={cn(
+            'border-l-4',
+            isApproved === 'ACCEPTED'
+              ? 'border-l-emerald-500'
+              : isApproved === 'SUBMITTED'
+                ? 'border-l-amber-500'
+                : 'border-l-rose-500'
+          )}
+        >
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
-              {isApproved === 'ACCEPTED' ? <CheckCircle className="h-4 w-4 text-emerald-500" /> :
-               isApproved === 'SUBMITTED' ? <Clock className="h-4 w-4 text-amber-500" /> :
-               <XCircle className="h-4 w-4 text-rose-500" />}
+              {isApproved === 'ACCEPTED' ? (
+                <CheckCircle className="h-4 w-4 text-emerald-500" />
+              ) : isApproved === 'SUBMITTED' ? (
+                <Clock className="h-4 w-4 text-amber-500" />
+              ) : (
+                <XCircle className="h-4 w-4 text-rose-500" />
+              )}
               Approval Status
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <Badge variant={
-              isApproved === 'ACCEPTED' ? 'default' :
-              isApproved === 'SUBMITTED' ? 'secondary' :
-              'destructive'
-            } className={cn(
-              isApproved === 'ACCEPTED' ? 'bg-emerald-600' :
-              isApproved === 'SUBMITTED' ? 'bg-amber-500/20 text-amber-600' : ''
-            )}>
+            <Badge
+              variant={
+                isApproved === 'ACCEPTED'
+                  ? 'default'
+                  : isApproved === 'SUBMITTED'
+                    ? 'secondary'
+                    : 'destructive'
+              }
+              className={cn(
+                isApproved === 'ACCEPTED'
+                  ? 'bg-emerald-600'
+                  : isApproved === 'SUBMITTED'
+                    ? 'bg-amber-500/20 text-amber-600'
+                    : ''
+              )}
+            >
               {isApproved === 'SUBMITTED' ? 'Pending' : isApproved}
             </Badge>
           </CardContent>
@@ -492,7 +522,11 @@ export default function RegistrationDetails({ slug }: { slug: string }) {
           <CardContent>
             <span className="font-medium">
               {registration.created_at
-                ? formatInTimeZone(new Date(registration.created_at), 'Asia/Kolkata', 'dd MMM yyyy, hh:mm a')
+                ? formatInTimeZone(
+                    new Date(registration.created_at),
+                    'Asia/Kolkata',
+                    'dd MMM yyyy, hh:mm a'
+                  )
                 : 'N/A'}
             </span>
           </CardContent>
@@ -522,11 +556,15 @@ export default function RegistrationDetails({ slug }: { slug: string }) {
                       {Object.entries(registration.details || {}).map(
                         ([key, value]) => {
                           // Skip team_members as it has its own tab
-                          if (key === 'team_members' || key === 'teamMembers') return null;
+                          if (key === 'team_members' || key === 'teamMembers')
+                            return null;
                           return (
                             <TableRow key={key}>
                               <TableCell className="font-medium capitalize w-1/3">
-                                {key.replace(/([A-Z])/g, ' $1').replace(/_/g, ' ').toLowerCase()}
+                                {key
+                                  .replace(/([A-Z])/g, ' $1')
+                                  .replace(/_/g, ' ')
+                                  .toLowerCase()}
                               </TableCell>
                               <TableCell>{formatValue(value)}</TableCell>
                             </TableRow>
@@ -540,31 +578,58 @@ export default function RegistrationDetails({ slug }: { slug: string }) {
                   <Table>
                     <TableBody>
                       <TableRow>
-                        <TableCell className="font-medium w-1/3">Registration ID</TableCell>
-                        <TableCell className="font-mono text-sm">{registration.id}</TableCell>
+                        <TableCell className="font-medium w-1/3">
+                          Registration ID
+                        </TableCell>
+                        <TableCell className="font-mono text-sm">
+                          {registration.id}
+                        </TableCell>
                       </TableRow>
                       <TableRow>
-                        <TableCell className="font-medium">Application ID</TableCell>
-                        <TableCell className="font-mono text-sm">{registration.application_id}</TableCell>
+                        <TableCell className="font-medium">
+                          Application ID
+                        </TableCell>
+                        <TableCell className="font-mono text-sm">
+                          {registration.application_id}
+                        </TableCell>
                       </TableRow>
                       <TableRow>
                         <TableCell className="font-medium">Event ID</TableCell>
-                        <TableCell className="font-mono text-sm">{registration.event_id}</TableCell>
+                        <TableCell className="font-mono text-sm">
+                          {registration.event_id}
+                        </TableCell>
                       </TableRow>
                       <TableRow>
-                        <TableCell className="font-medium">Entry Type</TableCell>
+                        <TableCell className="font-medium">
+                          Entry Type
+                        </TableCell>
                         <TableCell>
-                          <Badge variant={registration.is_team_entry ? 'default' : 'secondary'}>
-                            {registration.is_team_entry ? 'Team Entry' : 'Individual'}
+                          <Badge
+                            variant={
+                              registration.is_team_entry
+                                ? 'default'
+                                : 'secondary'
+                            }
+                          >
+                            {registration.is_team_entry
+                              ? 'Team Entry'
+                              : 'Individual'}
                           </Badge>
                         </TableCell>
                       </TableRow>
                       <TableRow>
-                        <TableCell className="font-medium">Attendance</TableCell>
+                        <TableCell className="font-medium">
+                          Attendance
+                        </TableCell>
                         <TableCell>
-                          <Badge variant="outline" className={cn(
-                            attendance === 'Present' ? 'border-emerald-500 text-emerald-600' : 'border-rose-500 text-rose-600'
-                          )}>
+                          <Badge
+                            variant="outline"
+                            className={cn(
+                              attendance === 'Present'
+                                ? 'border-emerald-500 text-emerald-600'
+                                : 'border-rose-500 text-rose-600'
+                            )}
+                          >
                             {attendance || 'Not marked'}
                           </Badge>
                         </TableCell>
@@ -575,34 +640,59 @@ export default function RegistrationDetails({ slug }: { slug: string }) {
                 {registration.is_team_entry && (
                   <TabsContent value="team" className="mt-4">
                     {(() => {
-                      const details = registration.details as Record<string, unknown>;
-                      const teamMembers = details?.team_members || details?.teamMembers;
-                      if (Array.isArray(teamMembers) && teamMembers.length > 0) {
+                      const details = registration.details as Record<
+                        string,
+                        unknown
+                      >;
+                      const teamMembers =
+                        details?.team_members || details?.teamMembers;
+                      if (
+                        Array.isArray(teamMembers) &&
+                        teamMembers.length > 0
+                      ) {
                         return (
                           <div className="space-y-3">
-                            {teamMembers.map((member: { name?: string; email?: string; id?: string }, idx: number) => (
-                              <Card key={member.id || idx} className="p-4">
-                                <div className="flex items-center gap-3">
-                                  <Avatar className="h-10 w-10">
-                                    <AvatarImage
-                                      src={`https://api.dicebear.com/6.x/initials/svg?seed=${member.name || member.email}`}
-                                    />
-                                    <AvatarFallback>
-                                      {(member.name || member.email || 'U').charAt(0).toUpperCase()}
-                                    </AvatarFallback>
-                                  </Avatar>
-                                  <div>
-                                    <p className="font-medium">{member.name || 'Team Member'}</p>
-                                    {member.email && (
-                                      <p className="text-sm text-muted-foreground">{member.email}</p>
-                                    )}
+                            {teamMembers.map(
+                              (
+                                member: {
+                                  name?: string;
+                                  email?: string;
+                                  id?: string;
+                                },
+                                idx: number
+                              ) => (
+                                <Card key={member.id || idx} className="p-4">
+                                  <div className="flex items-center gap-3">
+                                    <Avatar className="h-10 w-10">
+                                      <AvatarImage
+                                        src={`https://api.dicebear.com/6.x/initials/svg?seed=${member.name || member.email}`}
+                                      />
+                                      <AvatarFallback>
+                                        {(member.name || member.email || 'U')
+                                          .charAt(0)
+                                          .toUpperCase()}
+                                      </AvatarFallback>
+                                    </Avatar>
+                                    <div>
+                                      <p className="font-medium">
+                                        {member.name || 'Team Member'}
+                                      </p>
+                                      {member.email && (
+                                        <p className="text-sm text-muted-foreground">
+                                          {member.email}
+                                        </p>
+                                      )}
+                                    </div>
+                                    <Badge
+                                      variant="outline"
+                                      className="ml-auto"
+                                    >
+                                      Member {idx + 1}
+                                    </Badge>
                                   </div>
-                                  <Badge variant="outline" className="ml-auto">
-                                    Member {idx + 1}
-                                  </Badge>
-                                </div>
-                              </Card>
-                            ))}
+                                </Card>
+                              )
+                            )}
                           </div>
                         );
                       }
@@ -662,9 +752,9 @@ export default function RegistrationDetails({ slug }: { slug: string }) {
                   </SelectContent>
                 </Select>
               </div>
-              
+
               <Separator />
-              
+
               <div className="space-y-2">
                 <Label htmlFor="approval">Approval Status</Label>
                 <Select
@@ -679,8 +769,10 @@ export default function RegistrationDetails({ slug }: { slug: string }) {
                           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                           Updating...
                         </div>
+                      ) : isApproved === 'SUBMITTED' ? (
+                        'Pending'
                       ) : (
-                        isApproved === 'SUBMITTED' ? 'Pending' : isApproved || 'Select status'
+                        isApproved || 'Select status'
                       )}
                     </SelectValue>
                   </SelectTrigger>
@@ -726,8 +818,12 @@ export default function RegistrationDetails({ slug }: { slug: string }) {
               </div>
               <Separator />
               <div>
-                <p className="text-sm text-muted-foreground">Registrant Email</p>
-                <p className="font-medium break-all">{registration.registration_email}</p>
+                <p className="text-sm text-muted-foreground">
+                  Registrant Email
+                </p>
+                <p className="font-medium break-all">
+                  {registration.registration_email}
+                </p>
               </div>
             </CardContent>
           </Card>

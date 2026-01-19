@@ -1,21 +1,21 @@
 import type { User } from '@supabase/supabase-js';
 import { useEffect, useRef } from 'react';
-import { createClient } from '@/utils/supabase/client';
 import { useUserRolesStore } from '@/stores/user-roles';
+import { createClient } from '@/utils/supabase/client';
 
 interface AdminCheckProps {
   user: User | null;
 }
 
 const useAdmin = ({ user }: AdminCheckProps) => {
-  const { 
-    isAdmin, 
-    adminLoading, 
-    adminFetchedForUserId, 
-    setAdminState, 
-    setAdminLoading 
+  const {
+    isAdmin,
+    adminLoading,
+    adminFetchedForUserId,
+    setAdminState,
+    setAdminLoading,
   } = useUserRolesStore();
-  
+
   // Use ref for supabase client to avoid recreating on every render
   const supabaseRef = useRef(createClient());
 

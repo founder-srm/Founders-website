@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import {
   Book,
   FolderKanban,
@@ -8,25 +8,25 @@ import {
   Trees,
   UsersRound,
   Zap,
-} from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
-import { ModeToggle } from "@/components/theme/theme-toggle";
+} from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useState } from 'react';
+import { ModeToggle } from '@/components/theme/theme-toggle';
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button, buttonVariants } from "@/components/ui/button";
+} from '@/components/ui/accordion';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button, buttonVariants } from '@/components/ui/button';
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
-} from "@/components/ui/hover-card";
+} from '@/components/ui/hover-card';
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -35,22 +35,22 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu";
+} from '@/components/ui/navigation-menu';
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet";
-import useAdmin from "@/hooks/use-admin";
-import useClub from "@/hooks/use-club";
-import { usePresence } from "@/hooks/usePresence";
-import { cn } from "@/lib/utils";
-import { useUser } from "@/stores/session";
-import { AdminUserIcon } from "./custom-icons/custom-icons";
-import { LineShadowText } from "./ui/line-shadow-text";
-import SparklesText from "./ui/sparkles-text";
+} from '@/components/ui/sheet';
+import useAdmin from '@/hooks/use-admin';
+import useClub from '@/hooks/use-club';
+import { usePresence } from '@/hooks/usePresence';
+import { cn } from '@/lib/utils';
+import { useUser } from '@/stores/session';
+import { AdminUserIcon } from './custom-icons/custom-icons';
+import { LineShadowText } from './ui/line-shadow-text';
+import SparklesText from './ui/sparkles-text';
 
 // import { useTheme } from 'next-themes';
 
@@ -64,11 +64,11 @@ function AvatarButton({
   const isPresent = usePresence();
 
   const getInitials = (name: string) => {
-    if (!name || name === undefined) return "";
+    if (!name || name === undefined) return '';
     return name
-      .split(" ")
-      .map((word) => word[0])
-      .join("")
+      .split(' ')
+      .map(word => word[0])
+      .join('')
       .toUpperCase();
   };
 
@@ -78,15 +78,15 @@ function AvatarButton({
         <Link href="/dashboard/account" className="relative">
           <Avatar className="rounded-lg">
             <AvatarImage src={Image} alt={name} />
-            <AvatarFallback>{getInitials(name) || "SG"}</AvatarFallback>
+            <AvatarFallback>{getInitials(name) || 'SG'}</AvatarFallback>
           </Avatar>
           <span
             className={cn(
-              "absolute -end-1 -top-1 size-3 rounded-full border-2 border-background",
-              isPresent ? "bg-emerald-500" : "bg-yellow-500",
+              'absolute -end-1 -top-1 size-3 rounded-full border-2 border-background',
+              isPresent ? 'bg-emerald-500' : 'bg-yellow-500'
             )}
           >
-            <span className="sr-only">{isPresent ? "Online" : "Away"}</span>
+            <span className="sr-only">{isPresent ? 'Online' : 'Away'}</span>
           </span>
         </Link>
       </HoverCardTrigger>
@@ -94,7 +94,7 @@ function AvatarButton({
         <div className="flex justify-between space-x-4">
           <Avatar>
             <AvatarImage src={Image} />
-            <AvatarFallback>{getInitials(name) || "SG"}</AvatarFallback>
+            <AvatarFallback>{getInitials(name) || 'SG'}</AvatarFallback>
           </Avatar>
           <div className="space-y-1">
             <h4 className="text-sm font-semibold">{name}</h4>
@@ -104,12 +104,12 @@ function AvatarButton({
             <div className="flex items-center pt-2">
               <span
                 className={cn(
-                  "mr-2 size-2 rounded-full",
-                  isPresent ? "bg-emerald-500" : "bg-yellow-500",
+                  'mr-2 size-2 rounded-full',
+                  isPresent ? 'bg-emerald-500' : 'bg-yellow-500'
                 )}
               />
               <span className="text-xs text-muted-foreground">
-                {isPresent ? "Online" : "Away"}
+                {isPresent ? 'Online' : 'Away'}
               </span>
             </div>
           </div>
@@ -121,43 +121,43 @@ function AvatarButton({
 
 const subMenuItemsOne = [
   {
-    title: "About Us",
-    description: "Bringing Ideas to reality",
+    title: 'About Us',
+    description: 'Bringing Ideas to reality',
     icon: <Trees className="size-5 shrink-0" />,
-    route: "/about",
+    route: '/about',
   },
   {
-    title: "Blog",
-    description: "The Latest and Greatest in the world of entrepreneurship",
+    title: 'Blog',
+    description: 'The Latest and Greatest in the world of entrepreneurship',
     icon: <Book className="size-5 shrink-0" />,
-    route: "/blog",
+    route: '/blog',
   },
   {
-    title: "Creative Works",
-    description: "Showcasing our members creative works and projects",
+    title: 'Creative Works',
+    description: 'Showcasing our members creative works and projects',
     icon: <Paintbrush className="size-5 shrink-0" />,
-    route: "/creatives",
+    route: '/creatives',
   },
   {
-    title: "Our Team",
-    description: "Get to know the people behind the scenes at Founders Club",
+    title: 'Our Team',
+    description: 'Get to know the people behind the scenes at Founders Club',
     icon: <UsersRound className="size-5 shrink-0" />,
-    route: "/about/team",
+    route: '/about/team',
   },
   {
-    title: "Recruitments",
-    description: "Join our team and help us build the future",
+    title: 'Recruitments',
+    description: 'Join our team and help us build the future',
     icon: <Sunset className="size-5 shrink-0" />,
-    route: "/recruitments",
+    route: '/recruitments',
   },
 ];
 
 const subMenuItemsTwo = [
   {
-    title: "Events and Workshops",
-    description: "Get the latest updates on our events and workshops",
+    title: 'Events and Workshops',
+    description: 'Get the latest updates on our events and workshops',
     icon: <Zap className="size-5 shrink-0" />,
-    route: "/events",
+    route: '/events',
   },
   // {
   //   title: 'Contact Us',
@@ -178,8 +178,8 @@ const subMenuItemsTwo = [
 ];
 
 const isPathExcluded = (pathname: string, excludedPaths: string[]) => {
-  return excludedPaths.some((path) => {
-    if (path.endsWith("/*")) {
+  return excludedPaths.some(path => {
+    if (path.endsWith('/*')) {
       const prefix = path.slice(0, -2); // Remove /* from the end
       return pathname.startsWith(prefix);
     }
@@ -198,15 +198,15 @@ const Navbar1 = () => {
   // const shadowColor = theme.resolvedTheme === "dark" ? "white" : "black";
 
   const excludedRoutes = [
-    "/studio/*",
-    "/creatives",
-    "/events/writeup/*",
-    "/blog/posts/*",
-    "/auth/*",
-    "/signup",
-    "/admin/*",
-    "/ishan",
-    "/fling",
+    '/studio/*',
+    '/creatives',
+    '/events/writeup/*',
+    '/blog/posts/*',
+    '/auth/*',
+    '/signup',
+    '/admin/*',
+    '/ishan',
+    '/fling',
   ];
 
   if (isPathExcluded(pathname, excludedRoutes)) {
@@ -218,7 +218,7 @@ const Navbar1 = () => {
       <nav className="hidden justify-between lg:flex w-full container ">
         <div className="flex items-center gap-6">
           <Link
-            href={"/"}
+            href={'/'}
             className="flex items-center backdrop-blur-sm flex-nowrap text-balance leading-none tracking-tighter"
           >
             <Image
@@ -232,13 +232,13 @@ const Navbar1 = () => {
             <div className="flex items-center gap-2">
               <LineShadowText
                 className="italic text-2xl font-bold"
-                shadowColor={"gray"}
+                shadowColor={'gray'}
               >
                 Founders
               </LineShadowText>
               <LineShadowText
                 className="italic text-2xl font-bold"
-                shadowColor={"gray"}
+                shadowColor={'gray'}
               >
                 Club
               </LineShadowText>
@@ -248,11 +248,11 @@ const Navbar1 = () => {
           <div className="flex items-center">
             <Link
               className={cn(
-                "text-muted-foreground",
+                'text-muted-foreground',
                 navigationMenuTriggerStyle,
                 buttonVariants({
-                  variant: "ghost",
-                }),
+                  variant: 'ghost',
+                })
               )}
               href="/"
             >
@@ -270,7 +270,7 @@ const Navbar1 = () => {
                         <li key={idx}>
                           <NavigationMenuLink
                             className={cn(
-                              "flex select-none gap-4 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+                              'flex select-none gap-4 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground'
                             )}
                             href={item.route}
                           >
@@ -297,7 +297,7 @@ const Navbar1 = () => {
                         <li key={idx}>
                           <NavigationMenuLink
                             className={cn(
-                              "flex select-none gap-4 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+                              'flex select-none gap-4 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground'
                             )}
                             href={item.route}
                           >
@@ -321,11 +321,11 @@ const Navbar1 = () => {
 
             <Link
               className={cn(
-                "text-muted-foreground",
+                'text-muted-foreground',
                 navigationMenuTriggerStyle,
                 buttonVariants({
-                  variant: "ghost",
-                }),
+                  variant: 'ghost',
+                })
               )}
               href="/upcoming"
             >
@@ -333,11 +333,11 @@ const Navbar1 = () => {
             </Link>
             <Link
               className={cn(
-                "text-muted-foreground",
+                'text-muted-foreground',
                 navigationMenuTriggerStyle,
                 buttonVariants({
-                  variant: "ghost",
-                }),
+                  variant: 'ghost',
+                })
               )}
               href="/contact-us"
             >
@@ -356,7 +356,9 @@ const Navbar1 = () => {
           )}
           {isClub && (
             <Button variant="outline" size="icon" className="" asChild>
-              <Link href="/club-dashboard"><FolderKanban /></Link>
+              <Link href="/club-dashboard">
+                <FolderKanban />
+              </Link>
             </Button>
           )}
           {user ? (
@@ -384,7 +386,7 @@ const Navbar1 = () => {
       </nav>
       <div className="block lg:hidden w-full px-4">
         <div className="flex flex-row items-center w-full justify-between">
-          <Link href={"/"} className="flex items-center gap-2 backdrop-blur-sm">
+          <Link href={'/'} className="flex items-center gap-2 backdrop-blur-sm">
             <Image
               src="/FC-logo-short.png"
               alt="logo"
@@ -405,7 +407,7 @@ const Navbar1 = () => {
               <SheetHeader>
                 <SheetTitle>
                   <Link
-                    href={"/"}
+                    href={'/'}
                     className="flex items-center gap-2 backdrop-blur-sm"
                   >
                     <Image
@@ -439,7 +441,7 @@ const Navbar1 = () => {
                           key={idx}
                           onClick={() => setIsOpen(false)}
                           className={cn(
-                            "flex select-none gap-4 rounded-md p-3 leading-none outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+                            'flex select-none gap-4 rounded-md p-3 leading-none outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground'
                           )}
                           href={item.route}
                         >
@@ -466,7 +468,7 @@ const Navbar1 = () => {
                           key={idx}
                           onClick={() => setIsOpen(false)}
                           className={cn(
-                            "flex select-none gap-4 rounded-md p-3 leading-none outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+                            'flex select-none gap-4 rounded-md p-3 leading-none outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground'
                           )}
                           href={item.route}
                         >
@@ -510,13 +512,10 @@ const Navbar1 = () => {
                     </Button>
                   )}
                   {isClub && (
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      className=""
-                      asChild
-                    >
-                      <Link href="/club-dashboard"><FolderKanban /></Link>
+                    <Button variant="outline" size="icon" className="" asChild>
+                      <Link href="/club-dashboard">
+                        <FolderKanban />
+                      </Link>
                     </Button>
                   )}
                   {user ? (

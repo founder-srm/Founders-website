@@ -2,12 +2,12 @@
 
 import { Bot, Loader2, RefreshCw, Send, Sparkles } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useDashboardData } from '@/components/providers/DashboardDataProvider';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
-import { useDashboardData } from '@/components/providers/DashboardDataProvider';
 
 interface Message {
   id: string;
@@ -23,7 +23,12 @@ const PRESET_QUESTIONS = [
 ];
 
 export function DashboardAIInsights() {
-  const { getDataSummary, stats, eventPerformance, isLoading: dataLoading } = useDashboardData();
+  const {
+    getDataSummary,
+    stats,
+    eventPerformance,
+    isLoading: dataLoading,
+  } = useDashboardData();
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -37,13 +42,17 @@ export function DashboardAIInsights() {
   }, [messages]);
 
   // Generate AI response based on dashboard data
-  const generateResponse = useCallback(async (question: string): Promise<string> => {
-    const dataSummary = getDataSummary();
-    const lowerQuestion = question.toLowerCase();
+  const generateResponse = useCallback(
+    async (question: string): Promise<string> => {
+      const dataSummary = getDataSummary();
+      const lowerQuestion = question.toLowerCase();
 
-    // Simple local responses based on data - no API call needed for basic questions
-    if (lowerQuestion.includes('summary') || lowerQuestion.includes('overview')) {
-      return `📊 **Dashboard Summary**
+      // Simple local responses based on data - no API call needed for basic questions
+      if (
+        lowerQuestion.includes('summary') ||
+        lowerQuestion.includes('overview')
+      ) {
+        return `📊 **Dashboard Summary**
 
 Here's your current status:
 - **${stats.totalEvents}** total events created
@@ -51,48 +60,66 @@ Here's your current status:
 - **${stats.acceptanceRate.toFixed(1)}%** acceptance rate
 - **${stats.avgRegistrationsPerEvent.toFixed(1)}** average registrations per event
 
-${stats.recentTrend === 'up' 
-  ? `📈 Registrations are **trending up** by ${stats.trendPercentage.toFixed(1)}% compared to last week!` 
-  : stats.recentTrend === 'down' 
-    ? `📉 Registrations are **down** by ${stats.trendPercentage.toFixed(1)}% compared to last week.`
-    : '📊 Registrations have been **stable** this week.'}
+${
+  stats.recentTrend === 'up'
+    ? `📈 Registrations are **trending up** by ${stats.trendPercentage.toFixed(1)}% compared to last week!`
+    : stats.recentTrend === 'down'
+      ? `📉 Registrations are **down** by ${stats.trendPercentage.toFixed(1)}% compared to last week.`
+      : '📊 Registrations have been **stable** this week.'
+}
 
 Your most popular event is **"${stats.mostPopularEvent}"**.`;
-    }
+      }
 
-    if (lowerQuestion.includes('top') || lowerQuestion.includes('performing') || lowerQuestion.includes('popular')) {
-      const top3 = eventPerformance.slice(0, 3);
-      if (top3.length === 0) return 'No events have registrations yet.';
-      
-      return `🏆 **Top Performing Events**
+      if (
+        lowerQuestion.includes('top') ||
+        lowerQuestion.includes('performing') ||
+        lowerQuestion.includes('popular')
+      ) {
+        const top3 = eventPerformance.slice(0, 3);
+        if (top3.length === 0) return 'No events have registrations yet.';
 
-${top3.map((e, i) => `${i + 1}. **${e.title}**
+        return `🏆 **Top Performing Events**
+
+${top3
+  .map(
+    (e, i) => `${i + 1}. **${e.title}**
    - ${e.registrations} registrations
-   - ${e.accepted} accepted (${e.conversionRate.toFixed(0)}% conversion rate)`).join('\n\n')}
+   - ${e.accepted} accepted (${e.conversionRate.toFixed(0)}% conversion rate)`
+  )
+  .join('\n\n')}
 
-${top3[0].conversionRate > 80 
-  ? '✨ Great conversion rates! Your events are attracting quality registrations.' 
-  : 'Consider promoting these events more to increase registrations.'}`;
-    }
+${
+  top3[0].conversionRate > 80
+    ? '✨ Great conversion rates! Your events are attracting quality registrations.'
+    : 'Consider promoting these events more to increase registrations.'
+}`;
+      }
 
-    if (lowerQuestion.includes('trend') || lowerQuestion.includes('growth')) {
-      return `📈 **Registration Trends**
+      if (lowerQuestion.includes('trend') || lowerQuestion.includes('growth')) {
+        return `📈 **Registration Trends**
 
-${stats.recentTrend === 'up' 
-  ? `Great news! Registrations are **up ${stats.trendPercentage.toFixed(1)}%** this week compared to the previous week.` 
-  : stats.recentTrend === 'down' 
-    ? `Registrations are **down ${stats.trendPercentage.toFixed(1)}%** this week. Consider:\n- Promoting upcoming events on social media\n- Sending reminder emails to your community\n- Creating engaging event content`
-    : 'Registrations have been **stable** this week.'}
+${
+  stats.recentTrend === 'up'
+    ? `Great news! Registrations are **up ${stats.trendPercentage.toFixed(1)}%** this week compared to the previous week.`
+    : stats.recentTrend === 'down'
+      ? `Registrations are **down ${stats.trendPercentage.toFixed(1)}%** this week. Consider:\n- Promoting upcoming events on social media\n- Sending reminder emails to your community\n- Creating engaging event content`
+      : 'Registrations have been **stable** this week.'
+}
 
 **Current Stats:**
 - Total registrations: ${stats.totalRegistrations}
 - Average per event: ${stats.avgRegistrationsPerEvent.toFixed(1)}
 - Pending reviews: ${stats.pendingRegistrations}`;
-    }
+      }
 
-    if (lowerQuestion.includes('acceptance') || lowerQuestion.includes('approval') || lowerQuestion.includes('rate')) {
-      const rate = stats.acceptanceRate;
-      return `✅ **Acceptance Rate Analysis**
+      if (
+        lowerQuestion.includes('acceptance') ||
+        lowerQuestion.includes('approval') ||
+        lowerQuestion.includes('rate')
+      ) {
+        const rate = stats.acceptanceRate;
+        return `✅ **Acceptance Rate Analysis**
 
 Your current acceptance rate is **${rate.toFixed(1)}%**
 
@@ -101,27 +128,31 @@ Your current acceptance rate is **${rate.toFixed(1)}%**
 - Pending: ${stats.pendingRegistrations}
 - Rejected: ${stats.rejectedRegistrations}
 
-${rate > 80 
-  ? '🌟 Excellent acceptance rate! Your screening process is efficient.' 
-  : rate > 50 
-    ? '👍 Good acceptance rate. Review pending registrations to maintain quality.' 
-    : '⚠️ Low acceptance rate. Consider reviewing your registration criteria or event targeting.'}
+${
+  rate > 80
+    ? '🌟 Excellent acceptance rate! Your screening process is efficient.'
+    : rate > 50
+      ? '👍 Good acceptance rate. Review pending registrations to maintain quality.'
+      : '⚠️ Low acceptance rate. Consider reviewing your registration criteria or event targeting.'
+}
 
-${stats.pendingRegistrations > 10 
-  ? `\n⏳ You have **${stats.pendingRegistrations} pending registrations** to review.` 
-  : ''}`;
-    }
+${
+  stats.pendingRegistrations > 10
+    ? `\n⏳ You have **${stats.pendingRegistrations} pending registrations** to review.`
+    : ''
+}`;
+      }
 
-    if (lowerQuestion.includes('event') && lowerQuestion.includes('type')) {
-      return `📋 **Event Type Distribution**
+      if (lowerQuestion.includes('event') && lowerQuestion.includes('type')) {
+        return `📋 **Event Type Distribution**
 
 You have **${stats.totalEvents}** events total.
 
 Events are being organized effectively across different categories. Check the Event Types chart for the visual breakdown.`;
-    }
+      }
 
-    // Default response with summary
-    return `Based on your dashboard data:
+      // Default response with summary
+      return `Based on your dashboard data:
 
 ${dataSummary}
 
@@ -130,7 +161,9 @@ Feel free to ask specific questions about:
 - Registration trends
 - Acceptance rates
 - Event statistics`;
-  }, [getDataSummary, stats, eventPerformance]);
+    },
+    [getDataSummary, stats, eventPerformance]
+  );
 
   const handleSend = async (message?: string) => {
     const query = message || input.trim();
@@ -148,19 +181,20 @@ Feel free to ask specific questions about:
 
     try {
       const response = await generateResponse(query);
-      
+
       const assistantMessage: Message = {
         id: `assistant-${Date.now()}`,
         role: 'assistant',
         content: response,
       };
-      
+
       setMessages(prev => [...prev, assistantMessage]);
     } catch {
       const errorMessage: Message = {
         id: `error-${Date.now()}`,
         role: 'assistant',
-        content: 'Sorry, I encountered an error analyzing the data. Please try again.',
+        content:
+          'Sorry, I encountered an error analyzing the data. Please try again.',
       };
       setMessages(prev => [...prev, errorMessage]);
     } finally {
@@ -193,12 +227,14 @@ Feel free to ask specific questions about:
               <p className="text-sm text-muted-foreground mb-4">
                 Get insights and summaries about your events and registrations.
               </p>
-              
+
               {/* Preset questions */}
               <div className="w-full space-y-2">
-                <p className="text-xs text-muted-foreground mb-2">Quick questions:</p>
+                <p className="text-xs text-muted-foreground mb-2">
+                  Quick questions:
+                </p>
                 <div className="grid grid-cols-1 gap-2">
-                  {PRESET_QUESTIONS.map((question) => (
+                  {PRESET_QUESTIONS.map(question => (
                     <Button
                       key={question}
                       variant="outline"
@@ -215,7 +251,7 @@ Feel free to ask specific questions about:
             </div>
           ) : (
             <div className="space-y-4">
-              {messages.map((message) => (
+              {messages.map(message => (
                 <div
                   key={message.id}
                   className={cn(
@@ -226,7 +262,9 @@ Feel free to ask specific questions about:
                   <div
                     className={cn(
                       'flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center',
-                      message.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted'
+                      message.role === 'user'
+                        ? 'bg-primary text-primary-foreground'
+                        : 'bg-muted'
                     )}
                   >
                     {message.role === 'user' ? (
@@ -243,7 +281,9 @@ Feel free to ask specific questions about:
                         : 'bg-muted text-foreground'
                     )}
                   >
-                    <p className="whitespace-pre-wrap break-words">{message.content}</p>
+                    <p className="whitespace-pre-wrap break-words">
+                      {message.content}
+                    </p>
                   </div>
                 </div>
               ))}
@@ -254,9 +294,18 @@ Feel free to ask specific questions about:
                   </div>
                   <div className="bg-muted rounded-lg px-3 py-2">
                     <div className="flex gap-1">
-                      <span className="w-2 h-2 bg-foreground/40 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                      <span className="w-2 h-2 bg-foreground/40 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                      <span className="w-2 h-2 bg-foreground/40 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                      <span
+                        className="w-2 h-2 bg-foreground/40 rounded-full animate-bounce"
+                        style={{ animationDelay: '0ms' }}
+                      />
+                      <span
+                        className="w-2 h-2 bg-foreground/40 rounded-full animate-bounce"
+                        style={{ animationDelay: '150ms' }}
+                      />
+                      <span
+                        className="w-2 h-2 bg-foreground/40 rounded-full animate-bounce"
+                        style={{ animationDelay: '300ms' }}
+                      />
                     </div>
                   </div>
                 </div>
@@ -271,7 +320,7 @@ Feel free to ask specific questions about:
             <Input
               placeholder="Ask about your dashboard data..."
               value={input}
-              onChange={(e) => setInput(e.target.value)}
+              onChange={e => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
               disabled={isLoading || dataLoading}
               className="text-sm"

@@ -1,7 +1,7 @@
 import type { User } from '@supabase/supabase-js';
 import { useEffect, useRef } from 'react';
-import { createClient } from '@/utils/supabase/client';
 import { useUserRolesStore } from '@/stores/user-roles';
+import { createClient } from '@/utils/supabase/client';
 import type { Database } from '../../database.types';
 
 type ClubUserRole = Database['public']['Enums']['club_user_role'];
@@ -41,7 +41,7 @@ const useClub = ({ user }: ClubCheckProps) => {
     setClubState,
     setClubLoading,
   } = useUserRolesStore();
-  
+
   // Use ref for supabase client to avoid recreating on every render
   const supabaseRef = useRef(createClient());
 
@@ -74,7 +74,7 @@ const useClub = ({ user }: ClubCheckProps) => {
             club:clubs(*)
           `)
           .eq('user_id', user.id)
-          .eq('user_role', "club_rep")
+          .eq('user_role', 'club_rep')
           .single();
 
         if (error || !clubUserData) {
@@ -89,7 +89,12 @@ const useClub = ({ user }: ClubCheckProps) => {
           return;
         }
 
-        console.log('User is a club member:', user.email, 'Role:', clubUserData.user_role);
+        console.log(
+          'User is a club member:',
+          user.email,
+          'Role:',
+          clubUserData.user_role
+        );
         setClubState({
           isClub: true,
           club: clubUserData.club as ClubData,

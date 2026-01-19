@@ -1,6 +1,6 @@
 'use client';
 
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Cell } from 'recharts';
+import { Bar, BarChart, CartesianGrid, Cell, XAxis, YAxis } from 'recharts';
 import {
   Card,
   CardContent,
@@ -36,7 +36,10 @@ interface ApprovalWorkflowChartProps {
   autoApproveRate: number;
 }
 
-export function ApprovalWorkflowChart({ data, autoApproveRate }: ApprovalWorkflowChartProps) {
+export function ApprovalWorkflowChart({
+  data,
+  autoApproveRate,
+}: ApprovalWorkflowChartProps) {
   return (
     <Card>
       <CardHeader>
@@ -72,7 +75,9 @@ export function ApprovalWorkflowChart({ data, autoApproveRate }: ApprovalWorkflo
               {data.map((entry, index) => (
                 <Cell
                   key={`cell-${index}`}
-                  fill={index === 0 ? 'hsl(var(--chart-1))' : 'hsl(var(--chart-3))'}
+                  fill={
+                    index === 0 ? 'hsl(var(--chart-1))' : 'hsl(var(--chart-3))'
+                  }
                 />
               ))}
             </Bar>

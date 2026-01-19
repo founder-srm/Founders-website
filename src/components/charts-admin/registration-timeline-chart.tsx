@@ -33,7 +33,10 @@ interface RegistrationTimelineChartProps {
   peakDay: string;
 }
 
-export function RegistrationTimelineChart({ data, peakDay }: RegistrationTimelineChartProps) {
+export function RegistrationTimelineChart({
+  data,
+  peakDay,
+}: RegistrationTimelineChartProps) {
   return (
     <Card className="col-span-full lg:col-span-2">
       <CardHeader>
@@ -69,8 +72,16 @@ export function RegistrationTimelineChart({ data, peakDay }: RegistrationTimelin
             />
             <defs>
               <linearGradient id="fillTimeline" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="var(--color-registrations)" stopOpacity={0.8} />
-                <stop offset="95%" stopColor="var(--color-registrations)" stopOpacity={0.1} />
+                <stop
+                  offset="5%"
+                  stopColor="var(--color-registrations)"
+                  stopOpacity={0.8}
+                />
+                <stop
+                  offset="95%"
+                  stopColor="var(--color-registrations)"
+                  stopOpacity={0.1}
+                />
               </linearGradient>
             </defs>
             <Area
@@ -86,7 +97,8 @@ export function RegistrationTimelineChart({ data, peakDay }: RegistrationTimelin
       </CardContent>
       <CardFooter>
         <div className="text-sm text-muted-foreground">
-          Peak registration period: <span className="font-medium text-foreground">{peakDay}</span>
+          Peak registration period:{' '}
+          <span className="font-medium text-foreground">{peakDay}</span>
         </div>
       </CardFooter>
     </Card>

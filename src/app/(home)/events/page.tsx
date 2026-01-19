@@ -5,11 +5,8 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { urlFor } from '@/sanity/lib/image';
-import {  sanityFetch } from '@/sanity/lib/live';
-import {
-  ALL_EVENTS_QUERY,
-  EVENT_SETTINGS_QUERY,
-} from '@/sanity/lib/queries';
+import { sanityFetch } from '@/sanity/lib/live';
+import { ALL_EVENTS_QUERY, EVENT_SETTINGS_QUERY } from '@/sanity/lib/queries';
 import { FilterableEventsGrid } from './FilterableEventsGrid';
 
 const categories = [
@@ -140,7 +137,6 @@ export default async function EventsPage() {
           </form>
         </div>
       </div>
-      
     </section>
   );
 }

@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { LinkTreeCard } from '@/components/linktree/linktree-card';
 import { urlFor } from '@/sanity/lib/image';
-import {  sanityFetch } from '@/sanity/lib/live';
+import { sanityFetch } from '@/sanity/lib/live';
 import {
   FIRST_LINKTREE_QUERY,
   LINKTREE_BY_SLUG_QUERY,
@@ -81,7 +81,6 @@ export default async function CreativesPage() {
           links={normalizedLinks}
         />
       </div>
-      
     </main>
   );
 }

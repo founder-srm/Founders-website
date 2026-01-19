@@ -12,9 +12,9 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { CustomMDX } from '@/mdx-components';
 import { createClient } from '@/utils/supabase/server';
 import type { eventsInsertType } from '../../../../../../schema.zod';
-import { CustomMDX } from '@/mdx-components';
 
 // import { enGB } from 'date-fns/locale/';
 
@@ -199,7 +199,10 @@ export default async function EventRegistrationSection({
           <CardHeader>
             <CardTitle className="text-xl md:text-2xl">Event Rules</CardTitle>
           </CardHeader>
-          <CardContent className="ml-2 prose prose-sm dark:prose-invert max-w-none" suppressHydrationWarning>
+          <CardContent
+            className="ml-2 prose prose-sm dark:prose-invert max-w-none"
+            suppressHydrationWarning
+          >
             {/* TipTap outputs Markdown, render with MDX */}
             <CustomMDX source={event.rules || ''} />
           </CardContent>
@@ -216,9 +219,7 @@ export default async function EventRegistrationSection({
                 variant="outline"
                 className="w-full sm:w-auto"
               >
-                <Link href={event.more_info || '#'}>
-                  {event.more_info}
-                </Link>
+                <Link href={event.more_info || '#'}>{event.more_info}</Link>
               </Button>
             </div>
           </CardFooter>

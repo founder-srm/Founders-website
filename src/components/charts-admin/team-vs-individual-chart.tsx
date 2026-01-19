@@ -1,6 +1,6 @@
 'use client';
 
-import { Pie, PieChart, Cell, Label } from 'recharts';
+import { Cell, Label, Pie, PieChart } from 'recharts';
 import {
   Card,
   CardContent,
@@ -72,11 +72,8 @@ export function TeamVsIndividualChart({ data }: TeamVsIndividualChartProps) {
               outerRadius={70}
               strokeWidth={5}
             >
-              {data.map((entry) => (
-                <Cell 
-                  key={entry.type} 
-                  fill={COLORS[entry.type]} 
-                />
+              {data.map(entry => (
+                <Cell key={entry.type} fill={COLORS[entry.type]} />
               ))}
               <Label
                 content={({ viewBox }) => {

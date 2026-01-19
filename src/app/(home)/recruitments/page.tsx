@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import CareersLarge from '@/components/careers-large';
 import config from '@/lib/config';
 
-
 type Params = Promise<{ slug: string }>;
 
 export async function generateMetadata(
@@ -44,7 +43,6 @@ export default async function Recruitments() {
   return (
     <main className="flex flex-col items-center w-full ">
       <CareersLarge />
-      
     </main>
   );
 }

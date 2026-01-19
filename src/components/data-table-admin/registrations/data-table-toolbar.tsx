@@ -1,7 +1,7 @@
 'use client';
 
 import type { Table } from '@tanstack/react-table';
-import { X, Search, RefreshCw } from 'lucide-react';
+import { RefreshCw, Search, X } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -28,7 +28,8 @@ export function DataTableToolbar<TData>({
   onRefresh,
   activeTab = 'all',
 }: DataTableToolbarProps<TData>) {
-  const isFiltered = table.getState().columnFilters.length > 0 || globalFilter.length > 0;
+  const isFiltered =
+    table.getState().columnFilters.length > 0 || globalFilter.length > 0;
 
   const approvalColumn = table.getColumn('is_approved');
   const attendanceColumn = table.getColumn('attendance');
@@ -48,18 +49,20 @@ export function DataTableToolbar<TData>({
           <Input
             placeholder="Search by email, event, or ticket..."
             value={globalFilter}
-            onChange={(event) => setGlobalFilter(event.target.value)}
+            onChange={event => setGlobalFilter(event.target.value)}
             className="pl-10 h-10"
           />
         </div>
-        
+
         <div className="flex items-center gap-2 flex-wrap">
           {/* Approval Status Filter - only show when on 'all' or 'team' tabs */}
           {showStatusFilter && approvalColumn && (
             <Select
               value={(approvalColumn.getFilterValue() as string) ?? 'all'}
-              onValueChange={(value) =>
-                approvalColumn.setFilterValue(value === 'all' ? undefined : value)
+              onValueChange={value =>
+                approvalColumn.setFilterValue(
+                  value === 'all' ? undefined : value
+                )
               }
             >
               <SelectTrigger className="h-10 w-[140px]">
@@ -79,8 +82,10 @@ export function DataTableToolbar<TData>({
           {attendanceColumn && (
             <Select
               value={(attendanceColumn.getFilterValue() as string) ?? 'all'}
-              onValueChange={(value) =>
-                attendanceColumn.setFilterValue(value === 'all' ? undefined : value)
+              onValueChange={value =>
+                attendanceColumn.setFilterValue(
+                  value === 'all' ? undefined : value
+                )
               }
             >
               <SelectTrigger className="h-10 w-[140px]">
@@ -104,7 +109,7 @@ export function DataTableToolbar<TData>({
                     ? 'team'
                     : 'individual'
               }
-              onValueChange={(value) =>
+              onValueChange={value =>
                 teamEntryColumn.setFilterValue(
                   value === 'all' ? undefined : value === 'team'
                 )
@@ -138,7 +143,12 @@ export function DataTableToolbar<TData>({
 
           {/* Refresh Button */}
           {onRefresh && (
-            <Button variant="outline" size="icon" className="h-10 w-10" onClick={onRefresh}>
+            <Button
+              variant="outline"
+              size="icon"
+              className="h-10 w-10"
+              onClick={onRefresh}
+            >
               <RefreshCw className="h-4 w-4" />
             </Button>
           )}

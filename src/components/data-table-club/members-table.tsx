@@ -1,22 +1,22 @@
-"use client";
+'use client';
 
-import * as React from "react";
 import {
-  ColumnDef,
-  ColumnFiltersState,
-  SortingState,
-  VisibilityState,
+  type ColumnDef,
+  type ColumnFiltersState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
+  type SortingState,
   useReactTable,
-} from "@tanstack/react-table";
-import { RefreshCw, Search, Users } from "lucide-react";
-
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+  type VisibilityState,
+} from '@tanstack/react-table';
+import { RefreshCw, Search, Users } from 'lucide-react';
+import * as React from 'react';
+import AddMemberButton from '@/components/AddMemberButton';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
   Table,
   TableBody,
@@ -24,10 +24,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import AddMemberButton from "@/components/AddMemberButton";
-import { ClubMember } from "./columns";
+} from '@/components/ui/table';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import type { ClubMember } from './columns';
 
 interface DataTableProps<TData extends ClubMember, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -53,7 +52,7 @@ export function MembersDataTable<TData extends ClubMember, TValue>({
       email: true,
     });
   const [rowSelection, setRowSelection] = React.useState({});
-  const [statusFilter, setStatusFilter] = React.useState<string>("all");
+  const [statusFilter, setStatusFilter] = React.useState<string>('all');
 
   const table = useReactTable({
     data,
@@ -81,18 +80,16 @@ export function MembersDataTable<TData extends ClubMember, TValue>({
 
   // Apply status filter
   React.useEffect(() => {
-    if (statusFilter === "all") {
-      table.getColumn("is_verified")?.setFilterValue(undefined);
+    if (statusFilter === 'all') {
+      table.getColumn('is_verified')?.setFilterValue(undefined);
     } else {
-      table.getColumn("is_verified")?.setFilterValue(statusFilter);
+      table.getColumn('is_verified')?.setFilterValue(statusFilter);
     }
   }, [statusFilter, table]);
 
   // Calculate counts
   const allCount = data.length;
-  const verifiedCount = data.filter(
-    (item) => item.is_verified === true
-  ).length;
+  const verifiedCount = data.filter(item => item.is_verified === true).length;
   const pendingCount = allCount - verifiedCount;
 
   if (isLoading) {
@@ -114,10 +111,10 @@ export function MembersDataTable<TData extends ClubMember, TValue>({
             <Input
               placeholder="Search members..."
               value={
-                (table.getColumn("name")?.getFilterValue() as string) ?? ""
+                (table.getColumn('name')?.getFilterValue() as string) ?? ''
               }
-              onChange={(event) =>
-                table.getColumn("name")?.setFilterValue(event.target.value)
+              onChange={event =>
+                table.getColumn('name')?.setFilterValue(event.target.value)
               }
               className="pl-8 w-[200px] sm:w-[300px]"
             />
@@ -151,7 +148,7 @@ export function MembersDataTable<TData extends ClubMember, TValue>({
             disabled={isRefreshing}
           >
             <RefreshCw
-              className={`h-4 w-4 ${isRefreshing ? "animate-spin" : ""}`}
+              className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`}
             />
             <span className="sr-only">Refresh members</span>
           </Button>
@@ -164,9 +161,9 @@ export function MembersDataTable<TData extends ClubMember, TValue>({
       <div className="rounded-md border">
         <Table>
           <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
+            {table.getHeaderGroups().map(headerGroup => (
               <TableRow key={headerGroup.id} className="hover:bg-transparent">
-                {headerGroup.headers.map((header) => {
+                {headerGroup.headers.map(header => {
                   return (
                     <TableHead key={header.id} className="whitespace-nowrap">
                       {header.isPlaceholder
@@ -183,13 +180,13 @@ export function MembersDataTable<TData extends ClubMember, TValue>({
           </TableHeader>
           <TableBody>
             {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
+              table.getRowModel().rows.map(row => (
                 <TableRow
                   key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
+                  data-state={row.getIsSelected() && 'selected'}
                   className="group"
                 >
-                  {row.getVisibleCells().map((cell) => (
+                  {row.getVisibleCells().map(cell => (
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
@@ -213,11 +210,11 @@ export function MembersDataTable<TData extends ClubMember, TValue>({
                       No members found
                     </h3>
                     <p className="text-sm text-muted-foreground text-center max-w-sm mb-4">
-                      {statusFilter !== "all"
+                      {statusFilter !== 'all'
                         ? `No ${statusFilter} members found. Try changing the filter.`
-                        : "Start building your team by adding members."}
+                        : 'Start building your team by adding members.'}
                     </p>
-                    {statusFilter === "all" && <AddMemberButton />}
+                    {statusFilter === 'all' && <AddMemberButton />}
                   </div>
                 </TableCell>
               </TableRow>
@@ -229,12 +226,12 @@ export function MembersDataTable<TData extends ClubMember, TValue>({
       {/* Pagination */}
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-2">
         <div className="text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} of{" "}
+          {table.getFilteredSelectedRowModel().rows.length} of{' '}
           {table.getFilteredRowModel().rows.length} row(s) selected.
         </div>
         <div className="flex items-center gap-2">
           <div className="text-sm text-muted-foreground">
-            Page {table.getState().pagination.pageIndex + 1} of{" "}
+            Page {table.getState().pagination.pageIndex + 1} of{' '}
             {table.getPageCount()}
           </div>
           <div className="flex items-center space-x-2">

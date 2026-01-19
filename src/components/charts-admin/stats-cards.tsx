@@ -8,8 +8,8 @@ import {
   TrendingUp,
   Users,
 } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import type { DashboardStats } from '@/components/providers/DashboardDataProvider';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 interface StatsCardsProps {
   stats: DashboardStats;
@@ -26,9 +26,7 @@ export function StatsCards({ stats }: StatsCardsProps) {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">{stats.totalEvents}</div>
-          <p className="text-xs text-muted-foreground">
-            Events created
-          </p>
+          <p className="text-xs text-muted-foreground">Events created</p>
         </CardContent>
       </Card>
 
@@ -44,13 +42,17 @@ export function StatsCards({ stats }: StatsCardsProps) {
             {stats.recentTrend === 'up' ? (
               <>
                 <TrendingUp className="h-3 w-3 mr-1 text-green-500" />
-                <span className="text-green-500">+{stats.trendPercentage.toFixed(1)}%</span>
+                <span className="text-green-500">
+                  +{stats.trendPercentage.toFixed(1)}%
+                </span>
                 <span className="ml-1">from last week</span>
               </>
             ) : stats.recentTrend === 'down' ? (
               <>
                 <TrendingDown className="h-3 w-3 mr-1 text-red-500" />
-                <span className="text-red-500">-{stats.trendPercentage.toFixed(1)}%</span>
+                <span className="text-red-500">
+                  -{stats.trendPercentage.toFixed(1)}%
+                </span>
                 <span className="ml-1">from last week</span>
               </>
             ) : (
@@ -67,7 +69,9 @@ export function StatsCards({ stats }: StatsCardsProps) {
           <CheckCircle2 className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">{stats.acceptanceRate.toFixed(1)}%</div>
+          <div className="text-2xl font-bold">
+            {stats.acceptanceRate.toFixed(1)}%
+          </div>
           <p className="text-xs text-muted-foreground">
             {stats.acceptedRegistrations} accepted
           </p>
@@ -82,9 +86,7 @@ export function StatsCards({ stats }: StatsCardsProps) {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">{stats.pendingRegistrations}</div>
-          <p className="text-xs text-muted-foreground">
-            Awaiting approval
-          </p>
+          <p className="text-xs text-muted-foreground">Awaiting approval</p>
         </CardContent>
       </Card>
     </div>

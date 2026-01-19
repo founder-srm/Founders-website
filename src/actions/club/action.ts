@@ -1,14 +1,14 @@
-"use server";
+'use server';
 
-import { createClient } from "@/utils/supabase/elevatedClient";
-import { getuserbyid } from "@/app/(auth)/auth/actions";
+import { getuserbyid } from '@/app/(auth)/auth/actions';
+import { createClient } from '@/utils/supabase/elevatedClient';
 
 export interface ClubMember {
   id: string;
   user_id: string;
   club_id: string;
   email: string;
-  user_role: "club_rep" | "member";
+  user_role: 'club_rep' | 'member';
   is_verified: boolean;
   created_at: string;
   user_metadata?: {
@@ -27,18 +27,18 @@ export async function fetchClubMembers(clubId: string): Promise<{
     const supabase = createClient();
 
     const { data: clubMembers, error } = await supabase
-      .from("clubuseraccount")
-      .select("*")
-      .eq("club_id", clubId)
-      .order("created_at", { ascending: true });
+      .from('clubuseraccount')
+      .select('*')
+      .eq('club_id', clubId)
+      .order('created_at', { ascending: true });
 
     if (error) {
-      console.error("Error fetching club members:", error);
+      console.error('Error fetching club members:', error);
       return { data: null, error: error.message };
     }
 
     const membersWithDetails: ClubMember[] = await Promise.all(
-      (clubMembers || []).map(async (member) => {
+      (clubMembers || []).map(async member => {
         try {
           const { data: userData } = await getuserbyid(member.user_id);
           return {
@@ -53,8 +53,8 @@ export async function fetchClubMembers(clubId: string): Promise<{
 
     return { data: membersWithDetails, error: null };
   } catch (err) {
-    console.error("Error in fetchClubMembers:", err);
-    return { data: null, error: "Failed to fetch club members" };
+    console.error('Error in fetchClubMembers:', err);
+    return { data: null, error: 'Failed to fetch club members' };
   }
 }
 
@@ -63,9 +63,9 @@ export async function getClubById(clubId: string) {
     const supabase = createClient();
 
     const { data, error } = await supabase
-      .from("clubs")
-      .select("*")
-      .eq("id", clubId)
+      .from('clubs')
+      .select('*')
+      .eq('id', clubId)
       .single();
 
     if (error) {
@@ -74,22 +74,22 @@ export async function getClubById(clubId: string) {
 
     return { data, error: null };
   } catch (err) {
-    console.error("Error fetching club:", err);
-    return { data: null, error: "Failed to fetch club" };
+    console.error('Error fetching club:', err);
+    return { data: null, error: 'Failed to fetch club' };
   }
 }
 
 export async function updateMemberRole(
   memberId: string,
-  newRole: "club_rep" | "member"
+  newRole: 'club_rep' | 'member'
 ): Promise<{ success: boolean; error: string | null }> {
   try {
     const supabase = createClient();
 
     const { error } = await supabase
-      .from("clubuseraccount")
+      .from('clubuseraccount')
       .update({ user_role: newRole })
-      .eq("id", memberId);
+      .eq('id', memberId);
 
     if (error) {
       return { success: false, error: error.message };
@@ -97,8 +97,8 @@ export async function updateMemberRole(
 
     return { success: true, error: null };
   } catch (err) {
-    console.error("Error updating member role:", err);
-    return { success: false, error: "Failed to update member role" };
+    console.error('Error updating member role:', err);
+    return { success: false, error: 'Failed to update member role' };
   }
 }
 
@@ -110,9 +110,9 @@ export async function updateMemberVerification(
     const supabase = createClient();
 
     const { error } = await supabase
-      .from("clubuseraccount")
+      .from('clubuseraccount')
       .update({ is_verified: isVerified })
-      .eq("id", memberId);
+      .eq('id', memberId);
 
     if (error) {
       return { success: false, error: error.message };
@@ -120,8 +120,8 @@ export async function updateMemberVerification(
 
     return { success: true, error: null };
   } catch (err) {
-    console.error("Error updating member verification:", err);
-    return { success: false, error: "Failed to update member verification" };
+    console.error('Error updating member verification:', err);
+    return { success: false, error: 'Failed to update member verification' };
   }
 }
 
@@ -132,9 +132,9 @@ export async function removeMember(
     const supabase = createClient();
 
     const { error } = await supabase
-      .from("clubuseraccount")
+      .from('clubuseraccount')
       .delete()
-      .eq("id", memberId);
+      .eq('id', memberId);
 
     if (error) {
       return { success: false, error: error.message };
@@ -142,8 +142,8 @@ export async function removeMember(
 
     return { success: true, error: null };
   } catch (err) {
-    console.error("Error removing member:", err);
-    return { success: false, error: "Failed to remove member" };
+    console.error('Error removing member:', err);
+    return { success: false, error: 'Failed to remove member' };
   }
 }
 
@@ -155,9 +155,9 @@ export async function updateClubProfilePicture(
     const supabase = createClient();
 
     const { error } = await supabase
-      .from("clubs")
+      .from('clubs')
       .update({ profile_picture: profilePictureUrl })
-      .eq("id", clubId);
+      .eq('id', clubId);
 
     if (error) {
       return { success: false, error: error.message };
@@ -165,8 +165,8 @@ export async function updateClubProfilePicture(
 
     return { success: true, error: null };
   } catch (err) {
-    console.error("Error updating club profile picture:", err);
-    return { success: false, error: "Failed to update profile picture" };
+    console.error('Error updating club profile picture:', err);
+    return { success: false, error: 'Failed to update profile picture' };
   }
 }
 
@@ -176,49 +176,53 @@ export async function uploadClubImage(
 ): Promise<{ url: string | null; error: string | null }> {
   try {
     const supabase = createClient();
-    const file = formData.get("file") as File;
+    const file = formData.get('file') as File;
 
     if (!file) {
-      return { url: null, error: "No file provided" };
+      return { url: null, error: 'No file provided' };
     }
 
     // Validate file type
-    const allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
     if (!allowedTypes.includes(file.type)) {
-      return { url: null, error: "Invalid file type. Please upload a JPEG, PNG, WebP, or GIF image." };
+      return {
+        url: null,
+        error:
+          'Invalid file type. Please upload a JPEG, PNG, WebP, or GIF image.',
+      };
     }
 
     // Validate file size (max 5MB)
     const maxSize = 5 * 1024 * 1024;
     if (file.size > maxSize) {
-      return { url: null, error: "File too large. Maximum size is 5MB." };
+      return { url: null, error: 'File too large. Maximum size is 5MB.' };
     }
 
     // Create unique filename
-    const fileExt = file.name.split(".").pop();
+    const fileExt = file.name.split('.').pop();
     const fileName = `${clubId}/${Date.now()}.${fileExt}`;
 
     // Upload to Supabase Storage
     const { data, error: uploadError } = await supabase.storage
-      .from("club-assets")
+      .from('club-assets')
       .upload(fileName, file, {
-        cacheControl: "3600",
+        cacheControl: '3600',
         upsert: true,
       });
 
     if (uploadError) {
-      console.error("Upload error:", uploadError);
+      console.error('Upload error:', uploadError);
       return { url: null, error: uploadError.message };
     }
 
     // Get public URL
     const { data: urlData } = supabase.storage
-      .from("club-assets")
+      .from('club-assets')
       .getPublicUrl(data.path);
 
     return { url: urlData.publicUrl, error: null };
   } catch (err) {
-    console.error("Error uploading club image:", err);
-    return { url: null, error: "Failed to upload image" };
+    console.error('Error uploading club image:', err);
+    return { url: null, error: 'Failed to upload image' };
   }
 }

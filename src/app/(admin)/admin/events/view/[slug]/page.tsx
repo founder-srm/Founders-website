@@ -101,12 +101,15 @@ export default function AdminEventViewPage() {
 
   // Calculate registration stats
   const stats = useMemo(() => {
-    if (!registrations) return { total: 0, approved: 0, pending: 0, rejected: 0 };
+    if (!registrations)
+      return { total: 0, approved: 0, pending: 0, rejected: 0 };
     return {
       total: registrations.length,
-      approved: registrations.filter((r) => r.is_approved === 'ACCEPTED').length,
-      pending: registrations.filter((r) => r.is_approved === 'SUBMITTED').length,
-      rejected: registrations.filter((r) => r.is_approved === 'REJECTED' || r.is_approved === 'INVALID').length,
+      approved: registrations.filter(r => r.is_approved === 'ACCEPTED').length,
+      pending: registrations.filter(r => r.is_approved === 'SUBMITTED').length,
+      rejected: registrations.filter(
+        r => r.is_approved === 'REJECTED' || r.is_approved === 'INVALID'
+      ).length,
     };
   }, [registrations]);
 
@@ -224,7 +227,9 @@ export default function AdminEventViewPage() {
                       />
                     </div>
                     <div className="p-6">
-                      <h2 className="text-xl font-semibold mb-2">Description</h2>
+                      <h2 className="text-xl font-semibold mb-2">
+                        Description
+                      </h2>
                       <p className="text-muted-foreground">
                         {event.description || 'No description provided.'}
                       </p>
@@ -278,7 +283,9 @@ export default function AdminEventViewPage() {
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div>
-                      <p className="text-sm text-muted-foreground">Start Date</p>
+                      <p className="text-sm text-muted-foreground">
+                        Start Date
+                      </p>
                       <p className="font-medium">
                         {formatInTimeZone(
                           new Date(event.start_date),
@@ -339,7 +346,7 @@ export default function AdminEventViewPage() {
                   <CardContent>
                     <div className="flex flex-wrap gap-2">
                       {event.tags && event.tags.length > 0 ? (
-                        event.tags.map((tag) => (
+                        event.tags.map(tag => (
                           <Badge key={tag} variant="secondary">
                             {tag}
                           </Badge>

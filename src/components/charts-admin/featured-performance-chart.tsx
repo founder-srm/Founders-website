@@ -41,10 +41,15 @@ interface FeaturedPerformanceChartProps {
   regularAvg: number;
 }
 
-export function FeaturedPerformanceChart({ data, featuredAvg, regularAvg }: FeaturedPerformanceChartProps) {
-  const improvement = regularAvg > 0 
-    ? ((featuredAvg - regularAvg) / regularAvg * 100).toFixed(0) 
-    : '∞';
+export function FeaturedPerformanceChart({
+  data,
+  featuredAvg,
+  regularAvg,
+}: FeaturedPerformanceChartProps) {
+  const improvement =
+    regularAvg > 0
+      ? (((featuredAvg - regularAvg) / regularAvg) * 100).toFixed(0)
+      : '∞';
 
   return (
     <Card>
@@ -75,10 +80,12 @@ export function FeaturedPerformanceChart({ data, featuredAvg, regularAvg }: Feat
       </CardContent>
       <CardFooter className="flex-col items-start gap-1 text-sm">
         <div className="font-medium leading-none">
-          Featured events: <span className="text-primary">+{improvement}%</span> registrations
+          Featured events: <span className="text-primary">+{improvement}%</span>{' '}
+          registrations
         </div>
         <div className="leading-none text-muted-foreground text-xs">
-          Avg: {featuredAvg.toFixed(1)} (featured) vs {regularAvg.toFixed(1)} (regular)
+          Avg: {featuredAvg.toFixed(1)} (featured) vs {regularAvg.toFixed(1)}{' '}
+          (regular)
         </div>
       </CardFooter>
     </Card>

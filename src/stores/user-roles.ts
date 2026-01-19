@@ -28,7 +28,7 @@ interface UserRolesState {
   isAdmin: boolean;
   adminLoading: boolean;
   adminFetchedForUserId: string | null;
-  
+
   // Club state
   isClub: boolean;
   club: ClubData | null;
@@ -36,7 +36,7 @@ interface UserRolesState {
   userRole: ClubUserRole | null;
   clubLoading: boolean;
   clubFetchedForUserId: string | null;
-  
+
   // Actions
   setAdminState: (isAdmin: boolean, userId: string | null) => void;
   setAdminLoading: (loading: boolean) => void;
@@ -51,12 +51,12 @@ interface UserRolesState {
   reset: () => void;
 }
 
-export const useUserRolesStore = create<UserRolesState>()((set) => ({
+export const useUserRolesStore = create<UserRolesState>()(set => ({
   // Admin initial state
   isAdmin: false,
   adminLoading: true,
   adminFetchedForUserId: null,
-  
+
   // Club initial state
   isClub: false,
   club: null,
@@ -64,32 +64,35 @@ export const useUserRolesStore = create<UserRolesState>()((set) => ({
   userRole: null,
   clubLoading: true,
   clubFetchedForUserId: null,
-  
+
   // Actions
-  setAdminState: (isAdmin, userId) => set({ 
-    isAdmin, 
-    adminFetchedForUserId: userId,
-    adminLoading: false 
-  }),
-  setAdminLoading: (loading) => set({ adminLoading: loading }),
-  setClubState: ({ isClub, club, clubUser, userRole, userId }) => set({
-    isClub,
-    club,
-    clubUser,
-    userRole,
-    clubFetchedForUserId: userId,
-    clubLoading: false,
-  }),
-  setClubLoading: (loading) => set({ clubLoading: loading }),
-  reset: () => set({
-    isAdmin: false,
-    adminLoading: true,
-    adminFetchedForUserId: null,
-    isClub: false,
-    club: null,
-    clubUser: null,
-    userRole: null,
-    clubLoading: true,
-    clubFetchedForUserId: null,
-  }),
+  setAdminState: (isAdmin, userId) =>
+    set({
+      isAdmin,
+      adminFetchedForUserId: userId,
+      adminLoading: false,
+    }),
+  setAdminLoading: loading => set({ adminLoading: loading }),
+  setClubState: ({ isClub, club, clubUser, userRole, userId }) =>
+    set({
+      isClub,
+      club,
+      clubUser,
+      userRole,
+      clubFetchedForUserId: userId,
+      clubLoading: false,
+    }),
+  setClubLoading: loading => set({ clubLoading: loading }),
+  reset: () =>
+    set({
+      isAdmin: false,
+      adminLoading: true,
+      adminFetchedForUserId: null,
+      isClub: false,
+      club: null,
+      clubUser: null,
+      userRole: null,
+      clubLoading: true,
+      clubFetchedForUserId: null,
+    }),
 }));

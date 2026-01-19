@@ -62,7 +62,7 @@ function DashboardContent() {
       <div className="space-y-4">
         {/* Stats skeleton */}
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          {[1, 2, 3, 4].map((i) => (
+          {[1, 2, 3, 4].map(i => (
             <Card key={i}>
               <CardHeader className="pb-2">
                 <Skeleton className="h-4 w-[100px]" />
@@ -90,7 +90,9 @@ function DashboardContent() {
       {/* Header with refresh */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight">Dashboard Overview</h2>
+          <h2 className="text-2xl font-bold tracking-tight">
+            Dashboard Overview
+          </h2>
           <p className="text-muted-foreground">
             Analytics and insights for your events
           </p>
@@ -103,7 +105,6 @@ function DashboardContent() {
 
       {/* Main Layout: AI Sidebar + Charts */}
       <div className="flex flex-col lg:flex-row gap-6">
-
         {/* Main Charts Area */}
         <div className="flex-1 space-y-6 min-w-0">
           {/* Stats Cards */}
@@ -168,7 +169,5 @@ function DashboardContent() {
 }
 
 export default function AdminDashboard() {
-  return (
-    <DashboardContent />
-  );
+  return <DashboardContent />;
 }

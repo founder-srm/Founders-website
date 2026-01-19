@@ -9,22 +9,22 @@ import {
   SidebarHeader,
 } from '@/components/ui/sidebar';
 import { useUser } from '@/stores/session';
+import { DashboardAIInsights } from '../charts-admin/dashboard-ai-insights';
 import { AgentChat } from './agent-chat';
 import { NavUser } from './nav-user';
-import { DashboardAIInsights } from '../charts-admin/dashboard-ai-insights';
 
 export function SidebarRight({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
   const user = useUser();
   const pathname = usePathname();
-  
+
   // Check if we're on the new event page
   const isNewEventPage = pathname?.includes('/admin/events/create/new-event');
   const isAdminPage = pathname === '/admin';
 
   if (!user) return null;
-  
+
   return (
     <Sidebar
       collapsible="none"

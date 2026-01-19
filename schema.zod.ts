@@ -146,7 +146,9 @@ export const clubUserAccountInsertSchema = z.object({
   created_at: z.string().optional(),
 });
 
-export type ClubUserAccountInsertType = z.infer<typeof clubUserAccountInsertSchema>;
+export type ClubUserAccountInsertType = z.infer<
+  typeof clubUserAccountInsertSchema
+>;
 
 export type ClubUserAccountRowType = {
   id: string;

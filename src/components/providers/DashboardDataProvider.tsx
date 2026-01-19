@@ -1,7 +1,8 @@
 'use client';
 
 import { useQuery } from '@supabase-cache-helpers/postgrest-react-query';
-import React, { createContext, useContext, useMemo } from 'react';
+import type React from 'react';
+import { createContext, useContext, useMemo } from 'react';
 import { getAllEvents } from '@/actions/admin/events';
 import { getAllRegistrations } from '@/actions/admin/registrations';
 import type { Event } from '@/types/events';
@@ -97,7 +98,7 @@ interface DashboardDataContextType {
   isLoading: boolean;
   isError: boolean;
   refetch: () => void;
-  
+
   // Processed data
   stats: DashboardStats;
   registrationTrends: RegistrationTrend[];
@@ -105,7 +106,7 @@ interface DashboardDataContextType {
   registrationStatusData: RegistrationStatusData[];
   eventPerformance: EventPerformance[];
   monthlyData: { month: string; registrations: number; events: number }[];
-  
+
   // New analytics data
   attendanceData: AttendanceData[];
   teamVsIndividualData: TeamVsIndividualData[];
@@ -119,14 +120,20 @@ interface DashboardDataContextType {
   peakRegistrationDay: string;
   approvalWorkflowData: ApprovalWorkflowData[];
   autoApproveRate: number;
-  
+
   // For AI summaries
   getDataSummary: () => string;
 }
 
-const DashboardDataContext = createContext<DashboardDataContextType | null>(null);
+const DashboardDataContext = createContext<DashboardDataContextType | null>(
+  null
+);
 
-export function DashboardDataProvider({ children }: { children: React.ReactNode }) {
+export function DashboardDataProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const supabase = createClient();
 
   const {
@@ -175,13 +182,21 @@ export function DashboardDataProvider({ children }: { children: React.ReactNode 
       };
     }
 
-    const accepted = registrations.filter(r => r.is_approved === 'ACCEPTED').length;
-    const rejected = registrations.filter(r => r.is_approved === 'REJECTED' || r.is_approved === 'INVALID').length;
-    const pending = registrations.filter(r => r.is_approved === 'SUBMITTED').length;
+    const accepted = registrations.filter(
+      r => r.is_approved === 'ACCEPTED'
+    ).length;
+    const rejected = registrations.filter(
+      r => r.is_approved === 'REJECTED' || r.is_approved === 'INVALID'
+    ).length;
+    const pending = registrations.filter(
+      r => r.is_approved === 'SUBMITTED'
+    ).length;
     const total = registrations.length;
 
     // Calculate attendance rate
-    const presentCount = registrations.filter(r => r.attendance === 'Present').length;
+    const presentCount = registrations.filter(
+      r => r.attendance === 'Present'
+    ).length;
     const attendanceRate = total > 0 ? (presentCount / total) * 100 : 0;
 
     // Find most popular event
@@ -195,12 +210,12 @@ export function DashboardDataProvider({ children }: { children: React.ReactNode 
     const now = new Date();
     const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
     const fourteenDaysAgo = new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000);
-    
+
     const recentRegs = registrations.filter(r => {
       const date = new Date(r.created_at as string);
       return date >= sevenDaysAgo;
     }).length;
-    
+
     const previousRegs = registrations.filter(r => {
       const date = new Date(r.created_at as string);
       return date >= fourteenDaysAgo && date < sevenDaysAgo;
@@ -232,9 +247,12 @@ export function DashboardDataProvider({ children }: { children: React.ReactNode 
   const registrationTrends = useMemo<RegistrationTrend[]>(() => {
     if (!registrations) return [];
 
-    const dateMap = new Map<string, { registrations: number; accepted: number; rejected: number }>();
+    const dateMap = new Map<
+      string,
+      { registrations: number; accepted: number; rejected: number }
+    >();
     const now = new Date();
-    
+
     // Initialize last 30 days
     for (let i = 29; i >= 0; i--) {
       const date = new Date(now.getTime() - i * 24 * 60 * 60 * 1000);
@@ -243,12 +261,15 @@ export function DashboardDataProvider({ children }: { children: React.ReactNode 
     }
 
     registrations.forEach(reg => {
-      const date = new Date(reg.created_at as string).toISOString().split('T')[0];
+      const date = new Date(reg.created_at as string)
+        .toISOString()
+        .split('T')[0];
       if (dateMap.has(date)) {
         const data = dateMap.get(date)!;
         data.registrations++;
         if (reg.is_approved === 'ACCEPTED') data.accepted++;
-        if (reg.is_approved === 'REJECTED' || reg.is_approved === 'INVALID') data.rejected++;
+        if (reg.is_approved === 'REJECTED' || reg.is_approved === 'INVALID')
+          data.rejected++;
       }
     });
 
@@ -268,7 +289,13 @@ export function DashboardDataProvider({ children }: { children: React.ReactNode 
       typeCount[type] = (typeCount[type] || 0) + 1;
     });
 
-    const colors = ['var(--chart-1)', 'var(--chart-2)', 'var(--chart-3)', 'var(--chart-4)', 'var(--chart-5)'];
+    const colors = [
+      'var(--chart-1)',
+      'var(--chart-2)',
+      'var(--chart-3)',
+      'var(--chart-4)',
+      'var(--chart-5)',
+    ];
     return Object.entries(typeCount).map(([type, count], index) => ({
       type: type.charAt(0).toUpperCase() + type.slice(1),
       count,
@@ -281,9 +308,21 @@ export function DashboardDataProvider({ children }: { children: React.ReactNode 
     if (!registrations) return [];
 
     return [
-      { status: 'Accepted', count: stats.acceptedRegistrations, fill: 'var(--chart-1)' },
-      { status: 'Pending', count: stats.pendingRegistrations, fill: 'var(--chart-2)' },
-      { status: 'Rejected', count: stats.rejectedRegistrations, fill: 'var(--chart-3)' },
+      {
+        status: 'Accepted',
+        count: stats.acceptedRegistrations,
+        fill: 'var(--chart-1)',
+      },
+      {
+        status: 'Pending',
+        count: stats.pendingRegistrations,
+        fill: 'var(--chart-2)',
+      },
+      {
+        status: 'Rejected',
+        count: stats.rejectedRegistrations,
+        fill: 'var(--chart-3)',
+      },
     ].filter(item => item.count > 0);
   }, [registrations, stats]);
 
@@ -291,41 +330,56 @@ export function DashboardDataProvider({ children }: { children: React.ReactNode 
   const eventPerformance = useMemo<EventPerformance[]>(() => {
     if (!events || !registrations) return [];
 
-    return events.map(event => {
-      const eventRegs = registrations.filter(r => r.event_id === event.id);
-      const accepted = eventRegs.filter(r => r.is_approved === 'ACCEPTED').length;
-      const rejected = eventRegs.filter(r => r.is_approved === 'REJECTED' || r.is_approved === 'INVALID').length;
-      const total = eventRegs.length;
+    return events
+      .map(event => {
+        const eventRegs = registrations.filter(r => r.event_id === event.id);
+        const accepted = eventRegs.filter(
+          r => r.is_approved === 'ACCEPTED'
+        ).length;
+        const rejected = eventRegs.filter(
+          r => r.is_approved === 'REJECTED' || r.is_approved === 'INVALID'
+        ).length;
+        const total = eventRegs.length;
 
-      return {
-        title: event.title,
-        registrations: total,
-        accepted,
-        rejected,
-        conversionRate: total > 0 ? (accepted / total) * 100 : 0,
-      };
-    }).sort((a, b) => b.registrations - a.registrations);
+        return {
+          title: event.title,
+          registrations: total,
+          accepted,
+          rejected,
+          conversionRate: total > 0 ? (accepted / total) * 100 : 0,
+        };
+      })
+      .sort((a, b) => b.registrations - a.registrations);
   }, [events, registrations]);
 
   // Monthly data for trends
   const monthlyData = useMemo(() => {
     if (!events || !registrations) return [];
 
-    const monthMap = new Map<string, { registrations: number; events: number }>();
-    
+    const monthMap = new Map<
+      string,
+      { registrations: number; events: number }
+    >();
+
     // Get last 6 months
     const months = [];
     const now = new Date();
     for (let i = 5; i >= 0; i--) {
       const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
-      const monthStr = date.toLocaleDateString('en-US', { month: 'short', year: '2-digit' });
+      const monthStr = date.toLocaleDateString('en-US', {
+        month: 'short',
+        year: '2-digit',
+      });
       months.push(monthStr);
       monthMap.set(monthStr, { registrations: 0, events: 0 });
     }
 
     registrations.forEach(reg => {
       const date = new Date(reg.created_at as string);
-      const monthStr = date.toLocaleDateString('en-US', { month: 'short', year: '2-digit' });
+      const monthStr = date.toLocaleDateString('en-US', {
+        month: 'short',
+        year: '2-digit',
+      });
       if (monthMap.has(monthStr)) {
         monthMap.get(monthStr)!.registrations++;
       }
@@ -333,7 +387,10 @@ export function DashboardDataProvider({ children }: { children: React.ReactNode 
 
     events.forEach(event => {
       const date = new Date(event.start_date);
-      const monthStr = date.toLocaleDateString('en-US', { month: 'short', year: '2-digit' });
+      const monthStr = date.toLocaleDateString('en-US', {
+        month: 'short',
+        year: '2-digit',
+      });
       if (monthMap.has(monthStr)) {
         monthMap.get(monthStr)!.events++;
       }
@@ -348,7 +405,9 @@ export function DashboardDataProvider({ children }: { children: React.ReactNode 
   // Attendance data
   const attendanceData = useMemo<AttendanceData[]>(() => {
     if (!registrations) return [];
-    const present = registrations.filter(r => r.attendance === 'Present').length;
+    const present = registrations.filter(
+      r => r.attendance === 'Present'
+    ).length;
     const absent = registrations.filter(r => r.attendance === 'Absent').length;
     return [
       { status: 'Present' as const, count: present },
@@ -360,7 +419,9 @@ export function DashboardDataProvider({ children }: { children: React.ReactNode 
   const teamVsIndividualData = useMemo<TeamVsIndividualData[]>(() => {
     if (!registrations) return [];
     const team = registrations.filter(r => r.is_team_entry === true).length;
-    const individual = registrations.filter(r => r.is_team_entry !== true).length;
+    const individual = registrations.filter(
+      r => r.is_team_entry !== true
+    ).length;
     return [
       { type: 'Team' as const, count: team },
       { type: 'Individual' as const, count: individual },
@@ -406,42 +467,56 @@ export function DashboardDataProvider({ children }: { children: React.ReactNode 
   }, [events]);
 
   // Featured vs Regular comparison
-  const { featuredComparisonData, featuredAvgRegs, regularAvgRegs } = useMemo(() => {
-    if (!events || !registrations) return { 
-      featuredComparisonData: [], 
-      featuredAvgRegs: 0, 
-      regularAvgRegs: 0 
-    };
+  const { featuredComparisonData, featuredAvgRegs, regularAvgRegs } =
+    useMemo(() => {
+      if (!events || !registrations)
+        return {
+          featuredComparisonData: [],
+          featuredAvgRegs: 0,
+          regularAvgRegs: 0,
+        };
 
-    const featured = events.filter(e => e.is_featured);
-    const regular = events.filter(e => !e.is_featured);
+      const featured = events.filter(e => e.is_featured);
+      const regular = events.filter(e => !e.is_featured);
 
-    const featuredRegs = featured.reduce((sum, e) => 
-      sum + registrations.filter(r => r.event_id === e.id).length, 0
-    );
-    const regularRegs = regular.reduce((sum, e) => 
-      sum + registrations.filter(r => r.event_id === e.id).length, 0
-    );
+      const featuredRegs = featured.reduce(
+        (sum, e) => sum + registrations.filter(r => r.event_id === e.id).length,
+        0
+      );
+      const regularRegs = regular.reduce(
+        (sum, e) => sum + registrations.filter(r => r.event_id === e.id).length,
+        0
+      );
 
-    const featuredAvg = featured.length > 0 ? featuredRegs / featured.length : 0;
-    const regularAvg = regular.length > 0 ? regularRegs / regular.length : 0;
+      const featuredAvg =
+        featured.length > 0 ? featuredRegs / featured.length : 0;
+      const regularAvg = regular.length > 0 ? regularRegs / regular.length : 0;
 
-    return {
-      featuredComparisonData: [
-        { metric: 'Avg Registrations', featured: Math.round(featuredAvg), regular: Math.round(regularAvg) },
-        { metric: 'Total Events', featured: featured.length, regular: regular.length },
-      ],
-      featuredAvgRegs: featuredAvg,
-      regularAvgRegs: regularAvg,
-    };
-  }, [events, registrations]);
+      return {
+        featuredComparisonData: [
+          {
+            metric: 'Avg Registrations',
+            featured: Math.round(featuredAvg),
+            regular: Math.round(regularAvg),
+          },
+          {
+            metric: 'Total Events',
+            featured: featured.length,
+            regular: regular.length,
+          },
+        ],
+        featuredAvgRegs: featuredAvg,
+        regularAvgRegs: regularAvg,
+      };
+    }, [events, registrations]);
 
   // Registration timeline (days before event)
   const { registrationTimelineData, peakRegistrationDay } = useMemo(() => {
-    if (!events || !registrations) return { 
-      registrationTimelineData: [], 
-      peakRegistrationDay: 'N/A' 
-    };
+    if (!events || !registrations)
+      return {
+        registrationTimelineData: [],
+        peakRegistrationDay: 'N/A',
+      };
 
     const daysBuckets: Record<string, number> = {
       '30+ days': 0,
@@ -459,7 +534,9 @@ export function DashboardDataProvider({ children }: { children: React.ReactNode 
 
       const regDate = new Date(reg.created_at as string);
       const eventDate = new Date(event.start_date);
-      const diffDays = Math.floor((eventDate.getTime() - regDate.getTime()) / (1000 * 60 * 60 * 24));
+      const diffDays = Math.floor(
+        (eventDate.getTime() - regDate.getTime()) / (1000 * 60 * 60 * 24)
+      );
 
       if (diffDays >= 30) daysBuckets['30+ days']++;
       else if (diffDays >= 15) daysBuckets['15-30 days']++;
@@ -470,13 +547,17 @@ export function DashboardDataProvider({ children }: { children: React.ReactNode 
       else daysBuckets['Same day']++;
     });
 
-    const timelineData = Object.entries(daysBuckets).map(([daysBeforeEvent, registrations]) => ({
-      daysBeforeEvent,
-      registrations,
-    }));
+    const timelineData = Object.entries(daysBuckets).map(
+      ([daysBeforeEvent, registrations]) => ({
+        daysBeforeEvent,
+        registrations,
+      })
+    );
 
     // Find peak
-    const peak = Object.entries(daysBuckets).reduce((a, b) => a[1] > b[1] ? a : b);
+    const peak = Object.entries(daysBuckets).reduce((a, b) =>
+      a[1] > b[1] ? a : b
+    );
 
     return {
       registrationTimelineData: timelineData,
@@ -486,10 +567,11 @@ export function DashboardDataProvider({ children }: { children: React.ReactNode 
 
   // Approval workflow (auto vs manual)
   const { approvalWorkflowData, autoApproveRate } = useMemo(() => {
-    if (!events || !registrations) return { 
-      approvalWorkflowData: [], 
-      autoApproveRate: 0 
-    };
+    if (!events || !registrations)
+      return {
+        approvalWorkflowData: [],
+        autoApproveRate: 0,
+      };
 
     const autoRegs = registrations.filter(r => {
       const event = events.find(e => e.id === r.event_id);
@@ -497,7 +579,8 @@ export function DashboardDataProvider({ children }: { children: React.ReactNode 
     }).length;
 
     const manualRegs = registrations.length - autoRegs;
-    const rate = registrations.length > 0 ? (autoRegs / registrations.length) * 100 : 0;
+    const rate =
+      registrations.length > 0 ? (autoRegs / registrations.length) * 100 : 0;
 
     return {
       approvalWorkflowData: [
@@ -513,11 +596,12 @@ export function DashboardDataProvider({ children }: { children: React.ReactNode 
     if (!events || !registrations) return 'No data available yet.';
 
     const topEvents = eventPerformance.slice(0, 3);
-    const recentTrendText = stats.recentTrend === 'up' 
-      ? `up ${stats.trendPercentage.toFixed(1)}%` 
-      : stats.recentTrend === 'down' 
-        ? `down ${stats.trendPercentage.toFixed(1)}%`
-        : 'stable';
+    const recentTrendText =
+      stats.recentTrend === 'up'
+        ? `up ${stats.trendPercentage.toFixed(1)}%`
+        : stats.recentTrend === 'down'
+          ? `down ${stats.trendPercentage.toFixed(1)}%`
+          : 'stable';
 
     return `Dashboard Analytics Summary:
 - Total Events: ${stats.totalEvents}
@@ -570,7 +654,9 @@ export function DashboardDataProvider({ children }: { children: React.ReactNode 
 export function useDashboardData() {
   const context = useContext(DashboardDataContext);
   if (!context) {
-    throw new Error('useDashboardData must be used within a DashboardDataProvider');
+    throw new Error(
+      'useDashboardData must be used within a DashboardDataProvider'
+    );
   }
   return context;
 }

@@ -118,7 +118,7 @@ export function DataTable<TData, TValue>({
           onRefresh={onRefresh}
           activeTab={activeTab}
         />
-        
+
         {/* Column Visibility */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -212,4 +212,4 @@ export function DataTable<TData, TValue>({
       <DataTablePagination table={table} />
     </div>
   );
-};
+}

@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2, Plus } from "lucide-react";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-import { getuserbyid } from "@/app/(auth)/auth/actions";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Loader2, Plus } from 'lucide-react';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import * as z from 'zod';
+import { getuserbyid } from '@/app/(auth)/auth/actions';
 import {
   Dialog,
   DialogClose,
@@ -15,7 +15,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
+} from '@/components/ui/dialog';
 import {
   Form,
   FormControl,
@@ -24,16 +24,16 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import useClub from "@/hooks/use-club";
-import { toast } from "@/hooks/use-toast";
-import { useUser } from "@/stores/session";
-import { createClient } from "@/utils/supabase/client";
-import { Button } from "./ui/button";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import useClub from '@/hooks/use-club';
+import { toast } from '@/hooks/use-toast';
+import { useUser } from '@/stores/session';
+import { createClient } from '@/utils/supabase/client';
+import { Button } from './ui/button';
 
 const formSchema = z.object({
-  uuid: z.uuid("Please enter a valid UUID."),
+  uuid: z.uuid('Please enter a valid UUID.'),
 });
 
 const AddMemberButton = () => {
@@ -54,28 +54,28 @@ const AddMemberButton = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      uuid: "",
+      uuid: '',
     },
-    mode: "onChange",
+    mode: 'onChange',
   });
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     setIsLoading(true);
-    console.log("Searching for UUID:", data.uuid);
+    console.log('Searching for UUID:', data.uuid);
 
     const { data: userData, error: err } = await getuserbyid(data.uuid);
 
-    console.log("Response:", { userData, err });
+    console.log('Response:', { userData, err });
 
     if (err || !userData?.user) {
-      console.log("User not found or error occurred");
-      form.setError("uuid", { message: "No user found with this UUID." });
+      console.log('User not found or error occurred');
+      form.setError('uuid', { message: 'No user found with this UUID.' });
       setFoundUser(null);
       setIsLoading(false);
       return;
     }
 
-    console.log("User found:", userData.user);
+    console.log('User found:', userData.user);
     setFoundUser(userData.user);
     setIsLoading(false);
   }
@@ -89,44 +89,44 @@ const AddMemberButton = () => {
     try {
       // Check if user is already a member of this club
       const { data: existingMember } = await supabase
-        .from("clubuseraccount")
-        .select("*")
-        .eq("user_id", foundUser.id)
-        .eq("club_id", club.id)
+        .from('clubuseraccount')
+        .select('*')
+        .eq('user_id', foundUser.id)
+        .eq('club_id', club.id)
         .single();
 
       if (existingMember) {
         toast({
-          title: "Already a member",
-          description: "This user is already a member of your club.",
-          variant: "destructive",
+          title: 'Already a member',
+          description: 'This user is already a member of your club.',
+          variant: 'destructive',
         });
         setIsSaving(false);
         return;
       }
 
       // Add the member to the club
-      const { error } = await supabase.from("clubuseraccount").insert({
+      const { error } = await supabase.from('clubuseraccount').insert({
         user_id: foundUser.id,
         club_id: club.id,
-        email: foundUser.email || "",
-        user_role: "member",
+        email: foundUser.email || '',
+        user_role: 'member',
         is_verified: true,
       });
 
       if (error) {
         toast({
-          title: "Error",
+          title: 'Error',
           description: error.message,
-          variant: "destructive",
+          variant: 'destructive',
         });
         setIsSaving(false);
         return;
       }
 
       toast({
-        title: "Success",
-        description: "Member added successfully!",
+        title: 'Success',
+        description: 'Member added successfully!',
       });
 
       // Reset form and close dialog
@@ -135,11 +135,11 @@ const AddMemberButton = () => {
       setIsSaving(false);
       setDialogOpen(false);
     } catch (error) {
-      console.error("Error adding member:", error);
+      console.error('Error adding member:', error);
       toast({
-        title: "Error",
-        description: "Failed to add member. Please try again.",
-        variant: "destructive",
+        title: 'Error',
+        description: 'Failed to add member. Please try again.',
+        variant: 'destructive',
       });
       setIsSaving(false);
     }
@@ -157,7 +157,7 @@ const AddMemberButton = () => {
   return (
     <Dialog
       open={dialogOpen}
-      onOpenChange={(open) => {
+      onOpenChange={open => {
         setDialogOpen(open);
         if (!open) {
           form.reset();
@@ -212,7 +212,7 @@ const AddMemberButton = () => {
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={
-                        foundUser.user_metadata?.avatar_url || "/FC-logo1.png"
+                        foundUser.user_metadata?.avatar_url || '/FC-logo1.png'
                       }
                       alt="User Avatar"
                       className="w-16 h-16 rounded-full object-cover"
@@ -220,7 +220,7 @@ const AddMemberButton = () => {
                   </div>
                   <div className="flex-1">
                     <h3 className="font-semibold">
-                      {foundUser.user_metadata?.full_name || "Unknown User"}
+                      {foundUser.user_metadata?.full_name || 'Unknown User'}
                     </h3>
                     <p className="text-sm text-muted-foreground">
                       {foundUser.email}

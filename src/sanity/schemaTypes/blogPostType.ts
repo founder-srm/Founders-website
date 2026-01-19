@@ -87,13 +87,14 @@ export const blogPostType = defineType({
       const { author, publishedAt } = selection;
       return {
         ...selection,
-        subtitle: author && publishedAt
-          ? `by ${author} • ${new Date(publishedAt).toLocaleDateString()}`
-          : author
-            ? `by ${author}`
-            : publishedAt
-              ? new Date(publishedAt).toLocaleDateString()
-              : '',
+        subtitle:
+          author && publishedAt
+            ? `by ${author} • ${new Date(publishedAt).toLocaleDateString()}`
+            : author
+              ? `by ${author}`
+              : publishedAt
+                ? new Date(publishedAt).toLocaleDateString()
+                : '',
       };
     },
   },

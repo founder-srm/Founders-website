@@ -1,6 +1,7 @@
 'use client';
 
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Cell } from 'recharts';
+import { Bar, BarChart, CartesianGrid, Cell, XAxis, YAxis } from 'recharts';
+import type { EventPerformance } from '@/components/providers/DashboardDataProvider';
 import {
   Card,
   CardContent,
@@ -14,7 +15,6 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
-import type { EventPerformance } from '@/components/providers/DashboardDataProvider';
 
 const chartConfig = {
   registrations: {
@@ -35,16 +35,17 @@ export function EventPerformanceChart({ data }: EventPerformanceChartProps) {
   // Take top 8 events
   const topEvents = data.slice(0, 8).map(event => ({
     ...event,
-    shortTitle: event.title.length > 20 ? event.title.substring(0, 20) + '...' : event.title,
+    shortTitle:
+      event.title.length > 20
+        ? event.title.substring(0, 20) + '...'
+        : event.title,
   }));
 
   return (
     <Card className="col-span-full lg:col-span-2">
       <CardHeader>
         <CardTitle>Event Performance</CardTitle>
-        <CardDescription>
-          Registrations by event (top 8)
-        </CardDescription>
+        <CardDescription>Registrations by event (top 8)</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig} className="h-[300px] w-full">

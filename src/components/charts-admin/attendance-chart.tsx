@@ -1,6 +1,6 @@
 'use client';
 
-import { Pie, PieChart, Cell, Label } from 'recharts';
+import { Cell, Label, Pie, PieChart } from 'recharts';
 import {
   Card,
   CardContent,
@@ -46,7 +46,10 @@ interface AttendanceChartProps {
   attendanceRate: number;
 }
 
-export function AttendanceChart({ data, attendanceRate }: AttendanceChartProps) {
+export function AttendanceChart({
+  data,
+  attendanceRate,
+}: AttendanceChartProps) {
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
@@ -71,11 +74,8 @@ export function AttendanceChart({ data, attendanceRate }: AttendanceChartProps) 
               outerRadius={70}
               strokeWidth={5}
             >
-              {data.map((entry) => (
-                <Cell 
-                  key={entry.status} 
-                  fill={COLORS[entry.status]} 
-                />
+              {data.map(entry => (
+                <Cell key={entry.status} fill={COLORS[entry.status]} />
               ))}
               <Label
                 content={({ viewBox }) => {

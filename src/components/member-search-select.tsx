@@ -1,9 +1,11 @@
-"use client";
+'use client';
 
-import * as React from "react";
-import { Check, ChevronsUpDown, Loader2, X, Users } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import { Check, ChevronsUpDown, Loader2, Users, X } from 'lucide-react';
+import * as React from 'react';
+import { type ClubMember, fetchClubMembers } from '@/actions/club/action';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import {
   Command,
   CommandEmpty,
@@ -11,15 +13,13 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/command";
+} from '@/components/ui/command';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { fetchClubMembers, type ClubMember } from "@/actions/club/action";
+} from '@/components/ui/popover';
+import { cn } from '@/lib/utils';
 
 export interface SelectedMember {
   user_id: string;
@@ -36,11 +36,11 @@ interface MemberSearchSelectProps {
 }
 
 const getInitials = (name?: string) => {
-  if (!name) return "??";
+  if (!name) return '??';
   return name
-    .split(" ")
-    .map((word) => word[0])
-    .join("")
+    .split(' ')
+    .map(word => word[0])
+    .join('')
     .toUpperCase()
     .slice(0, 2);
 };
@@ -65,13 +65,13 @@ export function MemberSearchSelect({
       const { data, error } = await fetchClubMembers(clubId);
 
       if (error || !data) {
-        console.error("Error fetching members:", error);
+        console.error('Error fetching members:', error);
         setIsLoading(false);
         return;
       }
 
       // Only show verified members
-      const verifiedMembers = data.filter((m) => m.is_verified);
+      const verifiedMembers = data.filter(m => m.is_verified);
       setMembers(verifiedMembers);
       setIsLoading(false);
     }
@@ -80,13 +80,13 @@ export function MemberSearchSelect({
   }, [clubId]);
 
   const isSelected = (memberId: string) => {
-    return value.some((v) => v.user_id === memberId);
+    return value.some(v => v.user_id === memberId);
   };
 
   const handleSelect = (member: ClubMember) => {
     if (isSelected(member.user_id)) {
       // Remove member
-      onChange(value.filter((v) => v.user_id !== member.user_id));
+      onChange(value.filter(v => v.user_id !== member.user_id));
     } else {
       // Check max limit
       if (maxMembers && value.length >= maxMembers) {
@@ -105,7 +105,7 @@ export function MemberSearchSelect({
   };
 
   const handleRemove = (userId: string) => {
-    onChange(value.filter((v) => v.user_id !== userId));
+    onChange(value.filter(v => v.user_id !== userId));
   };
 
   const selectedCount = value.length;
@@ -140,10 +140,10 @@ export function MemberSearchSelect({
         <div className="space-y-2">
           <label className="text-sm font-medium">
             Selected Members ({selectedCount}
-            {maxMembers ? `/${maxMembers}` : ""})
+            {maxMembers ? `/${maxMembers}` : ''})
           </label>
           <div className="flex flex-wrap gap-2 p-3 border rounded-lg bg-muted/30 min-h-[60px]">
-            {value.map((member) => (
+            {value.map(member => (
               <Badge
                 key={member.user_id}
                 variant="secondary"
@@ -181,32 +181,38 @@ export function MemberSearchSelect({
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0" align="start">
+        <PopoverContent
+          className="w-[var(--radix-popover-trigger-width)] p-0"
+          align="start"
+        >
           <Command>
             <CommandInput placeholder="Search by name or email..." />
             <CommandList>
               <CommandEmpty>No members found.</CommandEmpty>
               <CommandGroup>
-                {members.map((member) => {
+                {members.map(member => {
                   const selected = isSelected(member.user_id);
-                  const disabled = !selected && maxMembers !== undefined && value.length >= maxMembers;
+                  const disabled =
+                    !selected &&
+                    maxMembers !== undefined &&
+                    value.length >= maxMembers;
 
                   return (
                     <CommandItem
                       key={member.user_id}
-                      value={`${member.user_metadata?.full_name || ""} ${member.email}`}
+                      value={`${member.user_metadata?.full_name || ''} ${member.email}`}
                       onSelect={() => !disabled && handleSelect(member)}
                       className={cn(
-                        "flex items-center gap-3 py-3 cursor-pointer",
-                        disabled && "opacity-50 cursor-not-allowed"
+                        'flex items-center gap-3 py-3 cursor-pointer',
+                        disabled && 'opacity-50 cursor-not-allowed'
                       )}
                     >
                       <div
                         className={cn(
-                          "flex h-5 w-5 items-center justify-center rounded border shrink-0",
+                          'flex h-5 w-5 items-center justify-center rounded border shrink-0',
                           selected
-                            ? "bg-primary border-primary text-primary-foreground"
-                            : "border-muted-foreground/30"
+                            ? 'bg-primary border-primary text-primary-foreground'
+                            : 'border-muted-foreground/30'
                         )}
                       >
                         {selected && <Check className="h-3.5 w-3.5" />}
@@ -222,13 +228,13 @@ export function MemberSearchSelect({
                       </Avatar>
                       <div className="flex flex-col flex-1 min-w-0">
                         <span className="font-medium truncate">
-                          {member.user_metadata?.full_name || "Unknown"}
+                          {member.user_metadata?.full_name || 'Unknown'}
                         </span>
                         <span className="text-xs text-muted-foreground truncate">
                           {member.email}
                         </span>
                       </div>
-                      {member.user_role === "club_rep" && (
+                      {member.user_role === 'club_rep' && (
                         <Badge
                           variant="outline"
                           className="text-xs bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20 shrink-0"
@@ -248,7 +254,8 @@ export function MemberSearchSelect({
       {/* Validation Message */}
       {!hasMinimum && (
         <p className="text-sm text-amber-600 dark:text-amber-500">
-          Please select at least {minMembers} member{minMembers > 1 ? "s" : ""} to continue.
+          Please select at least {minMembers} member{minMembers > 1 ? 's' : ''}{' '}
+          to continue.
         </p>
       )}
     </div>

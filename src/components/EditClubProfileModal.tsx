@@ -1,9 +1,13 @@
-"use client";
+'use client';
 
-import { useState, useRef } from "react";
-import { Building2, Camera, Loader2, Upload, X } from "lucide-react";
-import Image from "next/image";
-import { Button } from "@/components/ui/button";
+import { Building2, Camera, Loader2, Upload, X } from 'lucide-react';
+import Image from 'next/image';
+import { useRef, useState } from 'react';
+import {
+  updateClubProfilePicture,
+  uploadClubImage,
+} from '@/actions/club/action';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -12,8 +16,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { uploadClubImage, updateClubProfilePicture } from "@/actions/club/action";
+} from '@/components/ui/dialog';
 
 interface EditClubProfileModalProps {
   clubId: string;
@@ -42,16 +45,18 @@ export function EditClubProfileModal({
     if (!selectedFile) return;
 
     // Validate file type
-    const allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
     if (!allowedTypes.includes(selectedFile.type)) {
-      setError("Invalid file type. Please upload a JPEG, PNG, WebP, or GIF image.");
+      setError(
+        'Invalid file type. Please upload a JPEG, PNG, WebP, or GIF image.'
+      );
       return;
     }
 
     // Validate file size (max 5MB)
     const maxSize = 5 * 1024 * 1024;
     if (selectedFile.size > maxSize) {
-      setError("File too large. Maximum size is 5MB.");
+      setError('File too large. Maximum size is 5MB.');
       return;
     }
 
@@ -73,18 +78,24 @@ export function EditClubProfileModal({
 
     try {
       const formData = new FormData();
-      formData.append("file", file);
+      formData.append('file', file);
 
-      const { url, error: uploadError } = await uploadClubImage(clubId, formData);
+      const { url, error: uploadError } = await uploadClubImage(
+        clubId,
+        formData
+      );
 
       if (uploadError || !url) {
-        setError(uploadError || "Failed to upload image");
+        setError(uploadError || 'Failed to upload image');
         setIsUploading(false);
         return;
       }
 
       // Update club profile picture in database
-      const { error: updateError } = await updateClubProfilePicture(clubId, url);
+      const { error: updateError } = await updateClubProfilePicture(
+        clubId,
+        url
+      );
 
       if (updateError) {
         setError(updateError);
@@ -100,8 +111,8 @@ export function EditClubProfileModal({
       setPreview(null);
       setFile(null);
     } catch (err) {
-      console.error("Upload error:", err);
-      setError("An unexpected error occurred");
+      console.error('Upload error:', err);
+      setError('An unexpected error occurred');
     } finally {
       setIsUploading(false);
     }
@@ -119,7 +130,7 @@ export function EditClubProfileModal({
     setFile(null);
     setError(null);
     if (fileInputRef.current) {
-      fileInputRef.current.value = "";
+      fileInputRef.current.value = '';
     }
   };
 
@@ -195,7 +206,7 @@ export function EditClubProfileModal({
               disabled={isUploading}
             >
               <Upload className="w-4 h-4 mr-2" />
-              {preview ? "Choose Different Image" : "Select Image"}
+              {preview ? 'Choose Different Image' : 'Select Image'}
             </Button>
             <p className="text-xs text-muted-foreground text-center">
               JPEG, PNG, WebP, or GIF. Max 5MB.
@@ -211,7 +222,11 @@ export function EditClubProfileModal({
         </div>
 
         <DialogFooter className="gap-2 sm:gap-0">
-          <Button variant="outline" onClick={handleClose} disabled={isUploading}>
+          <Button
+            variant="outline"
+            onClick={handleClose}
+            disabled={isUploading}
+          >
             Cancel
           </Button>
           <Button onClick={handleUpload} disabled={!file || isUploading}>
@@ -221,7 +236,7 @@ export function EditClubProfileModal({
                 Uploading...
               </>
             ) : (
-              "Save Changes"
+              'Save Changes'
             )}
           </Button>
         </DialogFooter>
