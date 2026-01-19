@@ -38,78 +38,30 @@ export type Database = {
         }
         Relationships: []
       }
-      club_representatives: {
-        Row: {
-          club_email: string
-          club_name: string
-          club_website: string | null
-          created_at: string | null
-          email: string
-          first_name: string
-          id: string
-          last_name: string
-          phone: string
-          status: string | null
-          updated_at: string | null
-          user_id: string
-          verified_at: string | null
-        }
-        Insert: {
-          club_email: string
-          club_name: string
-          club_website?: string | null
-          created_at?: string | null
-          email: string
-          first_name: string
-          id?: string
-          last_name: string
-          phone: string
-          status?: string | null
-          updated_at?: string | null
-          user_id: string
-          verified_at?: string | null
-        }
-        Update: {
-          club_email?: string
-          club_name?: string
-          club_website?: string | null
-          created_at?: string | null
-          email?: string
-          first_name?: string
-          id?: string
-          last_name?: string
-          phone?: string
-          status?: string | null
-          updated_at?: string | null
-          user_id?: string
-          verified_at?: string | null
-        }
-        Relationships: []
-      }
       clubs: {
         Row: {
           created_at: string
-          email: string | null
+          email: string
           id: string
           name: string
           profile_picture: string | null
-          website: string | null
+          website: string
         }
         Insert: {
           created_at?: string
-          email?: string | null
+          email: string
           id?: string
           name: string
           profile_picture?: string | null
-          website?: string | null
+          website: string
         }
         Update: {
           created_at?: string
-          email?: string | null
+          email?: string
           id?: string
           name?: string
           profile_picture?: string | null
-          website?: string | null
+          website?: string
         }
         Relationships: []
       }
@@ -468,7 +420,7 @@ export type Database = {
         | "Ideathon"
         | "OpenHouse"
         | "Other"
-      club_user_role: "club_rep" | "admin"
+      club_user_role: "club_rep" | "member"
       "event-type": "online" | "offline" | "hybrid"
       "registration-status": "SUBMITTED" | "ACCEPTED" | "REJECTED" | "INVALID"
       "user-role": "user" | "moderator" | "admin" | "owner"
@@ -613,7 +565,7 @@ export const Constants = {
         "OpenHouse",
         "Other",
       ],
-      club_user_role: ["club_rep", "admin"],
+      club_user_role: ["club_rep", "member"],
       "event-type": ["online", "offline", "hybrid"],
       "registration-status": ["SUBMITTED", "ACCEPTED", "REJECTED", "INVALID"],
       "user-role": ["user", "moderator", "admin", "owner"],

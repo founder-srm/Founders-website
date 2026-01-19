@@ -37,6 +37,7 @@ export const typeformFieldSchema = z.object({
     'url',
     'file',
     'redirect',
+    'member_select',
   ]),
   label: z.string(),
   name: z.string(),
@@ -72,6 +73,9 @@ export const typeformFieldSchema = z.object({
   // Redirect field specific
   redirectUrl: z.string().optional(),
   redirectLabel: z.string().optional(),
+  // Member select field specific
+  minMembers: z.number().optional(),
+  maxMembers: z.number().optional(),
 });
 
 export type TypeFormField = z.infer<typeof typeformFieldSchema>;
