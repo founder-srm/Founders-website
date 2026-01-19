@@ -1,47 +1,63 @@
 import type { User } from '@supabase/supabase-js';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { createClient } from '@/utils/supabase/client';
+import { useUserRolesStore } from '@/stores/user-roles';
 
 interface AdminCheckProps {
   user: User | null;
 }
 
 const useAdmin = ({ user }: AdminCheckProps) => {
-  const [isAdmin, setIsAdmin] = useState(false);
-  const supabase = createClient();
+  const { 
+    isAdmin, 
+    adminLoading, 
+    adminFetchedForUserId, 
+    setAdminState, 
+    setAdminLoading 
+  } = useUserRolesStore();
+  
+  // Use ref for supabase client to avoid recreating on every render
+  const supabaseRef = useRef(createClient());
 
   useEffect(() => {
+    // Skip if we've already fetched for this user
+    if (user?.id === adminFetchedForUserId) {
+      return;
+    }
+
     async function checkAdmin() {
       if (!user) {
-        setIsAdmin(false);
+        setAdminState(false, null);
         return;
       }
 
+      setAdminLoading(true);
+
       try {
-        const { data: adminUser, error } = await supabase
+        const { data: adminUser, error } = await supabaseRef.current
           .from('adminuseraccount')
           .select('user_role')
           .eq('user_id', user.id)
           .single();
 
         if (error || !adminUser || adminUser.user_role === 'user') {
-          console.log('Admin check error:', error);
-          setIsAdmin(false);
+          setAdminState(false, user.id);
           return;
         }
 
         console.log('User is an admin:', user.email);
-        setIsAdmin(true);
+        setAdminState(true, user.id);
       } catch (error) {
         console.error('Admin check error:', error);
-        setIsAdmin(false);
+        setAdminState(false, user.id);
       }
     }
 
     checkAdmin();
-  }, [user, supabase]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id]);
 
-  return isAdmin;
+  return { isAdmin, loading: adminLoading };
 };
 
 export default useAdmin;
