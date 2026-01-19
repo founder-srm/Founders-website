@@ -204,13 +204,16 @@ export default function SignupPage(props: {
                 </div>
               </div>
             </div>
-            <Image
-              src="https://eedplvopkhwuhhquagfw.supabase.co/storage/v1/object/public/team/signup-pic.jpeg"
-              alt="placeholder"
-              width={720}
-              height={1280}
-              className="hidden h-full max-h-screen object-cover lg:block"
-            />
+            <div className="hidden lg:flex items-center justify-center overflow-hidden">
+              {/* this image has to be changed later on. its not a professional headshot nor any sort of professionalism in it */}
+              <Image
+                src="https://eedplvopkhwuhhquagfw.supabase.co/storage/v1/object/public/team/signup-pic.jpeg"
+                alt="team photo"
+                width={800}
+                height={800}
+                className="w-auto h-full object-cover"
+              />
+            </div>
           </div>
         </div>
       </section>
