@@ -4,7 +4,6 @@ import { sanityFetch } from '@/sanity/lib/live';
 import { HERO_QUERY } from '@/sanity/lib/queries';
 import InteractiveHoverButton from './ui/interactive-hover-button';
 import Particles from './ui/particles';
-import Link from 'next/link';
 
 export const revalidate = 3600; // revalidate every hour
 
@@ -27,12 +26,11 @@ export default async function Hero() {
               <p className="mb-12 max-w-[70%] text-xl font-normal text-muted-foreground">
                 {data.subtitle}
               </p>
-              <div className="flex flex-col items-start gap-2">
+              <div className="">
                 <InteractiveHoverButton
                   link={link}
                   text={data.buttonText || ''}
                 />
-                <Link href="/auth/club-signup" className="text-primary-foreground px-4 py-2 bg-primary rounded-lg font-semibold tracking-tighter text-lg hover:bg-primary/80">Register for Club Wars!</Link>
               </div>
             </div>
 

@@ -1,6 +1,7 @@
 "use client";
 import {
   Book,
+  FolderKanban,
   Menu,
   Paintbrush,
   Sunset,
@@ -189,8 +190,8 @@ const isPathExcluded = (pathname: string, excludedPaths: string[]) => {
 const Navbar1 = () => {
   const pathname = usePathname();
   const user = useUser();
-  const isAdmin = useAdmin({ user });
-  const isClub = useClub({ user });
+  const { isAdmin } = useAdmin({ user });
+  const { isClub } = useClub({ user });
   const [isOpen, setIsOpen] = useState(false);
 
   // const theme = useTheme();
@@ -354,8 +355,8 @@ const Navbar1 = () => {
             </Button>
           )}
           {isClub && (
-            <Button variant="outline" size="default" className="" asChild>
-              <Link href="/club-dashboard">Club Dashboard</Link>
+            <Button variant="outline" size="icon" className="" asChild>
+              <Link href="/club-dashboard"><FolderKanban /></Link>
             </Button>
           )}
           {user ? (
@@ -511,11 +512,11 @@ const Navbar1 = () => {
                   {isClub && (
                     <Button
                       variant="outline"
-                      size="default"
+                      size="icon"
                       className=""
                       asChild
                     >
-                      <Link href="/club-dashboard">Club Dashboard</Link>
+                      <Link href="/club-dashboard"><FolderKanban /></Link>
                     </Button>
                   )}
                   {user ? (

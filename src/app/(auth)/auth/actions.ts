@@ -141,16 +141,33 @@ export async function clubsignup(data: ClubSignupFormData) {
 
   const supabase = await createClient();
 
-  // Step 1: Create auth user
+  // Step 1: Create auth user with metadata
   const { data: authData, error: authError } = await supabase.auth.signUp({
     email: data.email,
     password: data.password,
+    options: {
+      data: {
+        full_name: `${data.firstName} ${data.lastName}`,
+        first_name: data.firstName,
+        last_name: data.lastName,
+        phone: data.phone,
+      },
+    },
   });
 
   if (authError) {
+    // Handle specific error codes
+    if (authError.code === 'user_already_exists' || authError.status === 422) {
+      return {
+        success: false,
+        error: 'A user with this email already exists. Please log in instead.',
+        code: 'USER_EXISTS',
+      };
+    }
     return {
       success: false,
       error: `Authentication failed: ${authError.message}`,
+      code: authError.code,
     };
   }
 
@@ -161,32 +178,54 @@ export async function clubsignup(data: ClubSignupFormData) {
     };
   }
 
-  // Step 2: Store club representative data in separate table
-  const { error: dbError } = await supabase
-    .from('club_representatives')
+  // Step 2: Create the club in the clubs table
+  const { data: clubData, error: clubError } = await supabase
+    .from('clubs')
     .insert({
-      user_id: authData.user.id,
-      first_name: data.firstName,
-      last_name: data.lastName,
-      email: data.email,
-      phone: data.phone,
-      club_name: data.clubName,
-      club_email: data.clubEmail,
-      club_website: data.clubWebsite || null,
-      status: 'pending',
-    });
+      name: data.clubName,
+      email: data.clubEmail,
+      website: data.clubWebsite || '',
+      profile_picture: null,
+    })
+    .select('id')
+    .single();
 
-  if (dbError) {
-    // Auth user was created but profile creation failed - this is a problem
-    console.error('Failed to create club representative profile:', dbError);
+  if (clubError) {
+    // Auth user was created but club creation failed
+    console.error('Failed to create club:', clubError);
     return {
       success: false,
-      error: `Account created but profile setup failed: ${dbError.message}. Please contact support.`,
+      error: `Account created but club setup failed: ${clubError.message}. Please contact support.`,
+    };
+  }
+
+  // Step 3: Create the club user account entry with role 'club_rep'
+  const { error: clubUserError } = await supabase
+    .from('clubuseraccount')
+    .insert({
+      user_id: authData.user.id,
+      club_id: clubData.id,
+      email: data.email,
+      user_role: 'club_rep',
+      is_verified: false,
+    });
+
+  if (clubUserError) {
+    // Club was created but user account creation failed
+    console.error('Failed to create club user account:', clubUserError);
+    return {
+      success: false,
+      error: `Account and club created but user role setup failed: ${clubUserError.message}. Please contact support.`,
     };
   }
 
   revalidatePath('/auth/club-signup', 'layout');
-  redirect('/club-dashboard');
+  
+  // Return success - let the client handle the redirect
+  return {
+    success: true,
+    message: 'Club account created successfully!',
+  };
 }
 
 export async function getuserbyid(uuid: string) {

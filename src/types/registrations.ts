@@ -11,6 +11,7 @@ export type Registration = {
   id?: string;
   is_approved?: Database['public']['Enums']['registration-status'];
   ticket_id?: number;
+  is_team_entry?: boolean;
 };
 
 export type RegistrationWithUser = {

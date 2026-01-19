@@ -8,11 +8,13 @@ import {
   Boxes,
   Check,
   FileCheck,
-  ShieldCheck,
+  Loader2,
   User,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -223,7 +225,9 @@ function ReviewItem({ label, value }: { label: string; value: string }) {
 // ============================================================================
 
 export function WizardForm() {
+  const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [profileFormData, setProfileFormData] = useState({
     firstName: "",
     lastName: "",
@@ -232,10 +236,10 @@ export function WizardForm() {
     repPassword: "",
     repConfirmPassword: "",
   });
-  const [clubFormData, setClubFormData] = useState({
+  const [clubFormData, setClubFormData] = useState<z.infer<typeof clubSchema>>({
     clubName: "",
     clubMail: "",
-    clubWebsite: "" as string | undefined,
+    clubWebsite: undefined,
   });
 
   const profileForm = useForm<z.infer<typeof profileSchema>>({
@@ -254,7 +258,11 @@ export function WizardForm() {
     setCurrentStep(currentStep + 1);
   }
   function onClubSubmit(values: z.infer<typeof clubSchema>) {
-    setClubFormData(values);
+    setClubFormData({
+      clubName: values.clubName,
+      clubMail: values.clubMail,
+      clubWebsite: values.clubWebsite,
+    });
     // ✅ This will be type-safe and validated.
     console.log(values);
     setCurrentStep(currentStep + 1);
@@ -264,7 +272,7 @@ export function WizardForm() {
   //   setRepFormData({ ...repFormData, [e.target.name]: e.target.value });
   // };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (currentStep === 1) {
       profileForm.handleSubmit(onProfileSubmit)();
     } else if (currentStep === 2) {
@@ -284,7 +292,41 @@ export function WizardForm() {
         terms: true,
       };
 
-      clubsignup(submitData);
+      setIsSubmitting(true);
+      try {
+        const result = await clubsignup(submitData);
+        
+        if (result && !result.success) {
+          // Handle specific error cases
+          if (result.code === 'USER_EXISTS') {
+            toast.error('Account already exists', {
+              description: 'A user with this email is already registered. Please log in instead.',
+              action: {
+                label: 'Go to Login',
+                onClick: () => router.push('/auth/login'),
+              },
+            });
+          } else {
+            toast.error('Signup failed', {
+              description: result.error || 'An unexpected error occurred. Please try again.',
+            });
+          }
+          setIsSubmitting(false);
+          return;
+        }
+        
+        // Success - redirect to club dashboard
+        toast.success('Account created!', {
+          description: 'Redirecting to your club dashboard...',
+        });
+        router.push('/club-dashboard');
+      } catch (error) {
+        console.error('Signup error:', error);
+        toast.error('Signup failed', {
+          description: 'An unexpected error occurred. Please try again.',
+        });
+        setIsSubmitting(false);
+      }
     }
   };
 
@@ -304,7 +346,7 @@ export function WizardForm() {
             className="mb-4 inline-flex items-center gap-2 rounded-full border-primary/20 bg-primary/5 px-4 py-1.5 text-xs font-medium uppercase tracking-wider text-primary backdrop-blur"
           >
             <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
-            Club Represntative
+            Club Representative
           </Badge>
           <h1 className="mb-3 text-3xl font-bold tracking-tight text-foreground md:text-4xl">
             Account Setup
@@ -631,7 +673,7 @@ export function WizardForm() {
                 <Button
                   variant="ghost"
                   onClick={handleBack}
-                  disabled={currentStep === 1}
+                  disabled={currentStep === 1 || isSubmitting}
                   className="gap-2 text-muted-foreground hover:text-foreground disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <ArrowLeft className="h-4 w-4" />
@@ -639,9 +681,15 @@ export function WizardForm() {
                 </Button>
                 <Button
                   onClick={handleNext}
+                  disabled={isSubmitting}
                   className="gap-2 rounded-full bg-primary px-8 hover:bg-primary/90"
                 >
-                  {currentStep === STEPS.length ? (
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="size-4 animate-spin" />
+                      Creating account...
+                    </>
+                  ) : currentStep === STEPS.length ? (
                     <>
                       Submit
                       <Check className="size-4" />
