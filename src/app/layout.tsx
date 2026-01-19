@@ -13,6 +13,7 @@ import Navbar1 from '@/components/navbar';
 import BannerProvider from '@/components/providers/BannerProvider';
 import { SessionProvider } from '@/components/providers/SessionProvider';
 import { ThemeProvider } from '@/components/theme/theme-provider';
+import { Toaster as SonnerToaster } from '@/components/ui/sonner';
 import { Toaster } from '@/components/ui/toaster';
 import config from '@/lib/config';
 import { SanityLive } from '@/sanity/lib/live';
@@ -186,6 +187,7 @@ export default async function RootLayout({
             {(await draftMode()).isEnabled && <VisualEditing />}
             <Footer2 />
             <Toaster />
+            <SonnerToaster richColors />
             <Noise />
           </SessionProvider>
         </ThemeProvider>

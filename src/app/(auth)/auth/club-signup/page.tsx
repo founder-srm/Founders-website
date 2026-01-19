@@ -227,7 +227,7 @@ export default function ClubSignUp() {
   function onProfileSubmit(values: z.infer<typeof profileSchema>) {
     setProfileFormData(values);
     // ✅ This will be type-safe and validated.
-    console.log(values);
+    // console.log(values);
     setCurrentStep(currentStep + 1);
   }
   function onClubSubmit(values: z.infer<typeof clubSchema>) {
@@ -237,7 +237,7 @@ export default function ClubSignUp() {
       clubWebsite: values.clubWebsite,
     });
     // ✅ This will be type-safe and validated.
-    console.log(values);
+    // console.log(values);
     setCurrentStep(currentStep + 1);
   }
 
@@ -268,6 +268,7 @@ export default function ClubSignUp() {
       setIsSubmitting(true);
       try {
         const result = await clubsignup(submitData);
+        console.log(result);
 
         if (result && !result.success) {
           // Handle specific error cases
