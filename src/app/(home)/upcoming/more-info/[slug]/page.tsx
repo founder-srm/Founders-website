@@ -119,7 +119,7 @@ export default async function EventRegistrationSection({
             </Button>
           </div>
         </div>
-        <div className="mx-auto max-w-screen-xl rounded-lg bg-muted pr-4 md:pr-10 pt-4 md:pt-10 lg:pr-32 lg:pt-28">
+        <div className="mx-auto max-w-screen-xl rounded-lg bg-muted">
           <Image
             src={event.banner_image || '/placeholder.svg'}
             alt={event.title}
