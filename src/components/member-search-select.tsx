@@ -138,6 +138,7 @@ export function MemberSearchSelect({
       {/* Selected Members Display */}
       {value.length > 0 && (
         <div className="space-y-2">
+          {/** biome-ignore lint/a11y/noLabelWithoutControl: abstracted from form builder component */}
           <label className="text-sm font-medium">
             Selected Members ({selectedCount}
             {maxMembers ? `/${maxMembers}` : ''})

@@ -286,6 +286,11 @@ export function TypeformMultiStep({
   // If event is gated, it's a team entry - prepend team member select field
   const isTeamEntry = (eventData as any).is_gated === true;
 
+  // Find original member_select field to get minMembers/maxMembers values
+  const originalMemberSelectField = originalFields.find(
+    f => f.fieldType === 'member_select'
+  );
+
   // Filter out any manually added member_select fields if event is gated
   // (gated events automatically get a team_members field prepended)
   const filteredOriginalFields = isTeamEntry
@@ -296,11 +301,12 @@ export function TypeformMultiStep({
     ? [
         {
           name: 'team_members',
-          label: 'Select Your Team Members',
+          label: originalMemberSelectField?.label || 'Select Your Team Members',
           fieldType: 'member_select',
           required: true,
-          minMembers: 2,
-          maxMembers: 5,
+          description: originalMemberSelectField?.description,
+          minMembers: originalMemberSelectField?.minMembers,
+          maxMembers: originalMemberSelectField?.maxMembers,
         } as TypeFormField,
         ...filteredOriginalFields,
       ]
@@ -351,6 +357,8 @@ export function TypeformMultiStep({
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
+              role="img"
+              aria-label="Access restricted warning"
             >
               <path
                 strokeLinecap="round"
@@ -388,6 +396,33 @@ export function TypeformMultiStep({
         variant: 'destructive',
       });
       return;
+    }
+
+    // Validate member_select fields before submission
+    for (const field of fields) {
+      if (field.fieldType === 'member_select') {
+        const selectedMembers = memberSelections[field.name] || [];
+        const minMembers = field.minMembers || 1;
+        const maxMembers = field.maxMembers;
+
+        if (selectedMembers.length < minMembers) {
+          toast({
+            title: 'Selection required',
+            description: `Please select at least ${minMembers} team member${minMembers > 1 ? 's' : ''}.`,
+            variant: 'destructive',
+          });
+          return;
+        }
+
+        if (maxMembers && selectedMembers.length > maxMembers) {
+          toast({
+            title: 'Too many members',
+            description: `Please select at most ${maxMembers} team member${maxMembers > 1 ? 's' : ''}.`,
+            variant: 'destructive',
+          });
+          return;
+        }
+      }
     }
 
     try {
