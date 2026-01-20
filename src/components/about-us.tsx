@@ -17,7 +17,7 @@ export default async function About1() {
   const { data } = await sanityFetch({ query: ABOUT_HERO_QUERY });
   return (
     data && (
-      <section className=" container">
+      <section className=" container px-6">
         <div className="container flex flex-col gap-28 py-32">
           <div className="flex flex-col gap-7">
             <h1 className="text-4xl font-semibold lg:text-7xl">{data.title}</h1>

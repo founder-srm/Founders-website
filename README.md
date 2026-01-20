@@ -9,11 +9,18 @@
 
 <p align="center">
   <a href="https://www.thefoundersclub.in/" >
-    <img src="https://img.shields.io/badge/Visit%20Live%20Website-0078D7?style=for-the-badge&logo=google-chrome&logoColor=white" alt="Website" />
+    <img src="https://img.shields.io/badge/Visit%20The%20Website-0078D7?style=for-the-badge&logo=google-chrome&logoColor=white" alt="Website" />
   </a>
   <a href="https://dashboard.simpleanalytics.com/thefoundersclub.in">
     <img src="https://simpleanalyticsbadges.com/simpleanalytics.com?mode=dark&logo=teal&counter=false&radius=10" height="20px" alt="Website" />
   </a>
+  <a href="https://groq.com" target="_blank" rel="noopener noreferrer">
+  <img
+    src="https://console.groq.com/powered-by-groq-dark.svg"
+    alt="Powered by Groq for fast inference."
+    style="height: 30px;"
+  />
+</a>
   <img src="https://github.com/founder-srm/Founders-website/actions/workflows/typecheck.yml/badge.svg" alt="Website" />
 </p>
 <p align="center">
@@ -23,12 +30,6 @@
   <img src="https://img.shields.io/github/stars/founder-srm/Founders-website?style=for-the-badge" alt="Stars" />
 </p>
 
-<a href="https://groq.com" target="_blank" rel="noopener noreferrer">
-  <img
-    src="https://console.groq.com/powered-by-groq-dark.svg"
-    alt="Powered by Groq for fast inference."
-  />
-</a>
 
 
 > **Empowering innovation at SRM through community, collaboration, and creation.**  
