@@ -169,9 +169,9 @@ function FileUploadField({
     if (!file) return;
 
     // Validate file size
-    const maxSize = (maxSizeMB || 5) * 1024 * 1024;
+    const maxSize = (maxSizeMB || 10) * 1024 * 1024;
     if (file.size > maxSize) {
-      setError(`File size must be less than ${maxSizeMB || 5}MB`);
+      setError(`File size must be less than ${maxSizeMB || 10}MB`);
       return;
     }
 
@@ -185,7 +185,7 @@ function FileUploadField({
       const filePath = `${eventSlug}/registrations/${fieldName}/${fileName}`;
 
       const { error: uploadError } = await supabase.storage
-        .from('event-uploads')
+        .from('events')
         .upload(filePath, file, {
           contentType: file.type,
           upsert: false,
@@ -194,7 +194,7 @@ function FileUploadField({
       if (uploadError) throw uploadError;
 
       const { data: urlData } = supabase.storage
-        .from('event-uploads')
+        .from('events')
         .getPublicUrl(filePath);
 
       onChange(urlData.publicUrl);
