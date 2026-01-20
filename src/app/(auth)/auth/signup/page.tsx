@@ -160,9 +160,9 @@ export default function SignupPage(props: {
                             </FormControl>
                             <div className="space-y-1 leading-none">
                               <FormLabel>
-                                I agree to the{" "}
-                                <Link href="/terms" className="text-primary">
-                                  terms and conditions
+                                I agree to the&nbsp;
+                                <Link href="/PrivacyPolicy" className="text-primary">
+                                  privacy policy
                                 </Link>
                               </FormLabel>
                             </div>
