@@ -115,7 +115,7 @@ export default async function EventRegistrationSection({
               variant="outline"
               className="w-full sm:w-auto"
             >
-              <Link href={event.more_info || '#'}>{event.more_info}</Link>
+              <Link href={event.more_info || '#'}>{event.more_info_text}</Link>
             </Button>
           </div>
         </div>
@@ -219,7 +219,7 @@ export default async function EventRegistrationSection({
                 variant="outline"
                 className="w-full sm:w-auto"
               >
-                <Link href={event.more_info || '#'}>{event.more_info}</Link>
+                <Link href={event.more_info || '#'}>{event.more_info_text}</Link>
               </Button>
             </div>
           </CardFooter>
