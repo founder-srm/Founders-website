@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import { motion, type Variants } from 'framer-motion';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { motion, type Variants } from "framer-motion";
 import {
   ArrowLeft,
   ArrowRight,
@@ -10,14 +10,14 @@ import {
   FileCheck,
   Loader2,
   User,
-} from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
-import { z } from 'zod';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+} from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -26,12 +26,12 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 // import { Label } from "@/components/ui/label";
-import { cn } from '@/lib/utils';
-import type { ClubSignupFormData } from '../actions';
-import { clubsignup } from '../actions';
+import { cn } from "@/lib/utils";
+import type { ClubSignupFormData } from "../actions";
+import { clubsignup } from "../actions";
 
 // ============================================================================
 // ANIMATION VARIANTS
@@ -44,7 +44,7 @@ const containerVariants: Variants = {
     scale: 1,
     transition: {
       duration: 0.5,
-      ease: 'easeOut',
+      ease: "easeOut",
       staggerChildren: 0.1,
     },
   },
@@ -55,7 +55,7 @@ const contentVariants: Variants = {
   visible: {
     opacity: 1,
     x: 0,
-    transition: { duration: 0.4, ease: 'easeOut' },
+    transition: { duration: 0.4, ease: "easeOut" },
   },
 };
 
@@ -64,15 +64,15 @@ const contentVariants: Variants = {
 // ============================================================================
 
 const STEPS = [
-  { id: 1, name: 'Personal Info', description: 'Basic details', icon: User },
-  { id: 2, name: 'Club Info', description: 'Club Details', icon: Boxes },
+  { id: 1, name: "Personal Info", description: "Basic details", icon: User },
+  { id: 2, name: "Club Info", description: "Club Details", icon: Boxes },
   // {
   //   id: 3,
   //   name: "Verification",
   //   description: "Verify Club Email",
   //   icon: ShieldCheck,
   // },
-  { id: 3, name: 'Review', description: 'Final check', icon: FileCheck },
+  { id: 3, name: "Review", description: "Final check", icon: FileCheck },
 ];
 
 // ============================================================================
@@ -83,37 +83,37 @@ const profileSchema = z
   .object({
     firstName: z
       .string()
-      .min(2, { message: 'First Name should be atleast 2 letters long' })
-      .max(50, { message: 'First Name can be only 50 letters long' }),
+      .min(2, { message: "First Name should be atleast 2 letters long" })
+      .max(50, { message: "First Name can be only 50 letters long" }),
     lastName: z
       .string()
-      .min(2, { message: 'Last Name should be atleast 2 letters long' })
-      .max(50, { message: 'Last Name can be only 50 letters long' }),
-    repMail: z.email({ message: 'Please enter a valid email address' }),
+      .min(2, { message: "Last Name should be atleast 2 letters long" })
+      .max(50, { message: "Last Name can be only 50 letters long" }),
+    repMail: z.email({ message: "Please enter a valid email address" }),
     repPhone: z
       .string()
-      .min(10, { message: 'Please enter a valid phone number' })
-      .max(50, { message: 'Please enter a valid phone number' }),
+      .min(10, { message: "Please enter a valid phone number" })
+      .max(50, { message: "Please enter a valid phone number" }),
     repPassword: z
       .string()
-      .min(8, { message: 'Password must be at least 8 characters' })
+      .min(8, { message: "Password must be at least 8 characters" })
       .regex(/[A-Z]/, {
-        message: 'Password must contain at least one uppercase letter',
+        message: "Password must contain at least one uppercase letter",
       })
-      .regex(/[0-9]/, { message: 'Password must contain at least one number' }),
+      .regex(/[0-9]/, { message: "Password must contain at least one number" }),
     repConfirmPassword: z.string(),
   })
-  .refine(data => data.repPassword === data.repConfirmPassword, {
+  .refine((data) => data.repPassword === data.repConfirmPassword, {
     message: "Passwords don't match",
-    path: ['repConfirmPassword'],
+    path: ["repConfirmPassword"],
   });
 
 const clubSchema = z.object({
   clubName: z
     .string()
-    .min(2, { message: 'Club Name should be atleast 2 letters long' }),
-  clubMail: z.email({ message: 'Please enter a valid email address' }),
-  clubWebsite: z.url().optional(),
+    .min(2, { message: "Club Name should be atleast 2 letters long" }),
+  clubMail: z.email({ message: "Please enter a valid email address" }),
+  clubWebsite: z.url(),
 });
 
 // ============================================================================
@@ -138,8 +138,8 @@ function SidebarStep({
         <div className="absolute left-6 top-10 h-full w-[2px] bg-border/30">
           <motion.div
             className="h-full w-full bg-primary"
-            initial={{ height: '0%' }}
-            animate={{ height: isCompleted ? '100%' : '0%' }}
+            initial={{ height: "0%" }}
+            animate={{ height: isCompleted ? "100%" : "0%" }}
             transition={{ duration: 0.4 }}
           />
         </div>
@@ -148,12 +148,12 @@ function SidebarStep({
       {/* Icon Bubble */}
       <motion.div
         className={cn(
-          'relative z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-full border-2 transition-all duration-300',
+          "relative z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-full border-2 transition-all duration-300",
           isCompleted
-            ? 'border-primary bg-primary text-primary-foreground'
+            ? "border-primary bg-primary text-primary-foreground"
             : isCurrent
-              ? 'border-primary bg-background text-primary shadow-[0_0_0_4px_rgba(var(--primary),0.1)]'
-              : 'border-border/50 bg-background/50 text-muted-foreground'
+              ? "border-primary bg-background text-primary shadow-[0_0_0_4px_rgba(var(--primary),0.1)]"
+              : "border-border/50 bg-background/50 text-muted-foreground",
         )}
         whileHover={{ scale: 1.05 }}
       >
@@ -168,10 +168,10 @@ function SidebarStep({
       <div className="flex flex-col">
         <span
           className={cn(
-            'text-sm font-semibold transition-colors duration-300',
+            "text-sm font-semibold transition-colors duration-300",
             isCurrent || isCompleted
-              ? 'text-foreground'
-              : 'text-muted-foreground'
+              ? "text-foreground"
+              : "text-muted-foreground",
           )}
         >
           {step.name}
@@ -202,26 +202,26 @@ export default function ClubSignUp() {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [profileFormData, setProfileFormData] = useState({
-    firstName: '',
-    lastName: '',
-    repMail: '',
-    repPhone: '',
-    repPassword: '',
-    repConfirmPassword: '',
+    firstName: "",
+    lastName: "",
+    repMail: "",
+    repPhone: "",
+    repPassword: "",
+    repConfirmPassword: "",
   });
   const [clubFormData, setClubFormData] = useState<z.infer<typeof clubSchema>>({
-    clubName: '',
-    clubMail: '',
-    clubWebsite: undefined,
+    clubName: "",
+    clubMail: "",
+    clubWebsite: "",
   });
 
   const profileForm = useForm<z.infer<typeof profileSchema>>({
     resolver: zodResolver(profileSchema),
-    mode: 'onChange',
+    mode: "onChange",
   });
   const clubForm = useForm<z.infer<typeof clubSchema>>({
     resolver: zodResolver(clubSchema),
-    mode: 'onChange',
+    mode: "onChange",
   });
 
   function onProfileSubmit(values: z.infer<typeof profileSchema>) {
@@ -272,20 +272,20 @@ export default function ClubSignUp() {
 
         if (result && !result.success) {
           // Handle specific error cases
-          if (result.code === 'USER_EXISTS') {
-            toast.error('Account already exists', {
+          if (result.code === "USER_EXISTS") {
+            toast.error("Account already exists", {
               description:
-                'A user with this email is already registered. Please log in instead.',
+                "A user with this email is already registered. Please log in instead.",
               action: {
-                label: 'Go to Login',
-                onClick: () => router.push('/auth/login'),
+                label: "Go to Login",
+                onClick: () => router.push("/auth/login"),
               },
             });
           } else {
-            toast.error('Signup failed', {
+            toast.error("Signup failed", {
               description:
                 result.error ||
-                'An unexpected error occurred. Please try again.',
+                "An unexpected error occurred. Please try again.",
             });
           }
           setIsSubmitting(false);
@@ -293,14 +293,14 @@ export default function ClubSignUp() {
         }
 
         // Success - redirect to club dashboard
-        toast.success('Account created!', {
-          description: 'Redirecting to your club dashboard...',
+        toast.success("Account created!", {
+          description: "Redirecting to your club dashboard...",
         });
-        router.push('/club-dashboard');
+        router.push("/club-dashboard");
       } catch (error) {
-        console.error('Signup error:', error);
-        toast.error('Signup failed', {
-          description: 'An unexpected error occurred. Please try again.',
+        console.error("Signup error:", error);
+        toast.error("Signup failed", {
+          description: "An unexpected error occurred. Please try again.",
         });
         setIsSubmitting(false);
       }
@@ -347,7 +347,7 @@ export default function ClubSignUp() {
             {/* Left Sidebar - Steps */}
             <div className="border-b border-border/40 bg-background/30 p-8 lg:border-b-0 lg:border-r">
               <div className="space-y-1">
-                {STEPS.map(step => (
+                {STEPS.map((step) => (
                   <SidebarStep
                     key={step.id}
                     step={step}
@@ -458,7 +458,7 @@ export default function ClubSignUp() {
                                   <Input
                                     // placeholder="name@example.com"
                                     {...field}
-                                    type={'password'}
+                                    type={"password"}
                                     // onChange={handleRepInputChange}
                                   />
                                 </FormControl>
@@ -476,7 +476,7 @@ export default function ClubSignUp() {
                                   <Input
                                     // placeholder="name@example.com"
                                     {...field}
-                                    type={'password'}
+                                    type={"password"}
                                     // onChange={handleRepInputChange}
                                   />
                                 </FormControl>
@@ -528,9 +528,9 @@ export default function ClubSignUp() {
                             render={({ field }) => (
                               <FormItem>
                                 <FormLabel>
-                                  Club Website{' '}
+                                  Club Website{" "}
                                   <span className="text-xs text-muted-foreground">
-                                    (Optional)
+                                    (Required)
                                   </span>
                                 </FormLabel>
                                 <FormControl>
@@ -634,7 +634,7 @@ export default function ClubSignUp() {
                             <ReviewItem
                               label="Club Website"
                               value={
-                                clubFormData.clubWebsite || 'Not Provided!'
+                                clubFormData.clubWebsite || "Not Provided!"
                               }
                             />
                           </div>
