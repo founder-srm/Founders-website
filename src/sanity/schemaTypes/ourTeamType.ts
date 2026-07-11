@@ -88,6 +88,13 @@ export const ourTeamType = defineType({
       initialValue: false,
     }),
     defineField({
+      name: 'isHRM',
+      title: 'Is HR Manager',
+      description: 'Check if this person is the HR Manager of the club',
+      type: 'boolean',
+      initialValue: false,
+    }),
+    defineField({
       name: 'isAdvisor',
       title: 'Is Advisor',
       description: 'Check if this person is an advisor to the club',

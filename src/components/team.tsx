@@ -1,14 +1,14 @@
-'use client';
-import { Github, Globe, Linkedin } from 'lucide-react';
-import { type JSX, useState } from 'react';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { urlFor } from '@/sanity/lib/image';
-import type { OurTeam, TEAM_QUERYResult } from '../../sanity.types';
-import { Button } from './ui/button';
+"use client";
+import { Github, Globe, Linkedin } from "lucide-react";
+import { type JSX, useState } from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { urlFor } from "@/sanity/lib/image";
+import type { OurTeam, TEAM_QUERYResult } from "../../sanity.types";
+import { Button } from "./ui/button";
 
 type SocialLink = {
-  platform: 'github' | 'linkedin' | 'website';
+  platform: "github" | "linkedin" | "website";
   url: string;
   icon: JSX.Element;
 };
@@ -20,23 +20,23 @@ type TeamSectionProps = {
 };
 
 const domainLabels = {
-  operations_marketing: 'Operations & Marketing',
-  operations: 'Operations & Marketing', // For backward compatibility [why tf do we merge them as one, this why the club is ass]
-  marketing: 'Operations & Marketing', // For backward compatibility
-  technical: 'Technical',
-  creatives: 'Creatives',
-  outreach: 'Outreach',
-  sponsorship: 'Sponsorship',
-  leadership: 'Leadership',
+  operations_marketing: "Operations & Marketing",
+  operations: "Operations & Marketing", // For backward compatibility [why tf do we merge them as one, this why the club is ass]
+  marketing: "Operations & Marketing", // For backward compatibility
+  technical: "Technical",
+  creatives: "Creatives",
+  outreach: "Outreach",
+  sponsorship: "Sponsorship",
+  leadership: "Leadership",
 };
 
 const domains = [
-  'operations_marketing',
-  'technical',
-  'creatives',
-  'outreach',
-  'sponsorship',
-  'leadership',
+  "operations_marketing",
+  "technical",
+  "creatives",
+  "outreach",
+  "sponsorship",
+  "leadership",
 ] as const;
 
 const TeamSection = ({ teamMembers }: TeamSectionProps) => {
@@ -44,12 +44,15 @@ const TeamSection = ({ teamMembers }: TeamSectionProps) => {
 
   // Filter different types of team members
   const leadershipTeam = teamMembers.filter(
-    member => member.isPresident || member.isVicePresident
+    (member) => member.isPresident || member.isVicePresident || member.isHRM,
   );
-  const advisoryTeam = teamMembers.filter(member => member.isAdvisor);
+  const advisoryTeam = teamMembers.filter((member) => member.isAdvisor);
   const regularTeam = teamMembers.filter(
-    member =>
-      !member.isPresident && !member.isVicePresident && !member.isAdvisor
+    (member) =>
+      !member.isPresident &&
+      !member.isVicePresident &&
+      !member.isHRM &&
+      !member.isAdvisor,
   );
 
   const getSocialLinks = (member: TeamMember): SocialLink[] => {
@@ -57,7 +60,7 @@ const TeamSection = ({ teamMembers }: TeamSectionProps) => {
 
     if (member.github) {
       links.push({
-        platform: 'github',
+        platform: "github",
         url: member.github,
         icon: <Github className="size-5 text-muted-foreground" />,
       });
@@ -65,7 +68,7 @@ const TeamSection = ({ teamMembers }: TeamSectionProps) => {
 
     if (member.linkedin) {
       links.push({
-        platform: 'linkedin',
+        platform: "linkedin",
         url: member.linkedin,
         icon: <Linkedin className="size-5 text-muted-foreground" />,
       });
@@ -73,7 +76,7 @@ const TeamSection = ({ teamMembers }: TeamSectionProps) => {
 
     if (member.website) {
       links.push({
-        platform: 'website',
+        platform: "website",
         url: member.website,
         icon: <Globe className="size-5 text-muted-foreground" />,
       });
@@ -91,7 +94,7 @@ const TeamSection = ({ teamMembers }: TeamSectionProps) => {
           {member.avatar ? (
             <AvatarImage
               src={urlFor(member.avatar).url()}
-              alt={member.name || ''}
+              alt={member.name || ""}
               className="object-cover"
             />
           ) : (
@@ -107,12 +110,12 @@ const TeamSection = ({ teamMembers }: TeamSectionProps) => {
         )}
         {socialLinks.length > 0 && (
           <div className="mt-2 flex gap-4">
-            {socialLinks.map(link => (
+            {socialLinks.map((link) => (
               <Button
                 key={`${member._id}-${link.platform}`}
                 variant="ghost"
                 size="icon"
-                onClick={() => window.open(link.url, '_blank')}
+                onClick={() => window.open(link.url, "_blank")}
                 aria-label={`${member.name}'s ${link.platform}`}
               >
                 {link.icon}
@@ -126,8 +129,8 @@ const TeamSection = ({ teamMembers }: TeamSectionProps) => {
 
   // Helper function to get the normalized domain
   const getNormalizedDomain = (domain: string): string => {
-    if (domain === 'operations' || domain === 'marketing') {
-      return 'operations_marketing';
+    if (domain === "operations" || domain === "marketing") {
+      return "operations_marketing";
     }
     return domain;
   };
@@ -150,8 +153,8 @@ const TeamSection = ({ teamMembers }: TeamSectionProps) => {
         <div className="container my-8">
           <h3 className="mb-8 text-xl font-bold">Leadership</h3>
           <div className="grid gap-x-12 gap-y-16 md:grid-cols-2 lg:grid-cols-3">
-            {leadershipTeam.map(member =>
-              renderTeamMember(member as TeamMember)
+            {leadershipTeam.map((member) =>
+              renderTeamMember(member as TeamMember),
             )}
           </div>
         </div>
@@ -162,7 +165,7 @@ const TeamSection = ({ teamMembers }: TeamSectionProps) => {
         <div className="container my-8">
           <h3 className="mb-8 text-xl font-bold">Advisors</h3>
           <div className="grid gap-x-12 gap-y-16 md:grid-cols-2 lg:grid-cols-4">
-            {advisoryTeam.map(member => {
+            {advisoryTeam.map((member) => {
               // For advisors, use advisorRole if available, otherwise fallback to role
               const advisorMember = {
                 ...member,
@@ -183,11 +186,11 @@ const TeamSection = ({ teamMembers }: TeamSectionProps) => {
           className="w-full"
         >
           <TabsList className="mb-8 h-auto flex-wrap justify-start">
-            {domains.map(domain => {
+            {domains.map((domain) => {
               const domainMembers = regularTeam.filter(
-                member =>
+                (member) =>
                   // biome-ignore lint/style/noNonNullAssertion: gae as shit error
-                  getNormalizedDomain(member.domain!) === domain
+                  getNormalizedDomain(member.domain!) === domain,
               );
               if (domainMembers.length === 0) return null;
 
@@ -205,11 +208,11 @@ const TeamSection = ({ teamMembers }: TeamSectionProps) => {
             })}
           </TabsList>
 
-          {domains.map(domain => {
+          {domains.map((domain) => {
             const domainMembers = regularTeam.filter(
-              member =>
+              (member) =>
                 // biome-ignore lint/style/noNonNullAssertion: same as b4
-                getNormalizedDomain(member.domain!) === domain
+                getNormalizedDomain(member.domain!) === domain,
             );
             if (domainMembers.length === 0) return null;
 
@@ -217,8 +220,8 @@ const TeamSection = ({ teamMembers }: TeamSectionProps) => {
               <TabsContent key={domain} value={domain} className="pt-4">
                 <div className="grid gap-x-12 gap-y-16 md:grid-cols-2 lg:grid-cols-4">
                   {/* //@ts-expect-error - TS doesn't know that domainMembers is not empty */}
-                  {domainMembers.map(member =>
-                    renderTeamMember(member as TeamMember)
+                  {domainMembers.map((member) =>
+                    renderTeamMember(member as TeamMember),
                   )}
                 </div>
               </TabsContent>

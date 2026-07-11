@@ -103,6 +103,7 @@ export type OurTeam = {
   domain?: "operations_marketing" | "technical" | "creatives" | "outreach" | "sponsorship" | "leadership";
   isPresident?: boolean;
   isVicePresident?: boolean;
+  isHRM?: boolean;
   isAdvisor?: boolean;
   advisorRole?: string;
   order?: number;
@@ -1594,6 +1595,7 @@ export type TEAM_QUERYResult = Array<{
   domain: "creatives" | "leadership" | "operations_marketing" | "outreach" | "sponsorship" | "technical" | null;
   isPresident: boolean | null;
   isVicePresident: boolean | null;
+  isHRM: boolean | null;
   isAdvisor: boolean | null;
   advisorRole: string | null;
   order: number | null;
